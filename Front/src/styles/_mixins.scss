@@ -1,0 +1,77 @@
+@use './var';
+
+@mixin breakpoint($breakpoint) {
+    // If the key exists in the map
+    @if map-has-key(var.$breakpoints, $breakpoint) {
+      // Prints a media query based on the value
+      @media (min-width: map-get(var.$breakpoints, $breakpoint)) {
+        @content;
+      }}
+    // If the key doesn't exist in the map
+    @else {
+      @warn "Unfortunately, no value could be retrieved from `#{$breakpoint}`. "
+          + "Available breakpoints are: #{map-keys($breakpoints)}.";
+    }}
+  
+@mixin h0 {
+  font-size: 3rem;
+  font-weight: 700;
+}
+@mixin h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+}
+@mixin h2 {
+  font-size: 2.05rem;
+  font-weight: 700;
+}
+@mixin h3 {
+  font-size: 1.75rem;
+  font-weight: 600;
+}
+@mixin h4 {
+  font-size: 1.45rem;
+  font-weight: 600;
+}
+@mixin h5 {
+  font-size: 1.2rem;
+  font-weight: 500;
+}
+@mixin p {
+  font-weight: 400 ;
+  font-size: 1rem;
+  letter-spacing: .02rem;
+  & em {
+    color: var.$primary;
+  }
+  & a {
+    cursor: pointer!important;
+    font-weight: 500;
+    color: var.$primary!important;
+  }}
+@mixin input-text {
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+@mixin category-link {
+  font-size: 0.750rem;
+  font-weight: 500;
+}
+@mixin star-rating-container {
+  width: fit-content;
+  background: var.$background;
+  border-radius: 1em;
+  padding: .2em;
+  font-size: 1.2em;
+  & div {
+    transform: scale(.9);
+  }}
+@mixin container {
+  padding-left: var.$container-padding;
+  padding-right: var.$container-padding;
+  @each $name, $value in var.$breakpoints {
+    @include breakpoint($name) {
+      margin-left: auto;
+      margin-right: auto;
+      max-width: $value;
+    }}}

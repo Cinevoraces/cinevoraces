@@ -1,0 +1,210 @@
+@use '~styles/var';
+@use '~styles/mixins' as mix;
+
+$section-margin: 4rem auto;
+$wrapper-padding: 2rem;
+
+@mixin wrapper {
+  background-color: var.$secondary-background;
+  margin: $section-margin;
+  & .wrapper {
+    @include mix.container;
+    padding-top: $wrapper-padding;
+    padding-bottom: $wrapper-padding;
+    @include mix.breakpoint('tablet') {
+      padding-top: calc($wrapper-padding * 1.5);
+      padding-bottom: calc($wrapper-padding * 1.5);
+    }}}
+@mixin h2 {
+  @include mix.h3;
+  margin-bottom: 1em;
+}
+
+.hero {
+  @include mix.container;
+  margin: 5em auto 6em auto;
+  & .wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    & h1 {
+      @include mix.h1;
+      padding-bottom: .8em;
+    }
+    & p {
+      @include mix.h4;
+      padding-bottom: 2em;
+    }
+    & span {
+      &:nth-child(1) {
+        font-size: 1.2em;
+      }
+      &:nth-child(2) {
+        color: var.$primary;
+      }}
+    & .buttons {
+      display: flex;
+      gap: 1em;
+    }}
+  & .img-wrapper {
+    display: none;
+    text-align: right;
+    & img {
+      max-width: 85%;
+      border-radius: 10px;
+      outline: 4px solid #2D2F37;
+      box-shadow: 4.88426px 2.93056px 11.7222px rgba(0, 0, 0, 0.15);
+    }}
+  @include mix.breakpoint('tablet') {
+    margin: 7em auto 7em auto;
+    & .wrapper {
+      & .buttons {
+        gap: 2em;
+      }}}
+  @include mix.breakpoint('desktop') {
+    margin: 7em auto 8.5em auto;
+    display: flex;
+    & .wrapper {
+      width: 50%;
+      & h1 {
+        @include mix.h0;
+      }
+      & p {
+        @include mix.h3;
+      }}
+    & .img-wrapper {
+      width: 50%;
+      display: block;
+    }}}
+
+.about {
+  @include wrapper;
+  & .wrapper {
+    & .text {
+      text-align: left;
+      & a {
+        align-self: flex-end;
+        width: fit-content;
+        margin-top: 2rem;
+    }}
+    & p {
+      @include mix.p;
+    }
+    & h2 {
+      @include h2;
+    }
+    & img {
+      width: 200px;
+      height: 100%;
+    }
+    & .content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1em;
+    }
+    & .mobile-title {
+      display: block;
+    }
+    & .tablet-title {
+      display: none;
+    }}
+  @media screen and (min-width: 670px) {
+    & .wrapper {
+      & .text {
+        text-align: right;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        & > * {
+          width: 95%;
+        }}
+      & .content {
+        flex-direction: row;
+      }
+      & .mobile-title {
+        display: none;
+      }
+      & .tablet-title {
+        display: block;
+      }
+      & img {
+        width: 250px;
+      }}}}
+
+.discord {
+  @include mix.container;
+  & .mobile-title {
+    display: block;
+  }
+  & .tablet-title {
+    display: none;
+  }
+  & h2 {
+    @include h2;
+  }
+  & .wrapper {
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: center;
+    & .text {
+      margin-bottom: 2rem;
+      & p {
+        @include mix.p;
+        margin-bottom: 1rem;
+      }}
+    & a {
+      width: fit-content;
+    }
+    & svg {
+      border-radius: 15px;
+      fill: var.$primary;
+      min-width: 125px;
+      max-width: 200px;
+    }}
+  @media screen and (min-width: 500px) {
+    & .wrapper {
+      flex-direction: row;
+      gap: 3em;
+    }
+    & .mobile-title {
+      display: none;
+    }
+    & .tablet-title {
+      display: block;
+    }}}
+
+.share {
+  @include wrapper;
+  & .wrapper {
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: center;
+    text-align: left;
+  }
+	& h2 {
+    @include h2;
+	}
+  & p {
+    @include mix.p;
+  }
+	& img {
+		max-width: 100%;
+		margin-top: 2em;
+		border-radius: 10px;
+		outline: 4px solid #2D2F37;
+		box-shadow: 4.88426px 2.93056px 11.7222px rgba(0, 0, 0, 0.15);
+	}
+  @include mix.breakpoint('tablet') {
+    & .wrapper {
+      text-align: right;
+      flex-direction: row;
+      gap: 3em;
+    }
+    & img {
+      max-width: 55%; 
+    }}
+  @include mix.breakpoint('laptop') {
+    & img {
+      max-width: 100%;
+    }}}

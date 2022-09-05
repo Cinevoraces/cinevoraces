@@ -1,0 +1,60 @@
+@use '~styles/mixins' as mix;
+
+.last-movies {
+  @include mix.container;
+  display: flex;
+  flex-direction: column;
+  gap: 2em;
+}
+.last-movies a:nth-last-child(1) {
+  align-self: flex-end;
+}
+.title {
+  @include mix.h3;
+}
+.grid {
+  display: grid;
+  gap: .5em;
+  grid-template-columns: repeat(3, 1fr);
+}
+.poster {
+  border-radius: 10px;
+  overflow: hidden;
+}
+.poster:nth-child(4),
+.poster:nth-child(5) {
+  display: none;
+}
+.img {
+  opacity: 0;
+  transition: .3s;
+  width: 100%;
+  height: 100%; 
+  object-fit: cover;
+}
+.loader {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@include mix.breakpoint('laptop') {
+  .grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  .poster:nth-child(4) {
+    display: block;
+  }
+}
+@include mix.breakpoint('desktop') {
+  .title {
+    @include mix.h2;
+  }
+  .grid {
+    grid-template-columns: repeat(5, 1fr);
+    gap: 1em;
+  }
+  .poster:nth-child(5) {
+    display: block;
+  }
+}

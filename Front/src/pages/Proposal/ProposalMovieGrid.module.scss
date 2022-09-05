@@ -1,0 +1,72 @@
+@use '~styles/var';
+@use '~styles/mixins' as mix;
+@use 'sass:color';
+
+.loader {
+  position: absolute;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+}
+.grid {
+  box-sizing: border-box;
+  border-radius: 4px;
+  background-color: var.$secondary-background;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1em;
+  overflow-y: auto;
+  height: 585px;
+  border: 0.5em solid #ffffff00;
+  &::-webkit-scrollbar {
+    width: 0.8em;
+  }
+  &::-webkit-scrollbar-track {
+    background: white;
+    border-radius: 1em;
+  }
+  &::-webkit-scrollbar-thumb {
+  background: #8A8A92;
+  border: 2px solid white;
+  border-radius: 1em;
+  background-clip: padding-box;
+  }
+  & .empty {
+    padding: 1em;
+  }}
+.movie {
+  background-color: var.$background;
+  border-radius: 10px;
+  padding: 1em;
+  display: flex;
+  transition: 0.2s;
+  & .title {
+    @include mix.h4;
+    margin-bottom: 1em;
+  }
+  & .desc {
+    flex: 4;
+  }
+  & .directors, .genres {
+    margin: 16px 0;
+  }
+  & .poster {
+    flex: 1;
+    & img {
+      width: 100%;
+      object-fit: cover;
+    }}}
+.selected {
+  background-color: rgba($color: var.$secondary, $alpha: 1);
+  color: var.$background;
+}
+
+@include mix.breakpoint('tablet') {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }}
+@include mix.breakpoint('desktop') {
+  .grid {
+    grid-template-columns: repeat(3, 1fr);
+  }}

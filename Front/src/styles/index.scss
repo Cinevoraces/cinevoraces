@@ -1,0 +1,36 @@
+@use './var.scss';
+@use './reset.scss';
+@use './mixins' as mix;
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
+
+html {
+  font-size: 16px;
+}
+body {
+  font-family: 'Montserrat', Arial, Helvetica, sans-serif;
+  background-color: var.$background;
+  color: var.$white;
+}
+p {
+  letter-spacing: 1%;
+  font-weight: 400 ;
+  font-size: 1rem;
+  line-height: 1.5em;
+}
+h1, h2, h3, h4, h4 {
+  line-height: 1.2em;
+}
+button {
+  font-family: 'Montserrat', Arial, Helvetica, sans-serif;
+}
+body::-webkit-scrollbar {
+  width: 5px;
+  height: 100%;
+  background: transparent;
+  border-radius: 5px;
+  position: fixed
+}
+body::-webkit-scrollbar-thumb {
+  background: hsla(0, 0%, 100%, .3);
+  border-radius: 5px
+}

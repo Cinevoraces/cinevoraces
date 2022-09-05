@@ -1,0 +1,46 @@
+@use '~styles/var';
+
+.filter-menu-back {
+  position: fixed;
+  top: 0; right: 0; left: 0; bottom: 0;
+  z-index: 2;
+}
+.filter-menu {
+  position: absolute;
+  left: 0; right: 0; top: 4.2rem;
+  max-width: 100%;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  background-color: var.$secondary-background;
+  padding: 1rem;
+  border-radius: 5px;
+  font-weight: 500;
+  letter-spacing: .02rem;
+  line-height: 2rem;
+  box-shadow: 3px 3px 2px rgba(0, 0, 0, 0.35);
+}
+.filter-name {
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: var.$primary;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  user-select: none;
+  & svg {
+    display: inline-block;
+    transform: scale(1.2);
+    margin-right: .5em;
+  }}
+.list {
+  margin-left: .5rem;
+}
+
+@media screen and (min-width: 675px) {
+  .filter-menu {
+    min-width: 400px;
+    max-width: 400px;
+  }
+}

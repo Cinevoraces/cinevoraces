@@ -1,0 +1,21 @@
+@use '~styles/mixins' as mix;
+@use '~styles/var';
+
+.title {
+  @include mix.h3;
+}
+.film {
+  @include mix.container;
+  margin: 2em auto;
+}
+.button {
+  display: flex;
+  justify-content: center;
+  & button {
+    width: 100%;
+  }}
+@media (min-width: 430px) {
+  .button {
+    & button {
+      width: fit-content;
+    }}}

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="100%" height="100%" viewBox="0 0 800 600" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:1.5;">
+    <g id="tests-dents-primitives" serif:id="tests dents primitives">
+        <g id="Couronne-extérieure" serif:id="Couronne extérieure">
+            <g transform="matrix(1.31351,0,0,1.18203,-153.235,-91.759)">
+                <path d="M325.442,462.918C290.968,431.912 268.925,384.509 268.925,331.429C268.925,238.045 337.153,162.228 421.189,162.228C468.166,162.228 510.203,185.92 538.129,223.14L421.189,331.429L538.129,439.718C510.356,476.733 468.628,500.368 421.958,500.617C418.548,469.224 394.46,444.871 365.294,444.871C349.792,444.871 335.725,451.751 325.442,462.918Z" style="fill:rgb(150,150,150);"/>
+            </g>
+            <g transform="matrix(0.820942,0,0,0.738769,54.228,55.1506)">
+                <ellipse cx="421.189" cy="331.429" rx="152.264" ry="169.2" style="fill:white;stroke:black;stroke-width:6.4px;"/>
+            </g>
+        </g>
+        <g id="Effet-biscuit" serif:id="Effet biscuit">
+        </g>
+        <g transform="matrix(0.656753,0,0,0.591015,123.382,104.121)">
+            <path d="M339.255,188.881C362.904,171.994 391.029,162.228 421.189,162.228C505.226,162.228 573.454,238.045 573.454,331.429C573.454,424.813 505.226,500.629 421.189,500.629C337.153,500.629 268.925,424.813 268.925,331.429C268.925,314.442 271.183,298.037 275.408,282.574C283.31,287.834 292.555,290.821 302.423,290.821C331.836,290.821 355.716,264.285 355.716,231.601C355.716,214.804 349.409,199.631 339.255,188.881Z" style="stroke:black;stroke-width:1.6px;"/>
+        </g>
+        <g transform="matrix(0.306035,0.0539622,-0.0552527,0.313354,298.991,190.68)">
+            <ellipse cx="327.62" cy="245.602" rx="24.135" ry="23.571" style="fill:white;stroke:black;stroke-width:3.18px;"/>
+        </g>
+    </g>
+</svg>

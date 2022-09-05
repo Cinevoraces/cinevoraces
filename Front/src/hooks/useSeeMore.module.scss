@@ -1,0 +1,21 @@
+@use '~styles/mixins' as mix;
+@use '~styles/var';
+
+.text {
+  font-weight: 400;
+  padding: 1em 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  line-height: 1.5em;
+}
+.more {
+  border: none;
+  background: none;
+  padding-left: inherit;
+  font-weight: 700;
+  font-size: 1em;
+  color: var.$primary;
+  cursor: pointer;
+  font-family: 'Montserrat', Arial, Helvetica, sans-serif;
+}

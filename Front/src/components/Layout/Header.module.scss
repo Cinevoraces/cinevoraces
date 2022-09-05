@@ -1,0 +1,69 @@
+@use '~styles/mixins' as mix;
+@use '~styles/var';
+
+.header {
+  padding: .5em 0;
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+  @include mix.container;
+  & button {
+    font-size: 14px;
+    padding: .7em;
+    & .mobile-sentence { 
+      display: block;
+    }
+    & .desktop-sentence {
+      display: none;
+    }}
+  & .logo {
+    display: flex;
+    align-items: center;
+    gap: .5em;
+  }
+  & .nav {
+    letter-spacing: .04rem;
+    display: none;
+    align-items: center;
+    gap: 1em;
+  }
+  & .nav-mobile {
+    background: none;
+    border: none;
+  }
+  .link {
+    color: var.$white;
+  }
+  .link:hover {
+    color: var.$primary;
+  }
+  .dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 100%;
+    background-color: var.$primary;
+  }}
+
+@include mix.breakpoint('tablet') {
+  .header {
+    & button {
+      font-size: 1rem;
+      padding: .8rem 1.5rem;
+      & .mobile-sentence { 
+        display: none;
+      }
+      & .desktop-sentence {
+        display: block;
+      }}
+    & .logo {
+      gap: 1.5em;
+      & svg {
+        margin-left: 1.1rem;
+        transform: scale(1.22);
+      }}
+    & .nav {
+      display: flex;
+    }
+    & .nav-mobile {
+      display: none;
+    }}}

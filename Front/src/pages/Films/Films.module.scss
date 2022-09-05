@@ -1,0 +1,69 @@
+@use '~styles/mixins' as mix;
+@use '~styles/var' as var;
+
+.films {
+  @include mix.container;
+  & .presentation {
+    @include mix.p;
+    margin: 3rem 0;
+    & h1 {
+      @include mix.h3;
+      margin-bottom: 1rem;
+    }}
+  & .loader-wrapper {
+    position: absolute;
+    right: 0; left: 0; 
+    margin-top: 8rem;
+    display: flex;
+    justify-content: center;
+  }
+  & .button {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 2.5rem;
+  }
+  & .grid {
+    display: grid;
+    gap: .5em;
+    grid-template-columns: repeat(3, minmax(115px, 1fr));
+    margin-bottom: 2.5rem;
+    min-height: 5em;
+  }
+  & .poster {
+    border-radius: 5px;
+    overflow: hidden;
+    & .loader-poster {
+      background-color: var.$secondary-background;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
+    }
+    & img {
+      transition: .3s;
+      opacity: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }}
+  .not-found {
+    @include mix.p;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 67vh;
+  }}
+
+@media screen and (max-width: 420px) {
+  .films .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }}
+@include mix.breakpoint('tablet') {
+  .films .grid {
+    grid-template-columns: repeat(4, minmax(175px, 1fr));
+  }}
+@include mix.breakpoint('desktop') {
+  .films .grid {
+    grid-template-columns: repeat(6, minmax(200px, 1fr));
+  }}

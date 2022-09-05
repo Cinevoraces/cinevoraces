@@ -1,0 +1,71 @@
+@use '~styles/var';
+@use '~styles/mixins' as mix;
+
+.background {
+  position: fixed;
+  z-index: 1;
+  left: 0; right: 0; top: 0; bottom: 0;
+}
+.nav {
+  position: absolute;
+  z-index: 68;
+  top: 0;
+  right: 0;
+  background-color: var.$secondary-background;
+  width: 100%;
+  padding-top: 3em;
+  box-shadow: -2px 4px 3px rgba(0, 0, 0, 0.25);
+  text-align: right;
+  & .username {
+    position: absolute;
+    top: 20px;
+    left: 1em;
+    z-index: 10;
+    color: var.$primary;
+  }
+  & .links {
+    background-color: var.$secondary-background;
+    border-radius: 10px;
+    margin: 0 1em;
+  }
+  & .link {
+    padding: 0.8em 0;
+    border-bottom: 1px solid var.$white;
+    & a {
+      display: inline-block;
+      width: 100%;
+      padding: 0.5em 0;
+      text-decoration: none;
+      color: var.$white;
+    }
+    & a:hover {
+      color: var.$primary;
+    }}
+  & .link:last-child {
+    border-bottom: none;
+  }}
+.ico {
+  width: 40px;
+  height: 40px;
+  outline: 1px var.$white solid;
+  border-radius: 100%;
+  z-index: 69;
+  cursor: pointer;
+}
+
+@include mix.breakpoint('tablet') {
+  .nav {
+    width: 50%;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    right: calc(1em - 4px);
+    padding-left: 1em;
+    padding-right: 1em;
+  }
+  .ico {
+    margin-right: 1em;
+  }}
+@include mix.breakpoint('laptop') {
+  .nav {
+    width: 30%;
+  }}

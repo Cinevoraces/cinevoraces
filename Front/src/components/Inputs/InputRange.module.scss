@@ -1,0 +1,122 @@
+@use '~styles/var';
+
+$gap: 1rem;
+$range-slide-width: 100%;
+$range-slide-thickness: 8px;
+$range-slide-radius: 50px;
+$range-slide-color: rgba(var.$secondary, 0.3);
+$range-thumb-size: 1em;
+$range-thumb-radius: 100%;
+$range-thumb-color: var.$secondary;
+
+/* Reset */
+input[type='range'] {
+  &::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    -webkit-tap-highlight-color: transparent;
+    border: none;
+    cursor: pointer;
+  }
+  &::-webkit-slider-runnable-track {
+    border: none;
+    cursor: pointer;
+  }
+  &::-moz-range-track {
+    border: none;
+    cursor: pointer;
+  }
+  &::-moz-range-thumb {
+    box-shadow: none;
+    border: none;
+    background: none;
+    cursor: pointer;
+  }
+  &::-ms-track {
+    background: transparent;
+    border-color: transparent;
+    color: transparent;
+    cursor: pointer;
+  }
+  &::-ms-fill-lower {
+    box-shadow: none;
+    border: none;
+  }
+  &::-ms-fill-upper {
+    box-shadow: none;
+    border: none;
+  }
+  &::-ms-thumb {
+    box-shadow: none;
+    border: none;
+  }
+  &:focus {
+    outline: none;
+  }}
+
+  /* Main style */
+.double-input-range {
+  & .input-container {    
+    position: relative;
+    display: flex;
+    gap: $gap;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    & .slider {
+      position: absolute;
+      right: 3.5em;
+      left: 3.5em;
+      &--simple {
+        position: absolute;
+        left: 5rem;
+        right: 3.5rem;
+      }}
+    & .value {
+      width: 2.5rem;
+      &--simple {
+        width: 5rem;
+      }}
+    & input[type='range'] {
+      position: absolute;
+      height: 0;
+      width: $range-slide-width;
+      outline: none;
+      pointer-events: none;
+      &::-webkit-slider-thumb {
+        background-color: $range-thumb-color;
+        border-radius: $range-thumb-radius;
+        height: $range-thumb-size;
+        width: $range-thumb-size;
+        pointer-events: all;
+        position: relative;
+        z-index: 5;
+        margin-left: calc($range-thumb-size / 2);
+      }
+      // FIREFOX
+      &::-moz-range-thumb {
+        background-color: $range-thumb-color;
+        pointer-events: all;
+      }
+      &::-moz-range-track {
+        height: $range-slide-thickness;
+        border-radius: $range-slide-radius;
+      }
+      // WEBKIT
+      &::-webkit-slider-thumb {
+        margin-top: - calc($range-slide-thickness / 2);
+        pointer-events: all;
+      }
+      &::-webkit-slider-runnable-track {
+        height: $range-slide-thickness;
+        background: $range-slide-color;
+        border-radius: $range-slide-radius;
+      }}
+      & input[type='range']:nth-child(1) {
+        /* FIREFOX Put slider color on bottom */ 
+        &::-moz-range-track {
+          background: $range-slide-color;
+        }
+        &::-webkit-slider-thumb {
+        /* CHROME Prevent thumbs to merge  */ 
+          margin-left: - calc($range-thumb-size / 3);
+        }}}}

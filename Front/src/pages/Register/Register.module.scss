@@ -1,0 +1,63 @@
+@use '~styles/mixins' as mix;
+
+.register {
+  @include mix.container;
+  display: grid;
+  grid-template-columns: 1fr;
+  justify-content: space-between;
+}
+.title {
+  font-size: 2.05rem;
+  font-weight: 700;
+  margin-bottom: 1em;
+}
+.form {
+  margin: 3em 0;
+  display: flex;
+  flex-direction: column;
+  gap: .5em;
+  & button {
+    margin-top: 1em;
+    width: fit-content;
+    display: flex;
+    gap: .5em;
+    align-self: end;
+  }}
+.img {
+  display: block;
+  max-width: 299px;
+  margin: 2em auto 0;
+}
+.rules {
+  font-size: .8em;
+  font-style: italic;
+  line-height: 1.2em;
+  margin-top: -10px;
+  padding: 0 .5em;
+}
+
+@include mix.breakpoint('tablet') {
+  .register {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .form {
+    justify-self: end;
+  }
+  .img {
+    justify-self: start;
+    order: -1;
+    margin: 5em 0 0 0;
+    max-width: 339px;
+  }}
+@include mix.breakpoint('laptop') {
+  .form {
+    width: 480px;
+  }
+  .img {
+    max-width: 479px;
+  }}
+@include mix.breakpoint('desktop') {
+  .form {
+    width: 580px;
+    margin-right: 3em;
+  }}

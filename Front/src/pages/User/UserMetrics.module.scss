@@ -1,0 +1,86 @@
+@use '~styles/mixins' as mix;
+@use '~styles/var';
+
+.user-metrics {
+  @include mix.container;
+  display: flex;
+  flex-wrap: wrap;
+  box-sizing: border-box;
+  justify-content: space-between;
+  gap: 2em
+
+}
+.metric {
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 1em;
+  &--primary {
+    color: var.$primary;
+    grid-area: primary;
+  }
+  &--secondary {
+    color: var.$secondary;
+    grid-area: secondary;
+  }
+  &--purple {
+    color: var.$purple;
+    grid-area: purple;
+  }
+  &--yellow {
+    color: var.$yellow;
+    grid-area: yellow;
+  }
+  &--green {
+      color: var.$green;
+      grid-area: green;
+  }
+  &:nth-child(1) {
+    width: calc(50% - 2em);
+  }
+  &:nth-child(2) {
+    width: calc(50% - 2em);
+  }}
+.count {
+  font-size: 2.05rem;
+  font-weight: 700;
+}
+.type {
+  font-size: 1.2rem;
+  font-weight: 600;
+  white-space: pre-line;
+}
+
+@media screen and (max-width: 310px) {
+  .user-metrics {
+    justify-content: center;
+  }
+  .metric {
+    &:nth-child(1) {
+      width: auto;
+    }
+    &:nth-child(2) {
+      width: auto;
+    }}}
+@media screen and (max-width: 395px) {
+  .count { font-size: 1.8rem; }
+  .type {
+    font-size: 1.1rem;
+    font-weight: 500;
+  }}
+@include mix.breakpoint('tablet') {
+  .user-metrics {
+    width: 100%;
+    padding: 0 4em;
+    justify-content: space-around;
+  }
+  .metric {
+    &:nth-child(1) {
+      width: auto;
+    }
+    &:nth-child(2) {
+      width: auto;
+    }}}

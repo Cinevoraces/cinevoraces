@@ -1,0 +1,74 @@
+@use '~styles/var';
+@use '~styles/mixins' as mix;
+
+$gap: 1.5rem;
+
+.user-params {
+  @include mix.container;
+  box-sizing: border-box;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: $gap;
+  & .field {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: $gap;
+    border-bottom: 1px solid var.$white;
+    padding-bottom: $gap;
+    & .inputs-container {
+      width: 90%;
+    }
+    & .field-name {
+      white-space: nowrap;
+      font-weight: 500;
+      font-size: 1rem;
+      & span {
+        text-transform: uppercase;
+        color: var.$input-text;
+      }}
+    & .buttons {
+      display: flex;
+      gap: $gap;
+      & button {
+        width: fit-content!important;
+      }}}}
+
+.upload-img {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 2rem auto;
+  width: 100%;
+  & .buttons {
+    margin-top: .8rem;
+    display: flex;
+    gap: 1rem;
+  }
+  & .preview {
+    max-width: 25rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    & img {
+      object-fit: contain;
+      width: 100px;
+      height: 100px;
+      border: 1px var.$white solid;
+      border-radius: 100%;
+    }}}
+
+@include mix.breakpoint('tablet') {
+  .user-params {
+    & .field {
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      & .inputs-container {
+        max-width: 400px;
+      }
+      & .buttons {
+        flex-direction: column;
+        align-self: center;
+      }}}}

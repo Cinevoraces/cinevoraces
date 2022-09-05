@@ -1,0 +1,19 @@
+@use '~styles/mixins' as mix;
+
+.wrapper {
+    padding: 1em;
+    margin: 0.2em 0;
+    border-radius: 4px;
+    &--error {
+        background-color: rgb(230, 53, 53);
+    }
+    &--success {
+        background-color: rgb(24, 165, 59);
+    }
+    &--warn {
+        background-color: rgb(198, 168, 21);
+    }
+}
+
+
+.blur-out{animation:blur-out 0.2s linear both} @keyframes blur-out{0%{filter:blur(.01px);}100%{filter:blur(8px);opacity:0}}

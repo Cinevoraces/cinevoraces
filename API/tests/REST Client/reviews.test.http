@@ -1,0 +1,31 @@
+@protocol=http://
+@host=localhost
+@port=:3000
+@prefix=/v1
+@baseUrl={{protocol}}{{host}}{{port}}{{prefix}}
+
+
+### Get all comments with movieId
+GET {{baseUrl}}/reviews/104/comments
+
+### Get all reviews fron user from on movie with userId and movieId
+GET {{baseUrl}}/reviews/1/3
+
+### Create a review empty for movie with user id and movie id
+POST {{baseUrl}}/reviews/1/10/
+
+### Update a comment for movie with user id and movie id
+PUT {{baseUrl}}/reviews/1/10/
+content-type: application/json
+
+{ 
+  "bookmarked": false,
+  "rating": 1,
+  "comment": "Kikou"
+}
+
+### Delete a review for movie with user id and movie id
+DELETE {{baseUrl}}/reviews/1/10/comment
+
+### Delete a review for movie with user id and movie id
+DELETE {{baseUrl}}/reviews/1/10

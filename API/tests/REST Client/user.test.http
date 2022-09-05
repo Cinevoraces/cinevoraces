@@ -1,0 +1,59 @@
+@protocol=http://
+@host=localhost
+@port=:3000
+@prefix=/v1
+@baseUrl={{protocol}}{{host}}{{port}}{{prefix}}
+
+### Create a new user in db
+POST {{baseUrl}}/users/register
+content-type: application/json
+
+{ "pseudo": "Yves", "mail": "Test@test.fr", "password": "Test" }
+
+### Log user
+POST {{baseUrl}}/users/login
+content-type: application/json
+
+{
+  "pseudo": "Mat-Mat",
+  "password": "f=2OB$Ix4F/OPB+~W;Xf"
+}
+### Log admin
+POST {{baseUrl}}/users/login
+content-type: application/json
+
+{
+  "pseudo": "Yves Signal",
+  "password": "PojJr454N7aO1dL3hn;b"
+}
+
+### Refresh tokens
+GET {{baseUrl}}/refreshTokens
+
+### Log user test
+POST {{baseUrl}}/users/login
+content-type: application/json
+
+{
+  "pseudo": "Test",
+  "password": "Test"
+}
+### Update user
+PUT {{baseUrl}}/users/modify/Test
+content-type: application/json
+
+{
+  "pseudo": "Test1",
+  "oldPassword": "Test",
+  "password": "Test1"
+}
+
+### Get all users from db
+GET {{baseUrl}}/users
+
+### Get user with userId
+
+GET {{baseUrl}}/users/3
+
+### LogOut user
+GET {{{{baseUrl}}}}/users/logout

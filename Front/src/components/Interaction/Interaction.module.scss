@@ -1,0 +1,144 @@
+@use '~styles/var';
+@use '~styles/mixins' as mix;
+
+$height: 63px;
+$border-radius: 10px;
+$gap: 6px;
+$wrapper-padding: 16px;
+// Box Shadows
+$bx-shw: 0px 4px 4px rgba(0, 0, 0, 0.25);
+$inner-btn: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
+$inner-wrapper: inset -2px 4px 4px rgba(0, 0, 0, 0.25);
+$inner-wrapper-reverse: inset 2px 4px 4px rgba(0, 0, 0, 0.25);
+$prim-border: 0px -2px 0px #FC9A3F;
+$second-border: 0px -2px 0px #FC783F;
+
+.interaction {
+  position: relative;
+  & button {
+    color: var.$white;
+    flex-direction: column;
+    gap: $gap;
+    width: 55px;
+    border-radius: $border-radius;
+    box-shadow: $bx-shw, $prim-border;
+  }
+  & button, .wrapper .rate-menu {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var.$secondary-background;
+    font-weight: 500;
+    height: $height;
+    user-select: none;
+    cursor: pointer;
+  }
+  & .wrapper {
+    position: absolute;
+    overflow: hidden;
+    left: -210px;
+    top: -3px;
+    height: calc($height + 10px);
+    width: 400%;
+    & .rate-menu {
+      box-sizing: border-box;
+      padding: $wrapper-padding;
+      position: absolute;
+      top: 3px;
+      border-radius: $border-radius 0 0 $border-radius;
+      box-shadow: $bx-shw, $prim-border;
+    }
+    &--hidden {
+      display: none;
+    }}}
+
+.background {
+  position: fixed;
+  left: 0; top: 0; bottom: 0; right: 0;
+  &--hidden {
+    display: none;
+  }}
+.loader {
+  width: 10%;
+  display: inline-block; 
+  & div {
+    height: 15px;
+    transform: translate(-35px, -20px) scale(0.6);
+  }}
+  
+.is-closed {
+  left: unset; 
+  right: -300px;
+}
+.is-open { 
+  left: unset; 
+  right: 0px; 
+}
+.is-opening {
+  animation: .5s slide;
+  -webkit-animation: .5s slide ; 
+}
+.is-closing { 
+  animation: .5s slide reverse;
+  -webkit-animation: .5s slide reverse;
+}
+.active {
+  & button {
+    box-shadow: $bx-shw, $second-border, $inner-btn;
+  }
+  & .wrapper .rate-menu {
+    box-shadow: $bx-shw, $second-border, $inner-wrapper-reverse;
+  }
+  & svg path {
+    fill: var.$white;
+  }
+}
+
+@keyframes slide {
+  from { right: -300px; }
+  to { right: 0px; }
+}
+@keyframes slideReversed {
+  from { left: -300px; }
+  to { left: 0px; }
+}
+
+@include mix.breakpoint('tablet'){
+  .interaction {
+    & button {
+      width: 62px;
+    }
+    & .wrapper {
+      right: 0px;
+      left: 46px;
+      & .rate-menu {
+        border-radius: 0 $border-radius $border-radius 0;
+        box-shadow: $bx-shw, $prim-border;
+      }}} 
+  .is-closed { 
+    right: unset; 
+    left: -300px; 
+  }
+  .is-open { 
+    right: unset; 
+    left: -2px; 
+  }
+  .is-opening {
+    animation: .5s slideReversed;
+    -webkit-animation: .5s slideReversed ; 
+  }
+  .is-closing { 
+    animation: .5s slideReversed reverse;
+    -webkit-animation: .5s slideReversed reverse;
+  }
+  .active {
+    & .wrapper .rate-menu {
+      box-shadow: $bx-shw, $second-border, $inner-wrapper;
+    }
+  }
+}
+@include mix.breakpoint('desktop'){
+  .interaction button {
+    width: 70px;
+  }
+}
