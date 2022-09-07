@@ -6,8 +6,8 @@ services:
       context: ./app
       dockerfile: Dockerfile
     restart: always
-    volumes:
-      - ./app:/app
+    # volumes:
+    #   - ./app:/app
 
   api:
     env_file:
@@ -18,17 +18,17 @@ services:
       context: ./api
       dockerfile: Dockerfile
     restart: always
-    volumes:
-      - ./api:/api
+    # volumes:
+    #   - ./api:/api
 
   postgres:
     build:
       context: ./data
       dockerfile: Dockerfile
     environment:
-      DB_PW: ${DB_PW}
-      DB_USER: ${DB_USER}
-      DB_NAME: ${DB_NAME}
+      POSTGRES_PASSWORD: ${DB_PW}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_DB: ${DB_NAME}
     restart: always
     volumes:
       - database:/var/lib/postgresql/data

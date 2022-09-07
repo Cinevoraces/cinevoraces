@@ -1,7 +1,12 @@
 FROM node:16-alpine3.16
+
 WORKDIR /api
-COPY package.json /api
-COPY package-lock.json /api
+
+COPY package.json .
+COPY package-lock.json .
+
 RUN npm i
-COPY . /api
+
+COPY . .
+
 CMD ["npm", "run", "start"]
