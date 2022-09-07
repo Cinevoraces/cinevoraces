@@ -6,8 +6,8 @@ services:
       context: ./app
       dockerfile: Dockerfile
     restart: always
-    # volumes:
-    #   - ./app:/app
+    volumes:
+      - ./app:/app
 
   api:
     env_file:
@@ -18,8 +18,8 @@ services:
       context: ./api
       dockerfile: Dockerfile
     restart: always
-    # volumes:
-    #   - ./api:/api
+    volumes:
+      - ./api:/api
 
   postgres:
     build:

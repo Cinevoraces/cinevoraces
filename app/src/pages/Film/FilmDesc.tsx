@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { usePostInteractionMutation,usePutInteractionMutation } from 'redux/api';
 import { useGetOneReviewQuery } from 'redux/api';
 import { InputStar } from 'components/Inputs/InputsLib';
@@ -27,6 +27,14 @@ function FilmDesc({movie, userId}: FilmDescProps) {
     {title: 'Durée :', content: `${movie.runtime}min`, style: 'elm--weight'},
   ];
 
+  useEffect(() => {
+    console.log(interactionsData);
+  }, [interactionsData]);
+
+  useEffect(() => {
+    console.log(userId);
+  }, [userId]);
+
   return (
     <div className={styles.desc}>
       <div className={styles.wrapper}>
@@ -35,8 +43,10 @@ function FilmDesc({movie, userId}: FilmDescProps) {
         {/* Wait for data fetch if logged */}
         {userId && interactionsData && 
           <Interactions movie={movie} userId={userId} data={interactionsData}/>}
-        {/* Don't wait for data if visitor */}
-        {!userId && <Interactions movie={movie} userId={userId}/>}
+        {/* Don't wait for data if visitor or no interaction */}
+        {(!userId || !interactionsData) && 
+          <Interactions movie={movie} userId={userId}/>}
+
       </div>
 
       <div className={styles.description}>
