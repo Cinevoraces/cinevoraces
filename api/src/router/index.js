@@ -15,6 +15,7 @@ const propositionsRouter = require('./propositions.router');
 
 // Adding subrouters
 router
+  .get('/', (_, res) => res.send("Bienvenue sur l'API v1 de Cinévoraces"))
   .use('/refreshTokens', refreshTokensRouter)
   .use('/movies', moviesRouter)
   .use('/users', usersRouter)

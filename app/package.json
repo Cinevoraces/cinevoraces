@@ -26,7 +26,7 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "dev": "HTTPS=true react-scripts start",
+    "dev": "HTTPS=false react-scripts start",
     "start": "serve -s build",
     "fix": "eslint --fix ./src",
     "build": "react-scripts build",

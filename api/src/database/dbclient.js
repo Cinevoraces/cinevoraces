@@ -3,9 +3,8 @@
 const { Pool } = require('pg');
 
 const {
-  DB_NAME, DB_USER, DB_HOST, DB_PORT, DB_PW,
+  DB_NAME, DB_USER, DB_HOST, DB_PORT, DB_PW, PG_URL,
 } = process.env;
-const PG_URL = process.env.DATABASE_URL;
 
 let clientConfig = {};
 if (PG_URL) {

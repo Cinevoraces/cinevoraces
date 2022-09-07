@@ -5,7 +5,7 @@ import { login, logout } from 'redux/slices/user';
 import Cookies from 'js-cookie';
 
 const baseQuery = retry(fetchBaseQuery({
-  baseUrl: process.env.REACT_APP_API,
+  baseUrl: process.env.REACT_APP_API, // For docker configuration with nginx, should be '/api'
   prepareHeaders: (headers, {getState, endpoint}) => {
     const accessToken = (getState() as RootState).user.accessToken;
     const refreshToken = Cookies.get('refreshToken');
