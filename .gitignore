@@ -21,3 +21,6 @@ out
 # misc
 .DS_Store
 .vscode
+
+#nginx certificates
+nginx/certificates

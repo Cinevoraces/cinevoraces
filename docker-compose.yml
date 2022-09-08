@@ -1,3 +1,5 @@
+version: "3"
+
 services:
   app:
     env_file: 
@@ -6,8 +8,8 @@ services:
       context: ./app
       dockerfile: Dockerfile
     restart: always
-    volumes:
-      - ./app:/app
+    # volumes:
+    #   - ./app:/app
 
   api:
     env_file:
@@ -18,8 +20,8 @@ services:
       context: ./api
       dockerfile: Dockerfile
     restart: always
-    volumes:
-      - ./api:/api
+    # volumes:
+    #   - ./api:/api
 
   postgres:
     build:
@@ -41,9 +43,12 @@ services:
     build:
       context: ./nginx
       dockerfile: Dockerfile
-    restart: always
+    restart: unless-stopped
     ports: 
-      - 3050:80
+      - 80:80
+      - 443:443
+    volumes:
+      - ./nginx/certificates:/nginx
 
 volumes:
   database:
