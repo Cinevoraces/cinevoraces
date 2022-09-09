@@ -48,7 +48,13 @@ services:
       - 80:80
       - 443:443
     volumes:
-      - ./nginx/certificates:/nginx
+      - ./nginx:/etc/nginx/conf.d/
+      - ./nginx/certificates:/var/www/certbot/
+
+  certbot:
+    image: certbot/certbot:latest
+    volumes:
+      - ./nginx/certificates:/var/www/certbot/
 
 volumes:
   database:

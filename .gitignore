@@ -23,4 +23,4 @@ out
 .vscode
 
 #nginx certificates
-nginx/certificates
+nginx/certificates/*
