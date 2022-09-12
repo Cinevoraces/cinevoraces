@@ -1,0 +1,26 @@
+version: "3"
+
+services:
+  postgres:
+    build:
+      context: ./data
+      dockerfile: Dockerfile.dev
+    environment:
+      POSTGRES_PASSWORD: ${PG_PW}
+      POSTGRES_USER: ${PG_USER}
+      POSTGRES_DB: ${PG_DB}
+    restart: always
+    
+  api:
+    environment:
+      - POSTGRES_URL=postgres://${PG_USER}:${PG_PW}@postgres:5432/${PG_DB}
+    depends_on:
+      - postgres
+    build:
+      context: ./api
+      dockerfile: Dockerfile.dev
+    ports:
+      - 8080:8080
+    restart: always
+    volumes:
+      - ./api:/api
