@@ -1,5 +1,5 @@
 import dbconnector from '@plugins/dbconnector';
-import root from '@routes/root';
+import movie from '@routes/movie.route';
 
 export default async function app(fastify: serverInstance) {
 
@@ -7,5 +7,5 @@ export default async function app(fastify: serverInstance) {
   fastify.register(dbconnector);
 
   // Register routes
-  fastify.register(root);
+  fastify.register(movie);
 }
