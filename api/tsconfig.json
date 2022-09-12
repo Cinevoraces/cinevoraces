@@ -12,6 +12,11 @@
     "removeComments": true,
     "sourceMap": true,
     "baseUrl": ".",
-    "outDir": "dist"
+    "outDir": "dist",
+    "paths": {
+      "@src/*": ["src/*"],
+      "@routes/*": ["src/routes/*"],
+      "@plugins/*": ["src/plugins/*"],
+    }
   }
 }
