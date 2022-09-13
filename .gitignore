@@ -4,6 +4,7 @@ app/out
 
 # api
 api/dist
+api/logs
 
 # database
 */sqitch.conf
