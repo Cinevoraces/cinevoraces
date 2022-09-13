@@ -1,11 +1,13 @@
-import dbconnector from '@plugins/dbconnector';
-import movie from '@routes/movie.route';
+import { movie } from '@routes/movie.route';
+import prismaClient from '@plugins/prismaClient';
 
-export default async function app(fastify: serverInstance) {
+const app = async (fastify: FastifyInstance) => {
 
   // Register plugins
-  fastify.register(dbconnector);
-
+  fastify.register(prismaClient);
+  
   // Register routes
   fastify.register(movie);
 }
+
+export default app;

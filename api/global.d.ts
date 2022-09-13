@@ -1,5 +1,6 @@
-type FastifyInstance = import('fastify').FastifyInstance;
-
-interface serverInstance extends FastifyInstance {
+type fastifyInstance = import('fastify').FastifyInstance;
+type PrismaClient = import('@prisma/client').PrismaClient;
+interface FastifyInstance extends fastifyInstance {
   // Add custom properties to FastifyInstance here
+  prisma: PrismaClient;
 }

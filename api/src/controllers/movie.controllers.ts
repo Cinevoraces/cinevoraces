@@ -1,17 +1,13 @@
-import { FastifyReply, FastifyRequest } from "fastify";
+import { FastifyReply, FastifyRequest } from 'fastify';
 
-type Movie = {
-  name: string
+export const getMovies = async (request: FastifyRequest, reply: FastifyReply) => {
+  const { prisma } = request;
+
+  try {
+    const movies = await prisma.movie.findMany();
+    reply.send(movies);
+    
+  } catch (error) {
+    reply.send(error);
+  }
 }
-
-const getMovie = async (request: FastifyRequest, reply:FastifyReply): Promise<Movie[]> => {
-    const fastify = request.server
-    try {
-      const { rows } = await fastify.pg.query(`SELECT * FROM movie`)
-      return rows
-    } catch (error) {
-      fastify.log.error(error)
-    }
-}
-
-export { getMovie }

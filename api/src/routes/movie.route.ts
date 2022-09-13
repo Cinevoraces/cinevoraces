@@ -1,10 +1,10 @@
-import { getMovie } from "@src/controllers/movie.controllers";
+import { getMovies } from "@src/controllers/movie.controllers";
 
-export default async function movie(fastify: serverInstance) {
+export const movie = async (fastify: FastifyInstance) => {
 
   const movieGetOpts = {
     schema: {},
-    handler: getMovie
+    handler: getMovies
   }
 
   fastify.get('/', movieGetOpts);
