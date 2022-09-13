@@ -20,7 +20,8 @@ services:
       context: ./api
       dockerfile: Dockerfile.dev
     ports:
-      - 8080:8080
+      - 8080:8080 # API
+      - 5555:5555 # Prisma Studio
     restart: always
     volumes:
       - ./api:/api
