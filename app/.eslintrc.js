@@ -16,7 +16,7 @@ module.exports = {
     'indent': 'off',
     '@typescript-eslint/indent': ['warn', 2],
     'keyword-spacing': 'off',
-    '@typescript-eslint/keyword-spacing': ['warn', { before: false, after: true }],
+    '@typescript-eslint/keyword-spacing': ['warn', { before: true, after: true }],
     'object-curly-spacing': 'off',
     '@typescript-eslint/object-curly-spacing': ['warn', 'always', { 'arraysInObjects': false }],
     '@typescript-eslint/type-annotation-spacing': ['warn', { 'before': false, 'after': false, overrides: { colon: { before: false, after: true } } }],
