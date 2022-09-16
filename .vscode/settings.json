@@ -3,4 +3,8 @@
   "editor.codeActionsOnSave": {
       "source.fixAll": true
       },
-  }
+  "eslint.workingDirectories": [
+    "./app",
+    "./api"
+  ]
+}
