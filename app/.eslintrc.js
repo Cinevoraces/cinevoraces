@@ -23,5 +23,9 @@ module.exports = {
     'no-multi-spaces': ['error'],
     'no-multiple-empty-lines': ['warn', { max: 1 }]
   },
-  extends: ['next/core-web-vitals', 'prettier']
+  extends: [
+    'next',
+    'next/core-web-vitals',
+    'prettier'
+  ]
 };

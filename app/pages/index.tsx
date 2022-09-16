@@ -5,7 +5,8 @@ import Image from 'next/image';
 const Home: NextPage = () => {
   return (
     <main>
-      Hello World
+      <h1 className='text-3xl font-bold text-orange-primary'>Bonjour et bienvenue chez Cinévoraces !</h1>
+      
     </main>
   );
 };
