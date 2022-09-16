@@ -14,12 +14,12 @@ openssl x509 -days 7300 -req -in ./cinevoraces-csr.pem -signkey ./cinevoraces-ke
 
 ## Pour établir le certificat initial dans un environnement docker :
 ```
-docker compose run --rm  certbot certonly --webroot --webroot-path /var/www/certbot/ -d cinevoraces.fr
+docker-compose run --rm  certbot certonly --webroot --webroot-path /var/www/certbot/ -d cinevoraces.fr
 ```
 
 ## Renouveler le certificat :
 ```
-docker compose run --rm certbot renew
+docker-compose run --rm certbot renew
 ```
 
 À utiliser avec un crontab pour automatiser le renouvellement.
