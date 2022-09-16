@@ -4,7 +4,7 @@ module.exports = {
     '@next/next/no-img-element': 'off',
     'quotes': ['warn', 'single'],
     'semi': 'off',
-    '@typescript-eslint/semi': 'error',
+    '@typescript-eslint/semi': 'warn',
     '@typescript-eslint/no-explicit-any': 'error',
     '@typescript-eslint/prefer-for-of': 'warn',
     'brace-style': 'off',
