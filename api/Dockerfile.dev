@@ -1,8 +1,8 @@
 FROM node:18-slim
 
 # For a x86 platform the following command can be executed, otherwise, run it directly inside the api container
-RUN apt-get update
-RUN apt-get install -y openssl
+RUN apt update
+RUN apt install -y openssl
 
 WORKDIR /api
 
