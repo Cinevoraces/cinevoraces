@@ -12,7 +12,6 @@
 | created_at | TIMESTAMP | NOT NULL, DEFAULT NOW | Creation date |
 | updated_at | TIMESTAMP | | Modification date |
 
-
 # Table movie
 
 | Column | Type | Specifications / Constraints | Description |
