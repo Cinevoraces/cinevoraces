@@ -4,7 +4,8 @@
 *Ask a project admin for sensitive informations.*
 ### .env:
 ```
-# App
-
 # Api
+PG_PW=
+PG_USER=
+PG_DB=
 ```
