@@ -1,9 +1,10 @@
 FROM node:18-slim
 
+# For a x86 platform the following command can be executed, otherwise, run it directly inside the api container
 RUN apt-get update
 RUN apt-get install -y openssl
 
-WORKDIR /app
+WORKDIR /api
 
 COPY package.json .
 COPY package-lock.json .
@@ -11,7 +12,5 @@ COPY package-lock.json .
 RUN npm i
 
 COPY . .
-
-RUN npx prisma generate
 
 CMD ["npm", "run", "dev"]
