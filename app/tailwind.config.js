@@ -5,7 +5,7 @@ module.exports = {
     './components/**/*.{js,ts,jsx,tsx}',
   ],
   theme: {
-    colors:{
+    colors: {
       'orange-primary':'#FC9A3F',
       'orange-secondary':'#FC783F',
       'purple':'#C99AF8',
@@ -13,11 +13,16 @@ module.exports = {
       'dark-gray':'#202029',
       'medium-gray':'#393945',
       'white':'#F2F2F3',
-      'light-gray':'#85F086'
+      'light-gray':'#85F086',
     },
-    fontFamily:{
-      sans: ['Montserrat', 'sans-serif']
+    fontFamily: {
+      sans: ['Montserrat', 'sans-serif'],
     },
+    extend: {
+      borderRadius: {
+        '4xl':'3rem',
+      }
+    }
   },
   plugins: [],
 };
