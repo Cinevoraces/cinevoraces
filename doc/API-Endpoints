@@ -21,6 +21,8 @@ Endpoints complete documentation will be writted later with Swagger, ***this isn
 **Return:** all movies object where `is_published=true`
 
 **Query strings:**
+- `filter[ispublished]=`: Boolean -> Filter by boolean (default to `true`)
+- `filter[userid]=`: Number -> Filter by user id
 - `filter[season]=`: Number -> Filter by season
 - `filter[latest]=`: Number -> Return the last `x` movies
 - `filter[bookmarked]=`: Boolean -> Filter by boolean
@@ -100,7 +102,8 @@ Endpoints complete documentation will be writted later with Swagger, ***this isn
 
 ```json
 {
-  "is_published": "String"
+  "is_published": "String",
+  "publishing_date": "String"
 }
 ```
 
@@ -108,3 +111,83 @@ Endpoints complete documentation will be writted later with Swagger, ***this isn
 
 ### **`/movies/:movieId`**
 *(Can only be used by movie's "owner")*
+
+## METRICS
+
+### :green_circle: GET
+### **`/metrics`**
+**Return:** website metrics object
+
+### **`/metrics/:userId`**
+**Return:** user metrics object
+
+## SLOTS
+
+### :green_circle: GET
+### **`/slots?`**
+**Return:** all proposition slots
+
+**Query strings:**
+- `filter[isbooked]=`: Boolean -> Filter by boolean
+- `filter[userid]=`: Number -> Filter by user id
+
+## USERS
+
+### :green_circle: GET
+### **`/users?`**
+**Return:** all users public data
+
+### **`/users/:userId`**
+**Return:** user public data
+
+**Query strings:**
+- `pop[movies]=`: Boolean -> populate with movie(s) proposed
+- `pop[comments]=`: Boolean -> populate with comments posted
+- `pop[reviews]=`: Boolean -> populate with metrics
+
+### :orange_circle: PUT
+
+### **`/users/:userId` (Logged user only)**
+
+**Body**
+
+```json
+{
+  "password": "String", // Required
+  "pseudo": "String",
+  "mail": "String",
+  "updated_password": "String"
+}
+```
+
+### **`/users/picture/:userId` (Logged user only)**
+
+**Body**
+
+```json
+// To define
+```
+
+### **`/users/role:userId` *(Admin only)***
+
+**Body**
+
+```json
+{
+  "role": "String"
+}
+```
+
+### :red_circle: DELETE
+
+### **`/users/:userId` *(Admin only)***
+
+## USERS
+
+### :yellow_circle: POST
+
+### **`/auth/register`**
+
+### **`/auth/login`**
+
+### **`/auth/logout`**
