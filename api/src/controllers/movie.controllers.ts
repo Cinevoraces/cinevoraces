@@ -1,4 +1,4 @@
-import { FastifyReply, FastifyRequest } from 'fastify';
+import type { FastifyReply, FastifyRequest } from 'fastify';
 
 export const getMovies = async (request: FastifyRequest, reply: FastifyReply) => {
   const { prisma } = request;

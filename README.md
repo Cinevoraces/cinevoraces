@@ -8,4 +8,6 @@
 PG_PW=
 PG_USER=
 PG_DB=
+
+JWT_SECRET=
 ```
