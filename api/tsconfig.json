@@ -17,6 +17,8 @@
       "@src/*": ["src/*"],
       "@routes/*": ["src/routes/*"],
       "@plugins/*": ["src/plugins/*"],
+      "@types/*": ["src/types/*"],
+      "@utils/*": ["src/utils/*"]
     }
   }
 }
