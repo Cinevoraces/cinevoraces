@@ -49,12 +49,15 @@ services:
       - 443:443
     volumes:
       - ./nginx/conf/:/etc/nginx/conf.d/
-      - ./nginx/certificates:/etc/nginx/certificates/
+      - ./certbot/www:/var/www/certbot/
+      - ./certbot/conf/:/etc/nginx/ssl/
 
   certbot:
     image: certbot/certbot:latest
     volumes:
-      - ./nginx/certificates:/etc/nginx/certificates/
+      - ./certbot/www/:/var/www/certbot/
+      - ./certbot/conf/:/etc/letsencrypt/
+
 
 volumes:
   database:
