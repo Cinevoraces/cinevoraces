@@ -1,15 +1,19 @@
-import { movie } from '@routes/movie.route';
-import prismaClient from '@plugins/prismaClient';
-import jwt from '@plugins/jwt';
+import type { FastifyInstance } from "fastify";
+import prismaClient from "@plugins/prismaClient";
+import jwt from "@plugins/jwt";
+import { movies } from "@modules/movies/movies.routes";
+import schemasRegister from "./schemas";
 
 const app = async (fastify: FastifyInstance) => {
+  // Register Schemas
+  fastify.register(schemasRegister);
 
   // Register plugins
   fastify.register(prismaClient);
   fastify.register(jwt);
-  
+
   // Register routes
-  fastify.register(movie);
-}
+  fastify.register(movies);
+};
 
 export default app;

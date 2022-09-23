@@ -1,7 +1,8 @@
+import type { FastifyInstance } from "fastify";
 import fastifyJwt, { FastifyJWTOptions } from "@fastify/jwt";
 import plugin from "fastify-plugin";
 
-const jwt = async (fastify: fastifyInstance) => {
+const jwt = async (fastify: FastifyInstance) => {
   if (fastify.jwt) {
     return fastify.log.warn("Fastify/jwt already registered");
   }

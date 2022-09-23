@@ -5,6 +5,7 @@ app/out
 # api
 api/dist
 api/logs
+api/coverage
 
 # database
 */sqitch.conf

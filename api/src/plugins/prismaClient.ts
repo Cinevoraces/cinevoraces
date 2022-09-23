@@ -1,6 +1,6 @@
+import type { FastifyPluginCallback } from "fastify";
 import { PrismaClient } from "@prisma/client";
 import { PrismaClientOptions } from "@prisma/client/runtime";
-import type { FastifyPluginCallback } from "fastify";
 import plugin from "fastify-plugin";
 
 declare module "fastify" {
@@ -25,7 +25,6 @@ const prismaClient: FastifyPluginCallback<FastifyPrismaClientOptions> = async (
   if (fastify.prisma) {
     return fastify.log.warn("Prisma client already registered");
   }
-
   const prisma = new PrismaClient(opts);
   await prisma.$connect();
 
@@ -40,5 +39,3 @@ const prismaClient: FastifyPluginCallback<FastifyPrismaClientOptions> = async (
 };
 
 export default plugin(prismaClient);
-
-// source: https://github.com/balcieren/fastify-prisma-client/blob/master/index.ts

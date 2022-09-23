@@ -1,5 +1,8 @@
 {
+  "include": ["src/**/*", "src/*", "test/*.ts"],
+  "exclude": ["dist", "test"],
   "compilerOptions": {
+    "types": ["@types/jest", "node"],
     "moduleResolution": "node",
     "target": "es2022",
     "module": "commonjs",
@@ -15,8 +18,10 @@
     "outDir": "dist",
     "paths": {
       "@src/*": ["src/*"],
-      "@routes/*": ["src/routes/*"],
+      "@modules/*": ["src/modules/*"],
       "@plugins/*": ["src/plugins/*"],
+      "@types/*": ["src/types/*"],
+      "@utils/*": ["src/utils/*"]
     }
   }
 }
