@@ -1,6 +1,6 @@
 import type { FastifyInstance } from "fastify";
-import { getMovieById, getMovies } from "./movies.handler";
-import { getMovieSchema, getMoviesSchema } from "./movies.schema";
+import { getMovieById, getMovies } from "@modules/movies/movies.handler";
+import { getMovieSchema, getMoviesSchema } from "@modules/movies/movies.schema";
 
 export const movies = async (fastify: FastifyInstance) => {
   fastify.route({
