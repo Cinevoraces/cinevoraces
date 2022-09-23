@@ -1,3 +1,4 @@
+import { FastifyInstance } from "fastify";
 import { getMovieById, getMovies } from "./movies.handler";
 import { getMovieSchema, getMoviesSchema } from "./movies.schema";
 

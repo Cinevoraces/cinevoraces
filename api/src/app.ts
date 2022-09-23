@@ -1,6 +1,8 @@
 import prismaClient from '@plugins/prismaClient';
 import { movies } from '@modules/movies/movies.routes';
 import schemasRegister from './schemas';
+import { FastifyInstance } from 'fastify';
+
 const app = async (fastify: FastifyInstance) => {
   fastify.register(schemasRegister)
   // Register plugins
