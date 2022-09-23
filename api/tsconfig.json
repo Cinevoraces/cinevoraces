@@ -15,7 +15,7 @@
     "outDir": "dist",
     "paths": {
       "@src/*": ["src/*"],
-      "@routes/*": ["src/routes/*"],
+      "@modules/*": ["src/modules/*"],
       "@plugins/*": ["src/plugins/*"],
       "@types/*": ["src/types/*"],
       "@utils/*": ["src/utils/*"]

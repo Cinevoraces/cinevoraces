@@ -25,7 +25,6 @@ const prismaClient: FastifyPluginCallback<FastifyPrismaClientOptions> = async (
   if (fastify.prisma) {
     return fastify.log.warn("Prisma client already registered");
   }
-
   const prisma = new PrismaClient(opts);
   await prisma.$connect();
 
