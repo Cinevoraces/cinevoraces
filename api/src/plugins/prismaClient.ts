@@ -1,7 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import { PrismaClientOptions } from "@prisma/client/runtime";
-import { FastifyPluginCallback } from "fastify";
-import plugin from 'fastify-plugin'; 
+import type { FastifyPluginCallback } from "fastify";
+import plugin from "fastify-plugin";
 
 declare module "fastify" {
   interface FastifyRequest {
@@ -31,7 +31,7 @@ const prismaClient: FastifyPluginCallback<FastifyPrismaClientOptions> = async (
 
   fastify
     .decorate("prisma", prisma)
-    .decorateRequest("prisma", {getter: () => fastify.prisma})
+    .decorateRequest("prisma", { getter: () => fastify.prisma })
     .addHook("onClose", async (fastify, done) => {
       await fastify.prisma.$disconnect();
       done();
@@ -39,6 +39,6 @@ const prismaClient: FastifyPluginCallback<FastifyPrismaClientOptions> = async (
   done();
 };
 
-export default plugin(prismaClient)
+export default plugin(prismaClient);
 
 // source: https://github.com/balcieren/fastify-prisma-client/blob/master/index.ts
