@@ -1,6 +1,6 @@
 {
-  "include": ["src/**/*", "src/*", "test/*.ts"],
-  "exclude": ["dist", "test"],
+  "include": ["src/**/*", "src/*", "test/*.test.ts"],
+  "exclude": ["dist"],
   "compilerOptions": {
     "types": ["@types/jest", "node"],
     "moduleResolution": "node",

@@ -1,4 +1,3 @@
-
 import { movie } from "@prisma/client"
 import createMovie from "./utils/createMovies"
 import { RessourceCreator } from "./utils/createRessource"
