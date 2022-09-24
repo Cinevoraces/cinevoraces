@@ -36,7 +36,7 @@ export const register = async (request: Request, reply: Reply) => {
     }
     if (!password.match(process.env.PASS_REGEXP)) {
       reply.code(422); // Unprocessable Entity
-      throw new Error("Invalid password.");
+      throw new Error("Invalid password format.");
     }
     const salt = await bcrypt.genSalt(10);
     password = await bcrypt.hash(password, salt);
@@ -59,23 +59,37 @@ export const register = async (request: Request, reply: Reply) => {
 
 export const login = async (request: Request, reply: Reply) => {
   const { prisma } = request;
-  // const { pseudo, password } = request.body.user;
+  const { pseudo, password } = request.body.user;
 
-  // try {
-  //   const user = await prisma.user.findFirst({
-  //     where: { pseudo },
-  //   });
-  //   if (!user) {
-  //     throw new Error("Utilisateur introuvable.");
-  //   }
+  try {
+    const user = await prisma.user.findUnique({
+      where: { pseudo },
+      select: {
+        id: true,
+        pseudo: true,
+        mail: true,
+        password: true,
+        role: true,
+        avatar_url: true,
+      },
+    });
 
-  //   const validPassword = await bcrypt.compare(password, user.password);
-  //   if (!validPassword) {
-  //     throw new Error("Mot de passe incorrect.");
-  //   }
+    if (!user) {
+      reply.code(404); // Not Found
+      throw new Error("Utilisateur introuvable.");
+    }
 
-  //   reply.send({ message: `Utilisateur "${pseudo}" connecté avec succés.` });
-  // } catch (error) {
-  //   reply.send(error);
-  // }
+    const isPasswordCorrect = await bcrypt.compare(password, user.password);
+    if (!isPasswordCorrect) {
+      reply.code(401); // Unauthorized
+      throw new Error("Mot de passe incorrect.");
+    }
+
+    reply.send({
+      user: user,
+      response: `Utilisateur "${pseudo}" connecté avec succés.`,
+    });
+  } catch (error) {
+    reply.send(error);
+  }
 };
