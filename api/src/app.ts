@@ -2,6 +2,7 @@ import type { FastifyInstance } from "fastify";
 import prismaClient from "@plugins/prismaClient";
 import jwt from "@plugins/jwt";
 import { movies } from "@modules/movies/movies.routes";
+import { auth } from "@modules/auth/auth.routes";
 import schemasRegister from "./schemas";
 
 const app = async (fastify: FastifyInstance) => {
@@ -14,6 +15,7 @@ const app = async (fastify: FastifyInstance) => {
 
   // Register routes
   fastify.register(movies);
+  fastify.register(auth);
 };
 
 export default app;

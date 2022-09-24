@@ -1,6 +1,6 @@
 import type { FastifySchema } from "fastify";
 
-const getMoviesSchema: FastifySchema = {
+export const getMoviesSchema: FastifySchema = {
   querystring: {
     type: "object",
     properties: {
@@ -17,7 +17,7 @@ const getMoviesSchema: FastifySchema = {
   },
 };
 
-const getMovieSchema: FastifySchema = {
+export const getMovieSchema: FastifySchema = {
   params: {
     type: "object",
     properties: {
@@ -30,5 +30,3 @@ const getMovieSchema: FastifySchema = {
     },
   },
 };
-
-export { getMoviesSchema, getMovieSchema };
