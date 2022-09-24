@@ -15,43 +15,33 @@ export const register = async (request: Request, reply: Reply) => {
   const { prisma } = request;
   let { pseudo, mail, password } = request.body.user;
 
-  // Duplicate check
   try {
+    // Duplicate check
     const user = await prisma.user.findFirst({
       where: { OR: [{ mail }, { pseudo }] },
     });
-
     if (user) {
       // French messages are to be displayed in front
-      if (mail === user.mail) {
+      reply.code(409); // Conflict
+      if (mail === user.mail)
         throw new Error("Cette adresse mail est déjà associée à un compte.");
-      }
-      if (pseudo === user.pseudo) {
+      if (pseudo === user.pseudo)
         throw new Error("Ce pseudo est déjà utilisé.");
-      }
     }
-  } catch (error) {
-    return reply
-      .code(409) // Conflict
-      .send(error);
-  }
 
-  // Test and Hash password
-  if (!process.env.PASS_REGEXP) {
-    return reply
-      .code(500) // Internal Server Error
-      .send(new Error("No password regexp found."));
-  }
-  if (!password.match(process.env.PASS_REGEXP)) {
-    return reply
-      .code(422) // Unprocessable Entity
-      .send(new Error("Invalid password."));
-  }
-  const salt = await bcrypt.genSalt(10);
-  password = await bcrypt.hash(password, salt);
+    // Test and Hash password
+    if (!process.env.PASS_REGEXP) {
+      reply.code(500); // Internal Server Error
+      throw new Error("No password regexp found.");
+    }
+    if (!password.match(process.env.PASS_REGEXP)) {
+      reply.code(422); // Unprocessable Entity
+      throw new Error("Invalid password.");
+    }
+    const salt = await bcrypt.genSalt(10);
+    password = await bcrypt.hash(password, salt);
 
-  // Create user
-  try {
+    // Create user
     await prisma.user.create({
       data: {
         pseudo,
@@ -69,4 +59,23 @@ export const register = async (request: Request, reply: Reply) => {
 
 export const login = async (request: Request, reply: Reply) => {
   const { prisma } = request;
+  // const { pseudo, password } = request.body.user;
+
+  // try {
+  //   const user = await prisma.user.findFirst({
+  //     where: { pseudo },
+  //   });
+  //   if (!user) {
+  //     throw new Error("Utilisateur introuvable.");
+  //   }
+
+  //   const validPassword = await bcrypt.compare(password, user.password);
+  //   if (!validPassword) {
+  //     throw new Error("Mot de passe incorrect.");
+  //   }
+
+  //   reply.send({ message: `Utilisateur "${pseudo}" connecté avec succés.` });
+  // } catch (error) {
+  //   reply.send(error);
+  // }
 };
