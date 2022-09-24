@@ -1,6 +1,6 @@
 import type { FastifyPluginCallback } from "fastify";
+import type { PrismaClientOptions } from "@prisma/client/runtime";
 import { PrismaClient } from "@prisma/client";
-import { PrismaClientOptions } from "@prisma/client/runtime";
 import plugin from "fastify-plugin";
 
 declare module "fastify" {

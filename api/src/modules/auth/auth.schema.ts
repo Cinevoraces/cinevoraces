@@ -70,7 +70,7 @@ export const loginSchema: FastifySchema = {
   response: {
     "200": {
       type: "object",
-      required: ["user", "response"],
+      required: ["user", "token", "response"],
       properties: {
         user: {
           type: "object",
@@ -83,6 +83,7 @@ export const loginSchema: FastifySchema = {
             avatar_url: { type: "string" },
           },
         },
+        token: { type: "string" },
         message: { type: "string" },
       },
     },

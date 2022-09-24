@@ -1,4 +1,4 @@
-import type { FastifyReply as Reply, FastifyRequest } from "fastify";
+import { fastify, FastifyReply as Reply, FastifyRequest } from "fastify";
 import bcrypt from "bcrypt";
 
 type Request = FastifyRequest<{
@@ -85,8 +85,12 @@ export const login = async (request: Request, reply: Reply) => {
       throw new Error("Mot de passe incorrect.");
     }
 
+    // Generate token
+    const token = await reply.jwtSign({ user });
+
     reply.send({
       user: user,
+      token: token,
       response: `Utilisateur "${pseudo}" connecté avec succés.`,
     });
   } catch (error) {

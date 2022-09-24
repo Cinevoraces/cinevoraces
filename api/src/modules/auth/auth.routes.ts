@@ -15,5 +15,6 @@ export const auth = async (fastify: FastifyInstance) => {
     url: "/login",
     schema: loginSchema,
     handler: login,
+    onRequest: [fastify.auth],
   });
 };
