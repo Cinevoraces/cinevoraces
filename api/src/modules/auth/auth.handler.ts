@@ -87,6 +87,7 @@ export const login = async (request: Request, reply: Reply) => {
 
     // Generate token
     const token = await reply.jwtSign({ user });
+    const refreshToken = await reply.jwtSign({ user }, { expiresIn: "1d" });
 
     reply.send({
       user: user,

@@ -15,6 +15,14 @@ export const auth = async (fastify: FastifyInstance) => {
     url: "/login",
     schema: loginSchema,
     handler: login,
+  });
+
+  fastify.route({
+    method: "GET",
+    url: "/test",
+    handler: (request, reply) => {
+      reply.send({ message: "ACCESS GRANTED" });
+    },
     onRequest: [fastify.auth],
   });
 };

@@ -19,6 +19,7 @@ const jwt: FastifyPluginCallback = async (fastify, opts, done) => {
 
   fastify.register(fastifyJwt, {
     secret: process.env.JWT_SECRET,
+    sign: { expiresIn: 60 },
   });
 
   fastify.decorate("auth", async (request: Request, reply: Reply) => {
