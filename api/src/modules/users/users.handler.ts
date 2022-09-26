@@ -4,6 +4,9 @@ type Request = FastifyRequest<{
   Params: {
     id: number;
   };
+  Querystring: {
+    pop: string;
+  };
 }>;
 
 export const handleGetUsers = async (request: Request, reply: Reply) => {
@@ -11,14 +14,10 @@ export const handleGetUsers = async (request: Request, reply: Reply) => {
 
   try {
     const users = await prisma.user.findMany({
-      select: {
-        id: true,
-        pseudo: true,
-        mail: true,
-        avatar_url: true,
-        role: true,
-        created_at: true,
-        updated_at: true,
+      orderBy: { id: "asc" },
+      include: {
+        movies: true,
+        reviews: true,
       },
     });
 
@@ -31,22 +30,38 @@ export const handleGetUsers = async (request: Request, reply: Reply) => {
 export const handleGetUserById = async (request: Request, reply: Reply) => {
   const { prisma } = request;
   const { id } = request.params;
+  const populate = request.query.pop;
+  console.log(populate);
 
   try {
-    const user = await prisma.user.findUnique({
-      where: { id },
-      select: {
-        id: true,
-        pseudo: true,
-        mail: true,
-        avatar_url: true,
-        role: true,
-        created_at: true,
-        updated_at: true,
-      },
-    });
+    const [user, bookmarked, viewed, liked, rating, commented] =
+      await prisma.$transaction([
+        prisma.user.findUnique({
+          where: { id },
+          include: {
+            movies: true,
+            reviews: true,
+          },
+        }),
+        prisma.review.count({ where: { user_id: id, bookmarked: true } }),
+        prisma.review.count({ where: { user_id: id, viewed: true } }),
+        prisma.review.count({ where: { user_id: id, liked: true } }),
+        prisma.review.count({ where: { user_id: id, rating: { gt: 0 } } }),
+        prisma.review.count({ where: { user_id: id, comment: { not: "" } } }),
+      ]);
 
-    reply.send(user);
+    const response = {
+      ...user,
+      metrics: {
+        bookmarked,
+        viewed,
+        liked,
+        rating,
+        commented,
+      },
+    };
+
+    reply.send(response);
   } catch (error) {
     reply.send(error);
   }
