@@ -24,6 +24,14 @@ export default function movieFiltersFactory(
           },
         ];
       }
+      if (key === "user_id") {
+        return [
+          ...acc,
+          {
+            [key]: filters[key],
+          },
+        ];
+      }
       return acc;
     },
     []

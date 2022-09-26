@@ -1,5 +1,8 @@
 import type { FastifyInstance } from "fastify";
-import { getMovieById, getMovies } from "@modules/movies/movies.handler";
+import {
+  handleGetMovieById,
+  handleGetMovies,
+} from "@modules/movies/movies.handler";
 import { getMovieSchema, getMoviesSchema } from "@modules/movies/movies.schema";
 
 export const movies = async (fastify: FastifyInstance) => {
@@ -7,13 +10,13 @@ export const movies = async (fastify: FastifyInstance) => {
     method: "GET",
     url: "/movies",
     schema: getMoviesSchema,
-    handler: getMovies,
+    handler: handleGetMovies,
   });
 
   fastify.route({
     method: "GET",
     url: "/movies/:id",
     schema: getMovieSchema,
-    handler: getMovieById,
+    handler: handleGetMovieById,
   });
 };

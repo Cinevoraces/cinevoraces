@@ -1,4 +1,4 @@
-import type { FastifyReply, FastifyRequest } from "fastify";
+import type { FastifyReply as Reply, FastifyRequest } from "fastify";
 import Filters from "@src/types/Filters";
 import movieFiltersFactory from "@src/utils/movieFiltersFactory";
 
@@ -11,14 +11,13 @@ type Request = FastifyRequest<{
   };
 }>;
 
-type Reply = FastifyReply;
-
-export const getMovies = async (request: Request, reply: Reply) => {
+export const handleGetMovies = async (request: Request, reply: Reply) => {
   const { prisma } = request;
-
+  const filters = movieFiltersFactory(request.query.filter);
+  console.log(request.query.filter);
+  const queryTest = request.query.filter;
+  // console.log(filters);
   try {
-    const filters = movieFiltersFactory(request.query.filter);
-
     const movies = await prisma.movie.findMany({
       where: {
         AND: [...filters],
@@ -30,11 +29,11 @@ export const getMovies = async (request: Request, reply: Reply) => {
   }
 };
 
-export const getMovieById = async (request: Request, reply: Reply) => {
+export const handleGetMovieById = async (request: Request, reply: Reply) => {
   const { prisma } = request;
-  try {
-    const { id } = request.params;
+  const { id } = request.params;
 
+  try {
     const movie = await prisma.movie.findUnique({
       where: {
         id,
