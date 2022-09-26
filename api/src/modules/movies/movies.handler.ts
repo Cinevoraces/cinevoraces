@@ -13,16 +13,16 @@ type Request = FastifyRequest<{
 
 export const handleGetMovies = async (request: Request, reply: Reply) => {
   const { prisma } = request;
-  const filters = movieFiltersFactory(request.query.filter);
-  console.log(request.query.filter);
-  const queryTest = request.query.filter;
-  // console.log(filters);
+  const filters = request.query.filter
+    ? movieFiltersFactory(request.query.filter)
+    : null;
+
   try {
-    const movies = await prisma.movie.findMany({
-      where: {
-        AND: [...filters],
-      },
-    });
+    const movies = await prisma.movie.findMany(
+      filters && {
+        where: { AND: [...filters] },
+      }
+    );
     reply.send(movies);
   } catch (error) {
     reply.send(error);
