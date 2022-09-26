@@ -1,4 +1,4 @@
-import { fastify, FastifyReply as Reply, FastifyRequest } from "fastify";
+import { FastifyReply as Reply, FastifyRequest } from "fastify";
 import bcrypt from "bcrypt";
 
 type Request = FastifyRequest<{
@@ -11,7 +11,7 @@ type Request = FastifyRequest<{
   };
 }>;
 
-export const register = async (request: Request, reply: Reply) => {
+export const handleRegister = async (request: Request, reply: Reply) => {
   const { prisma } = request;
   let { pseudo, mail, password } = request.body.user;
 
@@ -57,7 +57,7 @@ export const register = async (request: Request, reply: Reply) => {
   }
 };
 
-export const login = async (request: Request, reply: Reply) => {
+export const handleLogin = async (request: Request, reply: Reply) => {
   const { prisma } = request;
   const { pseudo, password } = request.body.user;
 
@@ -85,16 +85,59 @@ export const login = async (request: Request, reply: Reply) => {
       throw new Error("Mot de passe incorrect.");
     }
 
-    // Generate token
-    const token = await reply.jwtSign({ user });
+    // Generate tokens
+    const token = await reply.jwtSign(
+      { user_id: user.id },
+      { expiresIn: "1m" }
+    );
     const refreshToken = await reply.jwtSign({ user }, { expiresIn: "1d" });
 
-    reply.send({
-      user: user,
-      token: token,
-      response: `Utilisateur "${pseudo}" connecté avec succés.`,
-    });
+    reply
+      .setCookie("token", token, {})
+      .setCookie("refreshToken", refreshToken, {})
+      .send({
+        user: user,
+        response: `Utilisateur "${pseudo}" connecté avec succés.`,
+      });
   } catch (error) {
     reply.send(error);
   }
 };
+
+export async function handleRefreshToken(request: Request, reply: Reply) {
+  const { prisma } = request;
+  const { refreshToken } = request.cookies;
+
+  try {
+    if (!refreshToken) {
+      reply.code(401); // Unauthorized
+      throw new Error("Missing refreshToken.");
+    }
+
+    // Verify token
+    const decodedToken = this.jwt.decode(refreshToken);
+    const user = await prisma.user.findUnique({
+      where: { id: decodedToken.id },
+    });
+    if (!user) {
+      reply.code(401); // Unauthorized
+      throw new Error("Invalid refreshToken.");
+    }
+
+    // Generate new tokens
+    const newToken = await reply.jwtSign(
+      { user_id: user.id },
+      { expiresIn: "1m" }
+    );
+    const newRefreshToken = await reply.jwtSign({ user }, { expiresIn: "1d" });
+
+    reply
+      .setCookie("token", newToken, {})
+      .setCookie("refreshToken", newRefreshToken, {})
+      .send({
+        response: `Tokens successfully refreshed.`,
+      });
+  } catch (error) {
+    reply.send(error);
+  }
+}

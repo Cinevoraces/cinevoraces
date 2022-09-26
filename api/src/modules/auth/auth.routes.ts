@@ -1,5 +1,9 @@
 import type { FastifyInstance } from "fastify";
-import { login, register } from "@modules/auth/auth.handler";
+import {
+  handleLogin,
+  handleRegister,
+  handleRefreshToken,
+} from "@modules/auth/auth.handler";
 import { loginSchema, registerSchema } from "@modules/auth/auth.schema";
 
 export const auth = async (fastify: FastifyInstance) => {
@@ -7,22 +11,28 @@ export const auth = async (fastify: FastifyInstance) => {
     method: "POST",
     url: "/register",
     schema: registerSchema,
-    handler: register,
+    handler: handleRegister,
   });
 
   fastify.route({
     method: "POST",
     url: "/login",
     schema: loginSchema,
-    handler: login,
+    handler: handleLogin,
   });
 
   fastify.route({
     method: "GET",
     url: "/test",
+    onRequest: [fastify.auth],
     handler: (request, reply) => {
       reply.send({ message: "ACCESS GRANTED" });
     },
-    onRequest: [fastify.auth],
+  });
+
+  fastify.route({
+    method: "GET",
+    url: "/refresh",
+    handler: handleRefreshToken,
   });
 };

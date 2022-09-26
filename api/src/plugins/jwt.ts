@@ -3,6 +3,7 @@ import type {
   FastifyReply as Reply,
   FastifyPluginCallback,
 } from "fastify";
+import type { FastifyJWTOptions } from "@fastify/jwt";
 import fastifyJwt from "@fastify/jwt";
 import plugin from "fastify-plugin";
 
@@ -19,16 +20,18 @@ const jwt: FastifyPluginCallback = async (fastify, opts, done) => {
 
   fastify.register(fastifyJwt, {
     secret: process.env.JWT_SECRET,
-    sign: { expiresIn: 60 },
-  });
+  } as FastifyJWTOptions);
 
+  fastify.decorateReply("jwt", fastify.jwt);
   fastify.decorate("auth", async (request: Request, reply: Reply) => {
     try {
-      await request.jwtVerify();
+      const { token } = request.cookies;
+      fastify.jwt.verify(token);
     } catch (err) {
       reply.send(err);
     }
   });
+
   done();
 };
 

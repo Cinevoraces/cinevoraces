@@ -10,6 +10,7 @@
     "test": "jest"
   },
   "dependencies": {
+    "@fastify/cookie": "^8.3.0",
     "@fastify/jwt": "^6.3.2",
     "@prisma/client": "^4.3.1",
     "@types/qs": "^6.9.7",
