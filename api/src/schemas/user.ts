@@ -25,15 +25,11 @@ const userSchema = {
     },
     movies: {
       type: "array",
-      items: {
-        items: { $ref: "movie#" },
-      },
+      items: { $ref: "movie#" },
     },
     reviews: {
       type: "array",
-      items: {
-        items: { $ref: "review#" },
-      },
+      items: { $ref: "review#" },
     },
   },
   required: [
