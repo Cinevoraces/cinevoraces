@@ -5,20 +5,18 @@ type Request = FastifyRequest<{
     id: number;
   };
   Querystring: {
-    pop: string;
+    pop: { [key: string]: boolean };
   };
 }>;
 
 export const handleGetUsers = async (request: Request, reply: Reply) => {
   const { prisma } = request;
+  const { pop } = request.query;
 
   try {
     const users = await prisma.user.findMany({
       orderBy: { id: "asc" },
-      include: {
-        movies: true,
-        reviews: true,
-      },
+      include: pop && { ...pop },
     });
 
     reply.send(users);
@@ -30,17 +28,16 @@ export const handleGetUsers = async (request: Request, reply: Reply) => {
 export const handleGetUserById = async (request: Request, reply: Reply) => {
   const { prisma } = request;
   const { id } = request.params;
-  const populate = request.query.pop;
-  console.log(populate);
+  const { pop } = request.query;
 
   try {
     const [user, bookmarked, viewed, liked, rating, commented] =
       await prisma.$transaction([
-        prisma.user.findUnique({
+        prisma.user.findFirst({
           where: { id },
-          include: {
-            movies: true,
-            reviews: true,
+          include: pop && {
+            movies: pop.movies ? true : false,
+            reviews: pop.reviews ? true : false,
           },
         }),
         prisma.review.count({ where: { user_id: id, bookmarked: true } }),

@@ -4,9 +4,9 @@ export const getUsersSchema: FastifySchema = {
   querystring: {
     type: "object",
     properties: {
-      // filter: {
-      //   type: "object",
-      // },
+      pop: {
+        type: "object",
+      },
     },
   },
   response: {
@@ -22,6 +22,14 @@ export const getUserByIdSchema: FastifySchema = {
     type: "object",
     properties: {
       id: { type: "number" },
+    },
+  },
+  querystring: {
+    type: "object",
+    properties: {
+      pop: {
+        type: "object",
+      },
     },
   },
   response: {
