@@ -165,7 +165,15 @@ chmod +x backup.sh
 ```
 
 ## 5 - Automatization with crontab
-
+Enter cron scheduled jobs :
+```zsh
+crontab -e
+```
+To launch a script each day at 3:00
+```bash
+00 3 * * * ~/script
+```
+**Important** : Do not put extensions such as .sh. It prevents cron from executing the script !!
 
 ## 6 - Restore the db from a backup
 [Official documentation - pg_restore](https://docs.postgresql.fr/10/app-pgrestore.html)
