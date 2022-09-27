@@ -65,3 +65,27 @@ export const putUserByIdSchema: FastifySchema = {
     },
   },
 };
+
+export const deleteUserById: FastifySchema = {
+  body: {
+    type: "object",
+    properties: {
+      user: {
+        type: "object",
+        required: ["password"],
+        properties: {
+          password: { type: "string" },
+        },
+      },
+    },
+  },
+  response: {
+    "200": {
+      type: "object",
+      required: ["message"],
+      properties: {
+        message: { type: "string" },
+      },
+    },
+  },
+};

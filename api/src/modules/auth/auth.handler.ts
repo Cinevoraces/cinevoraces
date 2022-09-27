@@ -23,20 +23,20 @@ export const handleRegister = async (request: Request, reply: Reply) => {
     if (user) {
       // French messages are to be displayed in front
       reply.code(409); // Conflict
-      if (mail === user.mail)
+      if (mail === user.mail) {
         throw new Error("Cette adresse mail est déjà associée à un compte.");
-      if (pseudo === user.pseudo)
+      } else if (pseudo === user.pseudo) {
         throw new Error("Ce pseudo est déjà utilisé.");
+      }
     }
 
     // Test and Hash password
     if (!process.env.PASS_REGEXP) {
       reply.code(500); // Internal Server Error
-      throw new Error("No password regexp found.");
-    }
-    if (!password.match(process.env.PASS_REGEXP)) {
+      throw new Error("Regexp introuvable.");
+    } else if (!password.match(process.env.PASS_REGEXP)) {
       reply.code(422); // Unprocessable Entity
-      throw new Error("Invalid password format.");
+      throw new Error("Le format du mot de passe est invalide.");
     }
     const salt = await bcrypt.genSalt(10);
     password = await bcrypt.hash(password, salt);
@@ -135,7 +135,7 @@ export async function handleRefreshToken(request: Request, reply: Reply) {
       .setCookie("token", newToken, {})
       .setCookie("refreshToken", newRefreshToken, {})
       .send({
-        response: `Tokens successfully refreshed.`,
+        response: "Tokens successfully refreshed.",
       });
   } catch (error) {
     reply.send(error);

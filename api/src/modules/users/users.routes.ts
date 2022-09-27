@@ -1,8 +1,13 @@
 import type { FastifyInstance } from "fastify";
-import { getUsersSchema, getUserByIdSchema } from "./users.schema";
+import {
+  getUsersSchema,
+  getUserByIdSchema,
+  putUserByIdSchema,
+} from "./users.schema";
 import {
   handleGetUserById,
   handleGetUsers,
+  handlePutUserById,
 } from "@modules/users/users.handler";
 
 export const users = async (fastify: FastifyInstance) => {
@@ -18,5 +23,13 @@ export const users = async (fastify: FastifyInstance) => {
     url: "/users/:id",
     schema: getUserByIdSchema,
     handler: handleGetUserById,
+  });
+
+  fastify.route({
+    method: "PUT",
+    url: "/users/:id",
+    schema: putUserByIdSchema,
+    handler: handlePutUserById,
+    onRequest: [fastify.auth],
   });
 };
