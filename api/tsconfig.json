@@ -2,7 +2,7 @@
   "include": ["src/**/*", "src/*", "test/*.ts"],
   "exclude": ["dist", "test"],
   "compilerOptions": {
-    "types": ["@types/jest", "node"],
+    "types": ["jest", "node"],
     "moduleResolution": "node",
     "target": "es2022",
     "module": "commonjs",

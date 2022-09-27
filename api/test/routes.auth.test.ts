@@ -1,10 +1,4 @@
-import supertest from "supertest";
-import Fastify from "fastify";
-import app from "../src/app";
-
-const fastify = Fastify();
-fastify.register(app);
-const request = supertest(fastify.server);
+import request from "./utils/request";
 
 const newUser = {
   email: "jambon4000@gmail.net",

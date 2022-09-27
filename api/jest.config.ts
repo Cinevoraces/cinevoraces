@@ -1,4 +1,5 @@
 /** @type {import('ts-jest/dist/types').InitialOptionsTsJest} */
+
 const aliases = require("module-alias-jest/register");
 
 export default {
