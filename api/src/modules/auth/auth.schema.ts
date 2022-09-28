@@ -3,16 +3,11 @@ import type { FastifySchema } from "fastify";
 export const registerSchema: FastifySchema = {
   body: {
     type: "object",
+    required: ["mail", "pseudo", "password"],
     properties: {
-      user: {
-        type: "object",
-        required: ["mail", "pseudo", "password"],
-        properties: {
-          mail: { type: "string" },
-          pseudo: { type: "string" },
-          password: { type: "string" },
-        },
-      },
+      password: { type: "string" },
+      mail: { type: "string" },
+      pseudo: { type: "string" },
     },
   },
   response: {
@@ -56,15 +51,10 @@ export const registerSchema: FastifySchema = {
 export const loginSchema: FastifySchema = {
   body: {
     type: "object",
+    required: ["pseudo", "password"],
     properties: {
-      user: {
-        type: "object",
-        required: ["pseudo", "password"],
-        properties: {
-          pseudo: { type: "string" },
-          password: { type: "string" },
-        },
-      },
+      pseudo: { type: "string" },
+      password: { type: "string" },
     },
   },
   response: {

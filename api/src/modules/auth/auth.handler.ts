@@ -3,17 +3,15 @@ import bcrypt from "bcrypt";
 
 type Request = FastifyRequest<{
   Body: {
-    user: {
-      mail: string;
-      pseudo: string;
-      password: string;
-    };
+    pseudo: string;
+    mail: string;
+    password: string;
   };
 }>;
 
 export const handleRegister = async (request: Request, reply: Reply) => {
   const { prisma } = request;
-  let { pseudo, mail, password } = request.body.user;
+  let { pseudo, mail, password } = request.body;
 
   try {
     // Duplicate check
@@ -59,7 +57,7 @@ export const handleRegister = async (request: Request, reply: Reply) => {
 
 export const handleLogin = async (request: Request, reply: Reply) => {
   const { prisma } = request;
-  const { pseudo, password } = request.body.user;
+  const { pseudo, password } = request.body;
 
   try {
     const user = await prisma.user.findUnique({
@@ -87,8 +85,8 @@ export const handleLogin = async (request: Request, reply: Reply) => {
 
     // Generate tokens
     const token = await reply.jwtSign(
-      { user_id: user.id },
-      { expiresIn: "10m" } // TODO: DO NOT PUSH THIS
+      { id: user.id },
+      { expiresIn: "1m" }
     );
     const refreshToken = await reply.jwtSign({ ...user, expiresIn: "1d" });
 
@@ -126,7 +124,7 @@ export async function handleRefreshToken(request: Request, reply: Reply) {
 
     // Generate new tokens
     const newToken = await reply.jwtSign(
-      { user_id: user.id },
+      { id: user.id },
       { expiresIn: "1m" }
     );
     const newRefreshToken = await reply.jwtSign({ ...user, expiresIn: "1d" });

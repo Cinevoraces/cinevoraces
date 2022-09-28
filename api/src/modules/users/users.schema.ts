@@ -40,23 +40,17 @@ export const getUserByIdSchema: FastifySchema = {
 };
 
 export const putUserByIdSchema: FastifySchema = {
-  params: {
-    type: "object",
-    properties: {
-      id: { type: "number" },
-    },
-  },
   body: {
     type: "object",
+    required: ["password"],
     properties: {
-      user: {
+      password: { type: "string" },
+      update_user: {
         type: "object",
-        required: ["password"],
         properties: {
-          password: { type: "string" },
           pseudo: { type: "string" },
           mail: { type: "string" },
-          updated_password: { type: "string" },
+          password: { type: "string" },
         },
       },
     },
@@ -74,12 +68,13 @@ export const putUserByIdSchema: FastifySchema = {
 export const deleteUserById: FastifySchema = {
   body: {
     type: "object",
+    required: ["password"],
     properties: {
-      user: {
+      password: { type: "string" },
+      delete_user: {
         type: "object",
-        required: ["password"],
         properties: {
-          password: { type: "string" },
+
         },
       },
     },

@@ -9,11 +9,11 @@ type Request = FastifyRequest<{
     pop: { [key: string]: boolean };
   };
   Body: {
-    user: {
-      password: string;
-      pseudo: string;
-      mail: string;
-      updated_password: string;
+    password: string;
+    update_user?: {
+      pseudo?: string;
+      mail?: string;
+      password?: string;
     };
   };
 }>;
@@ -75,23 +75,11 @@ export const handleGetUserById = async (request: Request, reply: Reply) => {
 
 export async function handlePutUserById(request: Request, reply: Reply) {
   const { prisma } = request;
-  const { id } = request.params;
-  const { password, pseudo, mail, updated_password } = request.body.user;
+  const { password, update_user } = request.body;
   const { token } = request.cookies;
 
-  let updateUser: {
-    password?: string;
-    pseudo?: string;
-    mail?: string;
-  } = {};
-
   try {
-    // Verify token
-    const decodedToken = this.jwt.decode(token);
-    if (decodedToken.id !== id) {
-      reply.code(401); // Unauthorized
-      throw new Error("Vous n'êtes pas authorisé à modifier cet utilisateur.");
-    }
+    const id = this.jwt.decode(token).id;
 
     // User check
     const user = await prisma.user.findUnique({ where: { id } });
@@ -99,7 +87,6 @@ export async function handlePutUserById(request: Request, reply: Reply) {
       reply.code(404);
       throw new Error("Utilisateur introuvable.");
     }
-
     // Password check
     const isPasswordCorrect = await bcrypt.compare(password, user.password);
     if (!isPasswordCorrect) {
@@ -107,31 +94,25 @@ export async function handlePutUserById(request: Request, reply: Reply) {
       throw new Error("Mot de passe incorrect.");
     }
 
-    if (updated_password) {
+    if (update_user.password) {
       // Test and Hash new password
       if (!process.env.PASS_REGEXP) {
         reply.code(500); // Internal Server Error
         throw new Error("Regexp introuvable.");
-      } else if (!updated_password.match(process.env.PASS_REGEXP)) {
+      } else if (!update_user.password.match(process.env.PASS_REGEXP)) {
         reply.code(422); // Unprocessable Entity
         throw new Error("Le format du mot de passe est invalide.");
       }
       const salt = await bcrypt.genSalt(10);
-      updateUser.password = await bcrypt.hash(password, salt);
+      update_user.password = await bcrypt.hash(password, salt);
     }
-    if (pseudo) {
-      updateUser.pseudo = pseudo;
-    }
-    if (mail) {
-      updateUser.mail = mail;
-    }
-
+    
     // Update user
     await prisma.user.update({
       where: { id },
-      data: { ...updateUser },
+      data: { ...update_user },
     });
-
+    
     reply.send("Données utilisateur modifiées avec succés.");
   } catch (error) {
     reply.send(error);
@@ -142,7 +123,7 @@ export async function handlePutUserById(request: Request, reply: Reply) {
 export async function handleDeleteUserById(request: Request, reply: Reply) {
   const { prisma } = request;
   const { id } = request.params;
-  const { password } = request.body.user;
+  const { password } = request.body;
   const { token } = request.cookies;
 
   try {

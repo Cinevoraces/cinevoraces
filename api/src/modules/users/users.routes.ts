@@ -27,7 +27,7 @@ export const users = async (fastify: FastifyInstance) => {
 
   fastify.route({
     method: "PUT",
-    url: "/users/:id",
+    url: "/users",
     schema: putUserByIdSchema,
     handler: handlePutUserById,
     onRequest: [fastify.auth],
