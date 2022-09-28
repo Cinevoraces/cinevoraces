@@ -1,8 +1,14 @@
 {
-  "include": ["src/**/*", "src/*"],
-  "exclude": ["dist", "test"],
+  "include": [
+    "src/**/*",
+    "src/*",
+    "test/**/*.test.ts",
+    "test/utils/*.ts",
+    "test/*.ts"
+  ],
+  "exclude": ["dist"],
   "compilerOptions": {
-    "types": ["jest", "node"],
+    "types": ["@types/jest", "node"],
     "moduleResolution": "node",
     "target": "es2022",
     "module": "commonjs",

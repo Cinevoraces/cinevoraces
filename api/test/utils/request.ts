@@ -1,9 +1,9 @@
-import supertest from "supertest";
-import Fastify from "fastify";
-import app from "../../src/app";
+// import supertest from "supertest";
+// import Fastify from "fastify";
+// import app from "../../src/app";
 
-const fastify = Fastify();
-fastify.register(app);
-const request = supertest(fastify.server);
+// const fastify = Fastify();
+// fastify.register(app);
+// const request = supertest(fastify.server);
 
-export default request;
+// export default request;

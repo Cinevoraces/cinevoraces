@@ -102,7 +102,7 @@ export async function handlePutUserById(request: Request, reply: Reply) {
 
     // Password check
     const isPasswordCorrect = await bcrypt.compare(password, user.password);
-    if (isPasswordCorrect) {
+    if (!isPasswordCorrect) {
       reply.code(401); // Unauthorized
       throw new Error("Mot de passe incorrect.");
     }
@@ -174,5 +174,4 @@ export async function handleDeleteUserById(request: Request, reply: Reply) {
   } catch (error) {
     reply.send(error);
   }
-  // TODO
 }

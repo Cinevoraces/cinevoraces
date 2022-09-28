@@ -107,7 +107,6 @@ export const handleLogin = async (request: Request, reply: Reply) => {
 export async function handleRefreshToken(request: Request, reply: Reply) {
   const { prisma } = request;
   const { refreshToken } = request.cookies;
-  console.log(`refreshToken : ${refreshToken}`);
 
   try {
     if (!refreshToken) {
