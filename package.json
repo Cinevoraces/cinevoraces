@@ -1,0 +1,11 @@
+{
+  "name": "cinevoraces",
+  "scripts": {
+    "install": "(cd api && npm install); (cd app && npm install)",
+    "dev": "docker compose up"
+  },
+  "dependencies": {
+    "app": "file:app",
+    "cinevoraces-api": "file:api"
+  }
+}
