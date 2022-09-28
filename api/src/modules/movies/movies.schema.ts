@@ -1,37 +1,32 @@
-import { FastifySchema } from "fastify"
+import type { FastifySchema } from "fastify";
 
-
-const getMoviesSchema: FastifySchema = {
+export const getMoviesSchema: FastifySchema = {
   querystring: {
     type: "object",
     properties: {
       filter: {
-        type: 'object'
-      }
-    }
+        type: "object",
+      },
+    },
   },
   response: {
     "200": {
       type: "array",
-      items: {$ref: "movie#"}
-    }
-  }
-}
+      items: { $ref: "movie#" },
+    },
+  },
+};
 
-const getMovieSchema: FastifySchema = {
+export const getMovieSchema: FastifySchema = {
   params: {
     type: "object",
     properties: {
-      id: { type: 'number'}
-    }
+      id: { type: "number" },
+    },
   },
   response: {
     200: {
-      $ref: "movie#"
-    }
-  }
-}
-
-export {getMoviesSchema, getMovieSchema}
-
-
+      $ref: "movie#",
+    },
+  },
+};

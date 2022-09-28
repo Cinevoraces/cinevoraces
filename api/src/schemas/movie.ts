@@ -3,59 +3,56 @@ const movieSchema = {
   type: "object",
   properties: {
     id: {
-      type: "number"
+      type: "number",
     },
     french_title: {
-      type: "string"
+      type: "string",
     },
     original_title: {
-      type: "string"
+      type: "string",
     },
     poster_url: {
-      type: "string"
+      type: "string",
     },
     directors: {
       type: "array",
-      items: 
-        {
-          type: "string"
-        }
-      
+      items: {
+        type: "string",
+      },
     },
     release_date: {
-      type: "string"
+      type: "string",
     },
     runtime: {
-      type: "number"
+      type: "number",
     },
     casting: {
       type: "array",
-      items: 
-        {
-          type: "string"
-        } 
+      items: {
+        type: "string",
+      },
     },
     presentation: {
-      type: "string"
+      type: "string",
     },
     is_published: {
-      type: "boolean"
+      type: "boolean",
     },
     publishing_date: {
-      type: "string"
+      type: "string",
     },
     user_id: {
-      type: "number"
+      type: "number",
     },
     season_id: {
-      type: "number"
+      type: "number",
     },
     created_at: {
-      type: "string"
+      type: "string",
     },
     updated_at: {
-      type: "null"
-    }
+      type: "null",
+    },
   },
   required: [
     "id",
@@ -72,8 +69,8 @@ const movieSchema = {
     "user_id",
     "season_id",
     "created_at",
-    "updated_at"
-  ]
-}
+    "updated_at",
+  ],
+};
 
-export default movieSchema
+export default movieSchema;

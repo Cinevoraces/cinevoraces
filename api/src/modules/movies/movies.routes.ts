@@ -1,21 +1,22 @@
-import { FastifyInstance } from "fastify";
-import { getMovieById, getMovies } from "./movies.handler";
-import { getMovieSchema, getMoviesSchema } from "./movies.schema";
+import type { FastifyInstance } from "fastify";
+import {
+  handleGetMovieById,
+  handleGetMovies,
+} from "@modules/movies/movies.handler";
+import { getMovieSchema, getMoviesSchema } from "@modules/movies/movies.schema";
 
 export const movies = async (fastify: FastifyInstance) => {
-  
   fastify.route({
     method: "GET",
-    url: '/movies',
+    url: "/movies",
     schema: getMoviesSchema,
-    handler: getMovies
-  })
+    handler: handleGetMovies,
+  });
 
   fastify.route({
     method: "GET",
-    url: '/movies/:id',
+    url: "/movies/:id",
     schema: getMovieSchema,
-    handler: getMovieById
-  })
-  
-}
+    handler: handleGetMovieById,
+  });
+};

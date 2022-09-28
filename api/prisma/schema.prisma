@@ -1,5 +1,6 @@
 generator client {
   provider = "prisma-client-js"
+  previewFeatures = ["filteredRelationCount", "interactiveTransactions"]
   binaryTargets = ["native", "linux-musl", "debian-openssl-1.1.x"]
 }
 
@@ -141,8 +142,8 @@ model user {
   role       String    @default("user")
   created_at DateTime  @default(now()) @db.Timestamptz(6)
   updated_at DateTime? @db.Timestamptz(6)
-  movie      movie[]
-  review     review[]
+  movies     movie[]
+  reviews    review[]
 
   @@index([id], map: "user_idx")
 }

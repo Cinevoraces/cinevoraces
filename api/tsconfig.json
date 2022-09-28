@@ -1,5 +1,11 @@
 {
-  "include": ["src/**/*", "src/*", "test/*.test.ts"],
+  "include": [
+    "src/**/*",
+    "src/*",
+    "test/**/*.test.ts",
+    "test/utils/*.ts",
+    "test/*.ts"
+  ],
   "exclude": ["dist"],
   "compilerOptions": {
     "types": ["@types/jest", "node"],
@@ -24,5 +30,4 @@
       "@utils/*": ["src/utils/*"]
     }
   }
-  
 }
