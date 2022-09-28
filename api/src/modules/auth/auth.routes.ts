@@ -23,15 +23,6 @@ export const auth = async (fastify: FastifyInstance) => {
 
   fastify.route({
     method: "GET",
-    url: "/test",
-    onRequest: [fastify.auth],
-    handler: (request, reply) => {
-      reply.send({ message: "ACCESS GRANTED" });
-    },
-  });
-
-  fastify.route({
-    method: "GET",
     url: "/refresh",
     handler: handleRefreshToken,
   });

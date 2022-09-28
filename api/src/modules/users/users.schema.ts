@@ -48,12 +48,17 @@ export const putUserByIdSchema: FastifySchema = {
   },
   body: {
     type: "object",
-    required: ["password"],
     properties: {
-      password: { type: "string" },
-      pseudo: { type: "string" },
-      mail: { type: "string" },
-      updated_password: { type: "string" },
+      user: {
+        type: "object",
+        required: ["password"],
+        properties: {
+          password: { type: "string" },
+          pseudo: { type: "string" },
+          mail: { type: "string" },
+          updated_password: { type: "string" },
+        },
+      },
     },
   },
   response: {

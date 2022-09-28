@@ -88,9 +88,9 @@ export const handleLogin = async (request: Request, reply: Reply) => {
     // Generate tokens
     const token = await reply.jwtSign(
       { user_id: user.id },
-      { expiresIn: "1m" }
+      { expiresIn: "10m" } // TODO: DO NOT PUSH THIS
     );
-    const refreshToken = await reply.jwtSign({ user }, { expiresIn: "1d" });
+    const refreshToken = await reply.jwtSign({ ...user, expiresIn: "1d" });
 
     reply
       .setCookie("token", token, {})
@@ -107,6 +107,7 @@ export const handleLogin = async (request: Request, reply: Reply) => {
 export async function handleRefreshToken(request: Request, reply: Reply) {
   const { prisma } = request;
   const { refreshToken } = request.cookies;
+  console.log(`refreshToken : ${refreshToken}`);
 
   try {
     if (!refreshToken) {
@@ -129,7 +130,7 @@ export async function handleRefreshToken(request: Request, reply: Reply) {
       { user_id: user.id },
       { expiresIn: "1m" }
     );
-    const newRefreshToken = await reply.jwtSign({ user }, { expiresIn: "1d" });
+    const newRefreshToken = await reply.jwtSign({ ...user, expiresIn: "1d" });
 
     reply
       .setCookie("token", newToken, {})
