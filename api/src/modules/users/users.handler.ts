@@ -1,5 +1,5 @@
 import type { FastifyReply as Reply, FastifyRequest } from "fastify";
-import bcrypt from "bcrypt";
+import { comparePassword, hashPassword } from "@src/utils/bcryptHandler";
 
 type Request = FastifyRequest<{
   Params: {
@@ -101,7 +101,7 @@ export async function handlePutUserById(request: Request, reply: Reply) {
     }
 
     // Password check
-    const isPasswordCorrect = await bcrypt.compare(password, user.password);
+    const isPasswordCorrect = await comparePassword(password, user.password);
     if (!isPasswordCorrect) {
       reply.code(401); // Unauthorized
       throw new Error("Mot de passe incorrect.");
@@ -116,8 +116,7 @@ export async function handlePutUserById(request: Request, reply: Reply) {
         reply.code(422); // Unprocessable Entity
         throw new Error("Le format du mot de passe est invalide.");
       }
-      const salt = await bcrypt.genSalt(10);
-      updateUser.password = await bcrypt.hash(password, salt);
+      updateUser.password = await hashPassword(password);
     }
     if (pseudo) {
       updateUser.pseudo = pseudo;
@@ -157,7 +156,7 @@ export async function handleDeleteUserById(request: Request, reply: Reply) {
     }
 
     // Password check
-    const isPasswordCorrect = await bcrypt.compare(password, admin.password);
+    const isPasswordCorrect = await comparePassword(password, admin.password);
     if (isPasswordCorrect) {
       reply.code(401); // Unauthorized
       throw new Error("Mot de passe incorrect.");
