@@ -182,6 +182,11 @@ Example :
 docker exec cinevoraces_postgres_1 pg_restore -c -U ${DB_USER} -d ${DB_NAME} backups/backup_2022-09-27.09:32:22 -v
 ```
 
+Specifically for a back done with a differrent owner the commande --no-owner allow to ignore the owner pointed at in the backup :
+```zsh
+docker exec cinevoraces_postgres_1 pg_restore -c --no-owner -U ${DB_USER} -d ${DB_NAME} backups/backup_file -v
+```
+
 ## (Old) - Restore Database backup for Heroku hosting specifically
 ### Import from Heroku db
 

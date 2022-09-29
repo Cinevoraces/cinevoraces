@@ -36,8 +36,8 @@ const filterSlice = createSlice({
     initFilters(state, {payload}: {payload: DBFilters[]}) {
       // Set Periodes
       state.periode = {
-        baseValues: [payload[0].min_max_dates[0], payload[0].min_max_dates[1]],
-        stateValues: [payload[0].min_max_dates[0], payload[0].min_max_dates[1]]
+        baseValues: [parseInt(payload[0].min_max_dates[0].split(',')[0],10), parseInt(payload[0].min_max_dates[0].split(',')[1],10)],
+        stateValues: [parseInt(payload[0].min_max_dates[0].split(',')[0],10), parseInt(payload[0].min_max_dates[0].split(',')[1],10)]
       };
       state.runtime.maxValue = payload[0].max_runtime;
       state.runtime.value = payload[0].max_runtime;
@@ -54,8 +54,9 @@ const filterSlice = createSlice({
           !(constructor.includes(season)) && constructor.push(season);
         });
         constructor.forEach((season, index) => { // Format data
+          console.log(season)
           formatedData.push(
-            {name: `Saison ${season[0]} - ${season[1]}`, value: `season_number=${season[0]}`, 
+            {name: `Saison ${season}`, value: `season_number=${season[0]}`, 
               isChecked: (index === constructor.length - 1) ? true : false});
         });
         state.mainFilters = formatedData; // Update state

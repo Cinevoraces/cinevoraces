@@ -59,6 +59,18 @@ function Films() {
       (query !== queryString) && setQueryString(query);
     }}, [filtersData, mainFilters]);
 
+    useEffect(()=> {
+    moviesData && console.log("moviesData",moviesData)
+    error && console.log("error",error)
+    filtersData && console.log("filtersData",filtersData)
+    movies && console.log("movies",movies)
+
+    }, [
+      moviesData,
+error,
+filtersData,
+movies
+    ])
   // Update movies useState with redux filter state
   useEffect(() => {
     if (moviesData && filtersData) {
@@ -95,11 +107,12 @@ function Films() {
         if (avgRate === 0) return true;
         if (Number(movie.avg_rating) && Number(movie.avg_rating) === avgRate) return true;
       });
-      // By movie title
+      // // By movie title
       filteredMovies = filteredMovies.filter(movie => { 
         return movie.french_title.toLowerCase().includes(query.toLowerCase());
       });
       setMovies(filteredMovies);
+
     }}, [moviesData, filtersData, mainFilters, genre, country, periode, runtime, avgRate, query]);
   
   return(

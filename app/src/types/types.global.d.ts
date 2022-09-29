@@ -60,7 +60,7 @@ type DBFilters = {
   seasons_list: [number[]],
   genres_list: string[],
   countries_list: string[],
-  min_max_dates: [number, number],
+  min_max_dates: [string],
   max_runtime: number
 }
 type TMDBMovie = {
