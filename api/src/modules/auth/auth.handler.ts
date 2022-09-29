@@ -1,5 +1,5 @@
 import { FastifyReply as Reply, FastifyRequest } from "fastify";
-import bcrypt from "bcrypt";
+import { comparePassword, hashPassword } from "@src/utils/bcryptHandler";
 
 type Request = FastifyRequest<{
   Body: {
@@ -38,8 +38,7 @@ export const handleRegister = async (request: Request, reply: Reply) => {
       reply.code(422); // Unprocessable Entity
       throw new Error("Le format du mot de passe est invalide.");
     }
-    const salt = await bcrypt.genSalt(10);
-    password = await bcrypt.hash(password, salt);
+    password = await hashPassword(password);
 
     // Create user
     await prisma.user.create({
@@ -79,7 +78,7 @@ export const handleLogin = async (request: Request, reply: Reply) => {
       throw new Error("Utilisateur introuvable.");
     }
 
-    const isPasswordCorrect = await bcrypt.compare(password, user.password);
+    const isPasswordCorrect = await comparePassword(password, user.password);
     if (!isPasswordCorrect) {
       reply.code(401); // Unauthorized
       throw new Error("Mot de passe incorrect.");
