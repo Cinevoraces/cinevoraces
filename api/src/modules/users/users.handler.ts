@@ -109,10 +109,7 @@ export async function handlePutUserById(request: Request, reply: Reply) {
 
     if (updated_password) {
       // Test and Hash new password
-      if (!process.env.PASS_REGEXP) {
-        reply.code(500); // Internal Server Error
-        throw new Error("Regexp introuvable.");
-      } else if (!updated_password.match(process.env.PASS_REGEXP)) {
+      if (!updated_password.match(process.env.PASS_REGEXP)) {
         reply.code(422); // Unprocessable Entity
         throw new Error("Le format du mot de passe est invalide.");
       }
