@@ -1,4 +1,5 @@
 import type { FastifyInstance } from "fastify";
+import envCheck from "@plugins/envCheck";
 import prismaClient from "@plugins/prismaClient";
 import jwt from "@plugins/jwt";
 import cookie from "@plugins/cookie";
@@ -12,6 +13,7 @@ const app = async (fastify: FastifyInstance) => {
   fastify.register(schemasRegister);
 
   // Register plugins
+  fastify.register(envCheck);
   fastify.register(prismaClient);
   fastify.register(cookie);
   fastify.register(jwt);

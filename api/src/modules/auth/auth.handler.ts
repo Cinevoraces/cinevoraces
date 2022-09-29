@@ -31,10 +31,7 @@ export const handleRegister = async (request: Request, reply: Reply) => {
     }
 
     // Test and Hash password
-    if (!process.env.PASS_REGEXP) {
-      reply.code(500); // Internal Server Error
-      throw new Error("Regexp introuvable.");
-    } else if (!password.match(process.env.PASS_REGEXP)) {
+    if (!password.match(process.env.PASS_REGEXP)) {
       reply.code(422); // Unprocessable Entity
       throw new Error("Le format du mot de passe est invalide.");
     }
