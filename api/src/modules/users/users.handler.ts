@@ -79,10 +79,8 @@ export async function handlePutUserById(request: Request, reply: Reply) {
   const { token } = request.cookies;
 
   try {
-    const id = this.jwt.decode(token).id;
-
     // User check
-    const user = await prisma.user.findUnique({ where: { id } });
+    const user = await prisma.user.findUnique({ where: { id: request.user.id  } });
     if (!user) {
       reply.code(404);
       throw new Error("Utilisateur introuvable.");
@@ -105,7 +103,7 @@ export async function handlePutUserById(request: Request, reply: Reply) {
     
     // Update user
     await prisma.user.update({
-      where: { id },
+      where: { id: request.user.id },
       data: { ...update_user },
     });
     

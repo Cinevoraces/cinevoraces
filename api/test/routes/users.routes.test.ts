@@ -56,9 +56,10 @@ describe("Users routes test", () => {
       method: "PUT",
       url: "/users",
       headers: {
-        cookie: `token=${(login.cookies[0] as any).value}`,
+        authorization: `Bearer ${(login.cookies[0] as any).value}`
       },
       payload: {
+        
         password,
         update_user: {
           pseudo: "IHateTests",
