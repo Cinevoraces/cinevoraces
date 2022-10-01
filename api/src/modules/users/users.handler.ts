@@ -1,5 +1,5 @@
 import type { FastifyReply as Reply, FastifyRequest } from "fastify";
-import bcrypt from "bcrypt";
+import { comparePassword, hashPassword } from "@src/utils/bcryptHandler";
 
 type Request = FastifyRequest<{
   Params: {
@@ -88,7 +88,7 @@ export async function handlePutUserById(request: Request, reply: Reply) {
       throw new Error("Utilisateur introuvable.");
     }
     // Password check
-    const isPasswordCorrect = await bcrypt.compare(password, user.password);
+    const isPasswordCorrect = await comparePassword(password, user.password);
     if (!isPasswordCorrect) {
       reply.code(401); // Unauthorized
       throw new Error("Mot de passe incorrect.");
@@ -96,15 +96,11 @@ export async function handlePutUserById(request: Request, reply: Reply) {
 
     if (update_user.password) {
       // Test and Hash new password
-      if (!process.env.PASS_REGEXP) {
-        reply.code(500); // Internal Server Error
-        throw new Error("Regexp introuvable.");
-      } else if (!update_user.password.match(process.env.PASS_REGEXP)) {
+      if (!update_user.password.match(process.env.PASS_REGEXP)) {
         reply.code(422); // Unprocessable Entity
         throw new Error("Le format du mot de passe est invalide.");
       }
-      const salt = await bcrypt.genSalt(10);
-      update_user.password = await bcrypt.hash(password, salt);
+      update_user.password = await hashPassword(password);
     }
     
     // Update user
@@ -138,7 +134,7 @@ export async function handleDeleteUserById(request: Request, reply: Reply) {
     }
 
     // Password check
-    const isPasswordCorrect = await bcrypt.compare(password, admin.password);
+    const isPasswordCorrect = await comparePassword(password, admin.password);
     if (isPasswordCorrect) {
       reply.code(401); // Unauthorized
       throw new Error("Mot de passe incorrect.");
