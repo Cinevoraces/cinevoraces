@@ -2,7 +2,8 @@
   "name": "cinevoraces",
   "scripts": {
     "install": "(cd api && npm install); (cd app && npm install)",
-    "dev": "docker compose up"
+    "dev": "docker compose up",
+    "test": "(cd api && npm run test)"
   },
   "dependencies": {
     "app": "file:app",
