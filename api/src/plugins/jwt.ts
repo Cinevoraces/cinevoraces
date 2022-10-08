@@ -26,7 +26,7 @@ type UserJwt = {
 
 declare module "@fastify/jwt" {
   interface FastifyJWT {
-    payload: { user: UserJwt, expiresIn: string }
+    payload: UserJwt & { expiresIn: string }
     user: UserJwt
   }
 }

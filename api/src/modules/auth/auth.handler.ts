@@ -81,9 +81,9 @@ export const handleLogin = async (request: Request, reply: Reply) => {
 
     // Generate tokens
     const token = await reply.jwtSign(
-      {user, expiresIn: "1m" }
+      {...user, expiresIn: "1m" }
     );
-    const refreshToken = await reply.jwtSign({ user, expiresIn: "1d" });
+    const refreshToken = await reply.jwtSign({ ...user, expiresIn: "1d" });
 
     reply
       .setCookie("token", token, {})
@@ -129,10 +129,10 @@ export async function handleRefreshToken(request: Request, reply: Reply) {
     // Generate new tokens
 
     const newToken = await reply.jwtSign(
-      { user ,expiresIn: "1m" }
+      { ...user ,expiresIn: "1m" }
     );
     
-    const newRefreshToken = await reply.jwtSign({ user, expiresIn: "1d" });
+    const newRefreshToken = await reply.jwtSign({ ...user, expiresIn: "1d" });
 
     reply
       .setCookie("token", newToken, {})
