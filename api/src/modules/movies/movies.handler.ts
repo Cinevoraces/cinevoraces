@@ -15,15 +15,18 @@ type Request = FastifyRequest<{
 export const handleGetMovies = async (request: Request, reply: Reply) => {
   const { prisma } = request;
   const filters = movieFiltersFactory(request.query.filter)
-
+  
   try {
     const movies = await prisma.movie.findMany(
-      (filters && filters.where) && {
+      (filters) && {
         where: { AND: [...filters.where].reduce<Prisma.movieWhereInput[]>(
           (acc, v) => (v !== undefined ? [...acc, v] : acc),
           [],
         ), },
+        orderBy: filters.orderBy,
+        ...filters.pagination,
       }
+
     );
     reply.send(movies);
   } catch (error) {

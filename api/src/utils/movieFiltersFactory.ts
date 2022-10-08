@@ -14,6 +14,7 @@ export default function movieFiltersFactory(
 ): {
   where: Prisma.movieWhereInput[]
   orderBy: Prisma.movieOrderByWithRelationInput | null
+  pagination: {take: number}
 } {
   if (!filters) return null
   const keys = Object.keys(filters);
@@ -44,24 +45,30 @@ export default function movieFiltersFactory(
           },
         ];
       }
-      if (key === "lastest") {
-        return [
-          ...acc
-        ]
-      }
       return acc;
     },
     []
   );
 
-  const orderBy = orderByHandler(config.orderBy)
+  const orderBy = orderByHandler(filters.orderBy)
+  const pagination = paginationHandler(filters.pagination)
 
-  return { where, orderBy }
+  return { where, orderBy, pagination }
 }
 
 
 const orderByHandler = (order: "asc" | "desc"): Prisma.movieOrderByWithRelationInput => {
+  if(!order) return null
   return {
     publishing_date: order
+  }
+}
+
+const paginationHandler = (take: number): {
+  take: number
+} => {
+  if(!take) return null
+  return {
+    take
   }
 }
