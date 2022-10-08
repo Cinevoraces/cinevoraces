@@ -99,18 +99,9 @@ export const handleLogin = async (request: Request, reply: Reply) => {
 
 export async function handleRefreshToken(request: Request, reply: Reply) {
   const { prisma } = request;
-  const { refreshToken } = request.cookies;
-
   try {
-    if (!refreshToken) {
-      reply.code(401); // Unauthorized
-      throw new Error("Missing refreshToken.");
-    }
-    // Verify token
-    const decodedToken = this.jwt.decode(refreshToken);
-  
     const user = await prisma.user.findUnique({
-      where: { id: decodedToken.user.id },
+      where: { id: request.user.id },
       select: {
         id: true,
         pseudo: true,

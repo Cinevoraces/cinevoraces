@@ -25,5 +25,6 @@ export const auth = async (fastify: FastifyInstance) => {
     method: "GET",
     url: "/refresh",
     handler: handleRefreshToken,
+    onRequest: [fastify.auth]
   });
 };

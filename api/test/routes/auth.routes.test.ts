@@ -73,7 +73,7 @@ describe("Auth routes test", () => {
       method: "GET",
       url: "/refresh",
       headers: {
-        cookie: `refreshToken=${(login.cookies[1] as any).value}`,
+        authorization: `Bearer ${(login.cookies[1] as any).value}`
       },
     });
 
