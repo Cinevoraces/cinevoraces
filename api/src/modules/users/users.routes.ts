@@ -3,11 +3,13 @@ import {
   getUsersSchema,
   getUserByIdSchema,
   putUserByIdSchema,
+  deleteUserByIdSchema,
 } from "./users.schema";
 import {
   handleGetUserById,
   handleGetUsers,
   handlePutUserById,
+  handleDeleteUserById,
 } from "@modules/users/users.handler";
 
 export const users = async (fastify: FastifyInstance) => {
@@ -31,5 +33,15 @@ export const users = async (fastify: FastifyInstance) => {
     schema: putUserByIdSchema,
     handler: handlePutUserById,
     onRequest: [fastify.accessVerify],
+    preValidation: [fastify.passwordVerify],
+  });
+
+  fastify.route({
+    method: "DELETE",
+    url: "/users/:id",
+    schema: deleteUserByIdSchema,
+    handler: handleDeleteUserById,
+    onRequest: [fastify.isAdmin],
+    preValidation: [fastify.passwordVerify],
   });
 };

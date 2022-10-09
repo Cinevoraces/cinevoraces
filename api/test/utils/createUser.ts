@@ -1,9 +1,8 @@
 import { faker } from '@faker-js/faker';
 import { user, Prisma } from '@prisma/client';
 import { createRessource } from './createRessource';
-import bcrypt from "bcrypt";
 
-export default async function createUser (params?: Pick<Prisma.userCreateInput, "password">) {
+export default async function createUser (params?: Pick<Prisma.userCreateInput, "password" | "role">) {
   const fakeUser: Prisma.userCreateInput = {
       pseudo: faker.internet.userName(),
       mail: faker.internet.email(),

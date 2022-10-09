@@ -21,17 +21,25 @@ describe("Users routes test", () => {
     metrics: expect.anything(),
   });
   let user: Awaited<ReturnType<typeof createUser>>
+  let admin: Awaited<ReturnType<typeof createUser>>
+  let userToDelete: Awaited<ReturnType<typeof createUser>>
   const password = "password1234";
   
   beforeAll(async () => {
     const encryptedPassword = await bcrypt.hash(password, 10);
     user = await createUser({
       password: encryptedPassword,
-    })
+    });
+    admin = await createUser({
+      password: encryptedPassword,
+      role: "admin",
+    });
+    userToDelete = await createUser();
   })
 
   afterAll(async () => {
     user.remove()
+    admin.remove()
   })
   
   test("GET /users", async () => {
@@ -105,6 +113,26 @@ describe("Users routes test", () => {
           password: "password123456789",
         },
       },
+    });
+
+    expect(res.statusCode).toEqual(200);
+  });
+
+  test("DELETE /users/:id", async () => {  
+    const login = await app.inject({
+      method: "POST",
+      url: "/login",
+      payload: { pseudo: admin.data.pseudo, password },
+    });
+    const loginRes = await login.json();
+
+    const res = await app.inject({
+      method: "DELETE",
+      url: `/users/${userToDelete.data.id}`,
+      headers: {
+        authorization: `Bearer ${loginRes.token}`,
+      },
+      payload: { password },
     });
 
     expect(res.statusCode).toEqual(200);
