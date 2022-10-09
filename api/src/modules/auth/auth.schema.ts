@@ -18,33 +18,8 @@ export const registerSchema: FastifySchema = {
         message: { type: "string" },
       },
     },
-    "409": {
-      type: "object",
-      required: ["message", "statusCode"],
-      properties: {
-        statusCode: { type: "number" },
-        error: { type: "string" },
-        message: { type: "string" },
-      },
-    },
-    "422": {
-      type: "object",
-      required: ["message", "statusCode"],
-      properties: {
-        statusCode: { type: "number" },
-        error: { type: "string" },
-        message: { type: "string" },
-      },
-    },
-    "500": {
-      type: "object",
-      required: ["message", "statusCode"],
-      properties: {
-        statusCode: { type: "number" },
-        error: { type: "string" },
-        message: { type: "string" },
-      },
-    },
+    "409": { $ref: "apiError#" },
+    "422": { $ref: "apiError#" },
   },
 };
 
@@ -60,7 +35,7 @@ export const loginSchema: FastifySchema = {
   response: {
     "200": {
       type: "object",
-      required: ["user", "response"],
+      required: ["user", "token", "response"],
       properties: {
         user: {
           type: "object",
@@ -73,25 +48,41 @@ export const loginSchema: FastifySchema = {
             avatar_url: { type: "string" },
           },
         },
-        message: { type: "string" },
+        token: { type: "string" },
+        response: { type: "string" },
       },
     },
-    "401": {
-      type: "object",
-      required: ["message", "statusCode"],
-      properties: {
-        statusCode: { type: "number" },
-        error: { type: "string" },
-        message: { type: "string" },
-      },
+    "401": { $ref: "apiError#" },
+    "404": { $ref: "apiError#" },
+  },
+};
+
+export const refreshSchema: FastifySchema = {
+  headers: {
+    type: "object",
+    required: ["Cookie"],
+    properties: {
+      refresh_token: { type: "string" },
     },
-    "404": {
+  },
+  response: {
+    "200": {
       type: "object",
-      required: ["message", "statusCode"],
+      required: ["user", "token", "response"],
       properties: {
-        statusCode: { type: "number" },
-        error: { type: "string" },
-        message: { type: "string" },
+        user: {
+          type: "object",
+          required: ["id", "pseudo", "mail", "role", "avatar_url"],
+          properties: {
+            id: { type: "string" },
+            pseudo: { type: "string" },
+            mail: { type: "string" },
+            role: { type: "string" },
+            avatar_url: { type: "string" },
+          },
+        },
+        token: { type: "string" },
+        response: { type: "string" },
       },
     },
   },
