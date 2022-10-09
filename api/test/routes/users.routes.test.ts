@@ -51,12 +51,13 @@ describe("Users routes test", () => {
       url: "/login",
       payload: { pseudo: user.data.pseudo, password },
     });
+    const loginRes = await login.json();
 
     const res = await app.inject({
       method: "PUT",
       url: "/users",
       headers: {
-        cookie: `token=${(login.cookies[0] as any).value}`,
+        authorization: `Bearer ${loginRes.token}`,
       },
       payload: {
         password,

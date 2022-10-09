@@ -95,10 +95,10 @@ describe("Auth routes test", () => {
     expect(await refresh.json()).toEqual(expect.objectContaining({
       user: expect.objectContaining({
         id: expect.any(String),
-        // pseudo: expect.any(String),
-        // mail: expect.any(String),
-        // role: expect.any(String),
-        // avatar_url: expect.any(String),
+        pseudo: expect.any(String),
+        mail: expect.any(String),
+        role: expect.any(String),
+        avatar_url: expect.any(String),
       }),
       token: expect.any(String),
       response: expect.any(String)

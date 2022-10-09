@@ -127,7 +127,6 @@ export const handleRefreshToken = async (request: Request, reply: Reply) => {
       throw new Error("Utilisateur introuvable.");
     }
 
-    console.log(user);
     // Generate new tokens
     const accessToken = await reply.jwtSign(
       { ...user, expiresIn: "1m" }

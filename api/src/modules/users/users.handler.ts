@@ -73,18 +73,15 @@ export const handleGetUserById = async (request: Request, reply: Reply) => {
   }
 };
 
-export async function handlePutUserById(request: Request, reply: Reply) {
+export const handlePutUserById = async (request: Request, reply: Reply) => {
   const { prisma } = request;
   const { password, update_user } = request.body;
-  const { token } = request.cookies;
+  const { id } = request.user;
 
   try {
-    const id = this.jwt.decode(token).id;
-
-    // User check
     const user = await prisma.user.findUnique({ where: { id } });
     if (!user) {
-      reply.code(404);
+      reply.code(404); // Not Found
       throw new Error("Utilisateur introuvable.");
     }
     // Password check
