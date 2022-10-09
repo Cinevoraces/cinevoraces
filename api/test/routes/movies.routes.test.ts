@@ -33,7 +33,8 @@ describe("Movies routes test", () => {
   test("GET /movies with published/season filters", async () => {
     const res = await app.inject({
       method: "GET",
-      url: "/movies?filter[is_published]=false&filter[season_id]=3",
+      url: "/movies",
+      query: "filter[is_published]=true&filter[season_id]=3",
     });
 
     expect(res.statusCode).toEqual(200);
@@ -50,7 +51,8 @@ describe("Movies routes test", () => {
   test("GET /movies with user id filter", async () => {
     const res = await app.inject({
       method: "GET",
-      url: "/movies?filter[user_id]=1",
+      url: "/movies",
+      query: "filter[user_id]=1",
     });
 
     expect(res.statusCode).toEqual(200);
