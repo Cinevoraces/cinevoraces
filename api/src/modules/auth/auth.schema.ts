@@ -1,6 +1,12 @@
 import type { FastifySchema } from "fastify";
 
 export const registerSchema: FastifySchema = {
+  description: `
+  **Registering endpoint.**
+  Password must match the following requirments: *8 Characters, at least 1 Number, at least 1 letter.*
+  It can contain the following special characters: !#$&%*+=?|
+  `,
+  tags: ['Authentication'],
   body: {
     type: "object",
     required: ["mail", "pseudo", "password"],
@@ -24,6 +30,11 @@ export const registerSchema: FastifySchema = {
 };
 
 export const loginSchema: FastifySchema = {
+  description: `
+  **Login endpoint**.
+  Will respond with an access token in the *body* and a refresh token in a *cookie*.
+  `,
+  tags: ['Authentication'],
   body: {
     type: "object",
     required: ["pseudo", "password"],
@@ -58,6 +69,12 @@ export const loginSchema: FastifySchema = {
 };
 
 export const refreshSchema: FastifySchema = {
+  description: `
+  **New token requesting endpoint.**
+  The refresh token must be sent in the *authorization headers*.
+  A new pair of tokens will be sent in the *body* and in a *cookie*.
+  `,
+  tags: ['Authentication'],
   headers: {
     type: "object",
     required: ["Cookie"],
@@ -85,5 +102,7 @@ export const refreshSchema: FastifySchema = {
         response: { type: "string" },
       },
     },
+    "401": { $ref: "apiError#" },
+    "404": { $ref: "apiError#" },
   },
 };

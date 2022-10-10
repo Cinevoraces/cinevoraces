@@ -3,6 +3,7 @@ import envCheck from "@plugins/envCheck";
 import prismaClient from "@plugins/prismaClient";
 import jwt from "@plugins/jwt";
 import hooks from "@plugins/hooks";
+import swagger from "@plugins/swagger";
 import cookie from "@plugins/cookie";
 import { movies } from "@modules/movies/movies.routes";
 import { users } from "@modules/users/users.routes";
@@ -19,6 +20,7 @@ const app = async (fastify: FastifyInstance) => {
   fastify.register(cookie);
   fastify.register(jwt);
   fastify.register(hooks);
+  fastify.register(swagger);
 
   // Register routes
   fastify.register(movies);
