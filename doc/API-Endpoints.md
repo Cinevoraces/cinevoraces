@@ -1,17 +1,7 @@
 # API Endpoints
-Query strings uses [qs package](https://www.npmjs.com/package/qs), see the repo's `README.md` if you need documentation.
-
-qs is "plugged" in fastify options object.
-```typescript
-import Fastify from 'fastify';
-import qs from 'qs';
-
-const fastify = Fastify({
-  querystringParser: str => qs.parse(str)
-});
-```
-
-Endpoints complete documentation will be writted later with Swagger, ***this isn't the documentation***.
+- Endpoints complete documentation is written using Swagger, ***this isn't the documentation***.
+- Every endpoint needs to be correctly documented using fastify *schemas*, Swagger uses them to create documentation (please match existing documentation pattern!). [See documentation](https://github.com/fastify/fastify-swagger).
+- Query strings uses [qs package](https://www.npmjs.com/package/qs), see the repo's `README.md` if you need documentation.
 
 ## MOVIES
 
