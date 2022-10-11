@@ -30,6 +30,6 @@ export const users = async (fastify: FastifyInstance) => {
     url: "/users",
     schema: putUserByIdSchema,
     handler: handlePutUserById,
-    onRequest: [fastify.auth],
+    onRequest: [fastify.accessVerify],
   });
 };

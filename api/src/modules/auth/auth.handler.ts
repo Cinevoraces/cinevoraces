@@ -19,7 +19,6 @@ export const handleRegister = async (request: Request, reply: Reply) => {
       where: { OR: [{ mail }, { pseudo }] },
     });
     if (user) {
-      // French messages are to be displayed in front
       reply.code(409); // Conflict
       if (mail === user.mail) {
         throw new Error("Cette adresse mail est déjà associée à un compte.");
@@ -37,11 +36,7 @@ export const handleRegister = async (request: Request, reply: Reply) => {
 
     // Create user
     await prisma.user.create({
-      data: {
-        pseudo,
-        mail,
-        password,
-      },
+      data: { pseudo, mail, password },
     });
     reply
       .code(201) // Created
@@ -50,6 +45,7 @@ export const handleRegister = async (request: Request, reply: Reply) => {
     reply.send(error);
   }
 };
+
 
 export const handleLogin = async (request: Request, reply: Reply) => {
   const { prisma } = request;
@@ -79,18 +75,29 @@ export const handleLogin = async (request: Request, reply: Reply) => {
       throw new Error("Mot de passe incorrect.");
     }
 
+    const userObject = { 
+      id: user.id,
+      pseudo: user.pseudo,
+      mail: user.mail,
+      role: user.role,
+      avatar_url: user.avatar_url,
+     };
+
     // Generate tokens
-    const token = await reply.jwtSign(
-      { id: user.id },
-      { expiresIn: "1m" }
+    const accessToken = await reply.jwtSign(
+      { ...userObject, expiresIn: "1m" }
     );
-    const refreshToken = await reply.jwtSign({ ...user, expiresIn: "1d" });
+    const refreshToken = await reply.jwtSign(
+      { id: user.id, expiresIn: "1d"}
+    );
 
     reply
-      .setCookie("token", token, {})
-      .setCookie("refreshToken", refreshToken, {})
+      .setCookie("refresh_token", refreshToken, {
+        signed: true,
+      })
       .send({
-        user: user,
+        user: userObject,
+        token: accessToken,
         response: `Utilisateur "${pseudo}" connecté avec succés.`,
       });
   } catch (error) {
@@ -98,38 +105,44 @@ export const handleLogin = async (request: Request, reply: Reply) => {
   }
 };
 
-export async function handleRefreshToken(request: Request, reply: Reply) {
+export const handleRefreshToken = async (request: Request, reply: Reply) => {
   const { prisma } = request;
-  const { refreshToken } = request.cookies;
+  const { id } = request.user;
 
   try {
-    if (!refreshToken) {
-      reply.code(401); // Unauthorized
-      throw new Error("Missing refreshToken.");
-    }
-
-    // Verify token
-    const decodedToken = this.jwt.decode(refreshToken);
+    // Look for user in DB
     const user = await prisma.user.findUnique({
-      where: { id: decodedToken.id },
+      where: { id },
+      select: {
+        id: true,
+        pseudo: true,
+        mail: true,
+        role: true,
+        avatar_url: true,
+      },
     });
+
     if (!user) {
-      reply.code(401); // Unauthorized
-      throw new Error("Invalid refreshToken.");
+      reply.code(404); // Not Found
+      throw new Error("Utilisateur introuvable.");
     }
 
     // Generate new tokens
-    const newToken = await reply.jwtSign(
-      { id: user.id },
-      { expiresIn: "1m" }
+    const accessToken = await reply.jwtSign(
+      { ...user, expiresIn: "1m" }
     );
-    const newRefreshToken = await reply.jwtSign({ ...user, expiresIn: "1d" });
+    const refreshToken = await reply.jwtSign(
+      { id: user.id, expiresIn: "1d"}
+    );
 
     reply
-      .setCookie("token", newToken, {})
-      .setCookie("refreshToken", newRefreshToken, {})
+      .setCookie("refresh_token", refreshToken, {
+        signed: true,
+      })
       .send({
-        response: "Tokens successfully refreshed.",
+        user,
+        token: accessToken,
+        response: "Tokens régénérés avec succés.",
       });
   } catch (error) {
     reply.send(error);

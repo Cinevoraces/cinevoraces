@@ -1,3 +1,4 @@
+import type { resCookies } from "../types";
 import { build } from "../helper";
 import { faker } from "@faker-js/faker";
 import prisma from "../utils/prisma";
@@ -54,10 +55,20 @@ describe("Auth routes test", () => {
     });
 
     expect(login.statusCode).toEqual(200);
+    expect(await login.json()).toEqual(expect.objectContaining({
+      user: expect.objectContaining({
+        id: expect.any(String),
+        pseudo: expect.any(String),
+        mail: expect.any(String),
+        role: expect.any(String),
+        avatar_url: expect.any(String),
+      }),
+      token: expect.any(String),
+      response: expect.any(String)
+    }));
     expect(login.cookies).toEqual(
       expect.arrayContaining([
-        expect.objectContaining({ name: "token", value: expect.any(String) }),
-        expect.objectContaining({ name: "refreshToken", value: expect.any(String) }),
+        expect.objectContaining({ name: "refresh_token", value: expect.any(String) }),
       ])
     );
   });
@@ -69,14 +80,33 @@ describe("Auth routes test", () => {
       payload: { pseudo: user.data.pseudo, password },
     });
 
+    const cookieName = (login.cookies[0] as resCookies).name;
+    const cookieValue = (login.cookies[0] as resCookies).value;
+    
     const refresh = await app.inject({
       method: "GET",
       url: "/refresh",
       headers: {
-        cookie: `refreshToken=${(login.cookies[1] as any).value}`,
+        cookie: `${cookieName}=${cookieValue}`,
       },
     });
 
     expect(refresh.statusCode).toEqual(200);
+    expect(await refresh.json()).toEqual(expect.objectContaining({
+      user: expect.objectContaining({
+        id: expect.any(String),
+        pseudo: expect.any(String),
+        mail: expect.any(String),
+        role: expect.any(String),
+        avatar_url: expect.any(String),
+      }),
+      token: expect.any(String),
+      response: expect.any(String)
+    }));
+    expect(refresh.cookies).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ name: "refresh_token", value: expect.any(String) }),
+      ])
+    );
   });
 });

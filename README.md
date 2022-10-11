@@ -4,15 +4,18 @@
 
 _Ask a project admin for sensitive informations._
 
-### .env:
+### .env.api:
 
 ```
-# Api
-PG_PW=
-PG_USER=
-PG_DB=
-
-PASS_REGEXP=
-JWT_SECRET=
 COOKIE_SECRET=
+JWT_SECRET=
+PASS_REGEXP='^(?=.*[A-Za-z])(?=.*\d)[!#$&%*+=?|\-A-Za-z\d]{8,}$'
+```
+### .env.db:
+
+```
+POSTGRES_PASSWORD=
+POSTGRES_USER=
+POSTGRES_DB=
+POSTGRES_URL=
 ```

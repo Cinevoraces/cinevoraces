@@ -9,9 +9,25 @@ import plugin from "fastify-plugin";
 
 declare module "fastify" {
   interface FastifyInstance {
-    auth: (request: Request, reply: Reply) => Promise<void>;
+    accessVerify: (request: Request, reply: Reply) => void;
+    refreshVerify: (request: Request, reply: Reply) => void;
   }
 }
+declare module "@fastify/jwt" {
+  interface VerifyOptions {
+    onlyCookie: boolean;
+  }
+  interface FastifyJWT {
+		user: {
+      id?: number;
+      pseudo?: string;
+      mail?: string;
+      role?: string;
+      avatar_url?: string;
+    }
+	}
+}
+
 
 const jwt: FastifyPluginCallback = async (fastify, opts, done) => {
   if (fastify.jwt) {
@@ -20,13 +36,22 @@ const jwt: FastifyPluginCallback = async (fastify, opts, done) => {
 
   fastify.register(fastifyJwt, {
     secret: process.env.JWT_SECRET,
+    cookie: {
+      cookieName: "refresh_token",
+      signed: true,
+    }
   } as FastifyJWTOptions);
 
-  fastify.decorateReply("jwt", fastify.jwt);
-  fastify.decorate("auth", async (request: Request, reply: Reply) => {
+  fastify.decorate("accessVerify", async (request: Request, reply: Reply) => {
     try {
-      const { token } = request.cookies;
-      fastify.jwt.verify(token);
+      await request.jwtVerify();
+    } catch (err) {
+      reply.send(err);
+    }
+  });
+  fastify.decorate("refreshVerify", async (request: Request, reply: Reply) => {
+    try {
+      await request.jwtVerify({onlyCookie: true});
     } catch (err) {
       reply.send(err);
     }

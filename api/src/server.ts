@@ -12,7 +12,7 @@ const serverConfig = {
 export default async function createServer() {
   try {
     const fastify = Fastify({
-      logger: true,
+      logger: false,
       querystringParser: (str) => qs.parse(str, parseOptions),
     });
     fastify.register(app);
