@@ -1,3 +1,4 @@
+import type { globalMetrics, userMetrics } from "@src/types/Metrics";
 import { FastifyReply as Reply, FastifyRequest } from "fastify";
 
 type Request = FastifyRequest<{
@@ -5,19 +6,6 @@ type Request = FastifyRequest<{
     id: number;
   };
 }>;
-type globalMetrics = {
-  seasons_count: number;
-  movies_count: number;
-  countries_count: number;
-};
-type userMetrics = {
-  id: number;
-  propositions_count: number;
-  comments_count: number;
-  likes_count: number;
-  watchlist_count: number;
-  ratings_count: number;
-};
 
 export const handleGetGlobalMetrics = async (request: Request, reply: Reply) => {
   const { prisma } = request;
@@ -37,7 +25,6 @@ export const handleGetAllUsersMetrics = async (request: Request, reply: Reply) =
 
   try {
     const metrics = await prisma.$queryRaw`SELECT * FROM indiv_actions_metrics;`;
-    console.log(metrics);
 
     reply.send(metrics);
   } catch (error) {
