@@ -14,7 +14,6 @@ export const getGlobalMetricsSchema: FastifySchema = {
 export const getGetAllUsersMetrics: FastifySchema = {
   description: `
   **Get All users metrics**
-  Where *id* is the user id.
   `,
   tags: ['Metrics'],
   response: {
