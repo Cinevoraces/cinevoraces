@@ -47,8 +47,8 @@ export const handleGetUserById = async (request: Request, reply: Reply) => {
       include: querystring.pop,
     })
     const metrics = querystring.metrics 
-      ? prisma.$queryRaw`
-          SELECT * FROM indiv_actions_metrics WHERE id = ${id}
+      ? await prisma.$queryRaw`
+          SELECT * FROM indiv_actions_metrics WHERE id = ${id};
         `
       : {};
     const response = { ...user, metrics };
