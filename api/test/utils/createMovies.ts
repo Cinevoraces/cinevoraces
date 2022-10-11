@@ -2,7 +2,7 @@ import { faker } from '@faker-js/faker';
 import { movie, Prisma } from '@prisma/client';
 import { createRessource } from './createRessource';
 
-export default async function createMovie (userId?: number, params?: Prisma.movieCreateInput) {
+export default async function createMovie (userId?: number, params?: Pick<Prisma.movieCreateInput, "is_published" >) {
   const fakeMovie: Prisma.movieCreateInput = {
     french_title: faker.lorem.sentence(),
     original_title: faker.lorem.sentence(),
@@ -33,6 +33,48 @@ export default async function createMovie (userId?: number, params?: Prisma.movi
     publishing_date: faker.date.recent(),
     created_at: faker.date.recent(),
     updated_at: null,
+    movie_has_country: {
+      create: {
+        country: {
+          connectOrCreate: {
+            where: {
+              id: 1
+            },
+            create: {
+              name: faker.address.country()
+            }
+          }
+        }
+      }
+    },
+    movie_has_genre: {
+      create: {
+        genre: {
+          connectOrCreate: {
+            where: {
+              id: 1
+            },
+            create: {
+              name: faker.lorem.word()
+            }
+          }
+        }
+      }
+    },
+    movie_has_language: {
+      create: {
+        language: {
+          connectOrCreate: {
+            where: {
+              id: 1
+            },
+            create: {
+              name: faker.lorem.word()
+            }
+          }
+        }
+      }
+    },
     ...params
   }
   

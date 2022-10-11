@@ -12,6 +12,7 @@ declare module "fastify" {
     refreshVerify: (request: Request, reply: Reply) => void;
     isAdmin: (request: Request, reply: Reply) => void;
     passwordVerify: (request: Request, reply: Reply) => void;
+    hasProposition: (request: Request, reply: Reply) => void;
   }
 }
 

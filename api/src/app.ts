@@ -8,6 +8,7 @@ import cookie from "@plugins/cookie";
 import { movies } from "@modules/movies/movies.routes";
 import { users } from "@modules/users/users.routes";
 import { auth } from "@modules/auth/auth.routes";
+import { propositions } from "@modules/propositions/propositions.routes";
 import schemasRegister from "./schemas";
 
 const app = async (fastify: FastifyInstance) => {
@@ -26,6 +27,7 @@ const app = async (fastify: FastifyInstance) => {
   fastify.register(movies);
   fastify.register(users);
   fastify.register(auth);
+  fastify.register(propositions);
 };
 
 export default app;
