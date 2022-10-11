@@ -39,10 +39,7 @@ const hooks: FastifyPluginCallback = async (fastify, opts, done) => {
   fastify.decorate("isAdmin", async (request: Request, reply: Reply) => {
     try {
       await request.jwtVerify();
-      const admin = await request.prisma.user.findUnique({
-        where: { id: request.user.id },
-      });
-      if (request.user.role !== "admin" || !admin) {
+      if (request.user.role !== "admin") {
         reply.status(403)
         throw new Error("accès restreint aux administrateurs.");
       }
