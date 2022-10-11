@@ -1,9 +1,10 @@
 import type Filters from "@src/types/Filters";
 import { Prisma } from "@prisma/client";
 
-export default function movieFiltersFactory(
+export default function filtersFactoryMovie(
   filters: Filters.Movie
 ): Prisma.movieWhereInput[] {
+  if (filters === undefined) return null;
   const keys = Object.keys(filters);
   return (keys as Array<keyof Filters.Movie>).reduce<Prisma.movieWhereInput[]>(
     (acc, key) => {
