@@ -30,40 +30,40 @@ describe("Movies routes test", () => {
     expect(await res.json()).toEqual(expect.arrayContaining([movieObject]));
   });
 
-  // test("GET /movies with published/season filters", async () => {
-  //   const res = await app.inject({
-  //     method: "GET",
-  //     url: "/movies",
-  //     query: "filter[is_published]=true&filter[season_id]=3",
-  //   });
+  test("GET /movies with published/season filters", async () => {
+    const res = await app.inject({
+      method: "GET",
+      url: "/movies",
+      query: "filter[is_published]=true&filter[season_id]=3",
+    });
 
-  //   expect(res.statusCode).toEqual(200);
-  //   expect(await res.json()).toEqual(
-  //     expect.arrayContaining([
-  //       expect.objectContaining({
-  //         is_published: true,
-  //         season_id: 3,
-  //       }),
-  //     ])
-  //   );
-  // });
+    expect(res.statusCode).toEqual(200);
+    expect(await res.json()).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          is_published: true,
+          season_id: 3,
+        }),
+      ])
+    );
+  });
 
-  // test("GET /movies with user id filter", async () => {
-  //   const res = await app.inject({
-  //     method: "GET",
-  //     url: "/movies",
-  //     query: "filter[user_id]=1",
-  //   });
+  test("GET /movies with user id filter", async () => {
+    const res = await app.inject({
+      method: "GET",
+      url: "/movies",
+      query: "filter[user_id]=1",
+    });
 
-  //   expect(res.statusCode).toEqual(200);
-  //   expect(await res.json()).toEqual(
-  //     expect.arrayContaining([
-  //       expect.objectContaining({
-  //         user_id: 1,
-  //       }),
-  //     ])
-  //   );
-  // });
+    expect(res.statusCode).toEqual(200);
+    expect(await res.json()).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          user_id: 1,
+        }),
+      ])
+    );
+  });
 
   test("GET /movies/1", async () => {
     const res = await app.inject({
