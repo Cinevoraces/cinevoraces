@@ -1,5 +1,9 @@
 module.exports = {
   plugins: ['@typescript-eslint'],
+  parserOptions: {
+    tsconfigRootDir: __dirname,
+    project: ['./tsconfig.json'],
+  },
   rules: {
     '@next/next/no-img-element': 'off',
     'quotes': ['warn', 'single'],
@@ -7,6 +11,13 @@ module.exports = {
     '@typescript-eslint/semi': 'warn',
     '@typescript-eslint/no-explicit-any': 'error',
     '@typescript-eslint/prefer-for-of': 'warn',
+    'prefer-const': ['error', {
+      'destructuring': 'all',
+      'ignoreReadBeforeAssign': false
+    }],
+    '@typescript-eslint/consistent-type-definitions': ['error', 'interface'],
+    '@typescript-eslint/consistent-type-exports': 'error',
+    '@typescript-eslint/consistent-type-imports': 'warn',
     'brace-style': 'off',
     '@typescript-eslint/brace-style': 'warn',
     'comma-spacing': 'off',
