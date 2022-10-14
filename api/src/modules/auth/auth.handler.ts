@@ -85,7 +85,7 @@ export const handleLogin = async (request: Request, reply: Reply) => {
 
     // Generate tokens
     const accessToken = await reply.jwtSign(
-      { ...userObject, expiresIn: "1m" }
+      { id: user.id, pseudo: user.pseudo, role: user.role, expiresIn: "1m" }
     );
     const refreshToken = await reply.jwtSign(
       { id: user.id, expiresIn: "1d"}
@@ -115,21 +115,21 @@ export const handleRefreshToken = async (request: Request, reply: Reply) => {
       where: { id },
       select: {
         id: true,
-        pseudo: true,
         mail: true,
+        pseudo: true,
         role: true,
         avatar_url: true,
       },
     });
 
     if (!user) {
-      reply.code(404); // Not Found
-      throw new Error("Utilisateur introuvable.");
+      reply.code(401); // Not Found
+      throw new Error("Utilisateur introuvable, token compromis.");
     }
 
     // Generate new tokens
     const accessToken = await reply.jwtSign(
-      { ...user, expiresIn: "1m" }
+      { id: user.id, pseudo: user.pseudo, role: user.role, expiresIn: "1m" }
     );
     const refreshToken = await reply.jwtSign(
       { id: user.id, expiresIn: "1d"}
