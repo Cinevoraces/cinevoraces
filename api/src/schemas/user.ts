@@ -32,14 +32,7 @@ const userSchema = {
       items: { $ref: 'review#' },
     },
     metrics: {
-      type: 'object',
-      properties: {
-        bookmarked: { type: 'number' },
-        viewed: { type: 'number' },
-        liked: { type: 'number' },
-        rating: { type: 'number' },
-        commented: { type: 'number' },
-      },
+      $ref: 'userMetrics#',
     },
   },
   required: [

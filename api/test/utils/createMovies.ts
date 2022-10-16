@@ -1,5 +1,5 @@
 import { faker } from '@faker-js/faker';
-import { movie, Prisma } from '@prisma/client';
+import type { movie, Prisma } from '@prisma/client';
 import { createRessource } from './createRessource';
 
 export default async function createMovie (userId?: number, params?: Prisma.movieCreateInput) {
@@ -34,9 +34,9 @@ export default async function createMovie (userId?: number, params?: Prisma.movi
     created_at: faker.date.recent(),
     updated_at: null,
     ...params
-  }
+  };
   
-  const data = await createRessource<movie, Prisma.movieCreateInput, Prisma.movieUpdateInput>(fakeMovie, "movie")
+  const data = await createRessource<movie, Prisma.movieCreateInput, Prisma.movieUpdateInput>(fakeMovie, 'movie');
 
-  return data
+  return data;
 }

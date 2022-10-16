@@ -1,4 +1,5 @@
 import type { FastifyReply as Reply, FastifyRequest } from 'fastify';
+import type { userMetrics } from '@src/types/Metrics';
 import type Filters from '@src/types/Filters';
 import { hashPassword } from '@src/utils/bcryptHandler';
 import filtersFactoryUsers from '@src/utils/filtersFactoryUsers';
@@ -46,12 +47,20 @@ export const handleGetUserById = async (request: Request, reply: Reply) => {
       where: { id },
       include: querystring.pop,
     });
-    const metrics = querystring.metrics 
-      ? prisma.$queryRaw`
-          SELECT * FROM indiv_actions_metrics WHERE id = ${id}
-        `
-      : {};
-    const response = { ...user, metrics };
+
+    let response;
+    let metrics: userMetrics;
+    let rawQuery: Array<userMetrics | Record<string, unknown>> = [{}];
+
+    if (querystring.metrics) {
+      rawQuery = await prisma.$queryRaw`
+        SELECT * FROM indiv_actions_metrics WHERE id = ${id};
+      `;
+      metrics = (rawQuery as Array<userMetrics>)[0];
+      response = { ...user, metrics };
+    } else {
+      response = user;
+    }
 
     reply.send(response);
   } catch (error) {
