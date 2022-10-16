@@ -1,4 +1,4 @@
-import type { FastifySchema } from "fastify";
+import type { FastifySchema } from 'fastify';
 
 export const getUsersSchema: FastifySchema = {
   description: `
@@ -10,21 +10,21 @@ export const getUsersSchema: FastifySchema = {
   `,
   tags: ['Users'],
   querystring: {
-    type: "object",
+    type: 'object',
     properties: {
       pop: {
-        type: "object",
+        type: 'object',
         properties: {
-          movies: { type: "boolean" },
-          reviews: { type: "boolean" },
+          movies: { type: 'boolean' },
+          reviews: { type: 'boolean' },
         },
       },
     },
   },
   response: {
-    "200": {
-      type: "array",
-      items: { $ref: "user#" },
+    '200': {
+      type: 'array',
+      items: { $ref: 'user#' },
     },
   },
 };
@@ -40,29 +40,29 @@ export const getUserByIdSchema: FastifySchema = {
   `,
   tags: ['Users'],
   params: {
-    type: "object",
+    type: 'object',
     properties: {
-      id: { type: "number" },
+      id: { type: 'number' },
     },
   },
   querystring: {
-    type: "object",
+    type: 'object',
     properties: {
       pop: {
-        type: "object",
+        type: 'object',
         properties: {
-          movies: { type: "boolean" },
-          reviews: { type: "boolean" },
-          metrics: { type: "boolean" },
+          movies: { type: 'boolean' },
+          reviews: { type: 'boolean' },
+          metrics: { type: 'boolean' },
         },
       },
     },
   },
   response: {
-    "200": {
-      $ref: "user#",
+    '200': {
+      $ref: 'user#',
     },
-    "404": { $ref: "apiError#" },
+    '404': { $ref: 'apiError#' },
   },
 };
 
@@ -77,34 +77,34 @@ export const putUserByIdSchema: FastifySchema = {
   `,
   tags: ['Users'],
   body: {
-    type: "object",
-    required: ["password"],
+    type: 'object',
+    required: ['password'],
     properties: {
-      password: { type: "string" },
+      password: { type: 'string' },
       update_user: {
-        type: "object",
+        type: 'object',
         properties: {
-          pseudo: { type: "string" },
-          mail: { type: "string" },
-          password: { type: "string" },
+          pseudo: { type: 'string' },
+          mail: { type: 'string' },
+          password: { type: 'string' },
         },
       },
     },
   },
   response: {
-    "200": {
-      required: ["message"],
+    '200': {
+      required: ['message'],
       properties: {
-        message: { type: "string" },
+        message: { type: 'string' },
       },
     },
-    "401": { $ref: "apiError#" },
-    "422": { $ref: "apiError#" },
+    '401': { $ref: 'apiError#' },
+    '422': { $ref: 'apiError#' },
   },
 };
 
 export const deleteUserByIdSchema: FastifySchema = {
-  summary: "Admin only",
+  summary: 'Admin only',
   description: `
   **Delete user by id**.
   Route protected by *admin* role.
@@ -112,28 +112,28 @@ export const deleteUserByIdSchema: FastifySchema = {
   `,
   tags: ['Users'],
   body: {
-    type: "object",
-    required: ["password"],
+    type: 'object',
+    required: ['password'],
     properties: {
-      password: { type: "string" },
+      password: { type: 'string' },
     },
   },
   params: {
-    type: "object",
+    type: 'object',
     properties: {
-      id: { type: "number" },
+      id: { type: 'number' },
     },
   },
   response: {
-    "200": {
-      type: "object",
-      required: ["message"],
+    '200': {
+      type: 'object',
+      required: ['message'],
       properties: {
-        message: { type: "string" },
+        message: { type: 'string' },
       },
     },
-    "401": { $ref: "apiError#" },
-    "403": { $ref: "apiError#" },
-    "404": { $ref: "apiError#" },
+    '401': { $ref: 'apiError#' },
+    '403': { $ref: 'apiError#' },
+    '404': { $ref: 'apiError#' },
   },
 };

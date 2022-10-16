@@ -1,6 +1,6 @@
-import type { FastifyReply as Reply, FastifyRequest } from "fastify";
-import Filters from "@src/types/Filters";
-import filtersFactoryMovie from "@src/utils/filtersFactoryMovie";
+import type { FastifyReply as Reply, FastifyRequest } from 'fastify';
+import type Filters from '@src/types/Filters';
+import filtersFactoryMovie from '@src/utils/filtersFactoryMovie';
 
 type Request = FastifyRequest<{
   Querystring: {
@@ -18,7 +18,7 @@ export const handleGetMovies = async (request: Request, reply: Reply) => {
   try {
     const movies = await prisma.movie.findMany(
       filters && {
-        where: { AND: [...filters] },
+        where: { AND: [...filters]},
       }
     );
     reply.send(movies);

@@ -1,45 +1,45 @@
 const reviewSchema = {
-  $id: "review",
-  type: "object",
+  $id: 'review',
+  type: 'object',
   properties: {
     user_id: {
-      type: "number",
+      type: 'number',
     },
     movie_id: {
-      type: "number",
+      type: 'number',
     },
     bookmarked: {
-      type: "boolean",
+      type: 'boolean',
     },
     viewed: {
-      type: "boolean",
+      type: 'boolean',
     },
     liked: {
-      type: "boolean",
+      type: 'boolean',
     },
     rating: {
-      type: "number",
+      type: 'number',
     },
     comment: {
-      type: "string",
+      type: 'string',
     },
     created_at: {
-      type: "string",
+      type: 'string',
     },
     updated_at: {
-      type: "string",
+      type: 'string',
     },
   },
   required: [
-    "user_id",
-    "movie_id",
-    "bookmarked",
-    "viewed",
-    "liked",
-    "rating",
-    "comment",
-    "created_at",
-    "updated_at",
+    'user_id',
+    'movie_id',
+    'bookmarked',
+    'viewed',
+    'liked',
+    'rating',
+    'comment',
+    'created_at',
+    'updated_at',
   ],
 };
 

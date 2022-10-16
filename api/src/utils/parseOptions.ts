@@ -1,10 +1,10 @@
-import type { defaultDecoder } from "qs";
+import type { defaultDecoder } from 'qs';
 
 const parseOptions = {
   ignoreQueryPrefix: true,
   decoder(str: string, decoder: defaultDecoder, charset: unknown) {
-    const strWithoutPlus = str.replace(/\+/g, " ");
-    if (charset === "iso-8859-1") {
+    const strWithoutPlus = str.replace(/\+/g, ' ');
+    if (charset === 'iso-8859-1') {
       // unescape never throws, no try...catch needed:
       return strWithoutPlus.replace(/%[0-9a-f]{2}/gi, unescape);
     }
@@ -13,7 +13,7 @@ const parseOptions = {
       return parseFloat(str);
     }
 
-    const keywords: any = {
+    const keywords: Record<string, boolean> = {
       true: true,
       false: false,
       null: null,

@@ -1,55 +1,55 @@
 const userSchema = {
-  $id: "user",
-  type: "object",
+  $id: 'user',
+  type: 'object',
   properties: {
     id: {
-      type: "number",
+      type: 'number',
     },
     pseudo: {
-      type: "string",
+      type: 'string',
     },
     mail: {
-      type: "string",
+      type: 'string',
     },
     avatar_url: {
-      type: "string",
+      type: 'string',
     },
     role: {
-      type: "string",
+      type: 'string',
     },
     created_at: {
-      type: "string",
+      type: 'string',
     },
     updated_at: {
-      type: "string",
+      type: 'string',
     },
     movies: {
-      type: "array",
-      items: { $ref: "movie#" },
+      type: 'array',
+      items: { $ref: 'movie#' },
     },
     reviews: {
-      type: "array",
-      items: { $ref: "review#" },
+      type: 'array',
+      items: { $ref: 'review#' },
     },
     metrics: {
-      type: "object",
+      type: 'object',
       properties: {
-        bookmarked: { type: "number" },
-        viewed: { type: "number" },
-        liked: { type: "number" },
-        rating: { type: "number" },
-        commented: { type: "number" },
+        bookmarked: { type: 'number' },
+        viewed: { type: 'number' },
+        liked: { type: 'number' },
+        rating: { type: 'number' },
+        commented: { type: 'number' },
       },
     },
   },
   required: [
-    "id",
-    "pseudo",
-    "mail",
-    "avatar_url",
-    "role",
-    "created_at",
-    "updated_at",
+    'id',
+    'pseudo',
+    'mail',
+    'avatar_url',
+    'role',
+    'created_at',
+    'updated_at',
   ],
 };
 

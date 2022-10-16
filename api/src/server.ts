@@ -1,12 +1,12 @@
-import "module-alias/register";
-import Fastify from "fastify";
-import qs from "qs";
-import parseOptions from "@src/utils/parseOptions";
-import app from "@src/app";
+import 'module-alias/register';
+import Fastify from 'fastify';
+import qs from 'qs';
+import parseOptions from '@src/utils/parseOptions';
+import app from '@src/app';
 
 const serverConfig = {
   port: Number(process.env.port) || 8080,
-  host: "0.0.0.0",
+  host: '0.0.0.0',
 };
 
 export default async function createServer() {

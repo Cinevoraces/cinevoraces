@@ -1,11 +1,11 @@
 const apiErrorSchema = {
-  $id: "apiError",
-  type: "object",
-  required: ["message", "statusCode"],
+  $id: 'apiError',
+  type: 'object',
+  required: ['message', 'statusCode'],
   properties: {
-    statusCode: { type: "number" },
-    error: { type: "string" },
-    message: { type: "string" },
+    statusCode: { type: 'number' },
+    error: { type: 'string' },
+    message: { type: 'string' },
   },
 };
 

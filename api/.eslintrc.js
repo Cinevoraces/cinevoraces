@@ -30,7 +30,9 @@ module.exports = {
     'object-curly-spacing': 'off',
     '@typescript-eslint/object-curly-spacing': ['error', 'always', { 'arraysInObjects': false }],
     '@typescript-eslint/type-annotation-spacing': ['error', { 'before': false, 'after': false, overrides: { colon: { before: false, after: true } } }],
+    "@typescript-eslint/no-namespace": "off",
     'no-multi-spaces': ['error'],
+    "eol-last": ["error", "always"],
     'no-multiple-empty-lines': ['error', { max: 1 }]
   },
   extends: [

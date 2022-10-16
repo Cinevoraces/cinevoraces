@@ -1,5 +1,5 @@
-import { FastifyReply as Reply, FastifyRequest } from "fastify";
-import { comparePassword, hashPassword } from "@src/utils/bcryptHandler";
+import type { FastifyReply as Reply, FastifyRequest } from 'fastify';
+import { comparePassword, hashPassword } from '@src/utils/bcryptHandler';
 
 type Request = FastifyRequest<{
   Body: {
@@ -16,21 +16,21 @@ export const handleRegister = async (request: Request, reply: Reply) => {
   try {
     // Duplicate check
     const user = await prisma.user.findFirst({
-      where: { OR: [{ mail }, { pseudo }] },
+      where: { OR: [{ mail }, { pseudo }]},
     });
     if (user) {
       reply.code(409); // Conflict
       if (mail === user.mail) {
-        throw new Error("Cette adresse mail est déjà associée à un compte.");
+        throw new Error('Cette adresse mail est déjà associée à un compte.');
       } else if (pseudo === user.pseudo) {
-        throw new Error("Ce pseudo est déjà utilisé.");
+        throw new Error('Ce pseudo est déjà utilisé.');
       }
     }
 
     // Test and Hash password
     if (!password.match(process.env.PASS_REGEXP)) {
       reply.code(422); // Unprocessable Entity
-      throw new Error("Le format du mot de passe est invalide.");
+      throw new Error('Le format du mot de passe est invalide.');
     }
     password = await hashPassword(password);
 
@@ -45,7 +45,6 @@ export const handleRegister = async (request: Request, reply: Reply) => {
     reply.send(error);
   }
 };
-
 
 export const handleLogin = async (request: Request, reply: Reply) => {
   const { prisma } = request;
@@ -66,13 +65,13 @@ export const handleLogin = async (request: Request, reply: Reply) => {
 
     if (!user) {
       reply.code(404); // Not Found
-      throw new Error("Utilisateur introuvable.");
+      throw new Error('Utilisateur introuvable.');
     }
 
     const isPasswordCorrect = await comparePassword(password, user.password);
     if (!isPasswordCorrect) {
       reply.code(401); // Unauthorized
-      throw new Error("Mot de passe incorrect.");
+      throw new Error('Mot de passe incorrect.');
     }
 
     const userObject = { 
@@ -81,18 +80,18 @@ export const handleLogin = async (request: Request, reply: Reply) => {
       mail: user.mail,
       role: user.role,
       avatar_url: user.avatar_url,
-     };
+    };
 
     // Generate tokens
     const accessToken = await reply.jwtSign(
-      { ...userObject, expiresIn: "1m" }
+      { ...userObject, expiresIn: '1m' }
     );
     const refreshToken = await reply.jwtSign(
-      { id: user.id, expiresIn: "1d"}
+      { id: user.id, expiresIn: '1d' }
     );
 
     reply
-      .setCookie("refresh_token", refreshToken, {
+      .setCookie('refresh_token', refreshToken, {
         signed: true,
       })
       .send({
@@ -124,27 +123,27 @@ export const handleRefreshToken = async (request: Request, reply: Reply) => {
 
     if (!user) {
       reply.code(404); // Not Found
-      throw new Error("Utilisateur introuvable.");
+      throw new Error('Utilisateur introuvable.');
     }
 
     // Generate new tokens
     const accessToken = await reply.jwtSign(
-      { ...user, expiresIn: "1m" }
+      { ...user, expiresIn: '1m' }
     );
     const refreshToken = await reply.jwtSign(
-      { id: user.id, expiresIn: "1d"}
+      { id: user.id, expiresIn: '1d' }
     );
 
     reply
-      .setCookie("refresh_token", refreshToken, {
+      .setCookie('refresh_token', refreshToken, {
         signed: true,
       })
       .send({
         user,
         token: accessToken,
-        response: "Tokens régénérés avec succés.",
+        response: 'Tokens régénérés avec succés.',
       });
   } catch (error) {
     reply.send(error);
   }
-}
+};
