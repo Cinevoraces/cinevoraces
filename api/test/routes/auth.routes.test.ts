@@ -1,14 +1,14 @@
-import type { resCookies } from "../types";
-import { build } from "../helper";
-import { faker } from "@faker-js/faker";
-import prisma from "../utils/prisma";
-import bcrypt from "bcrypt";
-import createUser from "../utils/createUser";
+import type { resCookies } from '../types';
+import { build } from '../helper';
+import { faker } from '@faker-js/faker';
+import prisma from '../utils/prisma';
+import bcrypt from 'bcrypt';
+import createUser from '../utils/createUser';
 
-describe("Auth routes test", () => {
+describe('Auth routes test', () => {
   const app = build();
-  let user: Awaited<ReturnType<typeof createUser>>
-  const password = "password1234";
+  let user: Awaited<ReturnType<typeof createUser>>;
+  const password = 'password1234';
   const testUser = {
     pseudo: faker.internet.userName(),
     mail: faker.internet.email(),
@@ -19,17 +19,17 @@ describe("Auth routes test", () => {
     const encryptedPassword = await bcrypt.hash(password, 10);
     user = await createUser({
       password: encryptedPassword,
-    })
-  })
+    });
+  });
 
   afterAll(async () => {
-    user.remove()
-  })
+    user.remove();
+  });
 
-  test("POST /register", async () => {
+  test('POST /register', async () => {
     const res = await app.inject({
-      method: "POST",
-      url: "/register",
+      method: 'POST',
+      url: '/register',
       payload: { ...testUser },
     });
     await prisma.user.delete({
@@ -38,19 +38,19 @@ describe("Auth routes test", () => {
     expect(res.statusCode).toEqual(201);
   });
 
-  test("POST /register - Wrong password format", async () => {
+  test('POST /register - Wrong password format', async () => {
     const res = await app.inject({
-      method: "POST",
-      url: "/register",
-      payload: { ...testUser, password: "testercédouter" },
+      method: 'POST',
+      url: '/register',
+      payload: { ...testUser, password: 'testercédouter' },
     });
     expect(res.statusCode).toEqual(422);
   });
 
-  test("POST /login", async () => {
+  test('POST /login', async () => {
     const login = await app.inject({
-      method: "POST",
-      url: "/login",
+      method: 'POST',
+      url: '/login',
       payload: { pseudo: user.data.pseudo, password },
     });
 
@@ -68,15 +68,15 @@ describe("Auth routes test", () => {
     }));
     expect(login.cookies).toEqual(
       expect.arrayContaining([
-        expect.objectContaining({ name: "refresh_token", value: expect.any(String) }),
+        expect.objectContaining({ name: 'refresh_token', value: expect.any(String) }),
       ])
     );
   });
 
-  test("GET /refresh", async () => {
+  test('GET /refresh', async () => {
     const login = await app.inject({
-      method: "POST",
-      url: "/login",
+      method: 'POST',
+      url: '/login',
       payload: { pseudo: user.data.pseudo, password },
     });
 
@@ -84,8 +84,8 @@ describe("Auth routes test", () => {
     const cookieValue = (login.cookies[0] as resCookies).value;
     
     const refresh = await app.inject({
-      method: "GET",
-      url: "/refresh",
+      method: 'GET',
+      url: '/refresh',
       headers: {
         cookie: `${cookieName}=${cookieValue}`,
       },
@@ -105,7 +105,7 @@ describe("Auth routes test", () => {
     }));
     expect(refresh.cookies).toEqual(
       expect.arrayContaining([
-        expect.objectContaining({ name: "refresh_token", value: expect.any(String) }),
+        expect.objectContaining({ name: 'refresh_token', value: expect.any(String) }),
       ])
     );
   });

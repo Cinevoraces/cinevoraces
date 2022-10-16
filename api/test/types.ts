@@ -1,4 +1,4 @@
-export type resCookies = {
+export interface resCookies {
   name: string;
   value: string;
 }

@@ -1,4 +1,4 @@
-import type { FastifySchema } from "fastify";
+import type { FastifySchema } from 'fastify';
 
 export const getMoviesSchema: FastifySchema = {
   description: `
@@ -11,34 +11,34 @@ export const getMoviesSchema: FastifySchema = {
   `,
   tags: ['Movies'],
   querystring: {
-    type: "object",
+    type: 'object',
     properties: {
       filter: {
-        type: "object",
+        type: 'object',
       },
     },
   },
   response: {
-    "200": {
-      type: "array",
-      items: { $ref: "movie#" },
+    '200': {
+      type: 'array',
+      items: { $ref: 'movie#' },
     },
   },
 };
 
 export const getMovieSchema: FastifySchema = {
-  description: `**Get one movie by id**.`,
+  description: '**Get one movie by id**.',
   tags: ['Movies'],
   params: {
-    type: "object",
+    type: 'object',
     properties: {
-      id: { type: "number" },
+      id: { type: 'number' },
     },
   },
   response: {
     200: {
-      $ref: "movie#",
+      $ref: 'movie#',
     },
-    "404": { $ref: "apiError#" },
+    '404': { $ref: 'apiError#' },
   },
 };

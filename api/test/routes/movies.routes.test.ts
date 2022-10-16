@@ -1,6 +1,6 @@
-import { build } from "../helper";
+import { build } from '../helper';
 
-describe("Movies routes test", () => {
+describe('Movies routes test', () => {
   const app = build();
   const movieObject = expect.objectContaining({
     id: expect.any(Number),
@@ -20,21 +20,21 @@ describe("Movies routes test", () => {
     // updated_at: null,
   });
 
-  test("GET /movies", async () => {
+  test('GET /movies', async () => {
     const res = await app.inject({
-      method: "GET",
-      url: "/movies",
+      method: 'GET',
+      url: '/movies',
     });
 
     expect(res.statusCode).toEqual(200);
     expect(await res.json()).toEqual(expect.arrayContaining([movieObject]));
   });
 
-  test("GET /movies with published/season filters", async () => {
+  test('GET /movies with published/season filters', async () => {
     const res = await app.inject({
-      method: "GET",
-      url: "/movies",
-      query: "filter[is_published]=true&filter[season_id]=3",
+      method: 'GET',
+      url: '/movies',
+      query: 'filter[is_published]=true&filter[season_id]=3',
     });
 
     expect(res.statusCode).toEqual(200);
@@ -48,11 +48,11 @@ describe("Movies routes test", () => {
     );
   });
 
-  test("GET /movies with user id filter", async () => {
+  test('GET /movies with user id filter', async () => {
     const res = await app.inject({
-      method: "GET",
-      url: "/movies",
-      query: "filter[user_id]=1",
+      method: 'GET',
+      url: '/movies',
+      query: 'filter[user_id]=1',
     });
 
     expect(res.statusCode).toEqual(200);
@@ -65,10 +65,10 @@ describe("Movies routes test", () => {
     );
   });
 
-  test("GET /movies/1", async () => {
+  test('GET /movies/1', async () => {
     const res = await app.inject({
-      method: "GET",
-      url: "/movies/1",
+      method: 'GET',
+      url: '/movies/1',
     });
 
     expect(res.statusCode).toEqual(200);

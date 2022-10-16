@@ -1,15 +1,16 @@
-import type { FastifyInstance } from "fastify";
-import envCheck from "@plugins/envCheck";
-import prismaClient from "@plugins/prismaClient";
-import jwt from "@plugins/jwt";
-import hooks from "@plugins/hooks";
-import swagger from "@plugins/swagger";
-import cookie from "@plugins/cookie";
-import { movies } from "@modules/movies/movies.routes";
-import { users } from "@modules/users/users.routes";
-import { auth } from "@modules/auth/auth.routes";
-import { propositions } from "@modules/propositions/propositions.routes";
-import schemasRegister from "./schemas";
+import type { FastifyInstance } from 'fastify';
+import envCheck from '@plugins/envCheck';
+import prismaClient from '@plugins/prismaClient';
+import jwt from '@plugins/jwt';
+import hooks from '@plugins/hooks';
+import swagger from '@plugins/swagger';
+import cookie from '@plugins/cookie';
+import { auth } from '@modules/auth/auth.routes';
+import { metrics } from '@modules/metrics/metrics.routes';
+import { movies } from '@modules/movies/movies.routes';
+import { propositions } from '@modules/propositions/propositions.routes';
+import { users } from '@modules/users/users.routes';
+import schemasRegister from './schemas';
 
 const app = async (fastify: FastifyInstance) => {
   // Register Schemas
@@ -24,10 +25,11 @@ const app = async (fastify: FastifyInstance) => {
   fastify.register(swagger);
 
   // Register routes
-  fastify.register(movies);
-  fastify.register(users);
   fastify.register(auth);
+  fastify.register(metrics);
+  fastify.register(movies);
   fastify.register(propositions);
+  fastify.register(users);
 };
 
 export default app;

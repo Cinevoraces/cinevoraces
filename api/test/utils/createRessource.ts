@@ -1,28 +1,26 @@
-import { Prisma } from "@prisma/client"
-import prisma from "./prisma"
+import type { Prisma } from '@prisma/client';
+import prisma from './prisma';
 
-export type RessourceCreator<T>= {
+export interface RessourceCreator<T> {
   data: T,
-  remove: () => {}
-}
+  remove: ()=>void
+};
 
-export async function createRessource<T, CreateInput, UpdateInput>(data:CreateInput, model:Prisma.ModelName): Promise<RessourceCreator<T>> {
+export async function createRessource<T, CreateInput, UpdateInput>(data: CreateInput, model: Prisma.ModelName): Promise<RessourceCreator<T>> {
 
-  // @ts-expect-error
+  // @ts-expect-error - Prisma doesn't know about our models
   const element = await prisma[model].create({
     data: data
-  })
+  });
 
   const remove = async () => {
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-expect-error
+    // @ts-expect-error - Prisma doesn't know about our models
     const data = await prisma[model].delete({
       where: {
-       id: element.id
+        id: element.id
       }
-    })
-  }
+    });
+  };
 
-  return {data: element, remove}
-
+  return { data: element, remove };
 }

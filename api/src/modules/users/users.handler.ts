@@ -1,7 +1,8 @@
-import type { FastifyReply as Reply, FastifyRequest } from "fastify";
-import type Filters from "@src/types/Filters";
-import { comparePassword, hashPassword } from "@src/utils/bcryptHandler";
-import filtersFactoryUsers from "@src/utils/filtersFactoryUsers";
+import type { FastifyReply as Reply, FastifyRequest } from 'fastify';
+import type { userMetrics } from '@src/types/Metrics';
+import type Filters from '@src/types/Filters';
+import { hashPassword } from '@src/utils/bcryptHandler';
+import filtersFactoryUsers from '@src/utils/filtersFactoryUsers';
 
 type Request = FastifyRequest<{
   Params: {
@@ -26,7 +27,7 @@ export const handleGetUsers = async (request: Request, reply: Reply) => {
 
   try {
     const users = await prisma.user.findMany({
-      orderBy: { id: "asc" },
+      orderBy: { id: 'asc' },
       include: querystring.pop,
     });
 
@@ -45,13 +46,21 @@ export const handleGetUserById = async (request: Request, reply: Reply) => {
     const user = await prisma.user.findFirst({
       where: { id },
       include: querystring.pop,
-    })
-    const metrics = querystring.metrics 
-      ? prisma.$queryRaw`
-          SELECT * FROM indiv_actions_metrics WHERE id = ${id}
-        `
-      : {};
-    const response = { ...user, metrics };
+    });
+
+    let response;
+    let metrics: userMetrics;
+    let rawQuery: Array<userMetrics | Record<string, unknown>> = [{}];
+
+    if (querystring.metrics) {
+      rawQuery = await prisma.$queryRaw`
+        SELECT * FROM indiv_actions_metrics WHERE id = ${id};
+      `;
+      metrics = (rawQuery as Array<userMetrics>)[0];
+      response = { ...user, metrics };
+    } else {
+      response = user;
+    }
 
     reply.send(response);
   } catch (error) {
@@ -69,7 +78,7 @@ export const handlePutUserById = async (request: Request, reply: Reply) => {
       // Test and Hash new password
       if (!update_user.password.match(process.env.PASS_REGEXP)) {
         reply.code(422); // Unprocessable Entity
-        throw new Error("Le format du mot de passe est invalide.");
+        throw new Error('Le format du mot de passe est invalide.');
       }
       update_user.password = await hashPassword(update_user.password);
     }
@@ -80,11 +89,11 @@ export const handlePutUserById = async (request: Request, reply: Reply) => {
       data: { ...update_user },
     });
     
-    reply.send("Données utilisateur modifiées avec succés.");
+    reply.send('Données utilisateur modifiées avec succés.');
   } catch (error) {
     reply.send(error);
   }
-}
+};
 
 // Admin only
 export const handleDeleteUserById = async (request: Request, reply: Reply) => {
@@ -95,11 +104,11 @@ export const handleDeleteUserById = async (request: Request, reply: Reply) => {
     const user = await prisma.user.delete({ where: { id: Number(id) } });
     if (!user) {
       reply.code(404);
-      throw new Error("Utilisateur introuvable.");
+      throw new Error('Utilisateur introuvable.');
     }
 
     reply.send(`Utilisateur "${user.pseudo}" supprimé avec succés.`);
   } catch (error) {
     reply.send(error);
   }
-}
+};
