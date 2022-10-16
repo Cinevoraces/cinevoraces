@@ -1,4 +1,4 @@
-import type { FastifySchema } from "fastify";
+import type { FastifySchema } from 'fastify';
 
 export const getAllSlotsSchema: FastifySchema = {
   description: `**Get all slots**.
@@ -8,19 +8,19 @@ export const getAllSlotsSchema: FastifySchema = {
   `,
   tags: ['Propositions'],
   querystring: {
-    type: "object",
+    type: 'object',
     properties: {
       filter: {
-        type: "object",
+        type: 'object',
       },
     },
   },
   response: {
-    "200": {
-      type: "array",
-      items: { $ref: "slot#" },
+    '200': {
+      type: 'array',
+      items: { $ref: 'slot#' },
     },
-    "404": { $ref: "apiError#" },
+    '404': { $ref: 'apiError#' },
   },
 };
 
@@ -29,78 +29,78 @@ export const bookSlotSchema: FastifySchema = {
   Slot's *id* must be set in *params* and access token in bearer to pass user id.`,
   tags: ['Propositions'],
   params: {
-    type: "object",
+    type: 'object',
     properties: {
-      id: { type: "number" },
+      id: { type: 'number' },
     },
   },
   response: {
-    "200": { 
-      type: "object",
+    '200': { 
+      type: 'object',
       properties: {
-        message: { type: "string" },
+        message: { type: 'string' },
       },
     },
-    "401": { $ref: "apiError#" },
-    "404": { $ref: "apiError#" },
-    "406": { $ref: "apiError#" },
+    '401': { $ref: 'apiError#' },
+    '404': { $ref: 'apiError#' },
+    '406': { $ref: 'apiError#' },
   },
 };
 
 export const unbookSlotSchema: FastifySchema = {
-  summary: "Admin only",
+  summary: 'Admin only',
   description: `**Unbook a slot by id**.
   Route protected by *admin* role.
   You must provide the password as well.
   `,
   tags: ['Propositions'],
   params: {
-    type: "object",
+    type: 'object',
     properties: {
-      id: { type: "number" },
+      id: { type: 'number' },
     },
   },
   body: {
-    type: "object",
-    required: ["password"],
+    type: 'object',
+    required: ['password'],
     properties: {
-      password: { type: "string" },
+      password: { type: 'string' },
     },
   },
   response: {
-    "200": { 
-      type: "object",
+    '200': { 
+      type: 'object',
       properties: {
-        message: { type: "string" },
+        message: { type: 'string' },
       },
     },
-    "401": { $ref: "apiError#" },
+    '401': { $ref: 'apiError#' },
   },
 };
 
 export const getAllUsersPropositionSchema: FastifySchema = {
-  description: `**Get all users proposition**.`,
+  description: '**Get all users proposition**.',
   tags: ['Propositions'],
   response: {
-    "200": { 
-      type: "array",
-      items: { $ref: "proposition#" },
+    '200': { 
+      type: 'array',
+      items: { $ref: 'proposition#' },
     },
-    "404": { $ref: "apiError#" },
+    '404': { $ref: 'apiError#' },
   },
 };
 
 export const getUsersPropositionByIdSchema: FastifySchema = {
-  description: `**Get user proposition by id**.`,
+  description: '**Get user proposition by id**.',
   tags: ['Propositions'],
   params: {
-    type: "object",
+    type: 'object',
     properties: {
-      id: { type: "number" },
+      id: { type: 'number' },
     },
   },
   response: {
-    "200": { $ref: "proposition#" },
-    "404": { $ref: "apiError#" },
+    '200': { $ref: 'proposition#' },
+    '404': { $ref: 'apiError#' },
   },
 };

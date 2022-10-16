@@ -1,10 +1,10 @@
-import { build } from "../helper";
-import bcrypt from "bcrypt";
-import createUser from "../utils/createUser";
-import createMovie from "../utils/createMovies";
-import createSlot from "../utils/createSlot";
+import { build } from '../helper';
+import bcrypt from 'bcrypt';
+import createUser from '../utils/createUser';
+import createMovie from '../utils/createMovies';
+import createSlot from '../utils/createSlot';
 
-describe("Propositions routes test", () => {
+describe('Propositions routes test', () => {
   const app = build();
   const slotObject = expect.objectContaining({
     id: expect.any(Number),
@@ -26,12 +26,12 @@ describe("Propositions routes test", () => {
     presentation: expect.any(String),
   });
 
-  const password = "password1234";
-  let user: Awaited<ReturnType<typeof createUser>>
-  let admin: Awaited<ReturnType<typeof createUser>>
-  let slot: Awaited<ReturnType<typeof createSlot>>
-  let freeSlot: Awaited<ReturnType<typeof createSlot>>
-  let proposition: Awaited<ReturnType<typeof createMovie>>
+  const password = 'password1234';
+  let user: Awaited<ReturnType<typeof createUser>>;
+  let admin: Awaited<ReturnType<typeof createUser>>;
+  let slot: Awaited<ReturnType<typeof createSlot>>;
+  let freeSlot: Awaited<ReturnType<typeof createSlot>>;
+  let proposition: Awaited<ReturnType<typeof createMovie>>;
   
   beforeAll(async () => {
     const encryptedPassword = await bcrypt.hash(password, 10);
@@ -40,7 +40,7 @@ describe("Propositions routes test", () => {
     });
     admin = await createUser({
       password: encryptedPassword,
-      role: "admin",
+      role: 'admin',
     });
     slot = await createSlot({
       is_booked: true,
@@ -51,28 +51,28 @@ describe("Propositions routes test", () => {
     proposition = await createMovie(1, {
       is_published: false,
     });
-  })
+  });
 
   afterAll(async () => {
-    user.remove()
-    admin.remove()
-    slot.remove()
-    freeSlot.remove()
-    proposition.remove()
-  })
+    user.remove();
+    admin.remove();
+    slot.remove();
+    freeSlot.remove();
+    proposition.remove();
+  });
   
-  test("GET /propositions/slots?filter[is_booked]=true", async () => {
+  test('GET /propositions/slots?filter[is_booked]=true', async () => {
     const login = await app.inject({
-      method: "POST",
-      url: "/login",
+      method: 'POST',
+      url: '/login',
       payload: { pseudo: user.data.pseudo, password },
     });
     const loginRes = await login.json();
 
     const res = await app.inject({
-      method: "GET",
-      url: "/propositions/slots",
-      query: "filter[is_booked]=true",
+      method: 'GET',
+      url: '/propositions/slots',
+      query: 'filter[is_booked]=true',
       headers: {
         authorization: `Bearer ${loginRes.token}`,
       },
@@ -82,17 +82,17 @@ describe("Propositions routes test", () => {
     expect(await res.json()).toEqual(expect.arrayContaining([slotObject]));
   });
 
-  test("GET /propositions/users", async () => {
+  test('GET /propositions/users', async () => {
     const login = await app.inject({
-      method: "POST",
-      url: "/login",
+      method: 'POST',
+      url: '/login',
       payload: { pseudo: user.data.pseudo, password },
     });
     const loginRes = await login.json();
 
     const res = await app.inject({
-      method: "GET",
-      url: "/propositions/users",
+      method: 'GET',
+      url: '/propositions/users',
       headers: {
         authorization: `Bearer ${loginRes.token}`,
       },
@@ -102,35 +102,35 @@ describe("Propositions routes test", () => {
     expect(await res.json()).toEqual(expect.arrayContaining([propositionObject]));
   });
 
-  test("GET /propositions/users/:id", async () => {
+  test('GET /propositions/users/:id', async () => {
     const res = await app.inject({
-      method: "GET",
-      url: "/propositions/users/1",
+      method: 'GET',
+      url: '/propositions/users/1',
     });
 
     expect(res.statusCode).toEqual(200);
     expect(await res.json()).toEqual(propositionObject);
   });
 
-  test("GET /propositions/users/:id", async () => {
+  test('GET /propositions/users/:id', async () => {
     const res = await app.inject({
-      method: "GET",
-      url: "/propositions/users/2",
+      method: 'GET',
+      url: '/propositions/users/2',
     });
 
     expect(res.statusCode).toEqual(404);
   });
 
-  test("PUT /propositions/slots/book/:id", async () => {
+  test('PUT /propositions/slots/book/:id', async () => {
     const login = await app.inject({
-      method: "POST",
-      url: "/login",
+      method: 'POST',
+      url: '/login',
       payload: { pseudo: user.data.pseudo, password },
     });
     const loginRes = await login.json();
 
     const res = await app.inject({
-      method: "PUT",
+      method: 'PUT',
       url: `/propositions/slots/book/${freeSlot.data.id}`,
       headers: {
         authorization: `Bearer ${loginRes.token}`,
@@ -140,16 +140,16 @@ describe("Propositions routes test", () => {
     expect(res.statusCode).toEqual(200);
   });
 
-  test("PUT /propositions/slots/unbook/:id Succes", async () => {
+  test('PUT /propositions/slots/unbook/:id Succes', async () => {
     const login = await app.inject({
-      method: "POST",
-      url: "/login",
+      method: 'POST',
+      url: '/login',
       payload: { pseudo: admin.data.pseudo, password },
     });
     const loginRes = await login.json();
 
     const res = await app.inject({
-      method: "PUT",
+      method: 'PUT',
       url: `/propositions/slots/unbook/${freeSlot.data.id}`,
       payload: { password },
       headers: {
@@ -160,16 +160,16 @@ describe("Propositions routes test", () => {
     expect(res.statusCode).toEqual(200);
   });
   
-  test("PUT /propositions/slots/unbook/:id Unauthorized", async () => {
+  test('PUT /propositions/slots/unbook/:id Unauthorized', async () => {
     const login = await app.inject({
-      method: "POST",
-      url: "/login",
+      method: 'POST',
+      url: '/login',
       payload: { pseudo: user.data.pseudo, password },
     });
     const loginRes = await login.json();
 
     const res = await app.inject({
-      method: "PUT",
+      method: 'PUT',
       url: `/propositions/slots/unbook/${freeSlot.data.id}`,
       payload: { password },
       headers: {
@@ -180,16 +180,16 @@ describe("Propositions routes test", () => {
     expect(res.statusCode).toEqual(403);
   });
 
-  test("PUT /propositions/slots/unbook/:id un-reserved slot", async () => {
+  test('PUT /propositions/slots/unbook/:id un-reserved slot', async () => {
     const login = await app.inject({
-      method: "POST",
-      url: "/login",
+      method: 'POST',
+      url: '/login',
       payload: { pseudo: admin.data.pseudo, password },
     });
     const loginRes = await login.json();
 
     const res = await app.inject({
-      method: "PUT",
+      method: 'PUT',
       url: `/propositions/slots/unbook/${freeSlot.data.id}`,
       payload: { password },
       headers: {

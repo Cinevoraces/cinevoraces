@@ -1,4 +1,4 @@
-export type proposition = {
+export interface proposition {
   id: number;
   french_title: string;
   poster_url: string;

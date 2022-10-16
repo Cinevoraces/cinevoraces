@@ -1,55 +1,55 @@
 const propositionSchema = {
-  $id: "proposition",
-  type: "object",
+  $id: 'proposition',
+  type: 'object',
   properties: {
     id: {
-      type: "number",
+      type: 'number',
     },
     french_title: {
-      type: "string",
+      type: 'string',
     },
     poster_url: {
-      type: "string",
+      type: 'string',
     },
     directors: {
-      type: "array",
+      type: 'array',
       items: {
-        type: "string",
+        type: 'string',
       },
     },
     genres: {
-      type: "array",
+      type: 'array',
       items: {
-        type: "string",
+        type: 'string',
       },
     },
     release_date: {
-      type: "string",
+      type: 'string',
     },
     user_id: {
-      type: "number",
+      type: 'number',
     },
     user_pseudo: {
-      type: "string",
+      type: 'string',
     },
     publishing_date: {
-      type: "string",
+      type: 'string',
     },
     presentation: {
-      type: "string",
+      type: 'string',
     },
   },
   required: [
-    "id",
-    "french_title",
-    "poster_url",
-    "directors",
-    "genres",
-    "release_date",
-    "user_id",
-    "user_pseudo",
-    "publishing_date",
-    "presentation",
+    'id',
+    'french_title',
+    'poster_url',
+    'directors',
+    'genres',
+    'release_date',
+    'user_id',
+    'user_pseudo',
+    'publishing_date',
+    'presentation',
   ],
 };
 
