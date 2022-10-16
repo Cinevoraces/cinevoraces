@@ -4,7 +4,7 @@ import createUser from "../utils/createUser";
 import createMovie from "../utils/createMovies";
 import createSlot from "../utils/createSlot";
 
-describe("Users routes test", () => {
+describe("Propositions routes test", () => {
   const app = build();
   const slotObject = expect.objectContaining({
     id: expect.any(Number),

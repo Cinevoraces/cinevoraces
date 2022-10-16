@@ -24,7 +24,7 @@ export const handleGetMovies = async (request: Request, reply: Reply) => {
     
     if (movies.length === 0) {
       reply.code(404);
-      throw new Error("No movies found");
+      throw new Error("Aucun film trouvé");
     }
 
     reply.send(movies);
