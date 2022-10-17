@@ -55,7 +55,7 @@ export default function movieFiltersFactory(
 }
 
 const orderByHandler = (order: 'asc' | 'desc'): Prisma.movieOrderByWithRelationInput => {
-  if (!order) return null;
+  if (!order) return;
   return {
     publishing_date: order
   };
@@ -64,7 +64,7 @@ const orderByHandler = (order: 'asc' | 'desc'): Prisma.movieOrderByWithRelationI
 const paginationHandler = (take: number): {
   take: number
 } => {
-  if (!take) return null;
+  if (!take) return;
   return {
     take
   };

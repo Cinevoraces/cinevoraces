@@ -15,7 +15,13 @@ export const getMoviesSchema: FastifySchema = {
     properties: {
       filter: {
         type: 'object',
+        properties: {
+          is_published: { type: 'boolean' },
+          pagination: { type: 'number' },
+          orderBy: { type: 'string' }
+        },
       },
+
     },
   },
   response: {
