@@ -104,7 +104,10 @@ const hooks: FastifyPluginCallback = async (fastify, opts, done) => {
   });
 
   // preValidation hook
-  fastify.decorate('passwordVerify', async (request: Request<{ Body: { password: string } }>, reply: Reply) => {
+  fastify.decorate('passwordVerify', async (
+    request: Request<{ Body: { password: string } }>, 
+    reply: Reply
+  ) => {
     try {
       const user = await request.prisma.user.findUnique({
         where: { id: request.user.id },
