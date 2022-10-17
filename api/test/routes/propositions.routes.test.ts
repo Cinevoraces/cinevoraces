@@ -98,7 +98,6 @@ describe('Propositions routes test', () => {
       },
     });
 
-    console.log(await res.json());
     expect(res.statusCode).toEqual(200);
     expect(await res.json()).toHaveLength(2);
   });
