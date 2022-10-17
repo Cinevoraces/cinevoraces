@@ -1,27 +1,18 @@
 import type { FastifyReply as Reply, FastifyRequest } from 'fastify';
-import type Filters from '@src/types/Filters';
-import filtersFactoryMovie from '@src/utils/filtersFactoryMovie';
+import type PrismaQuery from '@src/types/Query';
+import prismaQueryFactory from '@src/utils/prismaQueryFactory';
 
 type Request = FastifyRequest<{
-  Querystring: {
-    filter: Filters.Movie;
-  };
-  Params: {
-    id: number;
-  };
+  Querystring: PrismaQuery.Querystring;
+  Params: { id: number };
 }>;
 
 export const handleGetMovies = async (request: Request, reply: Reply) => {
   const { prisma } = request;
-  const filters = filtersFactoryMovie(request.query.filter);
+  const prismaQuery = prismaQueryFactory(request.query, 'Movie');
 
   try {
-    const movies = await prisma.movie.findMany(
-      filters && {
-        where: { AND: [...filters]},
-      }
-    );
-    
+    const movies = await prisma.movie.findMany({ ...prismaQuery });
     if (movies.length === 0) {
       reply.code(404);
       throw new Error('Aucun film trouvé');
@@ -39,9 +30,7 @@ export const handleGetMovieById = async (request: Request, reply: Reply) => {
 
   try {
     const movie = await prisma.movie.findUnique({
-      where: {
-        id,
-      },
+      where: { id },
     });
 
     reply.send(movie);

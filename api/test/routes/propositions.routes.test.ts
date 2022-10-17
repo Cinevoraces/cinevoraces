@@ -25,7 +25,6 @@ describe('Propositions routes test', () => {
     publishing_date: expect.any(String),
     presentation: expect.any(String),
   });
-
   const password = 'password1234';
   let user: Awaited<ReturnType<typeof createUser>>;
   let admin: Awaited<ReturnType<typeof createUser>>;
@@ -80,6 +79,28 @@ describe('Propositions routes test', () => {
 
     expect(res.statusCode).toEqual(200);
     expect(await res.json()).toEqual(expect.arrayContaining([slotObject]));
+  });
+
+  test('GET /propositions/slots?filter[is_booked]=false&limit=2', async () => {
+    const login = await app.inject({
+      method: 'POST',
+      url: '/login',
+      payload: { pseudo: user.data.pseudo, password },
+    });
+    const loginRes = await login.json();
+
+    const res = await app.inject({
+      method: 'GET',
+      url: '/propositions/slots',
+      query: 'filter[is_booked]=false&limit=2',
+      headers: {
+        authorization: `Bearer ${loginRes.token}`,
+      },
+    });
+
+    console.log(await res.json());
+    expect(res.statusCode).toEqual(200);
+    expect(await res.json()).toHaveLength(2);
   });
 
   test('GET /propositions/users', async () => {

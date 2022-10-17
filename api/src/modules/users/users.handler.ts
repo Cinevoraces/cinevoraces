@@ -1,16 +1,13 @@
 import type { FastifyReply as Reply, FastifyRequest } from 'fastify';
 import type { userMetrics } from '@src/types/Metrics';
-import type Filters from '@src/types/Filters';
+import type PrismaQuery from '@src/types/Query';
+
 import { hashPassword } from '@src/utils/bcryptHandler';
-import filtersFactoryUsers from '@src/utils/filtersFactoryUsers';
+import prismaQueryFactory from '@src/utils/prismaQueryFactory';
 
 type Request = FastifyRequest<{
-  Params: {
-    id: number;
-  };
-  Querystring: {
-    pop: Filters.User;
-  };
+  Querystring: PrismaQuery.Querystring;
+  Params: { id: number };
   Body: {
     password: string;
     update_user?: {
@@ -23,12 +20,12 @@ type Request = FastifyRequest<{
 
 export const handleGetUsers = async (request: Request, reply: Reply) => {
   const { prisma } = request;
-  const querystring = filtersFactoryUsers(request.query.pop);
+  const prismaQuery = prismaQueryFactory(request.query, 'User');
 
   try {
     const users = await prisma.user.findMany({
+      ...prismaQuery,
       orderBy: { id: 'asc' },
-      include: querystring.pop,
     });
 
     reply.send(users);
@@ -40,24 +37,25 @@ export const handleGetUsers = async (request: Request, reply: Reply) => {
 export const handleGetUserById = async (request: Request, reply: Reply) => {
   const { prisma } = request;
   const { id } = request.params;
-  const querystring = filtersFactoryUsers(request.query.pop);
+  const metrics = request.query.pop?.metrics;
+  const prismaQuery = prismaQueryFactory(request.query, 'User');
 
   try {
+    let response;
+
     const user = await prisma.user.findFirst({
+      ...prismaQuery,
       where: { id },
-      include: querystring.pop,
     });
 
-    let response;
-    let metrics: userMetrics;
-    let rawQuery: Array<userMetrics | Record<string, unknown>> = [{}];
-
-    if (querystring.metrics) {
-      rawQuery = await prisma.$queryRaw`
+    if (metrics) {
+      const rawQuery = await prisma.$queryRaw`
         SELECT * FROM indiv_actions_metrics WHERE id = ${id};
       `;
-      metrics = (rawQuery as Array<userMetrics>)[0];
-      response = { ...user, metrics };
+      response = { 
+        ...user,
+        metrics: (rawQuery as Array<userMetrics>)[0] 
+      };
     } else {
       response = user;
     }
