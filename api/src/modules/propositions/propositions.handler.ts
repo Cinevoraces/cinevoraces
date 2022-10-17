@@ -37,28 +37,8 @@ export const handleGetAllSlots = async (request: Request, reply: Reply) => {
 export const handleBookSlot = async (request: Request, reply: Reply) => {
   const { prisma } = request;
   const { id: slotId } = request.params;
-  const { id: userId } = request.user;
 
   try {
-    const proposition: Array<proposition> = await prisma.$queryRaw`
-      SELECT * FROM pending_propositions WHERE user_id=${userId};
-    `;
-
-    if (proposition.length > 0) {
-      reply.code(401);
-      throw new Error('Vous avez déjà une proposition en attente. Vous pourrez réserver un nouveau créneau une fois votre proposition publiée.');
-    }
-
-    const slot = await prisma.proposition_slot.findUnique({
-      where: { id: slotId },
-      select: { is_booked: true },
-    });
-
-    if (slot.is_booked) {
-      reply.code(401);
-      throw new Error('Ce créneau est déjà réservé.');
-    }
-
     await prisma.proposition_slot.update({
       where: { id: slotId },
       data: { is_booked: true },
@@ -79,16 +59,6 @@ export const handleUnbookSlot = async (request: Request, reply: Reply) => {
   const { id: slotId } = request.params;
 
   try {
-    const slot = await prisma.proposition_slot.findUnique({
-      where: { id: slotId },
-      select: { is_booked: true },
-    });
-
-    if (!slot.is_booked) {
-      reply.code(406);
-      throw new Error('Ce créneau n\'est pas réservé.');
-    }
-
     await prisma.proposition_slot.update({
       where: { id: slotId },
       data: { is_booked: false },

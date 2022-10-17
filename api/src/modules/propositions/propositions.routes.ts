@@ -29,6 +29,7 @@ export const propositions = async (fastify: FastifyInstance) => {
     schema: bookSlotSchema,
     handler: handleBookSlot,
     onRequest: [fastify.accessVerify],
+    preValidation: [fastify.userHasProposition],
   });
 
   fastify.route({
@@ -37,7 +38,7 @@ export const propositions = async (fastify: FastifyInstance) => {
     schema: unbookSlotSchema,
     handler: handleUnbookSlot,
     onRequest: [fastify.isAdmin],
-    preValidation: [fastify.passwordVerify],
+    preValidation: [fastify.passwordVerify, fastify.isSlotBooked],
   });
 
   fastify.route({
