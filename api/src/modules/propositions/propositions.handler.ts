@@ -123,7 +123,7 @@ export const handleGetAllUsersProposition = async (request: Request, reply: Repl
   }
 };
 
-export const handleGetUsersPropositionById = async (request: Request, reply: Reply) => {
+export const handleGetUserPropositionByid = async (request: Request, reply: Reply) => {
   const { prisma } = request;
   const { id } = request.params;
 

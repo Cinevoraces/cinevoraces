@@ -9,7 +9,7 @@ import {
 import { 
   handleGetAllSlots, 
   handleGetAllUsersProposition,
-  handleGetUsersPropositionById, 
+  handleGetUserPropositionByid, 
   handleBookSlot,
   handleUnbookSlot,
 } from '@modules/propositions/propositions.handler';
@@ -51,6 +51,6 @@ export const propositions = async (fastify: FastifyInstance) => {
     method: 'GET',
     url: '/propositions/users/:id',
     schema: getUsersPropositionByIdSchema,
-    handler: handleGetUsersPropositionById,
+    handler: handleGetUserPropositionByid,
   });
 };
