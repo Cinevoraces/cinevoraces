@@ -18,7 +18,7 @@ const swagger: FastifyPluginCallback = async (fastify, opts, done) => {
         { name: 'Users', description: 'Users data related end-points' },
         { name: 'Movies', description: 'Movies data related end-points' },
         { name: 'Metrics', description: 'Metrics data related end-points' },
-        { name: 'Slots', description: 'Movie proposition slots related end-points' },
+        { name: 'Propositions', description: 'Movie propositions related end-points' },
       ],
     },
     exposeRoute: true,

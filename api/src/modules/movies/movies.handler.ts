@@ -21,6 +21,12 @@ export const handleGetMovies = async (request: Request, reply: Reply) => {
         where: { AND: [...filters]},
       }
     );
+    
+    if (movies.length === 0) {
+      reply.code(404);
+      throw new Error('Aucun film trouvé');
+    }
+
     reply.send(movies);
   } catch (error) {
     reply.send(error);
@@ -37,6 +43,7 @@ export const handleGetMovieById = async (request: Request, reply: Reply) => {
         id,
       },
     });
+
     reply.send(movie);
   } catch (error) {
     reply.send(error);
