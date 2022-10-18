@@ -1,27 +1,19 @@
 import type { FastifyReply as Reply, FastifyRequest } from 'fastify';
-import type { proposition } from '@src/types/proposition';
-import type Filters from '@src/types/Filters';
-import filtersFactorySlots from '@src/utils/filtersFactorySlots';
+import type { proposition_slot } from '@prisma/client';
+import type PrismaQuery from '@src/types/Query';
+import prismaQueryFactory from '@src/utils/prismaQueryFactory';
 
 type Request = FastifyRequest<{
-  Querystring: {
-    filter: Filters.Slot;
-  };
-  Params: {
-    id: number;
-  };
+  Querystring: PrismaQuery.Querystring;
+  Params: { id: number };
 }>;
 
 export const handleGetAllSlots = async (request: Request, reply: Reply) => {
   const { prisma } = request;
-  const filters = filtersFactorySlots(request.query.filter);
+  const prismaQuery = prismaQueryFactory(request.query, 'Slot');
 
   try {
-    const slots = await prisma.proposition_slot.findMany(
-      filters && {
-        where: { AND: [...filters]},
-      }
-    );
+    const slots = await prisma.proposition_slot.findMany({ ...prismaQuery });
 
     if (slots.length === 0) {
       reply.code(404);
@@ -78,7 +70,7 @@ export const handleGetAllUsersProposition = async (request: Request, reply: Repl
   const { prisma } = request;
 
   try {
-    const proposition: Array<proposition> = await prisma.$queryRaw`
+    const proposition: Array<proposition_slot> = await prisma.$queryRaw`
       SELECT * FROM pending_propositions;
     `;
 
@@ -98,7 +90,7 @@ export const handleGetUserPropositionByid = async (request: Request, reply: Repl
   const { id } = request.params;
 
   try {
-    const proposition: Array<proposition> = await prisma.$queryRaw`
+    const proposition: Array<proposition_slot> = await prisma.$queryRaw`
       SELECT * FROM pending_propositions WHERE user_id=${id};
     `;
 

@@ -65,6 +65,17 @@ describe('Movies routes test', () => {
     );
   });
 
+  test('GET /movies with bad filters', async () => {
+    const res = await app.inject({
+      method: 'GET',
+      url: '/movies',
+      query: 'filter[jambon]=true',
+    });
+
+    expect(res.statusCode).toEqual(200);
+    expect(await res.json()).toEqual(expect.arrayContaining([movieObject]));
+  });
+
   test('GET /movies/1', async () => {
     const res = await app.inject({
       method: 'GET',
