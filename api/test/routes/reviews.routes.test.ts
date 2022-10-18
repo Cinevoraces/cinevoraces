@@ -138,4 +138,45 @@ describe('Reviews routes test', () => {
       message: 'Commentaire mis à jour.',
     }));
   });
+
+  test('DELETE /reviews/:movieId/:userId', async () => {
+    const login = await app.inject({
+      method: 'POST',
+      url: '/login',
+      payload: { pseudo: user.data.pseudo, password },
+    });
+    const loginAdmin = await app.inject({
+      method: 'POST',
+      url: '/login',
+      payload: { pseudo: admin.data.pseudo, password },
+    });
+    const loginRes = await login.json();
+    const loginAdminRes = await loginAdmin.json();
+
+    const createReview = await app.inject({
+      method: 'PUT',  
+      url: '/reviews/1',
+      payload: {
+        rating: 5,
+      },
+      headers: {
+        authorization: `Bearer ${loginRes.token}`,
+      },
+    });
+    expect(createReview.statusCode).toEqual(200);
+
+    const deleteReview = await app.inject({
+      method: 'DELETE',
+      url: `/reviews/1/${user.data.id}`,
+      headers: {
+        authorization: `Bearer ${loginAdminRes.token}`,
+      },
+      payload: { password },
+    });
+    expect(await deleteReview.json()).toEqual(expect.objectContaining({
+      message: expect.any(String),
+    }));
+    expect(deleteReview.statusCode).toEqual(200);
+  });
+
 });

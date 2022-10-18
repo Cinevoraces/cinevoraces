@@ -1,8 +1,12 @@
 import type { FastifyInstance } from 'fastify';
 import {
   handleReviewMovie,
+  handleDeleteReview
 } from '@modules/reviews/reviews.handler';
-import { reviewMovieSchema } from '@modules/reviews/reviews.schema';
+import { 
+  reviewMovieSchema,
+  deleteReviewSchema
+} from '@modules/reviews/reviews.schema';
 
 export const reviews = async (fastify: FastifyInstance) => {
   fastify.route({
@@ -12,5 +16,14 @@ export const reviews = async (fastify: FastifyInstance) => {
     handler: handleReviewMovie,
     onRequest: [fastify.accessVerify],
     preHandler: [fastify.findOrCreateReviewObject],
+  });
+
+  fastify.route({
+    method: 'DELETE',
+    url: '/reviews/:movieId/:userId',
+    schema: deleteReviewSchema,
+    handler: handleDeleteReview,
+    onRequest: [fastify.isAdmin],
+    preValidation: [fastify.passwordVerify],
   });
 };
