@@ -2,9 +2,7 @@ import type { globalMetrics, userMetrics } from '@src/types/Metrics';
 import type { FastifyReply as Reply, FastifyRequest } from 'fastify';
 
 type Request = FastifyRequest<{
-  Params: {
-    id: number;
-  };
+  Params: { id: number };
 }>;
 
 export const handleGetGlobalMetrics = async (request: Request, reply: Reply) => {
