@@ -7,7 +7,7 @@ export const getMoviesSchema: FastifySchema = {
   Available query parameters:
   - filter[is_published]: filter by published status
   - filter[season_id]: filter by season number
-  - Filter[user_id]: filter by user id
+  - filter[user_id]: filter by user id
   `,
   tags: ['Movies'],
   querystring: {
