@@ -19,8 +19,8 @@ type Request = FastifyRequest<{
 }>;
 
 export const handleGetUsers = async (request: Request, reply: Reply) => {
-  const { prisma } = request;
-  const prismaQuery = prismaQueryFactory(request.query, 'User');
+  const { prisma, query } = request;
+  const prismaQuery = prismaQueryFactory(query, 'User');
 
   try {
     const users = await prisma.user.findMany({
@@ -35,10 +35,10 @@ export const handleGetUsers = async (request: Request, reply: Reply) => {
 };
 
 export const handleGetUserById = async (request: Request, reply: Reply) => {
-  const { prisma } = request;
+  const { prisma, query } = request;
   const { id } = request.params;
-  const metrics = request.query.pop?.metrics;
-  const prismaQuery = prismaQueryFactory(request.query, 'User');
+  const metrics = query.pop?.metrics;
+  const prismaQuery = prismaQueryFactory(query, 'User');
 
   try {
     let response;

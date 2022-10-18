@@ -8,8 +8,8 @@ type Request = FastifyRequest<{
 }>;
 
 export const handleGetMovies = async (request: Request, reply: Reply) => {
-  const { prisma } = request;
-  const prismaQuery = prismaQueryFactory(request.query, 'Movie');
+  const { prisma, query } = request;
+  const prismaQuery = prismaQueryFactory(query, 'Movie');
 
   try {
     const movies = await prisma.movie.findMany({ ...prismaQuery });
