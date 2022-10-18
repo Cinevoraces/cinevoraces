@@ -33,6 +33,34 @@ export const reviewMovieSchema: FastifySchema = {
   },
 };
 
+export const getAllReviewsSchema: FastifySchema = {
+  description: `
+  **Get all reviews**.
+  Use query parameters to filter the results using the following format: */reviews?filter[user_id]=2&filter[movie_id]=3*
+  Available query parameters:
+  - filter[movie_id]: filter by movie id
+  - filter[user_id]: filter by user id
+  `,
+  tags: ['Reviews'],
+  querystring: {
+    type: 'object',
+    properties: {
+      filter: {
+        type: 'object',
+      },
+    },
+  },
+  response: {
+    '200': {
+      type: 'array',
+      items: { $ref: 'review#' },
+    },
+    '401': { $ref: 'apiError#' },
+    '403': { $ref: 'apiError#' },
+    '404': { $ref: 'apiError#' },
+  },
+};
+
 export const deleteReviewSchema: FastifySchema = {
   summary: 'Admin only',
   description: `

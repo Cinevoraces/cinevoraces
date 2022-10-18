@@ -5,6 +5,16 @@ import createUser from '../utils/createUser';
 
 describe('Reviews routes test', () => {
   const app = build();
+  const reviewObject = expect.objectContaining({
+    user_id: expect.any(Number),
+    movie_id: expect.any(Number),
+    bookmarked: expect.any(Boolean),
+    viewed: expect.any(Boolean),
+    liked: expect.any(Boolean),
+    rating: expect.any(Number),
+    comment: expect.any(String),
+  });
+
   const password = 'password1234';
   let user: Awaited<ReturnType<typeof createUser>>;
   let admin: Awaited<ReturnType<typeof createUser>>;
@@ -177,6 +187,47 @@ describe('Reviews routes test', () => {
       message: expect.any(String),
     }));
     expect(deleteReview.statusCode).toEqual(200);
+  });
+
+  test('GET /reviews', async () => {
+    const login = await app.inject({
+      method: 'POST',
+      url: '/login',
+      payload: { pseudo: admin.data.pseudo, password },
+    });
+    const loginRes = await login.json();
+    await app.inject({
+      method: 'PUT',
+      url: '/reviews/1',
+      payload: { comment: 'Tester c\'est douter' },
+      headers: {
+        authorization: `Bearer ${loginRes.token}`,
+      },
+    });
+
+    const withoutQueryString = await app.inject({
+      method: 'GET',
+      url: '/reviews',
+      headers: {
+        authorization: `Bearer ${loginRes.token}`,
+      },
+    });
+    expect(await withoutQueryString.json()).toEqual(expect.arrayContaining([reviewObject]));
+    expect(withoutQueryString.statusCode).toEqual(200);
+
+    const withQueryString = await app.inject({
+      method: 'GET',
+      url: '/reviews',
+      query: `filter[movie_id]=1&filter[user_id]=${admin.data.id}`,
+      headers: {
+        authorization: `Bearer ${loginRes.token}`,
+      },
+    });
+    const testLenght = await withQueryString.json().length;
+
+    expect(await withQueryString.json()).toEqual(expect.arrayContaining([reviewObject]));
+    expect(testLenght).toEqual(1);
+    expect(withQueryString.statusCode).toEqual(200);
   });
 
 });

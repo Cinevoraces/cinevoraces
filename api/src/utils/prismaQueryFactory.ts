@@ -3,7 +3,7 @@ import type { Prisma } from '@prisma/client';
 
 export default function prismaQueryFactory(
   querystring: PrismaQuery.Querystring, 
-  dataType: 'Movie' | 'User' | 'Slot'
+  dataType: 'Movie' | 'User' | 'Slot' | 'Review'
 ) {
   const { filter, pop, limit } = querystring;
   let prismaQuery: PrismaQuery.FactoredQuery = {};
@@ -54,6 +54,19 @@ export default function prismaQueryFactory(
         };
       }
       break;
+    
+    case 'Review':
+      if (filter) {
+        const filtersEnum: Prisma.ReviewScalarFieldEnum[] = [
+          'movie_id', 
+          'user_id'
+        ];
+        const factoredFilters = whereFactory(filtersEnum, filter);
+        prismaQuery = { 
+          ...prismaQuery,
+          ...factoredFilters
+        };
+      }
   }
 
   return prismaQuery;

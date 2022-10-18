@@ -1,8 +1,11 @@
 import type { FastifyReply as Reply, FastifyRequest } from 'fastify';
 import type { review } from '@prisma/client';
+import type PrismaQuery from '@src/types/Query';
 import reviewResponseFactory from '@src/utils/reviewResponseFactory';
+import prismaQueryFactory from '@src/utils/prismaQueryFactory';
 
 type Request = FastifyRequest<{
+  Querystring: PrismaQuery.Querystring;
   Params: { movieId: number, userId: number };
   Body: review;
 }>;
@@ -33,12 +36,12 @@ export const handleReviewMovie = async (request: Request, reply: Reply) => {
   }
 };
 
-export const handleGetReviews = async (request: Request, reply: Reply) => {
-  const { prisma } = request;
+export const handleGetAllReviews = async (request: Request, reply: Reply) => {
+  const { prisma, query } = request;
+  const prismaQuery = prismaQueryFactory(query, 'Review');
 
   try {
-    const reviews = await prisma.review.findMany({
-    });
+    const reviews = await prisma.review.findMany({ ...prismaQuery });
 
     reply.send(reviews);
   } catch (error) {
@@ -51,7 +54,7 @@ export const handleDeleteReview = async (request: Request, reply: Reply) => {
   const { movieId, userId } = request.params;
 
   try {
-    const review = await prisma.review.delete({
+    await prisma.review.delete({
       where: {
         user_id_movie_id: {
           user_id: userId,

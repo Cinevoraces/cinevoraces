@@ -1,10 +1,12 @@
 import type { FastifyInstance } from 'fastify';
 import {
   handleReviewMovie,
+  handleGetAllReviews,
   handleDeleteReview
 } from '@modules/reviews/reviews.handler';
 import { 
   reviewMovieSchema,
+  getAllReviewsSchema,
   deleteReviewSchema
 } from '@modules/reviews/reviews.schema';
 
@@ -16,6 +18,14 @@ export const reviews = async (fastify: FastifyInstance) => {
     handler: handleReviewMovie,
     onRequest: [fastify.accessVerify],
     preHandler: [fastify.findOrCreateReviewObject],
+  });
+
+  fastify.route({
+    method: 'GET',
+    url: '/reviews',
+    schema: getAllReviewsSchema,
+    handler: handleGetAllReviews,
+    onRequest: [fastify.isAdmin],
   });
 
   fastify.route({
