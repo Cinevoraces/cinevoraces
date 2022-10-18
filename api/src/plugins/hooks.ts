@@ -14,6 +14,7 @@ declare module 'fastify' {
     passwordVerify: (request: Request, reply: Reply)=>void;
     userHasProposition: (request: Request, reply: Reply)=>void;
     isSlotBooked: (request: Request, reply: Reply)=>void;
+    findOrCreateReviewObject: (request: Request, reply: Reply)=>void;
   }
 }
 
@@ -117,6 +118,42 @@ const hooks: FastifyPluginCallback = async (fastify, opts, done) => {
         reply.code(401); // Unauthorized
         throw new Error('Mot de passe incorrect.');
       }
+    } catch (err) {
+      reply.send(err);
+    }
+  });
+
+  // preHandler hook
+  fastify.decorate('findOrCreateReviewObject', async (
+    request: Request<{ Params: { movieId: number } }>, 
+    reply: Reply
+  ) => {
+    const { prisma } = request;
+    const { movieId } = request.params;
+    const { id } = request.user;
+  
+    try {
+      let review = await prisma.review.findFirst({
+        where: {
+          user_id: id,
+          movie_id: Number(movieId),
+        },
+      });
+      if (!review) {
+        review = await prisma.review.create({
+          data: {
+            user_id: id,
+            movie_id: Number(movieId),
+          },
+        });
+      }
+      request.user = { 
+        ...request.user, 
+        previous_review: {
+          comment: review.comment,
+          rating: review.rating,
+        }
+      };
     } catch (err) {
       reply.send(err);
     }
