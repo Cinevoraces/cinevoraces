@@ -1,7 +1,7 @@
 import { build } from '../helper';
 import bcrypt from 'bcrypt';
 import createUser from '../utils/createUser';
-import createMovie from '../utils/createMovies';
+import createMovie from '../utils/createMovie';
 import createSlot from '../utils/createSlot';
 
 describe('Propositions routes test', () => {
