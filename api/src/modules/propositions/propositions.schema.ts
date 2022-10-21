@@ -78,7 +78,7 @@ export const unbookSlotSchema: FastifySchema = {
   },
 };
 
-export const getAllUsersPropositionSchema: FastifySchema = {
+export const getAllPropositionsSchema: FastifySchema = {
   description: '**Get all users proposition**.',
   tags: ['Propositions'],
   response: {

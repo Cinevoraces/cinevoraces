@@ -66,20 +66,20 @@ export const handleUnbookSlot = async (request: Request, reply: Reply) => {
   }
 };
 
-export const handleGetAllUsersProposition = async (request: Request, reply: Reply) => {
+export const handleGetAllPropositions = async (request: Request, reply: Reply) => {
   const { prisma } = request;
 
   try {
-    const proposition: Array<proposition_slot> = await prisma.$queryRaw`
+    const propositions: Array<proposition_slot> = await prisma.$queryRaw`
       SELECT * FROM pending_propositions;
     `;
 
-    if (proposition.length === 0) {
+    if (propositions.length === 0) {
       reply.code(404);
       throw new Error('Aucune proposition en attente.');
     }
 
-    reply.send(proposition);
+    reply.send(propositions);
   } catch (error) {
     reply.send(error);
   }

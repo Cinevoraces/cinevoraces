@@ -1,14 +1,14 @@
 import type { FastifyInstance } from 'fastify';
 import { 
   getAllSlotsSchema, 
-  getAllUsersPropositionSchema, 
+  getAllPropositionsSchema, 
   getUsersPropositionByIdSchema, 
   bookSlotSchema,
   unbookSlotSchema,
 } from '@modules/propositions/propositions.schema';
 import { 
   handleGetAllSlots, 
-  handleGetAllUsersProposition,
+  handleGetAllPropositions,
   handleGetUserPropositionByid, 
   handleBookSlot,
   handleUnbookSlot,
@@ -43,9 +43,9 @@ export const propositions = async (fastify: FastifyInstance) => {
 
   fastify.route({
     method: 'GET',
-    url: '/propositions/users',
-    schema: getAllUsersPropositionSchema,
-    handler: handleGetAllUsersProposition,
+    url: '/propositions',
+    schema: getAllPropositionsSchema,
+    handler: handleGetAllPropositions,
   });
 
   fastify.route({
