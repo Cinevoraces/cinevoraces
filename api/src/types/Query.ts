@@ -9,6 +9,9 @@ declare namespace PrismaQuery {
   interface where {
     where?: { 
       AND?: Array<Record<string, unknown>>;
+      review?: {
+        some?: Record<string, unknown>;
+      }
     }
   }
   interface include {

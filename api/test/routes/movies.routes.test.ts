@@ -75,7 +75,7 @@ describe('Movies routes test', () => {
   test('Get movies with published/season filters', async () => {
     const res = await app.inject({
       ...getAllMoviesInjectOptions,
-      query: 'filter[is_published]=true&filter[season_id]=3',
+      query: 'filter[is_published]=true&filter[season_id]=3&filter[bookmarked]=true',
     });
 
     expect(await res.json()).toEqual(
@@ -97,6 +97,18 @@ describe('Movies routes test', () => {
         user_id: 1,
       })])
     );
+  });
+
+  test('get all movies passing token', async () => {
+    const login = await app.inject(loginUserInjectOptions);
+    const loggedInjectOptions = {
+      ...getAllMoviesInjectOptions,
+      headers: { authorization: `Bearer ${await login.json().token}` },
+    };
+    
+    await app.inject({ ...loggedInjectOptions,
+      query: 'filter[bookmarked]=true',
+    });
   });
 
   test.skip('Get movies with user interaction filters', async () => {

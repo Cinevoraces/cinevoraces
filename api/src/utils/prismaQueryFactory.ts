@@ -1,22 +1,39 @@
 import type PrismaQuery from '@src/types/Query';
 import type { Prisma } from '@prisma/client';
+import objectHandler from './objectHandler';
 
 export default function prismaQueryFactory(
   querystring: PrismaQuery.Querystring, 
-  dataType: 'Movie' | 'User' | 'Slot'
+  dataType: 'Movie' | 'User' | 'Slot',
+  userId?: number
 ) {
   const { filter, pop, limit } = querystring;
   let prismaQuery: PrismaQuery.FactoredQuery = {};
-  
   switch (dataType) {
     case 'Movie':
       if (filter) {
-        const filtersEnum: Prisma.MovieScalarFieldEnum[] = [
+        const enumerator: Prisma.MovieScalarFieldEnum[] = [
           'is_published', 
           'season_id', 
           'user_id'
         ];
-        const factoredFilters = whereFactory(filtersEnum, filter);
+        const loggedEnumerator: Prisma.ReviewScalarFieldEnum[] = [
+          'bookmarked',
+          'liked',
+          'viewed',
+          'rating',
+          'comment' 
+        ];
+        const factoredFilters: typeof prismaQuery = {
+          where: { AND: objectHandler.keysToArray(enumerator, filter) }
+        };
+        if (userId) {
+          const userFilters = objectHandler.filterKeys(loggedEnumerator, filter);
+          if (userFilters.length > 0) factoredFilters.where.review.some = {
+            ...userFilters,
+            user_id: userId
+          };
+        };
         prismaQuery = { 
           ...prismaQuery,
           ...factoredFilters
@@ -26,21 +43,27 @@ export default function prismaQueryFactory(
 
     case 'User':
       if (pop) {
-        const populatorEnum: Array<keyof Prisma.userSelect> = ['movies', 'reviews'];
-        const factoredFilters = includeFactory(populatorEnum, pop);
-        prismaQuery = {
-          ...prismaQuery,
-          ...factoredFilters
+        const enumerator: Array<keyof Prisma.userSelect> = ['movies', 'reviews'];
+        const factoredFilters = {
+          include: objectHandler.filterKeys(enumerator, pop)
         };
+        if (Object.keys(factoredFilters.include).length > 0) {
+          prismaQuery = {
+            ...prismaQuery,
+            ...factoredFilters as PrismaQuery.include
+          };
+        }
       }
       break;
 
     case 'Slot':
       if (filter) {
-        const filtersEnum: Prisma.Proposition_slotScalarFieldEnum[] = [
+        const enumerator: Prisma.Proposition_slotScalarFieldEnum[] = [
           'is_booked'
         ];
-        const factoredFilters = whereFactory(filtersEnum, filter);
+        const factoredFilters: typeof prismaQuery = {
+          where: { AND: objectHandler.keysToArray(enumerator, filter) }
+        };
         prismaQuery = { 
           ...prismaQuery,
           ...factoredFilters
@@ -57,39 +80,4 @@ export default function prismaQueryFactory(
   }
 
   return prismaQuery;
-}
-
-function whereFactory(
-  filters: Array<string>,
-  query: Record<string, unknown>
-): PrismaQuery.where {
-  const keys = Object.keys(query);
-  return {
-    where: {
-      AND: (keys as Array<string>).reduce(
-        (acc, key) => {
-          if (typeof query[key] === 'undefined') return acc;
-          if (filters.find((filter) => filter === key)) {
-            return [...acc, { [key]: query[key] }];
-          }
-          return acc;
-        }, []
-      ),
-    },
-  };
-}
-
-function includeFactory(
-  populators: Array<string>,
-  query: Record<string, unknown>
-): PrismaQuery.include {
-  let factoredQuery = {};
-  for (const key in query) {
-    if (populators.find((populator) => populator === key)) {
-      factoredQuery = { ...factoredQuery, [key]: true };    
-    }
-  }
-  return Object.keys(factoredQuery).length > 0 
-    ? { include: factoredQuery } 
-    : {};
 }
