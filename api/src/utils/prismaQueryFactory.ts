@@ -29,6 +29,7 @@ export default function prismaQueryFactory(
         };
         if (userId) {
           const userFilters = objectHandler.filterKeys(loggedEnumerator, filter);
+          if (userFilters.rating) userFilters.rating = { lte: userFilters.rating };
           if (Object.keys(userFilters).length > 0) factoredFilters.where = {
             ...factoredFilters.where,
             review: {
