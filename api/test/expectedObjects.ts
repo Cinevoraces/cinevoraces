@@ -1,4 +1,8 @@
 export default {
+  error: expect.objectContaining({
+    message: expect.any(String),
+    statusCode: expect.any(Number),
+  }),
   metricsGlobal: expect.objectContaining({
     seasons_count: expect.any(Number),
     movies_count: expect.any(Number),
