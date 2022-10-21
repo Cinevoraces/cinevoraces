@@ -14,7 +14,7 @@ export const getMoviesSchema: FastifySchema = {
   - filter[bookmarked]: filter by bookmarked status.
   - filter[viewed]: filter by viewed status.
   - filter[liked]: filter by liked status.
-  - filter[rating]: filter by rating status.
+  - filter[rating]: filter by rating value *(<=)*.
   
   `,
   tags: ['Movies'],
