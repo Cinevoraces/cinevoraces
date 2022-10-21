@@ -9,8 +9,8 @@ type Request = FastifyRequest<{
 }>;
 
 export const handleGetAllSlots = async (request: Request, reply: Reply) => {
-  const { prisma } = request;
-  const prismaQuery = prismaQueryFactory(request.query, 'Slot');
+  const { prisma, query } = request;
+  const prismaQuery = prismaQueryFactory(query, 'Slot');
 
   try {
     const slots = await prisma.proposition_slot.findMany({ ...prismaQuery });

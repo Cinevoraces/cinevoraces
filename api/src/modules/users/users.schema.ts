@@ -3,8 +3,8 @@ import type { FastifySchema } from 'fastify';
 export const getUsersSchema: FastifySchema = {
   description: `
   **Get all users**.
-  Use query parameters to populate the results using the following format: */users?pop[movies]=true&pop[reviews]=true*
-  Available query parameters:
+  Use query parameters to populate the results using the following format: */users?pop[movies]=true&pop[reviews]=true*  
+  **Available query parameters:**
   - pop[movies]: populate with user posted movies
   - pop[reviews]: populate with user posted reviews
   `,

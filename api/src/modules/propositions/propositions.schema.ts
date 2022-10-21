@@ -2,8 +2,8 @@ import type { FastifySchema } from 'fastify';
 
 export const getAllSlotsSchema: FastifySchema = {
   description: `**Get all slots**.
-  Use query parameters to filter the results using the following format: */slots?filter[is_booked]=true*
-  Available query parameters:
+  Use query parameters to filter the results using the following format: */slots?filter[is_booked]=true* 
+  **Available query parameters:**
   - filter[is_booked]: filter by booked status.
   `,
   tags: ['Propositions'],
