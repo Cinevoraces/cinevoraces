@@ -11,6 +11,7 @@ declare module 'fastify' {
     accessVerify: (request: Request, reply: Reply)=>void;
     refreshVerify: (request: Request, reply: Reply)=>void;
     isAdmin: (request: Request, reply: Reply)=>void;
+    isLogged: (Request: Request, reply: Reply)=>void;
     passwordVerify: (request: Request, reply: Reply)=>void;
     userHasProposition: (request: Request, reply: Reply)=>void;
     isSlotBooked: (request: Request, reply: Reply)=>void;
@@ -45,6 +46,15 @@ const hooks: FastifyPluginCallback = async (fastify, opts, done) => {
         reply.status(403);
         throw new Error('accès restreint aux administrateurs.');
       }
+    } catch (err) {
+      reply.send(err);
+    }
+  });
+
+  // onRequest hook
+  fastify.decorate('isLogged', async (request: Request, reply: Reply) => {
+    try {
+      if (request.headers.authorization) await request.jwtVerify();
     } catch (err) {
       reply.send(err);
     }
