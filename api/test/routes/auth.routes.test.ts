@@ -1,112 +1,75 @@
-import type { resCookies } from '../types';
+import type { InjectOptions } from 'fastify';
 import { build } from '../helper';
 import { faker } from '@faker-js/faker';
 import prisma from '../utils/prisma';
 import bcrypt from 'bcrypt';
-import createUser from '../utils/createUser';
+import expectedObjects from '../expectedObjects';
 
 describe('Auth routes test', () => {
-  const app = build();
-  let user: Awaited<ReturnType<typeof createUser>>;
-  const password = 'password1234';
+  const { app, res } = build();
   const testUser = {
     pseudo: faker.internet.userName(),
     mail: faker.internet.email(),
-    password: password,
+    password: res.password,
+  };
+  const inject: Record<string, InjectOptions> = {
+    register: { method: 'POST', url: '/register' },
+    login: { method: 'POST', url: '/login' },
+    refresh: { method: 'GET', url: '/refresh' }
   };
   
   beforeAll(async () => {
-    const encryptedPassword = await bcrypt.hash(password, 10);
-    user = await createUser({
-      password: encryptedPassword,
-    });
+    const hashedPassword = await bcrypt.hash(res.password, 10);
+    res.users[0] = await res.createUser({ password: hashedPassword });
   });
 
   afterAll(async () => {
-    user.remove();
+    res.users[0].remove();
   });
 
-  test('POST /register', async () => {
-    const res = await app.inject({
-      method: 'POST',
-      url: '/register',
-      payload: { ...testUser },
-    });
-    await prisma.user.delete({
-      where: { pseudo: testUser.pseudo },
-    });
-    expect(res.statusCode).toEqual(201);
-  });
-
-  test('POST /register - Wrong password format', async () => {
-    const res = await app.inject({
-      method: 'POST',
-      url: '/register',
+  test('POST /register - Register function', async () => {
+    const wrongPasswordFormat = await app.inject({
+      ...inject.register,
       payload: { ...testUser, password: 'testercédouter' },
     });
-    expect(res.statusCode).toEqual(422);
+    const successfullRegister = await app.inject({
+      ...inject.register,
+      payload: { ...testUser },
+    });
+    await prisma.user.delete({ where: { pseudo: testUser.pseudo } });
+
+    expect(wrongPasswordFormat.statusCode).toEqual(422);
+    expect(successfullRegister.statusCode).toEqual(201);
   });
 
-  test('POST /login', async () => {
+  test('POST /login - Login function', async () => {
     const login = await app.inject({
-      method: 'POST',
-      url: '/login',
-      payload: { pseudo: user.data.pseudo, password },
+      ...inject.login,
+      payload: { pseudo: res.users[0].data.pseudo, password: res.password },
     });
 
     expect(login.statusCode).toEqual(200);
-    expect(await login.json()).toEqual(expect.objectContaining({
-      user: expect.objectContaining({
-        id: expect.any(String),
-        pseudo: expect.any(String),
-        mail: expect.any(String),
-        role: expect.any(String),
-        avatar_url: expect.any(String),
-      }),
-      token: expect.any(String),
-      response: expect.any(String)
-    }));
-    expect(login.cookies).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({ name: 'refresh_token', value: expect.any(String) }),
-      ])
-    );
+    expect(await login.json()).toEqual(expectedObjects.loginResponse);
+    expect(login.cookies).toEqual(expect.arrayContaining([expectedObjects.refreshToken]));
   });
 
-  test('GET /refresh', async () => {
+  test('GET /refresh - Refresh token function', async () => {
     const login = await app.inject({
-      method: 'POST',
-      url: '/login',
-      payload: { pseudo: user.data.pseudo, password },
+      ...inject.login,
+      payload: { pseudo: res.users[0].data.pseudo, password: res.password },
     });
 
-    const cookieName = (login.cookies[0] as resCookies).name;
-    const cookieValue = (login.cookies[0] as resCookies).value;
-    
+    const cookieName = (login.cookies[0] as Record<string, string>).name;
+    const cookieValue = (login.cookies[0] as Record<string, string>).value;
     const refresh = await app.inject({
-      method: 'GET',
-      url: '/refresh',
+      ...inject.refresh,
       headers: {
         cookie: `${cookieName}=${cookieValue}`,
       },
     });
 
     expect(refresh.statusCode).toEqual(200);
-    expect(await refresh.json()).toEqual(expect.objectContaining({
-      user: expect.objectContaining({
-        id: expect.any(String),
-        pseudo: expect.any(String),
-        mail: expect.any(String),
-        role: expect.any(String),
-        avatar_url: expect.any(String),
-      }),
-      token: expect.any(String),
-      response: expect.any(String)
-    }));
-    expect(refresh.cookies).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({ name: 'refresh_token', value: expect.any(String) }),
-      ])
-    );
+    expect(await refresh.json()).toEqual(expectedObjects.loginResponse);
+    expect(refresh.cookies).toEqual(expect.arrayContaining([expectedObjects.refreshToken]));
   });
 });

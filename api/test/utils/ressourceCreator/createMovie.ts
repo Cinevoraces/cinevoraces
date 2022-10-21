@@ -1,5 +1,5 @@
-import { faker } from '@faker-js/faker';
 import type { movie, Prisma } from '@prisma/client';
+import { faker } from '@faker-js/faker';
 import { createRessource } from './createRessource';
 
 export default async function createMovie (userId?: number, params?: Pick<Prisma.movieCreateInput, 'is_published' >) {

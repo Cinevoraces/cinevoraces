@@ -1,5 +1,5 @@
-import { faker } from '@faker-js/faker';
 import type { proposition_slot, Prisma } from '@prisma/client';
+import { faker } from '@faker-js/faker';
 import { createRessource } from './createRessource';
 
 export default async function createSlot (params?: Pick<Prisma.proposition_slotCreateInput, 'is_booked'>) {

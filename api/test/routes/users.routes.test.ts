@@ -1,112 +1,88 @@
+import type { InjectOptions } from 'fastify';
 import { build } from '../helper';
 import bcrypt from 'bcrypt';
-import createUser from '../utils/createUser';
+import expectedObjects from '../expectedObjects';
 
 describe('Users routes test', () => {
-  const app = build();
-  const userObject = expect.objectContaining({
-    id: expect.any(Number),
-    pseudo: expect.any(String),
-    mail: expect.any(String),
-    avatar_url: expect.any(String),
-    role: expect.any(String),
-    created_at: expect.anything(),
-    // updated_at: null,
-  });
-  const userObjectWithMoviesAndReviews = expect.objectContaining({
-    movies: expect.anything(),
-    reviews: expect.anything(),
-  });
-  const userObjectWithMetrics = expect.objectContaining({
-    metrics: expect.anything(),
-  });
-  let user: Awaited<ReturnType<typeof createUser>>;
-  let admin: Awaited<ReturnType<typeof createUser>>;
-  let userToDelete: Awaited<ReturnType<typeof createUser>>;
-  const password = 'password1234';
+  const { app, res } = build();
+  const inject: Record<string, InjectOptions> = {
+    login: { method: 'POST', url: '/login' },
+    loginAdmin: { method: 'POST', url: '/login' },
+    allUsers: { method: 'GET', url: '/users' },
+    userById: { method: 'GET', url: '/users/1' },
+    putUserByToken: { method: 'PUT', url: '/users' },
+  };
   
   beforeAll(async () => {
-    const encryptedPassword = await bcrypt.hash(password, 10);
-    user = await createUser({
-      password: encryptedPassword,
-    });
-    admin = await createUser({
-      password: encryptedPassword,
-      role: 'admin',
-    });
-    userToDelete = await createUser();
+    const encryptedPassword = await bcrypt.hash(res.password, 10);
+    res.users[0] = await res.createUser({ password: encryptedPassword });
+    res.users[1] = await res.createUser({ password: encryptedPassword, role: 'admin' });
+    res.users[2] = await res.createUser();
+    inject.login = { 
+      ...inject.login, 
+      payload: { 
+        pseudo: res.users[0].data.pseudo, 
+        password: res.password 
+      } 
+    };
+    inject.loginAdmin = { 
+      ...inject.loginAdmin, 
+      payload: { 
+        pseudo: res.users[1].data.pseudo, 
+        password: res.password 
+      } 
+    };
   });
 
   afterAll(async () => {
-    user.remove();
-    admin.remove();
+    res.users[0].remove();
+    res.users[1].remove();
   });
   
-  test('GET /users', async () => {
-    const res = await app.inject({
-      method: 'GET',
-      url: '/users',
-    });
-    expect(res.statusCode).toEqual(200);
-    expect(await res.json()).toEqual(expect.arrayContaining([userObject]));
-  });
-
-  test('GET /users populated with movies and reviews', async () => {
-    const res = await app.inject({
-      method: 'GET',
-      url: '/users',
-      query: 'pop[movies]=true&pop[reviews]=true',
-    });
-    expect(res.statusCode).toEqual(200);
-    expect(await res.json()).toEqual(expect.arrayContaining([userObjectWithMoviesAndReviews]));
-  });
-  
-  test('GET /users/1', async () => {
-    const res = await app.inject({
-      method: 'GET',
-      url: '/users/1',
-    });
-    expect(res.statusCode).toEqual(200);
-    expect(await res.json()).toEqual(userObject);
-  });
-
-  test('GET /users/1 with movies and reviews', async () => {
-    const res = await app.inject({
-      method: 'GET',
-      url: '/users/1',
+  test('GET /users - Get all Users', async () => {
+    const getAllUsers = await app.inject(inject.allUsers);
+    const populator_movies_reviews = await app.inject({
+      ...inject.allUsers,
       query: 'pop[movies]=true&pop[reviews]=true',
     });
 
-    expect(res.statusCode).toEqual(200);
-    expect(await res.json()).toEqual(userObjectWithMoviesAndReviews);
+    expect(getAllUsers.statusCode).toEqual(200);
+    expect(await getAllUsers.json()).toEqual(expect.arrayContaining([expectedObjects.user]));
+    expect(populator_movies_reviews.statusCode).toEqual(200);
+    expect(await populator_movies_reviews.json()).toEqual(expect.arrayContaining([expectedObjects.userWithMoviesAndReviews]));
   });
 
-  test('GET /users/1 populated with metrics', async () => {
-    const res = await app.inject({
-      method: 'GET',
-      url: '/users/1',
+  test('GET /users/:id - Get one User by ID', async () => {
+    const getOneUser = await app.inject(inject.userById);
+    const populator_movies_reviews = await app.inject({
+      ...inject.userById,
+      query: 'pop[movies]=true&pop[reviews]=true',
+    });
+    const populator_metrics = await app.inject({
+      ...inject.userById,
       query: 'pop[metrics]=true',
     });
-    expect(res.statusCode).toEqual(200);
-    expect(await res.json()).toEqual(userObjectWithMetrics);
+  
+    expect(getOneUser.statusCode).toEqual(200);
+    expect(await getOneUser.json()).toEqual(expectedObjects.user);
+    expect(populator_movies_reviews.statusCode).toEqual(200);
+    expect(await populator_movies_reviews.json()).toEqual(expectedObjects.userWithMoviesAndReviews);
+    expect(populator_metrics.statusCode).toEqual(200);
+    expect(await populator_metrics.json()).toEqual(expectedObjects.userWithMetrics);
   });
 
-  test('PUT /users', async () => {  
-    const login = await app.inject({
-      method: 'POST',
-      url: '/login',
-      payload: { pseudo: user.data.pseudo, password },
-    });
-    const loginRes = await login.json();
+  test('PUT /users - Modify user by accessToken', async () => {  
+    const login = await app.inject(inject.login);
+    const user = await login.json();
+    inject.putUserByToken = {
+      ...inject.putUserByToken,
+      headers: { authorization: `Bearer ${user.token}` },
+    };
 
-    const res = await app.inject({
-      method: 'PUT',
-      url: '/users',
-      headers: {
-        authorization: `Bearer ${loginRes.token}`,
-      },
+    const putUser = await app.inject({
+      ...inject.putUserByToken,
       payload: {
-        password,
+        password: res.password,
         update_user: {
           pseudo: 'IHateTests',
           password: 'password123456789',
@@ -114,26 +90,20 @@ describe('Users routes test', () => {
       },
     });
 
-    expect(res.statusCode).toEqual(200);
+    expect(putUser.statusCode).toEqual(200);
   });
 
-  test('DELETE /users/:id', async () => {  
-    const login = await app.inject({
-      method: 'POST',
-      url: '/login',
-      payload: { pseudo: admin.data.pseudo, password },
-    });
-    const loginRes = await login.json();
+  test('DELETE /users/:id - Delete one User by ID', async () => {  
+    const adminLogin = await app.inject(inject.loginAdmin);
+    const admin = await adminLogin.json();
 
-    const res = await app.inject({
+    const deleteUser = await app.inject({
       method: 'DELETE',
-      url: `/users/${userToDelete.data.id}`,
-      headers: {
-        authorization: `Bearer ${loginRes.token}`,
-      },
-      payload: { password },
+      url: `/users/${res.users[2].data.id}`,
+      headers: { authorization: `Bearer ${admin.token}` },
+      payload: { password: res.password },
     });
 
-    expect(res.statusCode).toEqual(200);
+    expect(deleteUser.statusCode).toEqual(200);
   });
 });

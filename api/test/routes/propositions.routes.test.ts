@@ -1,222 +1,134 @@
+import type { InjectOptions } from 'fastify';
 import { build } from '../helper';
 import bcrypt from 'bcrypt';
-import createUser from '../utils/createUser';
-import createMovie from '../utils/createMovie';
-import createSlot from '../utils/createSlot';
+import expectedObjects from '../expectedObjects';
 
 describe('Propositions routes test', () => {
-  const app = build();
-  const slotObject = expect.objectContaining({
-    id: expect.any(Number),
-    season_number: expect.any(Number),
-    episode: expect.any(Number),
-    publishing_date: expect.any(String),
-    is_booked: true,
-  });
-  const propositionObject = expect.objectContaining({
-    id: expect.any(Number),
-    french_title: expect.any(String),
-    poster_url: expect.any(String),
-    directors: expect.any(Array),
-    genres: expect.any(Array),
-    release_date: expect.any(String),
-    user_id: expect.any(Number),
-    user_pseudo: expect.any(String),
-    publishing_date: expect.any(String),
-    presentation: expect.any(String),
-  });
-  const password = 'password1234';
-  let user: Awaited<ReturnType<typeof createUser>>;
-  let admin: Awaited<ReturnType<typeof createUser>>;
-  let slot: Awaited<ReturnType<typeof createSlot>>;
-  let freeSlot: Awaited<ReturnType<typeof createSlot>>;
-  let proposition: Awaited<ReturnType<typeof createMovie>>;
+  const { app, res } = build();
+  const inject: Record<string, InjectOptions> = {
+    login: { method: 'POST', url: '/login' },
+    loginAdmin: { method: 'POST', url: '/login' },
+    allMovies: { method: 'GET', url: '/movies' },
+    movieById: { method: 'GET', url: '/movies/1' },
+    allSlots: { method: 'GET', url: '/propositions/slots' },
+    allPropositions: { method: 'GET', url: '/propositions' },
+    propositionByUserId: { method: 'GET', url: '/propositions/users/1' }
+  };
   
   beforeAll(async () => {
-    const encryptedPassword = await bcrypt.hash(password, 10);
-    user = await createUser({
-      password: encryptedPassword,
-    });
-    admin = await createUser({
-      password: encryptedPassword,
-      role: 'admin',
-    });
-    slot = await createSlot({
-      is_booked: true,
-    });
-    freeSlot = await createSlot({
-      is_booked: false,
-    });
-    proposition = await createMovie(1, {
-      is_published: false,
-    });
+    const encryptedPassword = await bcrypt.hash(res.password, 10);
+    res.users[0] = await res.createUser({ password: encryptedPassword });
+    res.users[1] = await res.createUser({ password: encryptedPassword, role: 'admin' });
+    inject.login = { 
+      ...inject.login, 
+      payload: { 
+        pseudo: res.users[0].data.pseudo, 
+        password: res.password 
+      } 
+    };
+    inject.loginAdmin = { 
+      ...inject.loginAdmin, 
+      payload: { 
+        pseudo: res.users[1].data.pseudo, 
+        password: res.password 
+      } 
+    };
+    res.slots[0] = await res.createSlot({ is_booked: true });
+    res.slots[1] = await res.createSlot({ is_booked: false });
+    res.movies[0] = await res.createMovie(1, { is_published: false });
   });
 
   afterAll(async () => {
-    user.remove();
-    admin.remove();
-    slot.remove();
-    freeSlot.remove();
-    proposition.remove();
+    res.users.forEach(user => user.remove());
+    res.slots.forEach(slot => slot.remove());
+    res.movies.forEach(movie => movie.remove());
   });
   
-  test('GET /propositions/slots?filter[is_booked]=true', async () => {
-    const login = await app.inject({
-      method: 'POST',
-      url: '/login',
-      payload: { pseudo: user.data.pseudo, password },
-    });
-    const loginRes = await login.json();
-
-    const res = await app.inject({
-      method: 'GET',
-      url: '/propositions/slots',
-      query: 'filter[is_booked]=true',
-      headers: {
-        authorization: `Bearer ${loginRes.token}`,
-      },
-    });
-
+  test('GET /propositions - Get all propositions', async () => {
+    const res = await app.inject(inject.allPropositions);
     expect(res.statusCode).toEqual(200);
-    expect(await res.json()).toEqual(expect.arrayContaining([slotObject]));
+    expect(await res.json()).toEqual(expect.arrayContaining([expectedObjects.proposition]));
   });
 
-  test('GET /propositions/slots?filter[is_booked]=false&limit=2', async () => {
-    const login = await app.inject({
-      method: 'POST',
-      url: '/login',
-      payload: { pseudo: user.data.pseudo, password },
-    });
-    const loginRes = await login.json();
-
-    const res = await app.inject({
-      method: 'GET',
-      url: '/propositions/slots',
-      query: 'filter[is_booked]=false&limit=2',
-      headers: {
-        authorization: `Bearer ${loginRes.token}`,
-      },
-    });
-
-    expect(res.statusCode).toEqual(200);
-    expect(await res.json()).toHaveLength(2);
-  });
-
-  test('GET /propositions/users', async () => {
-    const login = await app.inject({
-      method: 'POST',
-      url: '/login',
-      payload: { pseudo: user.data.pseudo, password },
-    });
-    const loginRes = await login.json();
-
-    const res = await app.inject({
-      method: 'GET',
-      url: '/propositions/users',
-      headers: {
-        authorization: `Bearer ${loginRes.token}`,
-      },
-    });
-
-    expect(res.statusCode).toEqual(200);
-    expect(await res.json()).toEqual(expect.arrayContaining([propositionObject]));
-  });
-
-  test('GET /propositions/users/:id', async () => {
-    const res = await app.inject({
-      method: 'GET',
-      url: '/propositions/users/1',
-    });
-
-    expect(res.statusCode).toEqual(200);
-    expect(await res.json()).toEqual(propositionObject);
-  });
-
-  test('GET /propositions/users/:id', async () => {
-    const res = await app.inject({
-      method: 'GET',
+  test('GET /propositions/users/:id - Get one proposition by user ID', async () => {
+    const successfullRequest = await app.inject(inject.propositionByUserId);
+    const notFound = await app.inject({
+      ...inject.propositionByUserId,
       url: '/propositions/users/2',
     });
 
-    expect(res.statusCode).toEqual(404);
+    expect(successfullRequest.statusCode).toEqual(200);
+    expect(await successfullRequest.json()).toEqual(expectedObjects.proposition);
+    expect(notFound.statusCode).toEqual(404);
   });
 
-  test('PUT /propositions/slots/book/:id', async () => {
-    const login = await app.inject({
-      method: 'POST',
-      url: '/login',
-      payload: { pseudo: user.data.pseudo, password },
+  test('GET /propositions/slots - Get all Slots', async () => {
+    const login = await app.inject(inject.login);
+    const user = await login.json();
+    inject.allSlots = {
+      ...inject.allSlots,
+      headers: { authorization: `Bearer ${user.token}` },
+    };
+
+    const filters_is_booked = await app.inject({
+      ...inject.allSlots,
+      query: 'filter[is_booked]=true',
     });
-    const loginRes = await login.json();
-
-    const res = await app.inject({
-      method: 'PUT',
-      url: `/propositions/slots/book/${freeSlot.data.id}`,
-      headers: {
-        authorization: `Bearer ${loginRes.token}`,
-      },
-    });
-
-    expect(res.statusCode).toEqual(200);
-  });
-
-  test('PUT /propositions/slots/unbook/:id Succes', async () => {
-    const login = await app.inject({
-      method: 'POST',
-      url: '/login',
-      payload: { pseudo: admin.data.pseudo, password },
-    });
-    const loginRes = await login.json();
-
-    const res = await app.inject({
-      method: 'PUT',
-      url: `/propositions/slots/unbook/${freeSlot.data.id}`,
-      payload: { password },
-      headers: {
-        authorization: `Bearer ${loginRes.token}`,
-      },
+    const filters_is_booked_and_limit = await app.inject({
+      ...inject.allSlots,
+      query: 'filter[is_booked]=false&limit=2',
     });
 
-    expect(res.statusCode).toEqual(200);
+    expect(filters_is_booked.statusCode).toEqual(200);
+    expect(await filters_is_booked.json()).toEqual(expect.arrayContaining([expectedObjects.slot]));
+    expect(filters_is_booked_and_limit.statusCode).toEqual(200);
+    expect(await filters_is_booked_and_limit.json()).toHaveLength(2);
   });
   
-  test('PUT /propositions/slots/unbook/:id Unauthorized', async () => {
-    const login = await app.inject({
-      method: 'POST',
-      url: '/login',
-      payload: { pseudo: user.data.pseudo, password },
-    });
-    const loginRes = await login.json();
+  test('PUT /propositions/slots/book/:id - Book a slot with accessToken', async () => {
+    const login = await app.inject(inject.login);
+    const user = await login.json();  
 
-    const res = await app.inject({
+    const bookSlotSuccess = await app.inject({
       method: 'PUT',
-      url: `/propositions/slots/unbook/${freeSlot.data.id}`,
-      payload: { password },
-      headers: {
-        authorization: `Bearer ${loginRes.token}`,
-      },
+      url: `/propositions/slots/book/${res.slots[1].data.id}`,
+      headers: { authorization: `Bearer ${user.token}` },
     });
-    
-    expect(res.statusCode).toEqual(403);
+    const bookSlotUnauthorized = await app.inject({
+      method: 'PUT',
+      url: `/propositions/slots/book/${res.slots[1].data.id}`
+    });
+
+    expect(bookSlotSuccess.statusCode).toEqual(200);
+    expect(bookSlotUnauthorized.statusCode).toEqual(401);
   });
 
-  test('PUT /propositions/slots/unbook/:id un-reserved slot', async () => {
-    const login = await app.inject({
-      method: 'POST',
-      url: '/login',
-      payload: { pseudo: admin.data.pseudo, password },
-    });
-    const loginRes = await login.json();
+  test('PUT /propositions/slots/unbook/:id - Unbook a slot', async () => {
+    const adminLogin = await app.inject(inject.loginAdmin);
+    const userLogin = await app.inject(inject.login);
+    const admin = await adminLogin.json();
+    const user = await userLogin.json(); 
 
-    const res = await app.inject({
+    const unbookSlotAsUser = await app.inject({
       method: 'PUT',
-      url: `/propositions/slots/unbook/${freeSlot.data.id}`,
-      payload: { password },
-      headers: {
-        authorization: `Bearer ${loginRes.token}`,
-      },
+      url: `/propositions/slots/unbook/${res.slots[0].data.id}`,
+      payload: { password: res.password },
+      headers: { authorization: `Bearer ${user.token}` },
     });
-    
-    expect(res.statusCode).toEqual(406);
+    const unbookSlotAsAdmin = await app.inject({
+      method: 'PUT',
+      url: `/propositions/slots/unbook/${res.slots[0].data.id}`,
+      payload: { password: res.password },
+      headers: { authorization: `Bearer ${admin.token}` },
+    });
+    const unbookSlotFreeSlot = await app.inject({
+      method: 'PUT',
+      url: `/propositions/slots/unbook/${res.slots[0].data.id}`,
+      payload: { password: res.password },
+      headers: { authorization: `Bearer ${admin.token}` },
+    });
+    expect(unbookSlotAsUser.statusCode).toEqual(403);
+    expect(unbookSlotAsAdmin.statusCode).toEqual(200);
+    expect(unbookSlotFreeSlot.statusCode).toEqual(406);
   });
 });

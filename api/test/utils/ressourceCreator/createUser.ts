@@ -1,5 +1,5 @@
-import { faker } from '@faker-js/faker';
 import type { user, Prisma } from '@prisma/client';
+import { faker } from '@faker-js/faker';
 import { createRessource } from './createRessource';
 
 export default async function createUser (params?: Pick<Prisma.userCreateInput, 'password' | 'role'>) {

@@ -1,4 +1,3 @@
-import { faker } from '@faker-js/faker';
 import type { review, Prisma } from '@prisma/client';
 import { createRessource } from './createRessource';
 

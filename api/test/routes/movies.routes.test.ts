@@ -1,182 +1,121 @@
 import type { InjectOptions } from 'fastify';
 import { build } from '../helper';
 import bcrypt from 'bcrypt';
-import createUser from '../utils/createUser';
-import createMovie from '../utils/createMovie';
-import createReview from '../utils/createReview';
+import expectedObject from '../expectedObjects';
 
 describe('Movies routes test', () => {
-  const app = build();
-  const movieObject = expect.objectContaining({
-    id: expect.any(Number),
-    french_title: expect.any(String),
-    original_title: expect.any(String),
-    poster_url: expect.any(String),
-    directors: expect.arrayContaining([expect.any(String)]),
-    release_date: expect.any(String),
-    runtime: expect.any(Number),
-    casting: expect.arrayContaining([expect.any(String)]),
-    presentation: expect.any(String),
-    is_published: expect.any(Boolean),
-    publishing_date: expect.any(String),
-    user_id: expect.any(Number),
-    season_id: expect.any(Number),
-  });
-  const password = 'password1234';
-  let user: Awaited<ReturnType<typeof createUser>>;
-  let movies: Awaited<ReturnType<typeof createMovie>>[];
-  let reviews: Awaited<ReturnType<typeof createReview>>[];
-  let loginUserInjectOptions: InjectOptions = {
-    method: 'POST',
-    url: '/login',
-  };
-  const getAllMoviesInjectOptions: InjectOptions = {
-    method: 'GET',
-    url: '/movies',
-  };
-  const getOneMovieInjectOptions: InjectOptions = {
-    method: 'GET',
-    url: '/movies/1',
+  const { app, res } = build();
+  const inject: Record<string, InjectOptions> = {
+    login: { method: 'POST', url: '/login' },
+    allMovies: { method: 'GET', url: '/movies' },
+    movieById: { method: 'GET', url: '/movies/1' }
   };
   
   beforeAll(async () => {
-    const encryptedPassword = await bcrypt.hash(password, 10);
-    user = await createUser({ password: encryptedPassword });
-    movies = [
-      await createMovie(user.data.id),
-      await createMovie(user.data.id),
-      await createMovie(user.data.id),
-      await createMovie(user.data.id),
-      await createMovie(user.data.id),
-    ];
-    reviews = [
-      await createReview(user.data.id, movies[0].data.id),
-      await createReview(user.data.id, movies[1].data.id),
-      await createReview(user.data.id, movies[2].data.id),
-      await createReview(user.data.id, movies[3].data.id),
-      await createReview(user.data.id, movies[4].data.id),
-    ];
-    loginUserInjectOptions = {
-      ...loginUserInjectOptions,
-      payload: { pseudo: user.data.pseudo, password },
+    const encryptedPassword = await bcrypt.hash(res.password, 10);
+    res.users[0] = await res.createUser({ password: encryptedPassword });
+    for (let i = 0; i < 5; i++) {
+      res.movies[i] = await res.createMovie(res.users[0].data.id);
+      res.reviews[i] = await res.createReview(res.users[0].data.id, res.movies[i].data.id);
+    }
+    inject.login = { 
+      ...inject.login, 
+      payload: { 
+        pseudo: res.users[0].data.pseudo, 
+        password: res.password 
+      } 
     };
   });
 
   afterAll(async () => {
-    user.remove();
+    res.users[0].remove();
   });
 
-  // GET /movies
-  test('Get All Movies', async () => {
-    const res = await app.inject({ ...getAllMoviesInjectOptions });
-    expect(await res.json()).toEqual(expect.arrayContaining([movieObject]));
-  });
-
-  test('Get movies with published/season filters', async () => {
-    const res = await app.inject({
-      ...getAllMoviesInjectOptions,
-      query: 'filter[is_published]=true&filter[season_id]=3&filter[bookmarked]=true',
+  test('GET /movies - Get all Movies', async () => {
+    const getAllMovies = await app.inject({
+      ...inject.allMovies 
     });
-
-    expect(await res.json()).toEqual(
-      expect.arrayContaining([expect.objectContaining({
-        is_published: true,
-        season_id: 3,
-      })]),
-    );
-  });
-
-  test('Get movies with user id filter', async () => {
-    const res = await app.inject({
-      ...getAllMoviesInjectOptions,
+    const filters_user_id = await app.inject({
+      ...inject.allMovies,
       query: 'filter[user_id]=1',
     });
-
-    expect(await res.json()).toEqual(
-      expect.arrayContaining([expect.objectContaining({
-        user_id: 1,
-      })])
-    );
-  });
-
-  test('get all movies passing token', async () => {
-    const login = await app.inject(loginUserInjectOptions);
-    const loggedInjectOptions = {
-      ...getAllMoviesInjectOptions,
-      headers: { authorization: `Bearer ${await login.json().token}` },
-    };
+    const wrongFiltersAsVisitor = await app.inject({
+      ...inject.allMovies,
+      query: 'filter[bookmarked]=true',
+    });
+    const wrongFilters = await app.inject({
+      ...inject.allMovies,
+      query: 'filter[jambon]=true',
+    });
+    const filters_is_published_season_id = await app.inject({
+      ...inject.allMovies,
+      query: 'filter[is_published]=true&filter[season_id]=3&filter[bookmarked]=true',
+    });
     
-    await app.inject({ ...loggedInjectOptions,
+    expect(await getAllMovies.json()).toEqual(expect.arrayContaining([expectedObject.movie]));
+    expect(await filters_user_id.json()).toEqual(expect.arrayContaining([expectedObject.moviesFilteredByUserId]));
+    expect(await wrongFiltersAsVisitor.json()).toEqual(expect.arrayContaining([expectedObject.movie]));
+    expect(await wrongFilters.json()).toEqual(expect.arrayContaining([expectedObject.movie]));
+    expect(await filters_is_published_season_id.json()).toEqual(expect.arrayContaining([expectedObject.moviesFilteredBySeason]));
+  });
+    
+  test('TEST', async () => {
+    const login = await app.inject(inject.login); 
+    await app.inject({ 
+      ...inject.allMovies,
+      headers: { authorization: `Bearer ${await login.json().token}` },
       query: 'filter[bookmarked]=true',
     });
   });
 
-  test.skip('Get movies with user interaction filters', async () => {
-    const login = await app.inject(loginUserInjectOptions);
-    const loggedInjectOptions = {
-      ...getAllMoviesInjectOptions,
+  test.skip('GET /movies - Get all Movies as logged User', async () => {
+    const login = await app.inject(inject.login);
+    inject.allMovies = {
+      ...inject.allMovies,
       headers: { authorization: `Bearer ${await login.json().token}` },
     };
-    
     const emptyRes = await app.inject({
-      ...loggedInjectOptions,
+      ...inject.allMovies,
       query: 'filter[bookmarked]=true',
     });
-    const emptyResLength = await emptyRes.json().length;
-    expect(emptyResLength).toEqual(0);
-
-    reviews[0].update({ 
-      bookmarked: true,
-      viewed: true,
-      liked: true,
-      rating: 5,
-    });
-    reviews[1].update({ bookmarked: true });
-    reviews[2].update({ bookmarked: true, viewed: true });
-    reviews[3].update({ liked: true });
-    reviews[4].update({ liked: true, rating: 5 });
-
+    
+    res.reviews[0].update({ bookmarked: true, viewed: true, liked: true, rating: 5 });
+    res.reviews[1].update({ bookmarked: true });
+    res.reviews[2].update({ bookmarked: true, viewed: true });
+    res.reviews[3].update({ liked: true });
+    res.reviews[4].update({ liked: true, rating: 5 });
+    
     const AllFiltersRes = await app.inject({
-      ...loggedInjectOptions,
+      ...inject.allMovies,
       query: 'filter[bookmarked]=true&filter[viewed]=true&filter[liked]=true&filter[rating]=true',
     });
-    const AllFiltersResLength = await AllFiltersRes.json().length;
-    expect(AllFiltersResLength).toEqual(1);
-
     const bookmarkedFilterRes = await app.inject({
-      ...loggedInjectOptions,
+      ...inject.allMovies,
       query: 'filter[bookmarked]=true',
     });
-    const bookmarkedFilterResLength = await bookmarkedFilterRes.json().length;
-    expect(bookmarkedFilterResLength).toEqual(3);
-
     const viewedFilterRes = await app.inject({
-      ...loggedInjectOptions,
+      ...inject.allMovies,
       query: 'filter[viewed]=true',
     });
-    const viewedFilterResLength = await viewedFilterRes.json().length;
-    expect(viewedFilterResLength).toEqual(2);
-
     const likedAndRatedFilterRes = await app.inject({
-      ...loggedInjectOptions,
+      ...inject.allMovies,
       query: 'filter[liked]=true&filter[rating]=true',
     });
+    
+    const emptyResLength = await emptyRes.json().length;
+    const AllFiltersResLength = await AllFiltersRes.json().length;
+    const bookmarkedFilterResLength = await bookmarkedFilterRes.json().length;
+    const viewedFilterResLength = await viewedFilterRes.json().length;
     const likedAndRatedFilterResLength = await likedAndRatedFilterRes.json().length;
+    expect(emptyResLength).toEqual(0);
+    expect(AllFiltersResLength).toEqual(1);
+    expect(bookmarkedFilterResLength).toEqual(3);
+    expect(viewedFilterResLength).toEqual(2);
     expect(likedAndRatedFilterResLength).toEqual(2);
   });
 
-  test('Get all movies using unexisting filters', async () => {
-    const res = await app.inject({
-      ...getAllMoviesInjectOptions,
-      query: 'filter[jambon]=true',
-    });
-
-    expect(await res.json()).toEqual(expect.arrayContaining([movieObject]));
-  });
-
-  // GET /movies/:id
-  test('Get one movie by id', async () => {
-    const res = await app.inject({ ...getOneMovieInjectOptions });
-    expect(await res.json()).toEqual(movieObject);
+  test('GET /movies/:id - Get one movie by id', async () => {
+    const res = await app.inject(inject.movieById);
+    expect(await res.json()).toEqual(expectedObject.movie);
   });
 });
