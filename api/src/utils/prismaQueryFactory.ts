@@ -29,16 +29,21 @@ export default function prismaQueryFactory(
         };
         if (userId) {
           const userFilters = objectHandler.filterKeys(loggedEnumerator, filter);
-          if (userFilters.length > 0) factoredFilters.where.review.some = {
-            ...userFilters,
-            user_id: userId
+          if (Object.keys(userFilters).length > 0) factoredFilters.where = {
+            ...factoredFilters.where,
+            review: {
+              some: {
+                user_id: userId,
+                ...userFilters,
+              }
+            },
           };
         };
         prismaQuery = { 
           ...prismaQuery,
           ...factoredFilters
         };
-      }
+      };
       break;
 
     case 'User':
