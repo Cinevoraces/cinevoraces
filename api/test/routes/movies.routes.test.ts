@@ -31,7 +31,7 @@ describe('Movies routes test', () => {
     res.users[0].remove();
   });
 
-  test('GET /movies - Get all Movies', async () => {
+  test.skip('GET /movies - Get all Movies', async () => {
     const getAllMovies = await app.inject({
       ...inject.allMovies 
     });
@@ -58,36 +58,27 @@ describe('Movies routes test', () => {
     expect(await wrongFilters.json()).toEqual(expect.arrayContaining([expectedObject.movie]));
     expect(await filters_is_published_season_id.json()).toEqual(expect.arrayContaining([expectedObject.moviesFilteredBySeason]));
   });
-    
-  test('TEST', async () => {
-    const login = await app.inject(inject.login); 
-    await app.inject({ 
-      ...inject.allMovies,
-      headers: { authorization: `Bearer ${await login.json().token}` },
-      query: 'filter[bookmarked]=true',
-    });
-  });
 
-  test.skip('GET /movies - Get all Movies as logged User', async () => {
+  test('GET /movies - Get all Movies as logged User', async () => {
     const login = await app.inject(inject.login);
     inject.allMovies = {
       ...inject.allMovies,
       headers: { authorization: `Bearer ${await login.json().token}` },
     };
-    const emptyRes = await app.inject({
+    const bookmarkedNotFound = await app.inject({
       ...inject.allMovies,
       query: 'filter[bookmarked]=true',
     });
     
-    res.reviews[0].update({ bookmarked: true, viewed: true, liked: true, rating: 5 });
-    res.reviews[1].update({ bookmarked: true });
-    res.reviews[2].update({ bookmarked: true, viewed: true });
-    res.reviews[3].update({ liked: true });
-    res.reviews[4].update({ liked: true, rating: 5 });
+    await res.reviews[0].update({ bookmarked: true, viewed: true, liked: true, rating: 5 });
+    await res.reviews[1].update({ bookmarked: true });
+    await res.reviews[2].update({ bookmarked: true, viewed: true });
+    await res.reviews[3].update({ liked: true });
+    await res.reviews[4].update({ liked: true, rating: 1 });
     
     const AllFiltersRes = await app.inject({
       ...inject.allMovies,
-      query: 'filter[bookmarked]=true&filter[viewed]=true&filter[liked]=true&filter[rating]=true',
+      query: 'filter[bookmarked]=true&filter[viewed]=true&filter[liked]=true&filter[rating]=5',
     });
     const bookmarkedFilterRes = await app.inject({
       ...inject.allMovies,
@@ -99,15 +90,14 @@ describe('Movies routes test', () => {
     });
     const likedAndRatedFilterRes = await app.inject({
       ...inject.allMovies,
-      query: 'filter[liked]=true&filter[rating]=true',
+      query: 'filter[liked]=true&filter[rating]=5',
     });
     
-    const emptyResLength = await emptyRes.json().length;
     const AllFiltersResLength = await AllFiltersRes.json().length;
     const bookmarkedFilterResLength = await bookmarkedFilterRes.json().length;
     const viewedFilterResLength = await viewedFilterRes.json().length;
     const likedAndRatedFilterResLength = await likedAndRatedFilterRes.json().length;
-    expect(emptyResLength).toEqual(0);
+    expect(await bookmarkedNotFound.json()).toEqual(expectedObject.error);
     expect(AllFiltersResLength).toEqual(1);
     expect(bookmarkedFilterResLength).toEqual(3);
     expect(viewedFilterResLength).toEqual(2);
