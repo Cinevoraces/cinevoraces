@@ -3,6 +3,8 @@ declare namespace PrismaQuery {
     filter?: Record<string, unknown>;
     pop?: Record<string, unknown>;
     limit?: number;
+    asc?: string;
+    desc?: string;
   }
   type FactoredQuery = where & include & take & orderBy;
 
