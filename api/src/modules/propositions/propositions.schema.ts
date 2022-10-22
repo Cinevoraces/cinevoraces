@@ -2,9 +2,15 @@ import type { FastifySchema } from 'fastify';
 
 export const getAllSlotsSchema: FastifySchema = {
   description: `**Get all slots**.
-  Use query parameters to filter the results using the following format: */slots?filter[is_booked]=true* 
+  Use query parameters to filter the results using the following format: */slots?filter[is_booked]=true*  
   **Available query parameters:**
   - filter[is_booked]: filter by booked status.
+  - filter[season_number]: filter by season number.
+
+  **Available query options**
+  - limit: limit the number of results.
+  - asc: sort by ascending order using column name.
+  - desc: sort by descending order using column name.
   `,
   tags: ['Propositions'],
   querystring: {
@@ -12,7 +18,14 @@ export const getAllSlotsSchema: FastifySchema = {
     properties: {
       filter: {
         type: 'object',
+        properties: {
+          is_booked: { type: 'boolean' },
+          season_number: { type: 'number' },
+        },
       },
+      limit: { type: 'number' },
+      asc: { type: 'string' },
+      desc: { type: 'string' },
     },
   },
   response: {
