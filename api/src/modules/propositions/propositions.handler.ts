@@ -13,7 +13,7 @@ export const handleGetAllSlots = async (request: Request, reply: Reply) => {
   const prismaQuery = prismaQueryFactory(query, 'Slot');
 
   try {
-    const slots = await prisma.proposition_slot.findMany({ ...prismaQuery });
+    const slots = await prisma.proposition_slot.findMany(prismaQuery);
 
     if (slots.length === 0) {
       reply.code(404);
