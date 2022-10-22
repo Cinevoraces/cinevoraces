@@ -35,6 +35,9 @@ describe('Propositions routes test', () => {
     };
     res.slots[0] = await res.createSlot({ is_booked: true });
     res.slots[1] = await res.createSlot({ is_booked: false });
+    for (let i = 1; i < 6; i++) {
+      res.slots.push(await res.createSlot({ is_booked: true }, 2, i));
+    }
     res.movies[0] = await res.createMovie(1, { is_published: false });
   });
 
@@ -78,11 +81,23 @@ describe('Propositions routes test', () => {
       ...inject.allSlots,
       query: 'filter[is_booked]=false&limit=2',
     });
+    const filters_season_2_last_3_episode = await app.inject({
+      ...inject.allSlots,
+      query: 'filter[is_booked]=true&filter[season_number]=2&desc=episode&limit=3',
+    });
+    const sorted_episode = await app.inject({
+      ...inject.allSlots,
+      query: 'filter[is_booked]=true&filter[season_number]=2&asc=episode&limit=3',
+    });
 
     expect(filters_is_booked.statusCode).toEqual(200);
     expect(await filters_is_booked.json()).toEqual(expect.arrayContaining([expectedObjects.slot]));
     expect(filters_is_booked_and_limit.statusCode).toEqual(200);
     expect(await filters_is_booked_and_limit.json()).toHaveLength(2);
+    expect(filters_season_2_last_3_episode.statusCode).toEqual(200);
+    expect(await filters_season_2_last_3_episode.json()).toEqual(expectedObjects.slotsSortedByEpisodes);
+    expect(sorted_episode.statusCode).toEqual(200);
+    expect(await sorted_episode.json()).toEqual(expectedObjects.slotsSortedWithAsc);
   });
   
   test('PUT /propositions/slots/book/:id - Book a slot with accessToken', async () => {

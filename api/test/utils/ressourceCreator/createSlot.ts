@@ -2,14 +2,14 @@ import type { proposition_slot, Prisma } from '@prisma/client';
 import { faker } from '@faker-js/faker';
 import { createRessource } from './createRessource';
 
-export default async function createSlot (params?: Pick<Prisma.proposition_slotCreateInput, 'is_booked'>) {
+export default async function createSlot (params?: Pick<Prisma.proposition_slotCreateInput, 'is_booked'>, seasonId?: number, episode?: number) {
   const fakeSlot: Prisma.proposition_slotCreateInput = {
     season: {
       connect: {
-        id: 1
+        id: seasonId ?? 1
       }
     },
-    episode: faker.datatype.number(),
+    episode: episode ?? faker.datatype.number(),
     publishing_date: faker.date.recent(),
     is_booked: false,
     ...params

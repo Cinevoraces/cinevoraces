@@ -80,6 +80,40 @@ export default {
     publishing_date: expect.any(String),
     is_booked: true,
   }),
+  slotsSortedByEpisodes: expect.arrayContaining([
+    expect.objectContaining({
+      season_number: 2,
+      episode: 5,
+      is_booked: true,
+    }),
+    expect.objectContaining({
+      season_number: 2,
+      episode: 4,
+      is_booked: true,
+    }),
+    expect.objectContaining({
+      season_number: 2,
+      episode: 3,
+      is_booked: true,
+    }),
+  ]),
+  slotsSortedWithAsc: expect.arrayContaining([
+    expect.objectContaining({
+      season_number: 2,
+      episode: 1,
+      is_booked: true,
+    }),
+    expect.objectContaining({
+      season_number: 2,
+      episode: 2,
+      is_booked: true,
+    }),
+    expect.objectContaining({
+      season_number: 2,
+      episode: 3,
+      is_booked: true,
+    }),
+  ]),
   user: expect.objectContaining({
     id: expect.any(Number),
     pseudo: expect.any(String),
