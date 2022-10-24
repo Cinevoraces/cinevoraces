@@ -28,11 +28,15 @@ export default {
     presentation: expect.any(String),
     is_published: expect.any(Boolean),
     publishing_date: expect.any(String),
-    user_id: expect.any(Number),
     season_id: expect.any(Number),
     countries: expect.arrayContaining([expect.any(String)]),
     genres: expect.arrayContaining([expect.any(String)]),
     languages: expect.arrayContaining([expect.any(String)]),
+    user: expect.objectContaining({
+      id: expect.any(Number),
+      pseudo: expect.any(String),
+      avatar_url: expect.any(String),
+    }),
   }),
   moviesFilteredBySeason: expect.objectContaining({
     id: expect.any(Number),
@@ -46,11 +50,15 @@ export default {
     presentation: expect.any(String),
     is_published: true,
     publishing_date: expect.any(String),
-    user_id: expect.any(Number),
     season_id: 3,
     countries: expect.arrayContaining([expect.any(String)]),
     genres: expect.arrayContaining([expect.any(String)]),
     languages: expect.arrayContaining([expect.any(String)]),
+    user: expect.objectContaining({
+      id: expect.any(Number),
+      pseudo: expect.any(String),
+      avatar_url: expect.any(String),
+    }),
   }),
   moviesFilteredByUserId: expect.objectContaining({
     id: expect.any(Number),
@@ -64,11 +72,15 @@ export default {
     presentation: expect.any(String),
     is_published: expect.any(Boolean),
     publishing_date: expect.any(String),
-    user_id: 1,
     season_id: expect.any(Number),
     countries: expect.arrayContaining([expect.any(String)]),
     genres: expect.arrayContaining([expect.any(String)]),
     languages: expect.arrayContaining([expect.any(String)]),
+    user: expect.objectContaining({
+      id: expect.any(Number),
+      pseudo: expect.any(String),
+      avatar_url: expect.any(String),
+    }),
   }),
   moviePopulatedWithReview: expect.objectContaining({
     id: expect.any(Number),
@@ -82,7 +94,6 @@ export default {
     presentation: expect.any(String),
     is_published: expect.any(Boolean),
     publishing_date: expect.any(String),
-    user_id: expect.any(Number),
     season_id: expect.any(Number),
     countries: expect.arrayContaining([expect.any(String)]),
     genres: expect.arrayContaining([expect.any(String)]),
@@ -97,6 +108,11 @@ export default {
         comment: expect.any(String),
       })
     ]),
+    user: expect.objectContaining({
+      id: expect.any(Number),
+      pseudo: expect.any(String),
+      avatar_url: expect.any(String),
+    }),
   }),
   moviePopulatedWithReviewAsLoggedUser: expect.objectContaining({
     id: expect.any(Number),
@@ -110,7 +126,6 @@ export default {
     presentation: expect.any(String),
     is_published: expect.any(Boolean),
     publishing_date: expect.any(String),
-    user_id: expect.any(Number),
     season_id: expect.any(Number),
     countries: expect.arrayContaining([expect.any(String)]),
     genres: expect.arrayContaining([expect.any(String)]),
@@ -132,6 +147,11 @@ export default {
         comment: expect.any(String),
       })
     ]),
+    user: expect.objectContaining({
+      id: expect.any(Number),
+      pseudo: expect.any(String),
+      avatar_url: expect.any(String),
+    }),
   }),
   proposition: expect.objectContaining({
     id: expect.any(Number),

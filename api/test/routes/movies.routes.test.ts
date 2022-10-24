@@ -2,7 +2,6 @@ import type { InjectOptions } from 'fastify';
 import { build } from '../helper';
 import bcrypt from 'bcrypt';
 import expectedObject from '../expectedObjects';
-// import prisma from '../utils/prisma';
 
 describe('Movies routes test', () => {
   const { app, res } = build();
@@ -132,6 +131,8 @@ describe('Movies routes test', () => {
       url: `/movies/${107}`,
       query: 'pop[review]=true',
     });
+
+    console.log(await pop_review.json());
 
     expect(await getOneMovieById.json()).toEqual(expectedObject.movie);
     expect(await pop_review.json()).toEqual(expectedObject.moviePopulatedWithReview);

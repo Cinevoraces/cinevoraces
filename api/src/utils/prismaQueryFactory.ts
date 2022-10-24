@@ -52,6 +52,7 @@ export default function prismaQueryFactory(
       // Movies are always joined with countries, genres and languages
       prismaQuery.include = {
         ...prismaQuery.include,
+        user: true,
         movie_has_country: {
           select: { country: { select: { name: true } } }
         },

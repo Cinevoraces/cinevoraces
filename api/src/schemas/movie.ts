@@ -41,9 +41,6 @@ const movieSchema = {
     publishing_date: {
       type: 'string',
     },
-    user_id: {
-      type: 'number',
-    },
     season_id: {
       type: 'number',
     },
@@ -91,6 +88,14 @@ const movieSchema = {
           created_at: { type: 'string' },
           updated_at: { type: 'string' },
         },
+      },
+    },
+    user: {
+      type: 'object',
+      properties: {
+        id: { type: 'number' },
+        pseudo: { type: 'string' },
+        avatar_url: { type: 'string' },
       },
     },
     created_at: {

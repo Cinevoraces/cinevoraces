@@ -15,6 +15,11 @@ export const handleGetMovies = async (request: Request, reply: Reply) => {
 
   try {
     const movies = await prisma.movie.findMany(prismaQuery);
+    const lol = await prisma.movie.findMany({
+      include: {
+        user: true,
+      }
+    });
 
     if (movies.length === 0) {
       reply.code(404);
