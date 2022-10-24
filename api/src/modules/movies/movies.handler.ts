@@ -28,13 +28,17 @@ export const handleGetMovies = async (request: Request, reply: Reply) => {
 };
 
 export const handleGetMovieById = async (request: Request, reply: Reply) => {
-  const { prisma, params } = request;
+  const { prisma, query, params, user } = request;
+  const prismaQuery = prismaQueryFactory({ pop: query?.pop }, 'Movie', user?.id);
   const { id } = params;
 
   try {
-    const movie = await prisma.movie.findUnique({ where: { id } });
-
-    reply.send(movie);
+    const movie = await prisma.movie.findUnique({ 
+      where: { id },
+      include: prismaQuery.include,
+    });
+    
+    reply.send(transformResponse.oneMovie(movie as rawMovie));
   } catch (error) {
     reply.send(error);
   }

@@ -1,3 +1,4 @@
+import type { Review } from './Review';
 export interface rawMovie {
   id: number;
   french_title: string;
@@ -14,6 +15,7 @@ export interface rawMovie {
   season_id: number;
   created_at: Date;
   updated_at: Date;
+  review: Array<Review>;
   movie_has_country: Array<{ country: { name: string } }>;
   movie_has_genre: Array<{ genre: { name: string } }>;
   movie_has_language: Array<{ language: { name: string } }>;

@@ -9,7 +9,7 @@ describe('Movies routes test', () => {
   const inject: Record<string, InjectOptions> = {
     login: { method: 'POST', url: '/login' },
     allMovies: { method: 'GET', url: '/movies' },
-    movieById: { method: 'GET', url: '/movies/1' }
+    movieById: { method: 'GET', url: '/movies/107' }
   };
   
   beforeAll(async () => {
@@ -109,22 +109,10 @@ describe('Movies routes test', () => {
       ...inject.allMovies,
       query: 'filter[liked]=true&filter[rating]=5',
     });
-
-    // // FIXME: This test isn't working with the createRessource function.
-    // // Fix it when reviews routes are merged. 
-    // const PopulatedWithUserReviews = await app.inject({
-    //   ...inject.allMovies,
-    //   query: 'pop[review]=true&filter[rating]=1',
-    // }); // return unpopulated movie object even so review 4 match the query.
-    // console.log(await PopulatedWithUserReviews.json()[0]);
-    // console.log(res.reviews[4]);
-    // const movies = await prisma.movie.findMany({
-    //   where: { id: 107 },
-    //   include: { review: { where: { user_id: 2 } } },
-    // }); // This query return the expected result.
-    // console.log(movies[0].review);
-    // // 
-
+    const PopulatedWithUserReview = await app.inject({
+      ...inject.allMovies,
+      query: 'pop[review]=true&filter[rating]=1',
+    });
     const AllFiltersResLength = await AllFiltersRes.json().length;
     const bookmarkedFilterResLength = await bookmarkedFilterRes.json().length;
     const viewedFilterResLength = await viewedFilterRes.json().length;
@@ -134,10 +122,31 @@ describe('Movies routes test', () => {
     expect(bookmarkedFilterResLength).toEqual(3);
     expect(viewedFilterResLength).toEqual(2);
     expect(likedAndRatedFilterResLength).toEqual(2);
+    expect(await PopulatedWithUserReview.json()[0]).toEqual(expectedObject.moviePopulatedWithReview);
   });
 
-  test('GET /movies/:id - Get one movie by id', async () => {
+  test('GET /movies/:id - Get one Movie by id', async () => {
     const res = await app.inject(inject.movieById);
     expect(await res.json()).toEqual(expectedObject.movie);
+  });
+
+  test('GET /movies/:id - Get one Movie as logged User', async () => {
+    const login = await app.inject(inject.login);
+    inject.movieById = {
+      ...inject.movieById,
+      headers: { authorization: `Bearer ${await login.json().token}` },
+    };
+    const pop_user_review_withou_existing_review = await app.inject({
+      ...inject.movieById,
+      query: 'pop[review]=true',
+    });
+    const pop_user_review = await app.inject({
+      ...inject.movieById,
+      url: `/movies/${res.movies[0].data.id}`,
+      query: 'pop[review]=true',
+    });
+
+    expect(await pop_user_review_withou_existing_review.json()).toEqual(expectedObject.movie);
+    expect(await pop_user_review.json()).toEqual(expectedObject.moviePopulatedWithReview);
   });
 });
