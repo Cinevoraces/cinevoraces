@@ -2,6 +2,7 @@ import type { InjectOptions } from 'fastify';
 import { build } from '../helper';
 import bcrypt from 'bcrypt';
 import expectedObject from '../expectedObjects';
+// import prisma from '../utils/prisma';
 
 describe('Movies routes test', () => {
   const { app, res } = build();
@@ -58,17 +59,13 @@ describe('Movies routes test', () => {
     });
     const sort_desc = await app.inject({
       ...inject.allMovies,
-      query: 'filter[is_published]=true&filter[season_id]=3&desc=publishing_date&limit=5',
+      query: 'filter[is_published]=true&filter[season_id]=3&desc=publishing_date&limit=2',
     });
     const sort_desc_res = await sort_desc.json();
-    const testArray = sort_desc_res.sort((
-      a: Record<string, Date>, 
-      b: Record<string, Date>
-    ) => {
-      const dateA = new Date(a.publishing_date);
-      const dateB = new Date(b.publishing_date);
-      return dateB.getTime() - dateA.getTime();
-    });
+    const test_desc_res = (
+      new Date(sort_desc_res[0].publishing_date) >
+      new Date(sort_desc_res[1].publishing_date)
+    );
 
     expect(await getAllMovies.json()).toEqual(expect.arrayContaining([expectedObject.movie]));
     expect(limit_10_results_length).toEqual(10);
@@ -76,7 +73,7 @@ describe('Movies routes test', () => {
     expect(await wrongFiltersAsVisitor.json()).toEqual(expect.arrayContaining([expectedObject.movie]));
     expect(await wrongFilters.json()).toEqual(expect.arrayContaining([expectedObject.movie]));
     expect(await filters_is_published_season_id.json()).toEqual(expect.arrayContaining([expectedObject.moviesFilteredBySeason]));
-    expect(testArray === sort_desc_res).toEqual(true);
+    expect(test_desc_res).toEqual(true);
   });
 
   test('GET /movies - Get all Movies as logged User', async () => {
@@ -90,11 +87,11 @@ describe('Movies routes test', () => {
       query: 'filter[bookmarked]=true',
     });
     
-    await res.reviews[0].update({ bookmarked: true, viewed: true, liked: true, rating: 5 });
-    await res.reviews[1].update({ bookmarked: true });
-    await res.reviews[2].update({ bookmarked: true, viewed: true });
-    await res.reviews[3].update({ liked: true });
-    await res.reviews[4].update({ liked: true, rating: 1 });
+    res.reviews[0] = await res.reviews[0].update({ bookmarked: true, viewed: true, liked: true, rating: 5 });
+    res.reviews[1] = await res.reviews[1].update({ bookmarked: true });
+    res.reviews[2] = await res.reviews[2].update({ bookmarked: true, viewed: true });
+    res.reviews[3] = await res.reviews[3].update({ liked: true });
+    res.reviews[4] = await res.reviews[4].update({ liked: true, rating: 1, comment: 'test' });
     
     const AllFiltersRes = await app.inject({
       ...inject.allMovies,
@@ -112,7 +109,22 @@ describe('Movies routes test', () => {
       ...inject.allMovies,
       query: 'filter[liked]=true&filter[rating]=5',
     });
-    
+
+    // // FIXME: This test isn't working with the createRessource function.
+    // // Fix it when reviews routes are merged. 
+    // const PopulatedWithUserReviews = await app.inject({
+    //   ...inject.allMovies,
+    //   query: 'pop[review]=true&filter[rating]=1',
+    // }); // return unpopulated movie object even so review 4 match the query.
+    // console.log(await PopulatedWithUserReviews.json()[0]);
+    // console.log(res.reviews[4]);
+    // const movies = await prisma.movie.findMany({
+    //   where: { id: 107 },
+    //   include: { review: { where: { user_id: 2 } } },
+    // }); // This query return the expected result.
+    // console.log(movies[0].review);
+    // // 
+
     const AllFiltersResLength = await AllFiltersRes.json().length;
     const bookmarkedFilterResLength = await bookmarkedFilterRes.json().length;
     const viewedFilterResLength = await viewedFilterRes.json().length;

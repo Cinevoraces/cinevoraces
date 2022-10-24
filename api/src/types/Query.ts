@@ -18,7 +18,7 @@ declare namespace PrismaQuery {
   }
   interface include {
     include?: {
-      [key: string]: boolean;
+      [key: string]: unknown;
     }
   }
   interface take {

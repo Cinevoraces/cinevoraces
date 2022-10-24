@@ -3,7 +3,7 @@ import prisma from '../prisma';
 
 export interface CreateRessource<T> {
   data: T,
-  update: (params: unknown)=>void,
+  update: (params: unknown)=>Promise<CreateRessource<T>>,
   remove: ()=>void
 };
 
@@ -31,7 +31,7 @@ export async function createRessource<T, CreateInput, UpdateInput>(data: CreateI
   // Define ressource updater
   const update = async (params: UpdateInput) => {
     // @ts-expect-error - Prisma doesn't know about our models
-    await prisma[model].update({
+    return await prisma[model].update({
       where: where,
       data: params
     });

@@ -10,90 +10,108 @@ export default function prismaQueryFactory(
   const { filter, pop, limit, asc, desc } = querystring;
   let prismaQuery: PrismaQuery.FactoredQuery = {};
   switch (dataType) {
-    case 'Movie':
-      if (filter) {
-        const enumerator: Prisma.MovieScalarFieldEnum[] = [
-          'is_published', 
-          'season_id', 
-          'user_id'
-        ];
-        const loggedEnumerator: Prisma.ReviewScalarFieldEnum[] = [
-          'bookmarked',
-          'liked',
-          'viewed',
-          'rating',
-          'comment' 
-        ];
-        const sortEnumerator: Prisma.MovieScalarFieldEnum[] = [
-          'id',
-          'french_title',
-          'release_date',
-          'publishing_date',
-          'release_date', 
-          'created_at',
-          'updated_at',
-        ];
-        const factoredFilters: typeof prismaQuery = {
-          where: { AND: objectHandler.keysToArray(enumerator, filter) }
+    case 'Movie': {
+      const filterEnumerator: Array<Prisma.MovieScalarFieldEnum> = [
+        'is_published', 
+        'season_id', 
+        'user_id',
+      ];
+      const loggedFilterEnumerator: Array<Prisma.ReviewScalarFieldEnum> = [
+        'bookmarked',
+        'liked',
+        'viewed',
+        'rating',
+        'comment' 
+      ];
+      const loggedPopEnumerator: Array<string> = [
+        'review'
+      ];
+      const sortEnumerator: Array<Prisma.MovieScalarFieldEnum> = [
+        'id',
+        'french_title',
+        'release_date',
+        'publishing_date',
+        'release_date', 
+        'created_at',
+        'updated_at',
+      ];
+      if (filter) prismaQuery = filterBuilder(filterEnumerator, filter, prismaQuery);
+      if (filter && userId) {
+        const userFilters = objectHandler.filterKeys(loggedFilterEnumerator, filter);
+        if (userFilters.rating) userFilters.rating = { lte: userFilters.rating };
+        if (Object.keys(userFilters).length > 0) prismaQuery.where = {
+          ...prismaQuery.where,
+          review: { some: { user_id: userId, ...userFilters } },
         };
-        if (userId) {
-          const userFilters = objectHandler.filterKeys(loggedEnumerator, filter);
-          if (userFilters.rating) userFilters.rating = { lte: userFilters.rating };
-          if (Object.keys(userFilters).length > 0) factoredFilters.where = {
-            ...factoredFilters.where,
-            review: { some: { user_id: userId, ...userFilters } },
-          };
-        };
-        if (desc || asc) {
-          sortEnumerator.find((item) => item === desc) &&
-            (factoredFilters.orderBy = { [desc]: 'desc' });
-          sortEnumerator.find((item) => item === asc) &&
-            (factoredFilters.orderBy = { [asc]: 'asc' });
-        }
-        prismaQuery = { ...prismaQuery, ...factoredFilters };
       };
-      break;
-
-    case 'User':
-      if (pop) {
-        const enumerator: Array<keyof Prisma.userSelect> = [
-          'movies', 
-          'reviews'
-        ];
-        const factoredFilters = {
-          include: objectHandler.filterKeys(enumerator, pop)
+      if (pop && userId) {
+        const userPopulator = objectHandler.filterKeys(loggedPopEnumerator, pop);
+        if (Object.keys(userPopulator).length > 0) prismaQuery.include = {
+          review: { where: { user_id: userId } },
         };
-        if (Object.keys(factoredFilters.include).length > 0) {
-          prismaQuery = { ...prismaQuery, ...factoredFilters as PrismaQuery.include };
-        }
       }
+      if (asc) prismaQuery = sortBuilder(sortEnumerator, asc, 'asc', prismaQuery);
+      if (desc) prismaQuery = sortBuilder(sortEnumerator, desc, 'desc', prismaQuery);
       break;
+    }
+    case 'User': {
+      const popEnumerator: Array<keyof Prisma.userSelect> = [
+        'movies', 
+        'reviews'
+      ];
+      if (pop) prismaQuery = populatorBuilder(popEnumerator, pop, prismaQuery); 
+      break;
+    }
 
-    case 'Slot':
-      if (filter) {
-        const enumerator: Prisma.Proposition_slotScalarFieldEnum[] = [
-          'is_booked',
-          'season_number'
-        ];
-        const sortEnumerator: Prisma.Proposition_slotScalarFieldEnum[] = [
-          'id',
-          'publishing_date',
-          'episode'
-        ];
-        const factoredFilters: typeof prismaQuery = {
-          where: { AND: objectHandler.keysToArray(enumerator, filter) }
-        };
-        if (desc || asc) {
-          sortEnumerator.find((item) => item === desc) &&
-            (factoredFilters.orderBy = { [desc]: 'desc' });
-          sortEnumerator.find((item) => item === asc) &&
-            (factoredFilters.orderBy = { [asc]: 'asc' });
-        }
-        prismaQuery = { ...prismaQuery, ...factoredFilters };
-      }
+    case 'Slot': {
+      const filterEnumerator: Prisma.Proposition_slotScalarFieldEnum[] = [
+        'is_booked',
+        'season_number'
+      ];
+      const sortEnumerator: Prisma.Proposition_slotScalarFieldEnum[] = [
+        'id',
+        'publishing_date',
+        'episode'
+      ];
+      if (filter) prismaQuery = filterBuilder(filterEnumerator, filter, prismaQuery);
+      if (asc) prismaQuery = sortBuilder(sortEnumerator, asc, 'asc', prismaQuery);
+      if (desc) prismaQuery = sortBuilder(sortEnumerator, desc, 'desc', prismaQuery);
       break;
+    }
   }
   if (limit) prismaQuery = { ...prismaQuery, take: limit };
 
   return prismaQuery;
 }
+
+const filterBuilder = (
+  enumerator: Array<string>,
+  filter: Record<string, unknown>,
+  prismaQuery: PrismaQuery.FactoredQuery
+) => {
+  return { ...prismaQuery, where: { AND: objectHandler.keysToArray(enumerator, filter) } };
+};
+
+const populatorBuilder = (
+  enumerator: Array<string>, 
+  pop: Record<string, unknown>,
+  prismaQuery: PrismaQuery.FactoredQuery
+): PrismaQuery.FactoredQuery => {
+  const factoredFilters = {
+    include: objectHandler.filterKeys(enumerator, pop)
+  };
+  if (Object.keys(factoredFilters.include).length > 0) {
+    return { ...prismaQuery, ...factoredFilters as PrismaQuery.include };
+  }
+};
+
+const sortBuilder = (
+  enumerator: Array<string>,
+  sort: string,
+  sortBy: 'asc' | 'desc',
+  prismaQuery: PrismaQuery.FactoredQuery
+): PrismaQuery.FactoredQuery => {
+  if (enumerator.find((item) => item === sort)) {
+    return { ...prismaQuery, orderBy: { [sort]: sortBy } };
+  }
+};
