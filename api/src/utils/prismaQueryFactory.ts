@@ -35,6 +35,7 @@ export default function prismaQueryFactory(
         'created_at',
         'updated_at',
       ];
+
       if (filter) prismaQuery = filterBuilder(filterEnumerator, filter, prismaQuery);
       if (filter && userId) {
         const userFilters = objectHandler.filterKeys(loggedFilterEnumerator, filter);
@@ -52,6 +53,20 @@ export default function prismaQueryFactory(
       }
       if (asc) prismaQuery = sortBuilder(sortEnumerator, asc, 'asc', prismaQuery);
       if (desc) prismaQuery = sortBuilder(sortEnumerator, desc, 'desc', prismaQuery);
+
+      // Movies are always joined with countries, genres and languages
+      prismaQuery.include = {
+        ...prismaQuery.include,
+        movie_has_country: {
+          select: { country: { select: { name: true } } }
+        },
+        movie_has_genre: {
+          select: { genre: { select: { name: true } } }
+        },
+        movie_has_language: { 
+          select: { language: { select: { name: true } } }
+        },
+      };
       break;
     }
     case 'User': {

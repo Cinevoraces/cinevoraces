@@ -30,6 +30,9 @@ export default {
     publishing_date: expect.any(String),
     user_id: expect.any(Number),
     season_id: expect.any(Number),
+    countries: expect.arrayContaining([expect.any(String)]),
+    genres: expect.arrayContaining([expect.any(String)]),
+    languages: expect.arrayContaining([expect.any(String)]),
   }),
   moviesFilteredBySeason: expect.objectContaining({
     id: expect.any(Number),
@@ -45,6 +48,9 @@ export default {
     publishing_date: expect.any(String),
     user_id: expect.any(Number),
     season_id: 3,
+    countries: expect.arrayContaining([expect.any(String)]),
+    genres: expect.arrayContaining([expect.any(String)]),
+    languages: expect.arrayContaining([expect.any(String)]),
   }),
   moviesFilteredByUserId: expect.objectContaining({
     id: expect.any(Number),
@@ -60,6 +66,9 @@ export default {
     publishing_date: expect.any(String),
     user_id: 1,
     season_id: expect.any(Number),
+    countries: expect.arrayContaining([expect.any(String)]),
+    genres: expect.arrayContaining([expect.any(String)]),
+    languages: expect.arrayContaining([expect.any(String)]),
   }),
   proposition: expect.objectContaining({
     id: expect.any(Number),

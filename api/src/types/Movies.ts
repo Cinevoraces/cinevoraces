@@ -1,0 +1,20 @@
+export interface rawMovie {
+  id: number;
+  french_title: string;
+  original_title: string;
+  poster_url: string;
+  directors: Array<string>;
+  release_date: Date;
+  runtime: number;
+  casting: Array<string>;
+  presentation: string;
+  is_published: boolean;
+  publishing_date: Date;
+  user_id: number;
+  season_id: number;
+  created_at: Date;
+  updated_at: Date;
+  movie_has_country: Array<{ country: { name: string } }>;
+  movie_has_genre: Array<{ genre: { name: string } }>;
+  movie_has_language: Array<{ language: { name: string } }>;
+};

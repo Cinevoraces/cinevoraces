@@ -1,6 +1,8 @@
 import type { FastifyReply as Reply, FastifyRequest } from 'fastify';
+import type { rawMovie } from '@src/types/Movies';
 import type PrismaQuery from '@src/types/Query';
 import prismaQueryFactory from '@src/utils/prismaQueryFactory';
+import transformResponse from '@src/utils/transformResponse';
 
 type Request = FastifyRequest<{
   Querystring: PrismaQuery.Querystring;
@@ -13,12 +15,13 @@ export const handleGetMovies = async (request: Request, reply: Reply) => {
 
   try {
     const movies = await prisma.movie.findMany(prismaQuery);
+
     if (movies.length === 0) {
       reply.code(404);
       throw new Error('Aucun film trouvé');
     }
 
-    reply.send(movies);
+    reply.send(transformResponse.manyMovies(movies as rawMovie[]));
   } catch (error) {
     reply.send(error);
   }

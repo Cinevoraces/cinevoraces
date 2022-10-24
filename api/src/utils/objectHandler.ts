@@ -8,6 +8,12 @@ interface objectHandler {
     enumerators: Array<string>,
     object: Record<string, unknown>
   )=>Record<string, unknown>;
+
+  nestedValuesToArray: (
+    array: Array<Record<string, {[key: string]: unknown }>>,
+    key: string,
+    nestedKey: string,
+  )=>string[];
 }
 
 export default {
@@ -32,5 +38,11 @@ export default {
       }
     }  
     return filteredObject;
-  }
+  },
+
+  nestedValuesToArray: (array, key, nestedKey) => {
+    return array.map((element) => {
+      return element[key][nestedKey];
+    });
+  },
 } as objectHandler;

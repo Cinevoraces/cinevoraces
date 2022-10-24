@@ -47,6 +47,24 @@ const movieSchema = {
     season_id: {
       type: 'number',
     },
+    countries: {
+      type: 'array',
+      items: {
+        type: 'string',
+      },
+    },
+    genres: {
+      type: 'array',
+      items: {
+        type: 'string',
+      },
+    },
+    languages: {
+      type: 'array',
+      items: {
+        type: 'string',
+      },
+    },
     created_at: {
       type: 'string',
     },
