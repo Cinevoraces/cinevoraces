@@ -9,14 +9,14 @@ export const getMoviesSchema: FastifySchema = {
   - filter[is_published]: filter by published status.
   - filter[season_id]: filter by season number.
   - filter[user_id]: filter by user id.
-  - pop[avg_rate]: populate the rate field with the average of all reviews.
+  - pop[review]: Add a "reviews" entry populated with all users reviews.
 
   **Available query parameters *logged user only*:**
   - filter[bookmarked]: filter by bookmarked status.
   - filter[viewed]: filter by viewed status.
   - filter[liked]: filter by liked status.
   - filter[rating]: filter by rating value *(<=)*.
-  - pop[user_review]: populate the review field with the review object of the user.
+  - pop[review]: Add a "reviews" entry populated with all users reviews and a "user_review" populated with user review using token.
   
   **Available query options**
   - limit: limit the number of results.
@@ -56,6 +56,7 @@ export const getMoviesSchema: FastifySchema = {
       type: 'array',
       items: { $ref: 'movie#' },
     },
+    '404': { $ref: 'apiError#' },
   },
 };
 
@@ -68,8 +69,20 @@ export const getMovieSchema: FastifySchema = {
       id: { type: 'number' },
     },
   },
+  querystring: {
+    type: 'object',
+    properties: {
+      pop: {
+        type: 'object',
+        properties: {
+          avg_rate: { type: 'boolean' },
+          review: { type: 'boolean' },
+        },
+      },
+    },
+  },
   response: {
-    200: {
+    '200': {
       $ref: 'movie#',
     },
     '404': { $ref: 'apiError#' },

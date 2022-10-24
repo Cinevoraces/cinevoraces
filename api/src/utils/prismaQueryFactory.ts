@@ -23,7 +23,7 @@ export default function prismaQueryFactory(
         'rating',
         'comment' 
       ];
-      const loggedPopEnumerator: Array<string> = [
+      const popEnumerator: Array<string> = [
         'review'
       ];
       const sortEnumerator: Array<Prisma.MovieScalarFieldEnum> = [
@@ -45,12 +45,7 @@ export default function prismaQueryFactory(
           review: { some: { user_id: userId, ...userFilters } },
         };
       };
-      if (pop && userId) {
-        const userPopulator = objectHandler.filterKeys(loggedPopEnumerator, pop);
-        if (Object.keys(userPopulator).length > 0) prismaQuery.include = {
-          review: { where: { user_id: userId } },
-        };
-      }
+      if (pop) prismaQuery = populatorBuilder(popEnumerator, pop, prismaQuery);
       if (asc) prismaQuery = sortBuilder(sortEnumerator, asc, 'asc', prismaQuery);
       if (desc) prismaQuery = sortBuilder(sortEnumerator, desc, 'desc', prismaQuery);
 

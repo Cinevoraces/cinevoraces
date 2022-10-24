@@ -109,7 +109,7 @@ describe('Movies routes test', () => {
       ...inject.allMovies,
       query: 'filter[liked]=true&filter[rating]=5',
     });
-    const PopulatedWithUserReview = await app.inject({
+    const populatedWithReviews = await app.inject({
       ...inject.allMovies,
       query: 'pop[review]=true&filter[rating]=1',
     });
@@ -122,12 +122,19 @@ describe('Movies routes test', () => {
     expect(bookmarkedFilterResLength).toEqual(3);
     expect(viewedFilterResLength).toEqual(2);
     expect(likedAndRatedFilterResLength).toEqual(2);
-    expect(await PopulatedWithUserReview.json()[0]).toEqual(expectedObject.moviePopulatedWithReview);
+    expect(await populatedWithReviews.json()[0]).toEqual(expectedObject.moviePopulatedWithReviewAsLoggedUser);
   });
 
   test('GET /movies/:id - Get one Movie by id', async () => {
-    const res = await app.inject(inject.movieById);
-    expect(await res.json()).toEqual(expectedObject.movie);
+    const getOneMovieById = await app.inject(inject.movieById);
+    const pop_review = await app.inject({
+      ...inject.movieById,
+      url: `/movies/${107}`,
+      query: 'pop[review]=true',
+    });
+
+    expect(await getOneMovieById.json()).toEqual(expectedObject.movie);
+    expect(await pop_review.json()).toEqual(expectedObject.moviePopulatedWithReview);
   });
 
   test('GET /movies/:id - Get one Movie as logged User', async () => {
@@ -136,17 +143,17 @@ describe('Movies routes test', () => {
       ...inject.movieById,
       headers: { authorization: `Bearer ${await login.json().token}` },
     };
-    const pop_user_review_withou_existing_review = await app.inject({
+    const pop_review_withou_existing_review = await app.inject({
       ...inject.movieById,
       query: 'pop[review]=true',
     });
-    const pop_user_review = await app.inject({
+    const pop_review = await app.inject({
       ...inject.movieById,
       url: `/movies/${res.movies[0].data.id}`,
       query: 'pop[review]=true',
     });
 
-    expect(await pop_user_review_withou_existing_review.json()).toEqual(expectedObject.movie);
-    expect(await pop_user_review.json()).toEqual(expectedObject.moviePopulatedWithReview);
+    expect(await pop_review_withou_existing_review.json()).toEqual(expectedObject.movie);
+    expect(await pop_review.json()).toEqual(expectedObject.moviePopulatedWithReviewAsLoggedUser);
   });
 });

@@ -21,7 +21,7 @@ export const handleGetMovies = async (request: Request, reply: Reply) => {
       throw new Error('Aucun film trouvé');
     }
 
-    reply.send(transformResponse.manyMovies(movies as rawMovie[]));
+    reply.send(transformResponse.manyMovies(movies as rawMovie[], user?.id));
   } catch (error) {
     reply.send(error);
   }
@@ -37,8 +37,8 @@ export const handleGetMovieById = async (request: Request, reply: Reply) => {
       where: { id },
       include: prismaQuery.include,
     });
-    
-    reply.send(transformResponse.oneMovie(movie as rawMovie));
+
+    reply.send(transformResponse.oneMovie(movie as rawMovie, user?.id));
   } catch (error) {
     reply.send(error);
   }

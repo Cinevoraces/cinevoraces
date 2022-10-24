@@ -73,6 +73,24 @@ const movieSchema = {
         viewed: { type: 'boolean' },
         rating: { type: 'number' },
         comment: { type: 'string' },
+        created_at: { type: 'string' },
+        updated_at: { type: 'string' },
+      },
+    },
+    reviews: {
+      type: 'array',
+      items: {
+        type: 'object',
+        properties: {
+          user_id: { type: 'number' },
+          bookmarked: { type: 'boolean' },
+          liked: { type: 'boolean' },
+          viewed: { type: 'boolean' },
+          rating: { type: 'number' },
+          comment: { type: 'string' },
+          created_at: { type: 'string' },
+          updated_at: { type: 'string' },
+        },
       },
     },
     created_at: {
