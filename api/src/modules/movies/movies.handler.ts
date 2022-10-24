@@ -13,7 +13,6 @@ export const handleGetMovies = async (request: Request, reply: Reply) => {
 
   try {
     const movies = await prisma.movie.findMany(prismaQuery);
-    
     if (movies.length === 0) {
       reply.code(404);
       throw new Error('Aucun film trouvé');
@@ -26,8 +25,8 @@ export const handleGetMovies = async (request: Request, reply: Reply) => {
 };
 
 export const handleGetMovieById = async (request: Request, reply: Reply) => {
-  const { prisma } = request;
-  const { id } = request.params;
+  const { prisma, params } = request;
+  const { id } = params;
 
   try {
     const movie = await prisma.movie.findUnique({ where: { id } });

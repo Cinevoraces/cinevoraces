@@ -10,8 +10,8 @@ type Request = FastifyRequest<{
 }>;
 
 export const handleRegister = async (request: Request, reply: Reply) => {
-  const { prisma } = request;
-  let { pseudo, mail, password } = request.body;
+  const { prisma, body } = request;
+  let { pseudo, mail, password } = body;
 
   try {
     // Duplicate check
@@ -47,8 +47,8 @@ export const handleRegister = async (request: Request, reply: Reply) => {
 };
 
 export const handleLogin = async (request: Request, reply: Reply) => {
-  const { prisma } = request;
-  const { pseudo, password } = request.body;
+  const { prisma, body } = request;
+  const { pseudo, password } = body;
 
   try {
     const user = await prisma.user.findUnique({
@@ -105,8 +105,8 @@ export const handleLogin = async (request: Request, reply: Reply) => {
 };
 
 export const handleRefreshToken = async (request: Request, reply: Reply) => {
-  const { prisma } = request;
-  const { id } = request.user;
+  const { prisma, user } = request;
+  const { id } = user;
 
   try {
     // Look for user in DB

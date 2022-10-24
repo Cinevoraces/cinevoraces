@@ -35,8 +35,8 @@ export const handleGetUsers = async (request: Request, reply: Reply) => {
 };
 
 export const handleGetUserById = async (request: Request, reply: Reply) => {
-  const { prisma, query } = request;
-  const { id } = request.params;
+  const { prisma, query, params } = request;
+  const { id } = params;
   const metrics = query.pop?.metrics;
   const prismaQuery = prismaQueryFactory(query, 'User');
 
@@ -67,9 +67,9 @@ export const handleGetUserById = async (request: Request, reply: Reply) => {
 };
 
 export const handlePutUserById = async (request: Request, reply: Reply) => {
-  const { prisma } = request;
-  const { update_user } = request.body;
-  const { id } = request.user;
+  const { prisma, user, body } = request;
+  const { update_user } = body;
+  const { id } = user;
 
   try {
     if (update_user.password) {
@@ -95,8 +95,8 @@ export const handlePutUserById = async (request: Request, reply: Reply) => {
 
 // Admin only
 export const handleDeleteUserById = async (request: Request, reply: Reply) => {
-  const { prisma } = request;
-  const { id } = request.params;
+  const { prisma, params } = request;
+  const { id } = params;
 
   try {
     const user = await prisma.user.delete({ where: { id: Number(id) } });

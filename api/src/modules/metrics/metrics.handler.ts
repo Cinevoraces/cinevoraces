@@ -31,8 +31,8 @@ export const handleGetAllUsersMetrics = async (request: Request, reply: Reply) =
 };
 
 export const handleGetUsersMetricsById = async (request: Request, reply: Reply) => {
-  const { prisma } = request;
-  const { id } = request.params;
+  const { prisma, params } = request;
+  const { id } = params;
   
   try {
     const metrics = await prisma.$queryRaw`SELECT * FROM indiv_actions_metrics WHERE id = ${id};`;
