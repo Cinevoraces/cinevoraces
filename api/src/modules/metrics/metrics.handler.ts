@@ -1,44 +1,67 @@
-import type { globalMetrics, userMetrics } from '@src/types/Metrics';
 import type { FastifyReply as Reply, FastifyRequest } from 'fastify';
 
 type Request = FastifyRequest<{
   Params: { id: number };
 }>;
 
+/**
+* **Get global metrics**
+* @description
+* Get Website global metrics from database
+*/
 export const handleGetGlobalMetrics = async (request: Request, reply: Reply) => {
-  const { prisma } = request;
+  const { pgClient } = request;
 
   try {
-    const metrics = await prisma.$queryRaw`SELECT * FROM global_metrics;`;
-    const response = (metrics as Array<globalMetrics>)[0];
+    const { rows } = await pgClient.query(`
+      SELECT * 
+      FROM global_metrics;`
+    );
 
-    reply.send(response);
+    reply.send(rows[0]);
   } catch (error) {
     reply.send(error);
   }
 };
 
+/**
+* **Get all users metrics**
+* @description
+* Get all users metrics from database
+*/
 export const handleGetAllUsersMetrics = async (request: Request, reply: Reply) => {
-  const { prisma } = request;
+  const { pgClient } = request;
 
   try {
-    const metrics = await prisma.$queryRaw`SELECT * FROM indiv_actions_metrics;`;
+    const { rows } = await pgClient.query(`
+      SELECT * 
+      FROM indiv_actions_metrics;`
+    );
 
-    reply.send(metrics);
+    reply.send(rows);
   } catch (error) {
     reply.send(error);
   }
 };
 
+/**
+* **Get one user metrics**
+* @description
+* Get one user metrics from database using user id
+*/
 export const handleGetUsersMetricsById = async (request: Request, reply: Reply) => {
-  const { prisma, params } = request;
+  const { pgClient, params } = request;
   const { id } = params;
   
   try {
-    const metrics = await prisma.$queryRaw`SELECT * FROM indiv_actions_metrics WHERE id = ${id};`;
-    const response = (metrics as Array<userMetrics>)[0];
+    const { rows } = await pgClient.query({
+      text:`  SELECT * 
+              FROM indiv_actions_metrics 
+              WHERE id = ${id};`,
+      values: [id]
+    });
 
-    reply.send(response);
+    reply.send(rows[0]);
   } catch (error) {
     reply.send(error);
   }
