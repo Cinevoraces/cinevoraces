@@ -1,7 +1,7 @@
 import type { FastifyPluginCallback } from 'fastify';
 import type { FastifyJWTOptions } from '@fastify/jwt';
-import type { review } from '@prisma/client';
-import fastifyJwt from '@fastify/jwt';
+import type { Database } from '@src/types/Database';
+import FastifyJwt from '@fastify/jwt';
 import plugin from 'fastify-plugin';
 
 declare module '@fastify/jwt' {
@@ -15,17 +15,23 @@ declare module '@fastify/jwt' {
       mail?: string;
       role?: string;
       avatar_url?: string;
-      previous_review?: Partial<review>;
+      previous_review?: Partial<Database.review>;
     }
   }
 }
 
-const jwt: FastifyPluginCallback = async (fastify, opts, done) => {
+/**
+ * **Fastify JWT**
+ * @description
+ * This plugin is used to generate and verify JWT tokens.
+ * It also adds a user property to the request object.
+ */
+const fastifyJwt: FastifyPluginCallback = async (fastify, opts, done) => {
   if (fastify.jwt) {
     return fastify.log.warn('Fastify/jwt already registered');
   }
 
-  fastify.register(fastifyJwt, {
+  fastify.register(FastifyJwt, {
     secret: process.env.JWT_SECRET,
     cookie: {
       cookieName: 'refresh_token',
@@ -36,4 +42,4 @@ const jwt: FastifyPluginCallback = async (fastify, opts, done) => {
   done();
 };
 
-export default plugin(jwt);
+export default plugin(fastifyJwt);

@@ -2,7 +2,16 @@ import type { FastifyPluginCallback } from 'fastify';
 import fastifySwagger from '@fastify/swagger';
 import plugin from 'fastify-plugin';
 
-const swagger: FastifyPluginCallback = async (fastify, opts, done) => {
+/**
+ * **Swagger**
+ * @description
+ * This plugin registers the swagger documentation.
+*/
+const swagger: FastifyPluginCallback = async (
+  fastify, 
+  opts, 
+  done
+) => {
   fastify.register(fastifySwagger, {
     routePrefix: '/dev-docs',
     swagger: {
@@ -24,6 +33,7 @@ const swagger: FastifyPluginCallback = async (fastify, opts, done) => {
     },
     exposeRoute: true,
   });
+  
   done();
 };
 
