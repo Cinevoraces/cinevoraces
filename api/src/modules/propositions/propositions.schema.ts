@@ -88,6 +88,8 @@ export const unbookSlotSchema: FastifySchema = {
       },
     },
     '401': { $ref: 'apiError#' },
+    '403': { $ref: 'apiError#' },
+    '404': { $ref: 'apiError#' },
   },
 };
 

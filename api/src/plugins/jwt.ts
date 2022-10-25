@@ -1,5 +1,6 @@
 import type { FastifyPluginCallback } from 'fastify';
 import type { FastifyJWTOptions } from '@fastify/jwt';
+import type { review } from '@prisma/client';
 import fastifyJwt from '@fastify/jwt';
 import plugin from 'fastify-plugin';
 
@@ -14,6 +15,7 @@ declare module '@fastify/jwt' {
       mail?: string;
       role?: string;
       avatar_url?: string;
+      previous_review?: Partial<review>;
     }
   }
 }
