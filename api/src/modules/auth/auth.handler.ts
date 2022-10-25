@@ -9,20 +9,31 @@ type Request = FastifyRequest<{
   };
 }>;
 
+/**
+ * **Register a new user**
+ * @description
+ * - Check if user exists and password validity
+ * - Hash password and create user
+ * - Send success message
+ * @body { *pseudo*, *mail*, *password* }
+ */
 export const handleRegister = async (request: Request, reply: Reply) => {
-  const { prisma, body } = request;
+  const { pgClient, body } = request;
   let { pseudo, mail, password } = body;
 
   try {
     // Duplicate check
-    const user = await prisma.user.findFirst({
-      where: { OR: [{ mail }, { pseudo }]},
+    const { rows: user, rowCount: isUser } = await pgClient.query({
+      text: ` SELECT pseudo, mail	
+              FROM "user"
+              WHERE pseudo = $1 OR mail = $2;`,
+      values: [pseudo, mail],
     });
-    if (user) {
+    if (isUser) {
       reply.code(409); // Conflict
-      if (mail === user.mail) {
+      if (mail === user[0].mail) {
         throw new Error('Cette adresse mail est déjà associée à un compte.');
-      } else if (pseudo === user.pseudo) {
+      } else if (pseudo === user[0].pseudo) {
         throw new Error('Ce pseudo est déjà utilisé.');
       }
     }
@@ -35,8 +46,10 @@ export const handleRegister = async (request: Request, reply: Reply) => {
     password = await hashPassword(password);
 
     // Create user
-    await prisma.user.create({
-      data: { pseudo, mail, password },
+    await pgClient.query({
+      text: ` INSERT INTO "user" (pseudo, mail, password)
+              VALUES ($1, $2, $3);`,
+      values: [pseudo, mail, password],
     });
     reply
       .code(201) // Created
@@ -46,48 +59,51 @@ export const handleRegister = async (request: Request, reply: Reply) => {
   }
 };
 
+/**
+ * **Login function**
+ * @description
+ * - Check if user exists and password match
+ * - Prepare user data and access/refresh tokens
+ * - Send user object, tokens and success message
+ * @body { *pseudo*, *password* }
+ */
 export const handleLogin = async (request: Request, reply: Reply) => {
-  const { prisma, body } = request;
+  const { pgClient, body } = request;
   const { pseudo, password } = body;
 
   try {
-    const user = await prisma.user.findUnique({
-      where: { pseudo },
-      select: {
-        id: true,
-        pseudo: true,
-        mail: true,
-        password: true,
-        role: true,
-        avatar_url: true,
-      },
+    const { rows: user, rowCount: isUser } = await pgClient.query({
+      text: ` SELECT id, pseudo, mail, password, role, avatar_url
+              FROM "user"
+              WHERE pseudo = $1;`,
+      values: [pseudo],
     });
 
-    if (!user) {
+    if (!isUser) {
       reply.code(404); // Not Found
       throw new Error('Utilisateur introuvable.');
     }
 
-    const isPasswordCorrect = await comparePassword(password, user.password);
+    const isPasswordCorrect = await comparePassword(password, user[0].password);
     if (!isPasswordCorrect) {
       reply.code(401); // Unauthorized
       throw new Error('Mot de passe incorrect.');
     }
 
     const userObject = { 
-      id: user.id,
-      pseudo: user.pseudo,
-      mail: user.mail,
-      role: user.role,
-      avatar_url: user.avatar_url,
+      id: user[0].id,
+      pseudo: user[0].pseudo,
+      mail: user[0].mail,
+      role: user[0].role,
+      avatar_url: user[0].avatar_url,
     };
 
     // Generate tokens
     const accessToken = await reply.jwtSign(
-      { id: user.id, pseudo: user.pseudo, role: user.role, expiresIn: '1m' }
+      { id: user[0].id, pseudo: user[0].pseudo, role: user[0].role, expiresIn: '1m' }
     );
     const refreshToken = await reply.jwtSign(
-      { id: user.id, expiresIn: '1d' }
+      { id: user[0].id, expiresIn: '1d' }
     );
 
     reply
@@ -104,34 +120,38 @@ export const handleLogin = async (request: Request, reply: Reply) => {
   }
 };
 
+/**
+ * **Access Token refreshing function**
+ * @description
+ * - Look for user decoded infos from request.user
+ * - Check if user exists in database
+ * - Generate new tokens
+ * - Send new tokens and success message
+ */
 export const handleRefreshToken = async (request: Request, reply: Reply) => {
-  const { prisma, user } = request;
+  const { pgClient, user } = request;
   const { id } = user;
 
   try {
     // Look for user in DB
-    const user = await prisma.user.findUnique({
-      where: { id },
-      select: {
-        id: true,
-        mail: true,
-        pseudo: true,
-        role: true,
-        avatar_url: true,
-      },
+    const { rows, rowCount: isUser } = await pgClient.query({
+      text: ` SELECT id, pseudo, mail, role, avatar_url
+              FROM "user"
+              WHERE id = $1;`,
+      values: [id],
     });
 
-    if (!user) {
+    if (!isUser) {
       reply.code(401); // Not Found
       throw new Error('Utilisateur introuvable, token compromis.');
     }
 
     // Generate new tokens
     const accessToken = await reply.jwtSign(
-      { id: user.id, pseudo: user.pseudo, role: user.role, expiresIn: '1m' }
+      { id: rows[0].id, pseudo: rows[0].pseudo, role: rows[0].role, expiresIn: '1m' }
     );
     const refreshToken = await reply.jwtSign(
-      { id: user.id, expiresIn: '1d' }
+      { id: rows[0].id, expiresIn: '1d' }
     );
 
     reply
@@ -139,7 +159,7 @@ export const handleRefreshToken = async (request: Request, reply: Reply) => {
         signed: true,
       })
       .send({
-        user,
+        user: { ...rows[0] },
         token: accessToken,
         response: 'Tokens régénérés avec succés.',
       });
