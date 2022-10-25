@@ -9,4 +9,4 @@ declare namespace Query {
 
 }
 
-export default Query;
+export type { Query };
