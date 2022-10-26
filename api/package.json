@@ -4,7 +4,7 @@
   "description": "Cinevoraces Fastify API",
   "auhtor": "BenoitSafari",
   "scripts": {
-    "dev": "(tsc-watch --onSuccess \"node dist/src/server.js\")",
+    "dev": "tsc-watch --onSuccess \"node dist/src/server.js\"",
     "build": "tsc",
     "start": "node dist/server.js",
     "test": "jest --watchAll"
