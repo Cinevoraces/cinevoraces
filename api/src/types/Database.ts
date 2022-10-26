@@ -1,4 +1,18 @@
 declare namespace Database {
+  type dataEnum = 
+  'country' 
+  | 'genre' 
+  | 'language' 
+  | 'movie' 
+  | 'comment'
+  | 'movie_has_country'
+  | 'movie_has_genre'
+  | 'movie_has_language'
+  | 'proposition_slot'
+  | 'review'
+  | 'season'
+  | 'user';
+  
   interface country {
     id: number
     name: string
