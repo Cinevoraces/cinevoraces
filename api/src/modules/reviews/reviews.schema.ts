@@ -2,7 +2,7 @@ import type { FastifySchema } from 'fastify';
 
 export const reviewMovieSchema: FastifySchema = {
   description: `
-  **Get one review by user and movie id**.
+  **Update one review by user and movie id**.
   Movie's *id* must be set in *params* and access token in bearer to pass user id.
   `,
   tags: ['Reviews'],
@@ -25,7 +25,7 @@ export const reviewMovieSchema: FastifySchema = {
     },
   },
   response: {
-    200: {
+    '200': {
       message: { type: 'string' },
       review: { $ref: 'review#' }
     },

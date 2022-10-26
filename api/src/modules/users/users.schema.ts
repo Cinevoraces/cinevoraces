@@ -5,6 +5,9 @@ export const getUsersSchema: FastifySchema = {
   **Get all users**.
   Use query parameters to populate the results using the following format: */users?pop[movies]=true&pop[reviews]=true*  
   **Available query parameters:**
+  - filter[pseudo]: filter by user pseudo
+  - filter[mail]: filter by user mail
+  - filter[role]: filter by user role
   - pop[movies]: populate with user posted movies
   - pop[reviews]: populate with user posted reviews
   `,
@@ -12,6 +15,14 @@ export const getUsersSchema: FastifySchema = {
   querystring: {
     type: 'object',
     properties: {
+      filter: {
+        type: 'object',
+        properties: {
+          pseudo: { type: 'string' },
+          mail: { type: 'string' },
+          role: { type: 'string' },
+        },
+      },
       pop: {
         type: 'object',
         properties: {

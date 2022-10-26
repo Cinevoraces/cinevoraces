@@ -1,3 +1,4 @@
+// TODO: May be useless once SQL conversion is done
 interface objectHandler {
   keysToArray: (
     enumerators: Array<string>,

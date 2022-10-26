@@ -1,5 +1,5 @@
-import type { Prisma } from '@prisma/client';
-import prisma from '../prisma';
+import type { Database } from '@src/types/Database';
+import pgClient from '../pgClient';
 
 export interface CreateRessource<T> {
   data: T,
@@ -7,43 +7,32 @@ export interface CreateRessource<T> {
   remove: ()=>void
 };
 
-export async function createRessource<T, CreateInput, UpdateInput>(data: CreateInput, model: Prisma.ModelName): Promise<CreateRessource<T>> {
+export async function createRessource<T, CreateInput, UpdateInput>(data: CreateInput, model: Database.dataEnum): Promise<CreateRessource<T>> {
   // Define ressource creation
-  // @ts-expect-error - Prisma doesn't know about our models
-  const element = await prisma[model].create({
-    data: data
+  const { rows } = await pgClient.query({
+    text: `
+    `,
+    values: [],
   });
-  
-  // Define "where" prisma query structure according to model
-  let where: object;
-  switch (model) {
-    case 'review':
-      where = {
-        user_id_movie_id: {
-          user_id: element.user_id,
-          movie_id: element.movie_id
-        } };
-      break;
-    default:
-      where = { id: element.id };
-  }
 
   // Define ressource updater
   const update = async (params: UpdateInput) => {
-    // @ts-expect-error - Prisma doesn't know about our models
-    return await prisma[model].update({
-      where: where,
-      data: params
+    const { rows } = await pgClient.query({
+      text: `
+      `,
+      values: [],
     });
+    return rows[0];
   };
 
   // Define ressource remover
   const remove = async () => {
-    // @ts-expect-error - Prisma doesn't know about our models
-    await prisma[model].delete({
-      where: where
+    await pgClient.query({
+      text: `
+      `,
+      values: [],
     });
   };
-
-  return { data: element, remove, update };
+  
+  return { data: rows[0], remove, update };
 }

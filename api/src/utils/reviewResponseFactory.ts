@@ -1,10 +1,10 @@
-import type { review } from '@prisma/client';
+import type { Database } from '@src/types/Database';
 
-type reviewKeys = keyof Pick<review, 'bookmarked' | 'viewed' | 'liked' | 'rating' | 'comment'>;
+type reviewKeys = keyof Pick<Database.review, 'bookmarked' | 'viewed' | 'liked' | 'rating' | 'comment'>;
 
 export default function reviewResponseFactory(
-  review: review,
-  previousReview: Partial<review>
+  review: Database.review,
+  previousReview: Partial<Database.review>
 ): string {
   const keys = Object.keys(review)[0] as reviewKeys;
   const value = review[keys];
