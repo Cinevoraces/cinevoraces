@@ -36,8 +36,8 @@ const pgClient: FastifyPluginCallback = async (
   await pgClient.connect();
 
   fastify
-    .decorate('pg', pgClient)
-    .decorateRequest('pg', { getter: () => fastify.pgClient });
+    .decorate('pgClient', pgClient)
+    .decorateRequest('pgClient', { getter: () => fastify.pgClient });
   done();
 };
 
