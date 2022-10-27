@@ -127,6 +127,7 @@ CREATE VIEW reviewView AS
 
 SELECT 
       -- User and Review columns selection
+      "movie".id AS movie_id,
       "user".id AS author_id, 
       "user".pseudo AS author_pseudo,
       "user".mail AS author_mail,
@@ -136,7 +137,6 @@ SELECT
 	review.comment,
       -- Movie object build
       (SELECT json_build_object(
-            'id', "movie".id,
             'french_title', "movie".french_title,
             'original_title', "movie".original_title,
             'poster_url', "movie".poster_url,
