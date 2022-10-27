@@ -47,7 +47,6 @@ describe('REVIEWS ENDPOINTS', () => {
     const bookmarkedTest = await app.inject({
       ...inject.putReview, payload: { bookmarked: true },
     });
-    console.log(await bookmarkedTest.json());
     expect(bookmarkedTest.statusCode).toEqual(200);
     expect(await bookmarkedTest.json()).toEqual(expect.objectContaining({
       message: 'Film ajouté à ma liste.',

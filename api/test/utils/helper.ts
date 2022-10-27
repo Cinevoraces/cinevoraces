@@ -7,13 +7,8 @@ import pgClient from './pgClient';
 import parseOptions from '../../src/utils/parseOptions';
 import { faker } from '@faker-js/faker';
 import { comparePassword, hashPassword } from '../../src/utils/bcryptHandler';
-import { ressourcesCreator } from './ressourceCreator/createRessource';
+import { ressourcesCreator } from './createRessource';
 import expectedObjects from './expectedObjects';
-
-// import createMovie from './ressourceCreator/createMovie';
-// import createReview from './ressourceCreator/createReview';
-// import createSlot from './ressourceCreator/createSlot';
-// import createUser from './ressourceCreator/createUser';
 
 export function build() {
   // Create App instance
@@ -30,14 +25,6 @@ export function build() {
   // Prepare ressources
   const res = {
     users: [] as Array<{ user: Database.user, delete: ()=>void }>,
-    // createUser,
-    // createMovie,
-    // createReview,
-    // createSlot,
-    // users: [] as Awaited<ReturnType<typeof createUser>>[],
-    // movies: [] as Awaited<ReturnType<typeof createMovie>>[],
-    // reviews: [] as Awaited<ReturnType<typeof createReview>>[],
-    // slots: [] as Awaited<ReturnType<typeof createSlot>>[],
   };
 
   beforeAll(async () => {

@@ -1,7 +1,7 @@
-import type { Database } from '../../../src/types/Database';
+import type { Database } from '../../src/types/Database';
 import { faker } from '@faker-js/faker';
-import { hashPassword } from '../../../src/utils/bcryptHandler';
-import pgClient from '../pgClient';
+import { hashPassword } from '../../src/utils/bcryptHandler';
+import pgClient from './pgClient';
 
 export const ressourcesCreator: {
   user: (

@@ -27,7 +27,16 @@ export const reviewMovieSchema: FastifySchema = {
   response: {
     '200': {
       message: { type: 'string' },
-      review: { $ref: 'review#' }
+      review: {
+        type: 'object',
+        properties: {
+          bookmarked: { type: 'boolean' },
+          viewed: { type: 'boolean' },
+          liked: { type: 'boolean' },
+          rating: { type: 'number' },
+          comment: { type: 'string' }
+        },
+      },
     },
     '404': { $ref: 'apiError#' },
   },

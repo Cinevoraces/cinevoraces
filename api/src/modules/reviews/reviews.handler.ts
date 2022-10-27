@@ -1,13 +1,13 @@
 import type { FastifyReply as Reply, FastifyRequest } from 'fastify';
 import type { Database } from '@src/types/Database';
 import type { Query } from '@src/types/Query';
-import { updateReview, getReviews } from '@src/dataMapper/review.dataMapper';
+import { updateReview, getOneReview } from '@modules/reviews/review.datamapper';
 import reviewResponseFactory from '@src/utils/reviewResponseFactory';
 
 type Request = FastifyRequest<{
   Querystring: Query.querystring;
   Params: { movieId: number, userId: number };
-  Body: Record<keyof Pick<Database.review, 'bookmarked' | 'viewed' | 'liked' | 'rating' | 'comment'>, unknown>,
+  Body: Record<keyof Pick<Database.review, 'bookmarked' | 'viewed' | 'liked' | 'rating' | 'comment'>, boolean | number | string>,
 }>;
 
 /**
@@ -24,19 +24,15 @@ export const handleReviewMovie = async (request: Request, reply: Reply) => {
     pgClient.query(
       updateReview(body, { movie_id, user_id })
     );
-    // FIXME: Return 500
     const { rows: review } = await pgClient.query(
-      getReviews({ 
-        values: { movie_id, user_id },
-        select: ['bookmarked', 'viewed', 'liked', 'rating', 'comment']
-      })
+      getOneReview({ movie_id, user_id })
     );
-
+    
     const message = reviewResponseFactory(
       body as Partial<Database.review>, 
       previous_review
     );
-
+      
     reply.send({
       message,
       review: review[0],
