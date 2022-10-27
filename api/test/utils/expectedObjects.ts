@@ -166,13 +166,21 @@ export default {
     presentation: expect.any(String),
   }),
   review: expect.objectContaining({
-    user_id: expect.any(Number),
     movie_id: expect.any(Number),
-    bookmarked: expect.any(Boolean),
-    viewed: expect.any(Boolean),
-    liked: expect.any(Boolean),
-    rating: expect.any(Number),
+    author_id: expect.any(Number),
+    author_pseudo: expect.any(String),
+    author_mail: expect.any(String),
+    author_role: expect.any(String),
+    author_avatar: expect.any(String),
+    member_since: expect.any(Number),
     comment: expect.any(String),
+    movie: expect.objectContaining({
+      french_title: expect.any(String),
+      original_title: expect.any(String),
+      poster_url: expect.any(String),
+      publishing_date: expect.any(String),
+      season_id: expect.any(Number),
+    })
   }),
   slot: expect.objectContaining({
     id: expect.any(Number),

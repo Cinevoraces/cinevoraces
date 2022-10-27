@@ -1,5 +1,6 @@
 import type { InjectOptions } from 'fastify';
 import { build } from '../utils/helper';
+import { queryBuilder } from '../../src/utils/queryBuilder';
 
 describe('REVIEWS ENDPOINTS', () => {
   const { app, res, expectedObjects } = build();
@@ -20,6 +21,15 @@ describe('REVIEWS ENDPOINTS', () => {
       url: '/reviews',
     },
   };
+
+  test('PUT /reviews/:movie_id', async () => {
+    const test = queryBuilder(
+      { movie_id: 1 },
+      'AND',
+      0
+    );
+    // console.log(test);
+  });      
 
   test('PUT REVIEWS', async () => {
     // Login as user and prepare request
@@ -150,7 +160,7 @@ describe('REVIEWS ENDPOINTS', () => {
     }));
   });
 
-  test.skip('GET REVIEWS', async () => {
+  test('GET REVIEWS', async () => {
     // Log Admin
     inject.login = {
       ...inject.login,
@@ -163,17 +173,18 @@ describe('REVIEWS ENDPOINTS', () => {
       payload: { comment: 'Tester c\'est douter' },
       headers: { authorization: `Bearer ${token}` },
     });
-
-    const withoutQueryString = await app.inject({
+    inject.getReviews = {
       ...inject.getReviews,
       headers: { authorization: `Bearer ${token}` },
-    });
+    };
+
+    const withoutQueryString = await app.inject(inject.getReviews);
     expect(await withoutQueryString.json()).toEqual(expect.arrayContaining([expectedObjects.review]));
     expect(withoutQueryString.statusCode).toEqual(200);
 
     const withQueryString = await app.inject({
       ...inject.getReviews,
-      query: `filter[movie_id]=1&filter[user_id]=${res.users[0].user.id}`,
+      query: `where[movie_id]=1&where[author_id]=${res.users[0].user.id}`,
     });
 
     expect(await withQueryString.json()).toEqual(expect.arrayContaining([expectedObjects.review]));
