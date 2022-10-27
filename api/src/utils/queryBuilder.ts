@@ -1,37 +1,23 @@
-interface query {
-  columns: Record<string, unknown>,
-  operator: 'WHERE' | 'SET',
-  join?: 'AND' | 'OR' | ','
-}
-
 /**
- * **fieldsReducer**
+ * **queryBuilder**
  * @description
  * Reduce objects of fields to an SQL query.
- * Be careful, you need to pass values in the same order as you pass your queries!
- * @param fields Contain fields and values to filter/set.
- * @param operator 'WHERE' | 'SET'
+ * @param columns - Object containing the fields to be selected.
  * @param join 'AND' | 'OR' | ','
+ * @param count Number of values to be inserted.
 */
 export const queryBuilder = (
-  fields: Array<query>
-): Array<string> => {
-  if (fields.length === 0) throw new Error('No fields provided');
-  const returnArray: Array<string> = [];
-  let count = 0;
-
-  fields.forEach((field) => {
-    const { columns, operator, join } = field;
-    const keys = Object.keys(columns);
-    if (keys.length > 1 && !join) throw new Error('Join method must be provided for multiple fields');
-    returnArray.push(`${operator} ` + keys.reduce(
-      (acc, key, index) => {
-        if (typeof key === 'undefined') return acc;
-        return [...acc, `${key}=$${Number([index]) + 1 + count}`];
-      }, []
-    ).join(` ${join} `));
-    count += keys.length;
-  });
-
-  return returnArray;
+  columns: Record<string, unknown>,
+  join: 'AND' | 'OR' | ',',
+  count?: number 
+): { query: string, returnCount: number } => {
+  if (columns === undefined || columns === null) return { query: '', returnCount: 0 };
+  const keys = Object.keys(columns);
+  let returnCount = count ? count : 0;
+  const query = keys.reduce((acc, key, index) => {
+    if (typeof key === 'undefined') return acc;
+    returnCount ++;
+    return [...acc, `${key}=$${Number([index]) + 1 + returnCount}`];
+  }, []).join(` ${join} `);
+  return { query, returnCount };
 };
