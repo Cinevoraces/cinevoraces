@@ -1,6 +1,6 @@
 import type { FastifyReply as Reply, FastifyRequest } from 'fastify';
 import { comparePassword, hashPassword } from '@src/utils/bcryptHandler';
-import { createUser, findUserByPseudoOrMail, getUsers } from '@src/dataMapper/user.dataMapper';
+import { createUser, findUserByPseudoOrMail, getTokenObject } from '@modules/auth/auth.datamapper';
 
 type Request = FastifyRequest<{
   Body: {
@@ -25,7 +25,7 @@ export const handleRegister = async (request: Request, reply: Reply) => {
   try {
     // Duplicate check
     const { rows: user, rowCount: isUser } = await pgClient.query(
-      findUserByPseudoOrMail({ pseudo, mail })
+      findUserByPseudoOrMail(pseudo, mail)
     );
     
     if (isUser) {
@@ -70,7 +70,7 @@ export const handleLogin = async (request: Request, reply: Reply) => {
 
   try {
     const { rows: user, rowCount: isUser } = await pgClient.query(
-      getUsers({ pseudo }, false)
+      getTokenObject({ pseudo })
     );
 
     if (!isUser) {
@@ -129,7 +129,7 @@ export const handleRefreshToken = async (request: Request, reply: Reply) => {
   try {
     // Look for user in DB
     const { rows, rowCount: isUser } = await pgClient.query(
-      getUsers({ id }, false)
+      getTokenObject({ id })
     );
 
     if (!isUser) {
