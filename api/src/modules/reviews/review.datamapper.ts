@@ -1,5 +1,6 @@
 import type { Database } from '@src/types/Database';
 import type { Query } from '@src/types/Query';
+import { queryBuilder } from '@src/utils/queryBuilder';
 
 /**
  * **updateReview**
@@ -43,3 +44,30 @@ export const getOneReview = (
     values: [user_id, movie_id],
   };
 };
+
+/**
+ * **getReviews**
+ * @description
+ * Get reviews as admin.
+ * @returns SQL query object
+ */
+export const getReviews = (
+  ids?: Partial<Record<'author_id' | 'movie_id', number>>
+): Query.preparedQuery => {
+  const query = {
+    text: 'SELECT * FROM "reviewview"',
+    values: [] as Array<number>,
+  };
+  if (typeof ids !== 'undefined') {
+    const { query: buildedQuery } = queryBuilder(ids, 'AND');
+    if (buildedQuery !== '') {
+      query.text = `${query.text} WHERE ${buildedQuery}`;
+      query.values = Object.values(ids);
+    }
+  }
+  return {
+    text: `${query.text};`,
+    values: query.values,
+  };
+};
+

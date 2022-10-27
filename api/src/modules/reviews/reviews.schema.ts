@@ -42,20 +42,24 @@ export const reviewMovieSchema: FastifySchema = {
   },
 };
 
-export const getAllReviewsSchema: FastifySchema = {
+export const getReviewsSchema: FastifySchema = {
   description: `
-  **Get all reviews**.
-  Use query parameters to filter the results using the following format: */reviews?filter[user_id]=2&filter[movie_id]=3*
+  **Get reviews**.
+  Use query parameters to filter the results using the following format: */reviews?select[user_id]=2&select[movie_id]=3*
   Available query parameters:
-  - filter[movie_id]: filter by movie id
-  - filter[user_id]: filter by user id
+  - where[movie_id]: filter by movie id
+  - where[author_id]: filter by user id
   `,
   tags: ['Reviews'],
   querystring: {
     type: 'object',
     properties: {
-      filter: {
+      where: {
         type: 'object',
+        properties: {
+          movie_id: { type: 'number' },
+          author_id: { type: 'number' },
+        },
       },
     },
   },

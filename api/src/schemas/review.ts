@@ -2,17 +2,17 @@ const reviewSchema = {
   $id: 'review',
   type: 'object',
   properties: {
+    movie_id: { type: 'number' },
     author_id: { type: 'number' },
-    author_pseudo: { type: 'number' },
-    author_mail: { type: 'boolean' },
-    author_role: { type: 'boolean' },
-    author_avatar: { type: 'boolean' },
+    author_pseudo: { type: 'string' },
+    author_mail: { type: 'string' },
+    author_role: { type: 'string' },
+    author_avatar: { type: 'string' },
     member_since: { type: 'number' },
     comment: { type: 'string' },
     movie: {
       type: 'object',
       properties: {
-        id: { type: 'number' },
         french_title: { type: 'string' },
         original_title: { type: 'string' },
         poster_url: { type: 'string' },

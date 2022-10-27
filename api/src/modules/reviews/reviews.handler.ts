@@ -1,7 +1,7 @@
 import type { FastifyReply as Reply, FastifyRequest } from 'fastify';
 import type { Database } from '@src/types/Database';
 import type { Query } from '@src/types/Query';
-import { updateReview, getOneReview } from '@modules/reviews/review.datamapper';
+import { updateReview, getOneReview, getReviews } from '@modules/reviews/review.datamapper';
 import reviewResponseFactory from '@src/utils/reviewResponseFactory';
 
 type Request = FastifyRequest<{
@@ -43,23 +43,22 @@ export const handleReviewMovie = async (request: Request, reply: Reply) => {
 };
 
 /**
- * **Get all reviews object (ADMIN)**
+ * **Get reviews object (ADMIN)**
  * @description
- * Get all reviews from database
+ * Get reviews from database
  * @query
- * - filter[movie_id]: filter by movie id
- * - filter[user_id]: filter by user id
+ * - where[movie_id]: filter by movie id
+ * - where[author_id]: filter by user id
 */
-export const handleGetAllReviews = async (request: Request, reply: Reply) => {
+export const handleGetReviews = async (request: Request, reply: Reply) => {
   const { pgClient, query } = request;
-  // const { where } = queryFactory(query, 'review');
+  const { where } = query;
   try {
-    // const { rows } = await pgClient.query({
-    //   text: 'SELECT * FROM "review" $1;',
-    //   values: [where]
-    // });
+    const { rows } = await pgClient.query(
+      getReviews(where)
+    );
 
-    // reply.send(reviews);
+    reply.send(rows);
   } catch (error) {
     reply.send(error);
   }
