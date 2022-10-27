@@ -201,20 +201,21 @@ const hooks: FastifyPluginCallback = async (fastify, opts, done) => {
     const { pgClient, params, user } = request;
     const { movieId } = params;
     const { id: userId } = user;
-  
-    try {
-      let review = await pgClient.query({
-        text: ` SELECT comment, rating
+    const query = { 
+      text: ` SELECT comment, rating
                 FROM review
                 WHERE user_id=$1 AND movie_id=$2;`,
-        values: [userId, Number(movieId)],
-      });
+      values: [userId, Number(movieId)],
+    };
+
+    try {
+      let review = await pgClient.query(query);
       if (!review.rowCount) {
-        review = await pgClient.query({
-          text: ` INSERT INTO review (user_id, movie_id)
-                  VALUES ($1,$2);`,
-          values: [userId, Number(movieId)],
+        await pgClient.query({
+          ...query,
+          text: ' INSERT INTO review (user_id, movie_id) VALUES ($1,$2);',
         });
+        review = await pgClient.query(query);
       }
       const { comment, rating } = review.rows[0];
       request.user = { 

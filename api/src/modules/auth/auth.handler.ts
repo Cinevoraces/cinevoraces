@@ -1,5 +1,6 @@
 import type { FastifyReply as Reply, FastifyRequest } from 'fastify';
 import { comparePassword, hashPassword } from '@src/utils/bcryptHandler';
+import { createUser, findUserByPseudoOrMail, getUsers } from '@src/dataMapper/user.dataMapper';
 
 type Request = FastifyRequest<{
   Body: {
@@ -23,12 +24,10 @@ export const handleRegister = async (request: Request, reply: Reply) => {
 
   try {
     // Duplicate check
-    const { rows: user, rowCount: isUser } = await pgClient.query({
-      text: ` SELECT pseudo, mail	
-              FROM "user"
-              WHERE pseudo = $1 OR mail = $2;`,
-      values: [pseudo, mail],
-    });
+    const { rows: user, rowCount: isUser } = await pgClient.query(
+      findUserByPseudoOrMail({ pseudo, mail })
+    );
+    
     if (isUser) {
       reply.code(409); // Conflict
       if (mail === user[0].mail) {
@@ -46,11 +45,9 @@ export const handleRegister = async (request: Request, reply: Reply) => {
     password = await hashPassword(password);
 
     // Create user
-    await pgClient.query({
-      text: ` INSERT INTO "user" (pseudo, mail, password)
-              VALUES ($1, $2, $3);`,
-      values: [pseudo, mail, password],
-    });
+    await pgClient.query(
+      createUser({ pseudo, mail, password })
+    );
     reply
       .code(201) // Created
       .send({ message: `Utilisateur "${pseudo}" créé avec succés.` });
@@ -72,12 +69,9 @@ export const handleLogin = async (request: Request, reply: Reply) => {
   const { pseudo, password } = body;
 
   try {
-    const { rows: user, rowCount: isUser } = await pgClient.query({
-      text: ` SELECT id, pseudo, mail, password, role, avatar_url
-              FROM "user"
-              WHERE pseudo = $1;`,
-      values: [pseudo],
-    });
+    const { rows: user, rowCount: isUser } = await pgClient.query(
+      getUsers({ pseudo }, false)
+    );
 
     if (!isUser) {
       reply.code(404); // Not Found
@@ -134,12 +128,9 @@ export const handleRefreshToken = async (request: Request, reply: Reply) => {
 
   try {
     // Look for user in DB
-    const { rows, rowCount: isUser } = await pgClient.query({
-      text: ` SELECT id, pseudo, mail, role, avatar_url
-              FROM "user"
-              WHERE id = $1;`,
-      values: [id],
-    });
+    const { rows, rowCount: isUser } = await pgClient.query(
+      getUsers({ id }, false)
+    );
 
     if (!isUser) {
       reply.code(401); // Not Found

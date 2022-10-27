@@ -3,7 +3,7 @@ import type { Database } from '@src/types/Database';
 type reviewKeys = keyof Pick<Database.review, 'bookmarked' | 'viewed' | 'liked' | 'rating' | 'comment'>;
 
 export default function reviewResponseFactory(
-  review: Database.review,
+  review: Partial<Database.review>,
   previousReview: Partial<Database.review>
 ): string {
   const keys = Object.keys(review)[0] as reviewKeys;

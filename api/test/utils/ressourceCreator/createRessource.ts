@@ -1,38 +1,49 @@
-import type { Database } from '@src/types/Database';
+import type { Database } from '../../../src/types/Database';
+import { faker } from '@faker-js/faker';
+import { hashPassword } from '../../../src/utils/bcryptHandler';
 import pgClient from '../pgClient';
 
-export interface CreateRessource<T> {
-  data: T,
-  update: (params: unknown)=>Promise<CreateRessource<T>>,
-  remove: ()=>void
-};
-
-export async function createRessource<T, CreateInput, UpdateInput>(data: CreateInput, model: Database.dataEnum): Promise<CreateRessource<T>> {
-  // Define ressource creation
-  const { rows } = await pgClient.query({
-    text: `
-    `,
-    values: [],
-  });
-
-  // Define ressource updater
-  const update = async (params: UpdateInput) => {
-    const { rows } = await pgClient.query({
-      text: `
-      `,
-      values: [],
-    });
-    return rows[0];
-  };
-
-  // Define ressource remover
-  const remove = async () => {
+export const ressourcesCreator: {
+  user: (
+    user?: {
+      pseudo?: string, 
+      mail?: string, 
+      password?: string, 
+      role?: string
+    }
+  )=>Promise<{ user: Database.user, delete: ()=>void }>,
+} = {
+  user: async (user) => {
+    let u = {
+      pseudo: faker.internet.userName(),
+      mail: faker.internet.email(),
+      password: faker.internet.password(),
+      role: 'user',
+    };
+    if (user) u = { ...u, ...user };
+    const hashed = await hashPassword(u.password);
+    
     await pgClient.query({
-      text: `
-      `,
-      values: [],
+      text: ` INSERT INTO "user" (pseudo, mail, password, role)
+              VALUES ($1, $2, $3, $4);`,
+      values: [u.pseudo, u.mail, hashed, u.role],
     });
-  };
-  
-  return { data: rows[0], remove, update };
-}
+    const { rows } = await pgClient.query({
+      text: ` SELECT * FROM "user"
+              WHERE pseudo = $1
+              AND mail = $2;`,
+      values: [u.pseudo, u.mail],
+    });
+
+    return { 
+      user: { ...rows[0], password: u.password },
+      delete: async () => {
+        await pgClient.query({
+          text: ` DELETE FROM "user"
+                  WHERE id = $1;`,
+          values: [rows[0].id],
+        });
+      }  
+    };
+  }
+};

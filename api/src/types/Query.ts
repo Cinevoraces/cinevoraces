@@ -6,6 +6,10 @@ declare namespace Query {
     asc?: string;
     desc?: string;
   }
+  interface preparedQuery {
+    text: string;
+    values?: Array<unknown>;
+  }
 
 }
 

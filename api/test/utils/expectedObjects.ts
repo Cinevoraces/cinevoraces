@@ -165,6 +165,15 @@ export default {
     publishing_date: expect.any(String),
     presentation: expect.any(String),
   }),
+  review: expect.objectContaining({
+    user_id: expect.any(Number),
+    movie_id: expect.any(Number),
+    bookmarked: expect.any(Boolean),
+    viewed: expect.any(Boolean),
+    liked: expect.any(Boolean),
+    rating: expect.any(Number),
+    comment: expect.any(String),
+  }),
   slot: expect.objectContaining({
     id: expect.any(Number),
     season_number: expect.any(Number),

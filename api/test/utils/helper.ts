@@ -1,9 +1,13 @@
+import type { Database } from '../../src/types/Database';
 import Fastify from 'fastify';
 import plugin from 'fastify-plugin';
 import qs from 'qs';
 import App from '../../src/app';
 import pgClient from './pgClient';
 import parseOptions from '../../src/utils/parseOptions';
+import { faker } from '@faker-js/faker';
+import { comparePassword, hashPassword } from '../../src/utils/bcryptHandler';
+import { ressourcesCreator } from './ressourceCreator/createRessource';
 import expectedObjects from './expectedObjects';
 
 // import createMovie from './ressourceCreator/createMovie';
@@ -17,11 +21,15 @@ export function build() {
     querystringParser: (str) => qs.parse(str, parseOptions),
   });
 
+  const password = {
+    default: 'password1234',
+    comparePassword,
+    hashPassword,
+  };
+
   // Prepare ressources
   const res = {
-    default: {
-      password: 'password1234',
-    }
+    users: [] as Array<{ user: Database.user, delete: ()=>void }>,
     // createUser,
     // createMovie,
     // createReview,
@@ -36,10 +44,12 @@ export function build() {
     void app.register(plugin(App));
     await app.ready();
     await pgClient.connect();
+    res.users.push(await ressourcesCreator.user({ role: 'admin' }));
+    res.users.push(await ressourcesCreator.user());
   });
 
   afterAll(async () => {
-    await pgClient.end();
+    res.users.forEach(async (u) => await u.delete());
     app.close();
   });
 
@@ -48,5 +58,7 @@ export function build() {
     res,
     pgClient,
     expectedObjects, 
+    password,
+    faker,
   };
 }

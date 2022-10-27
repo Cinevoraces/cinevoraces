@@ -11,33 +11,30 @@ export const getGlobalMetricsSchema: FastifySchema = {
   },
 };
 
-export const getGetAllUsersMetrics: FastifySchema = {
+export const getUsersMetricsSchema: FastifySchema = {
   description: `
   **Get All users metrics**
+  Use query parameters to filter the results using the following format: */reviews?filter[user_id]=2.
+  **Available query parameters:**
+  - filter[user_id]: filter by user id.
   `,
   tags: ['Metrics'],
+  querystring: {
+    type: 'object',
+    properties: {
+      filter: {
+        type: 'object',
+        properties: {
+          user_id: { type: 'number' },
+        },
+      },
+    },
+  },
   response: {
     '200': {
       type: 'array',
       items: { $ref: 'userMetrics#' },
     },
-    '404': { $ref: 'apiError#' },
-  },
-};
-
-export const getUsersMetricsById: FastifySchema = {
-  description: `
-  **Get one user metrics by id**
-  `,
-  tags: ['Metrics'],
-  params: {
-    type: 'object',
-    properties: {
-      id: { type: 'number' },
-    },
-  },
-  response: {
-    '200': { $ref: 'userMetrics#' },
     '404': { $ref: 'apiError#' },
   },
 };

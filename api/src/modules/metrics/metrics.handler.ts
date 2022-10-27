@@ -1,7 +1,9 @@
 import type { FastifyReply as Reply, FastifyRequest } from 'fastify';
+import type { Query } from '@src/types/Query';
+import { getGlobalMetrics, getUsersMetrics } from '@src/dataMapper/metrics.dataMapper';
 
 type Request = FastifyRequest<{
-  Params: { id: number };
+  Querystring: Query.querystring;
 }>;
 
 /**
@@ -13,11 +15,9 @@ export const handleGetGlobalMetrics = async (request: Request, reply: Reply) => 
   const { pgClient } = request;
 
   try {
-    const { rows } = await pgClient.query(`
-      SELECT * 
-      FROM global_metrics;`
+    const { rows } = await pgClient.query(
+      getGlobalMetrics()
     );
-
     reply.send(rows[0]);
   } catch (error) {
     reply.send(error);
@@ -25,43 +25,21 @@ export const handleGetGlobalMetrics = async (request: Request, reply: Reply) => 
 };
 
 /**
-* **Get all users metrics**
+* **Get users metrics**
 * @description
-* Get all users metrics from database
+* Get users metrics from database, can be filtered by id
 */
-export const handleGetAllUsersMetrics = async (request: Request, reply: Reply) => {
-  const { pgClient } = request;
+export const handleGetUsersMetrics = async (request: Request, reply: Reply) => {
+  const { pgClient, query } = request;
+  const { filter } = query;
 
   try {
-    const { rows } = await pgClient.query(`
-      SELECT * 
-      FROM indiv_actions_metrics;`
-    );
+    const { rows } = await pgClient.query(
+      getUsersMetrics(
+        filter?.user_id && Number(filter.user_id)
+      ));
 
     reply.send(rows);
-  } catch (error) {
-    reply.send(error);
-  }
-};
-
-/**
-* **Get one user metrics**
-* @description
-* Get one user metrics from database using user id
-*/
-export const handleGetUsersMetricsById = async (request: Request, reply: Reply) => {
-  const { pgClient, params } = request;
-  const { id } = params;
-  
-  try {
-    const { rows } = await pgClient.query({
-      text:`  SELECT * 
-              FROM indiv_actions_metrics 
-              WHERE id = ${id};`,
-      values: [id]
-    });
-
-    reply.send(rows[0]);
   } catch (error) {
     reply.send(error);
   }

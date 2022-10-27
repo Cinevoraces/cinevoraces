@@ -9,7 +9,7 @@ import { auth } from '@modules/auth/auth.routes';
 import { metrics } from '@modules/metrics/metrics.routes';
 // import { movies } from '@modules/movies/movies.routes';
 // import { propositions } from '@modules/propositions/propositions.routes';
-// import { reviews } from '@modules/reviews/reviews.routes';
+import { reviews } from '@modules/reviews/reviews.routes';
 // import { users } from '@modules/users/users.routes';
 import schemasRegister from './schemas';
 
@@ -30,7 +30,7 @@ const app = async (fastify: FastifyInstance) => {
   fastify.register(metrics);
   // fastify.register(movies);
   // fastify.register(propositions);
-  // fastify.register(reviews);
+  fastify.register(reviews);
   // fastify.register(users);
 };
 
