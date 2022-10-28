@@ -9,6 +9,9 @@ import { queryBuilder } from '@src/utils/queryBuilder';
  * @param updateValue - Object containing only one of the following keys: *bookmarked, viewed, liked, rating, comment*.
  * @param ids - Object containing *movie_id, user_id*.
  * @returns SQL query object
+ * @securityNote
+ * This route is protected with schema validation. 
+ * **column** can't be anything else than *'bookmarked' | 'viewed' | 'liked' | 'rating' | 'comment'*. 
  */
 export const updateReview = (
   updateValue: Record<keyof Pick<Database.review, 'bookmarked' | 'viewed' | 'liked' | 'rating' | 'comment'>, boolean | number | string>,
@@ -54,12 +57,13 @@ export const getOneReview = (
 export const getReviews = (
   ids?: Partial<Record<'author_id' | 'movie_id', number>>
 ): Query.preparedQuery => {
+  const enumerator = ['author_id', 'movie_id'];
   const query = {
     text: 'SELECT * FROM "reviewview"',
     values: [] as Array<number>,
   };
   if (typeof ids !== 'undefined') {
-    const { query: buildedQuery } = queryBuilder(ids, 'AND');
+    const { query: buildedQuery } = queryBuilder(ids, 'AND', enumerator);
     if (buildedQuery !== '') {
       query.text = `${query.text} WHERE ${buildedQuery}`;
       query.values = Object.values(ids);
@@ -70,4 +74,3 @@ export const getReviews = (
     values: query.values,
   };
 };
-

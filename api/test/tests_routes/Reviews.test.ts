@@ -22,15 +22,6 @@ describe('REVIEWS ENDPOINTS', () => {
     },
   };
 
-  test('PUT /reviews/:movie_id', async () => {
-    const test = queryBuilder(
-      { movie_id: 1 },
-      'AND',
-      0
-    );
-    // console.log(test);
-  });      
-
   test('PUT REVIEWS', async () => {
     // Login as user and prepare request
     inject.login = {
@@ -187,8 +178,14 @@ describe('REVIEWS ENDPOINTS', () => {
       query: `where[movie_id]=1&where[author_id]=${res.users[0].user.id}`,
     });
 
+    const UnauthorizedQueryString = await app.inject({
+      ...inject.getReviews,
+      query: `where[jambon]=1&where[author_id]=${res.users[0].user.id}`,
+    });
+
     expect(await withQueryString.json()).toEqual(expect.arrayContaining([expectedObjects.review]));
     expect(await withQueryString.json().length).toEqual(1);
     expect(withQueryString.statusCode).toEqual(200);
+    expect(UnauthorizedQueryString.statusCode).toEqual(500);
   });
 });
