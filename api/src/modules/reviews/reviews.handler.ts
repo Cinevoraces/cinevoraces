@@ -1,7 +1,7 @@
 import type { FastifyReply as Reply, FastifyRequest } from 'fastify';
 import type { Database } from '@src/types/Database';
 import type { Query } from '@src/types/Query';
-import { updateReview, getOneReview, getReviews } from '@modules/reviews/review.datamapper';
+import { updateReview, deleteComment, getOneReview, getReviews } from '@modules/reviews/review.datamapper';
 import reviewResponseFactory from '@src/utils/reviewResponseFactory';
 
 type Request = FastifyRequest<{
@@ -74,12 +74,12 @@ export const handleDeleteReview = async (request: Request, reply: Reply) => {
   const { movieId: movie_id, userId: user_id } = params;
 
   try {
-    // await prisma.review.delete({
-    //   where: { user_id_movie_id: { user_id, movie_id } },
-    // });
+    await pgClient.query(
+      deleteComment({ movie_id, user_id })
+    );
 
     reply.send({
-      message: 'Objet review supprimé avec succés.',
+      message: 'Commentaire supprimé avec succés.',
     });  
   } catch (error) {
     reply.send(error);

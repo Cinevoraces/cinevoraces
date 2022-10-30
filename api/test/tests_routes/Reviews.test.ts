@@ -1,6 +1,5 @@
 import type { InjectOptions } from 'fastify';
 import { build } from '../utils/helper';
-import { queryBuilder } from '../../src/utils/queryBuilder';
 
 describe('REVIEWS ENDPOINTS', () => {
   const { app, res, expectedObjects } = build();
@@ -102,21 +101,21 @@ describe('REVIEWS ENDPOINTS', () => {
     }));
   });
 
-  test.skip('DELETE REVIEWS', async () => {
+  test('DELETE REVIEWS', async () => {
     // Log user
     inject.login = {
       ...inject.login,
       payload: { pseudo: res.users[1].user.pseudo, password: res.users[1].user.password },
     };
     const log_user = await app.inject(inject.login);
-    const { user_token } = await log_user.json();
+    const { token: user_token } = await log_user.json();
     // Log Admin
     inject.login = {
       ...inject.login,
       payload: { pseudo: res.users[0].user.pseudo, password: res.users[0].user.password },
     };
     const log_admin = await app.inject(inject.login);
-    const { admin_token } = await log_admin.json();
+    const { token: admin_token } = await log_admin.json();
     
     // Create the review as user
     await app.inject({
@@ -129,9 +128,11 @@ describe('REVIEWS ENDPOINTS', () => {
       ...inject.deleteReview,
       headers: { authorization: `Bearer ${user_token}` },
       payload: { password: res.users[1].user.password },
+      url: `/reviews/1/${res.users[1].user.id}`,
     };
     const deleteReviewAsUser = await app.inject(inject.deleteReview);
     expect(deleteReviewAsUser.statusCode).toEqual(403);
+
     // Delete the review as admin
     inject.deleteReview = {
       ...inject.deleteReview,

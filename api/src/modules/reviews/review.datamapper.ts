@@ -30,6 +30,28 @@ export const updateReview = (
 };
 
 /**
+ * **deleteComment**
+ * @description
+ * Update one review with comment set to "null".
+ * @param ids - Object containing *movie_id, user_id*.
+ * @returns SQL query object
+ * @securityNote
+ * This route is protected with schema validation. 
+ * **column** can't be anything else than *'bookmarked' | 'viewed' | 'liked' | 'rating' | 'comment'*. 
+ */
+export const deleteComment = (
+  ids: Record<keyof Pick<Database.review, 'user_id' | 'movie_id'>, number>
+): Query.preparedQuery => {
+  const { user_id, movie_id } = ids;
+  return {
+    text: ` UPDATE review 
+            SET comment = null 
+            WHERE user_id=$1 AND movie_id=$2;`,
+    values: [user_id, movie_id],
+  };
+};
+
+/**
  * **getOneReview**
  * @description
  * Get one review object containing the following fields: *bookmarked, viewed, liked, rating, comment*.
