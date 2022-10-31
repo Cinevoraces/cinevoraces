@@ -33,13 +33,13 @@ export const queryBuilder = {
  * @description
  * Reduce objects of fields to a "WHERE" SQL query.
  * @param columns - Object containing the fields to be selected.
- * @param join 'AND' | 'OR'
+ * @param join 'AND' | 'OR' | ','
  * @param safeCheck Array of strings containing an enum of authorized columns.
  * @param count Where values counter should start.
 */
   where: (
     columns: Record<string, unknown>,
-    join: 'AND' | 'OR',
+    join: 'AND' | 'OR' | ',',
     safeCheck: Array<string>,
     count?: number 
   ): { query: string, count: number, values: Array<unknown> } => {

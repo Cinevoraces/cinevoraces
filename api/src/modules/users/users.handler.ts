@@ -1,7 +1,7 @@
 import type { FastifyReply as Reply, FastifyRequest } from 'fastify';
 import type { Query } from '@src/types/Query';
 import { hashPassword } from '@src/utils/bcryptHandler';
-import { getUsers } from '@modules/users/users.datamapper';
+import { getUsers, updateUser } from '@modules/users/users.datamapper';
 
 type Request = FastifyRequest<{
   Querystring: Query.querystring;
@@ -32,9 +32,14 @@ type Request = FastifyRequest<{
 export const handleGetUsers = async (request: Request, reply: Reply) => {
   const { pgClient, query } = request;
   try {
-    const { rows: users } = await pgClient.query(
+    const { rows: users, rowCount } = await pgClient.query(
       getUsers(query)
     );
+
+    if (!rowCount) {
+      reply.code(404);
+      throw new Error('Aucun résultat.');
+    }
 
     reply.send(users);
   } catch (error) {
@@ -42,32 +47,31 @@ export const handleGetUsers = async (request: Request, reply: Reply) => {
   }
 };
 
-// export const handlePutUserById = async (request: Request, reply: Reply) => {
-//   const { prisma, user, body } = request;
-//   const { update_user } = body;
-//   const { id } = user;
+export const handlePutUser = async (request: Request, reply: Reply) => {
+  const { pgClient, user, body } = request;
+  const { update_user } = body;
+  const { id } = user;
 
-//   try {
-//     if (update_user.password) {
-//       // Test and Hash new password
-//       if (!update_user.password.match(process.env.PASS_REGEXP)) {
-//         reply.code(422); // Unprocessable Entity
-//         throw new Error('Le format du mot de passe est invalide.');
-//       }
-//       update_user.password = await hashPassword(update_user.password);
-//     }
+  try {
+    if (update_user.password) {
+      // Test and Hash new password
+      if (!update_user.password.match(process.env.PASS_REGEXP)) {
+        reply.code(422); // Unprocessable Entity
+        throw new Error('Le format du mot de passe est invalide.');
+      }
+      update_user.password = await hashPassword(update_user.password);
+    }
     
-//     // Update user
-//     await prisma.user.update({
-//       where: { id },
-//       data: { ...update_user },
-//     });
-    
-//     reply.send('Données utilisateur modifiées avec succés.');
-//   } catch (error) {
-//     reply.send(error);
-//   }
-// };
+    // Update user
+    await pgClient.query(
+      updateUser(id, update_user)
+    );
+
+    reply.send({ message: 'Données utilisateur modifiées avec succés.' });
+  } catch (error) {
+    reply.send(error);
+  }
+};
 
 // // Admin only
 // export const handleDeleteUserById = async (request: Request, reply: Reply) => {

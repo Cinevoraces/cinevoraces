@@ -37,3 +37,27 @@ export const getUsers = (
     values,
   };
 };
+
+/**
+ * **updateUser**
+ * @description
+ * Get users according to query.
+ * @param querystring - URL querystring.
+ * @returns SQL query object
+ */
+export const updateUser = (
+  id: number,
+  set: Record<string, unknown>
+
+): Query.preparedQuery => {
+  const enumerator = ['pseudo', 'mail', 'password'];
+  const SET = queryBuilder.where(set, ',', enumerator, 1);
+
+  return {
+    text: ` UPDATE "user"
+            SET ${SET.query}
+            WHERE id=$1
+    ;`,
+    values: [id, ...SET.values],
+  };
+};

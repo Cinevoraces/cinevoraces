@@ -1,12 +1,12 @@
 import type { FastifyInstance } from 'fastify';
 import {
   getUsersSchema,
-  putUserByIdSchema,
-  deleteUserByIdSchema,
+  putUserSchema,
+  // deleteUserSchema,
 } from './users.schema';
 import {
   handleGetUsers,
-  // handlePutUserById,
+  handlePutUser,
   // handleDeleteUserById,
 } from '@modules/users/users.handler';
 
@@ -18,14 +18,14 @@ export const users = async (fastify: FastifyInstance) => {
     handler: handleGetUsers,
   });
 
-  // fastify.route({
-  //   method: 'PUT',
-  //   url: '/users',
-  //   schema: putUserByIdSchema,
-  //   handler: handlePutUserById,
-  //   onRequest: [fastify.accessVerify],
-  //   preValidation: [fastify.passwordVerify],
-  // });
+  fastify.route({
+    method: 'PUT',
+    url: '/users',
+    schema: putUserSchema,
+    handler: handlePutUser,
+    onRequest: [fastify.accessVerify],
+    preValidation: [fastify.passwordVerify],
+  });
 
   // fastify.route({
   //   method: 'DELETE',
