@@ -1,7 +1,7 @@
 import type { InjectOptions } from 'fastify';
 import { build } from '../utils/helper';
 
-describe('USERS ENDPOINTS', () => {
+describe('SLOTS ENDPOINTS', () => {
   const { app, res, expectedObjects } = build();
   const inject: Record<string, InjectOptions> = {
     login: { 
