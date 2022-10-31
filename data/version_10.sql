@@ -2,7 +2,7 @@
 -- Added Character limitations to "pseudo" and "email" fields
 
 -- BEGIN;
--- FIXME: Seems to break DB
+-- //FIXME: Seems to break DB
 -- ALTER TABLE "user"
 --   ADD CONSTRAINT pseudolenght CHECK (char_length(pseudo) <= 32)
 -- ;
