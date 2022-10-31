@@ -54,11 +54,16 @@ export const handleGetReviews = async (request: Request, reply: Reply) => {
   const { pgClient, query } = request;
   const { where } = query;
   try {
-    const { rows } = await pgClient.query(
+    const { rows: reviews, rowCount } = await pgClient.query(
       getReviews(where)
     );
 
-    reply.send(rows);
+    if (!rowCount) {
+      reply.code(404);
+      throw new Error('Aucun résultat.');
+    }
+
+    reply.send(reviews);
   } catch (error) {
     reply.send(error);
   }
