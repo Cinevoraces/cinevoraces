@@ -26,6 +26,7 @@ export function build() {
   const res = {
     users: [] as Array<{ user: Database.user, delete: ()=>void }>,
     slots: [] as Array<{ slot: Database.proposition_slot, delete: ()=>void }>,
+    movies: [] as Array<{ movie: Database.movie, delete: ()=>void }>,
   };
 
   beforeAll(async () => {
@@ -36,10 +37,17 @@ export function build() {
     res.users.push(await ressourcesCreator.user());
     res.users.push(await ressourcesCreator.user());
     res.slots.push(await ressourcesCreator.slot());
+    res.movies.push(await ressourcesCreator.movie({ user_id: 1 }, true));
+    res.movies.push(await ressourcesCreator.movie({ user_id: 2 }));
+    res.movies.push(await ressourcesCreator.movie({ user_id: 3 }));
+    res.movies.push(await ressourcesCreator.movie({ user_id: 4 }));
+    res.movies.push(await ressourcesCreator.movie({ user_id: 5 }));
   });
 
   afterAll(async () => {
     res.users.forEach(async (u) => await u.delete());
+    res.slots.forEach(async (s) => await s.delete());
+    res.movies.forEach(async (m) => await m.delete());
     app.close();
   });
 
