@@ -231,24 +231,25 @@ export default {
     role: expect.any(String),
     created_at: expect.anything(),
   }),
-  userWithMetrics: expect.objectContaining({
+  userWithReviews: expect.objectContaining({
     id: expect.any(Number),
     pseudo: expect.any(String),
     mail: expect.any(String),
     avatar_url: expect.any(String),
     role: expect.any(String),
     created_at: expect.anything(),
-    metrics: expect.anything(),
-  }),
-  userWithMoviesAndReviews: expect.objectContaining({
-    id: expect.any(Number),
-    pseudo: expect.any(String),
-    mail: expect.any(String),
-    avatar_url: expect.any(String),
-    role: expect.any(String),
-    created_at: expect.anything(),
-    movies: expect.anything(),
     reviews: expect.anything(),
+  }),
+  userWithMoviesReviewsAndMetrics: expect.objectContaining({
+    id: expect.any(Number),
+    pseudo: expect.any(String),
+    mail: expect.any(String),
+    avatar_url: expect.any(String),
+    role: expect.any(String),
+    created_at: expect.anything(),
+    propositions: expect.anything(),
+    reviews: expect.anything(),
+    metrics: expect.anything(),
   }),
   loginResponse: expect.objectContaining({
     user: expect.objectContaining({

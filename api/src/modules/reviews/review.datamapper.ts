@@ -85,7 +85,7 @@ export const getReviews = (
     values: [] as Array<number>,
   };
   if (typeof ids !== 'undefined') {
-    const { query: buildedQuery } = queryBuilder(ids, 'AND', enumerator);
+    const { query: buildedQuery } = queryBuilder.where(ids, 'AND', enumerator);
     if (buildedQuery !== '') {
       query.text = `${query.text} WHERE ${buildedQuery}`;
       query.values = Object.values(ids);

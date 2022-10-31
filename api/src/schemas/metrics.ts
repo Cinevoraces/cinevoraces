@@ -24,7 +24,6 @@ const userMetricsSchema = {
     'ratings_count',
   ],
   properties: {
-    id: { type: 'number' },
     propositions_count: { type: 'number' },
     comments_count: { type: 'number' },
     likes_count: { type: 'number' },

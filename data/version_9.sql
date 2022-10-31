@@ -94,7 +94,8 @@ SELECT
                   'season_number', season.number,
                   'french_title', movie.french_title, 
                   'original_title', movie.original_title, 
-                  'poster_url', movie.poster_url, 
+                  'poster_url', movie.poster_url,
+                  'presentation', movie.presentation,
                   'publishing_date', movie.publishing_date,
                   'avg_rating', ROUND(COALESCE(ar.avg_rating,0),1)
             ))
@@ -106,8 +107,6 @@ SELECT
 		                  FROM "review" WHERE "rating" IS NOT NULL GROUP BY review.movie_id) ar
 	            ON movie.id = ar.movie_id
             WHERE "user".id = movie.user_id
-
-            AND movie.is_published IS true
       ), '[]') AS propositions
 FROM "user"
 GROUP BY 

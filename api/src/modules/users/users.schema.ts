@@ -2,30 +2,34 @@ import type { FastifySchema } from 'fastify';
 
 export const getUsersSchema: FastifySchema = {
   description: `
-  **Get all users**.
+  **Get users**.
   Use query parameters to populate the results using the following format: */users?pop[movies]=true&pop[reviews]=true*  
   **Available query parameters:**
-  - filter[pseudo]: filter by user pseudo
-  - filter[mail]: filter by user mail
-  - filter[role]: filter by user role
-  - pop[movies]: populate with user posted movies
-  - pop[reviews]: populate with user posted reviews
+  - where[id]: filter by user id
+  - where[pseudo]: filter by user pseudo
+  - where[mail]: filter by user mail
+  - where[role]: filter by user role
+  - select[propositions]: populate with user posted movies
+  - select[reviews]: populate with user posted reviews
+  - select[metrics]: populate with user metrics
   `,
   tags: ['Users'],
   querystring: {
     type: 'object',
     properties: {
-      filter: {
+      where: {
         type: 'object',
         properties: {
+          id: { type: 'number' },
           pseudo: { type: 'string' },
           mail: { type: 'string' },
           role: { type: 'string' },
         },
       },
-      pop: {
+      select: {
         type: 'object',
         properties: {
+          propositions: { type: 'boolean' },
           movies: { type: 'boolean' },
           reviews: { type: 'boolean' },
         },
@@ -37,43 +41,6 @@ export const getUsersSchema: FastifySchema = {
       type: 'array',
       items: { $ref: 'user#' },
     },
-  },
-};
-
-export const getUserByIdSchema: FastifySchema = {
-  description: `
-  **Get one user by id**.
-  Use query parameters to populate the results using the following format: */users?pop[movies]=true&pop[reviews]=true&pop[metrics]=true*
-  Available query parameters:
-  - pop[movies]: populate with user posted movies
-  - pop[reviews]: populate with user posted reviews
-  - pop[metrics]: populate with user metrics
-  `,
-  tags: ['Users'],
-  params: {
-    type: 'object',
-    properties: {
-      id: { type: 'number' },
-    },
-  },
-  querystring: {
-    type: 'object',
-    properties: {
-      pop: {
-        type: 'object',
-        properties: {
-          movies: { type: 'boolean' },
-          reviews: { type: 'boolean' },
-          metrics: { type: 'boolean' },
-        },
-      },
-    },
-  },
-  response: {
-    '200': {
-      $ref: 'user#',
-    },
-    '404': { $ref: 'apiError#' },
   },
 };
 
