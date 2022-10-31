@@ -2,12 +2,12 @@ import type { FastifyInstance } from 'fastify';
 import {
   getUsersSchema,
   putUserSchema,
-  // deleteUserSchema,
+  deleteUserByIdSchema,
 } from './users.schema';
 import {
   handleGetUsers,
   handlePutUser,
-  // handleDeleteUserById,
+  handleDeleteUserById,
 } from '@modules/users/users.handler';
 
 export const users = async (fastify: FastifyInstance) => {
@@ -27,12 +27,12 @@ export const users = async (fastify: FastifyInstance) => {
     preValidation: [fastify.passwordVerify],
   });
 
-  // fastify.route({
-  //   method: 'DELETE',
-  //   url: '/users/:id',
-  //   schema: deleteUserByIdSchema,
-  //   handler: handleDeleteUserById,
-  //   onRequest: [fastify.isAdmin],
-  //   preValidation: [fastify.passwordVerify],
-  // });
+  fastify.route({
+    method: 'DELETE',
+    url: '/users/:id',
+    schema: deleteUserByIdSchema,
+    handler: handleDeleteUserById,
+    onRequest: [fastify.isAdmin],
+    preValidation: [fastify.passwordVerify],
+  });
 };

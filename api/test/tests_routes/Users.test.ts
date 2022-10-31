@@ -1,4 +1,5 @@
 import type { InjectOptions } from 'fastify';
+import { url } from 'inspector';
 import { build } from '../utils/helper';
 
 describe('USERS ENDPOINTS', () => {
@@ -162,10 +163,24 @@ describe('USERS ENDPOINTS', () => {
 
   test('DELETE USERS', async () =>{
     // LOG ADMIN
-    inject.login = {
+    const AdminLogin = await app.inject({
       ...inject.login, 
       payload: { pseudo: res.users[0].user.pseudo, password: res.users[0].user.password },
+    });
+    // DELETE USER WITH ADMIN ROLE
+    const deleteUser = {
+      ...inject.deleteUser,
+      headers: { Authorization: `Bearer ${AdminLogin.json().token}` },
+      payload: { password: res.users[0].user.password },
+      url: `/users/${res.users[2].user.id}`,
     };
-    const login = await app.inject(inject.login);
+    const success = await app.inject(deleteUser);
+    expect(success.statusCode).toEqual(200);
+
+    const fail = await app.inject({
+      ...deleteUser,
+      url: '/users/156468',
+    });
+    expect(fail.statusCode).toEqual(404);
   });
 });

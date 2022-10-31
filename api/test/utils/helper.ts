@@ -33,6 +33,7 @@ export function build() {
     await pgClient.connect();
     res.users.push(await ressourcesCreator.user({ role: 'admin' }));
     res.users.push(await ressourcesCreator.user());
+    res.users.push(await ressourcesCreator.user());
   });
 
   afterAll(async () => {

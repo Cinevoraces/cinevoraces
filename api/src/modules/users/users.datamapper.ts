@@ -61,3 +61,19 @@ export const updateUser = (
     values: [id, ...SET.values],
   };
 };
+
+/**
+ * **deleteUser**
+ * @description
+ * Delete one user.
+ * @param id - User's id.
+ * @returns SQL query object
+ */
+export const deleteUser = (
+  id: number
+): Query.preparedQuery => {
+  return {
+    text: ' DELETE FROM "user" WHERE id=$1;',
+    values: [id],
+  };
+};
