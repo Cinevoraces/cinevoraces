@@ -3,7 +3,7 @@ import type { FastifySchema } from 'fastify';
 export const registerSchema: FastifySchema = {
   description: `
   **Registering endpoint.**
-  Password must match the following requirments: *8 Characters, at least 1 Number, at least 1 letter.*
+  Password must match the following requirments: *8 Characters, at least 1 Number, at least 1 letter. Max 64 characters*
   It can contain the following special characters: !#$&%*+=?|
   `,
   tags: ['Authentication'],
