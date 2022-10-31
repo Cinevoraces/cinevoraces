@@ -15,10 +15,11 @@ export const handleGetGlobalMetrics = async (request: Request, reply: Reply) => 
   const { pgClient } = request;
 
   try {
-    const { rows } = await pgClient.query(
+    const { rows: globalMetrics } = await pgClient.query(
       getGlobalMetrics()
     );
-    reply.send(rows[0]);
+    
+    reply.send(globalMetrics[0]);
   } catch (error) {
     reply.send(error);
   }
