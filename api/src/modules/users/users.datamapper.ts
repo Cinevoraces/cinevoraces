@@ -42,7 +42,8 @@ export const getUsers = (
  * **updateUser**
  * @description
  * Get users according to query.
- * @param querystring - URL querystring.
+ * @param id - User id.
+ * @param set - Object containing *pseudo | mail | password*.
  * @returns SQL query object
  */
 export const updateUser = (

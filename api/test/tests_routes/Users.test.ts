@@ -1,5 +1,4 @@
 import type { InjectOptions } from 'fastify';
-import { url } from 'inspector';
 import { build } from '../utils/helper';
 
 describe('USERS ENDPOINTS', () => {

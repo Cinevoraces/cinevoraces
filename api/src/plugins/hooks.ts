@@ -96,31 +96,33 @@ const hooks: FastifyPluginCallback = async (fastify, opts, done) => {
     request: Request<{ Params: { id: number } }>,
     reply: Reply
   ) => {
-    const { pgClient, user } = request;
+    const { pgClient, user, params } = request;
     const { id: userId } = user;
+    const { id: propositionId } = params;
 
     try {
-      const { rowCount: propositions } = await pgClient.query({
-        text: ` SELECT * 
-                FROM pending_propositions
-                WHERE user_id=$1;`,
+      // Check if user already has a pending proposition
+      const { rowCount: userHasProposition } = await pgClient.query({
+        text: ` SELECT id AS movie_id, user_id, is_published
+                FROM movie
+                WHERE is_published = false AND user_id = $1;`,
         values: [userId],
       });
-      if (propositions) {
+      if (userHasProposition) {
         reply.code(401);
         throw new Error('Vous avez déjà une proposition en attente. Vous pourrez réserver un nouveau créneau une fois votre proposition publiée.');
       }
-
-      // TODO: Define if it's the right place to do that
-      // const { id: slotId } = request.params;
-      // const slot = await prisma.proposition_slot.findUnique({
-      //   where: { id: Number(slotId) },
-      //   select: { is_booked: true },
-      // });
-      // if (slot.is_booked) {
-      //   reply.code(401);
-      //   throw new Error('Ce créneau est déjà réservé.');
-      // }
+      // Check if target slot is available
+      const { rowCount: isPropositionBooked } = await pgClient.query({
+        text: ` SELECT is_booked
+                FROM proposition_slot
+                WHERE id = $1 AND is_booked = true;`,
+        values: [propositionId],
+      });
+      if (isPropositionBooked) {
+        reply.code(401);
+        throw new Error('Ce créneau est déjà réservé.');
+      }
     } catch (error) {
       reply.send(error);
     }
@@ -144,10 +146,10 @@ const hooks: FastifyPluginCallback = async (fastify, opts, done) => {
       const { rowCount: slot } = await pgClient.query({
         text: ` SELECT *
                 FROM proposition_slot
-                WHERE id=$1 AND is_booked=true;`,
+                WHERE id=$1 AND is_booked=false;`,
         values: [slotId],
       });
-      if (!slot) {
+      if (slot) {
         reply.code(406);
         throw new Error('Ce créneau n\'est pas réservé.');
       }
@@ -167,8 +169,12 @@ const hooks: FastifyPluginCallback = async (fastify, opts, done) => {
     reply: Reply
   ) => {
     const { pgClient, user, body } = request;
-    const { password } = body;
     const { id: userId } = user;
+
+    if (!body || !body.password) {
+      reply.code(401); // Unauthorized
+      throw new Error('Mot de passe requis.');
+    }
 
     try {
       const { rows } = await pgClient.query({
@@ -178,7 +184,7 @@ const hooks: FastifyPluginCallback = async (fastify, opts, done) => {
         values: [userId],
       });
       
-      const isPasswordCorrect = await comparePassword(password, rows[0].password);
+      const isPasswordCorrect = await comparePassword(body.password, rows[0].password);
       if (!isPasswordCorrect) {
         reply.code(401); // Unauthorized
         throw new Error('Mot de passe incorrect.');

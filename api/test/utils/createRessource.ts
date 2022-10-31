@@ -3,16 +3,26 @@ import { faker } from '@faker-js/faker';
 import { hashPassword } from '../../src/utils/bcryptHandler';
 import pgClient from './pgClient';
 
-export const ressourcesCreator: {
+interface ressourcesCreator {
   user: (
     user?: {
-      pseudo?: string, 
-      mail?: string, 
-      password?: string, 
-      role?: string
+      pseudo?: string;
+      mail?: string;
+      password?: string;
+      role?: string;
     }
-  )=>Promise<{ user: Database.user, delete: ()=>void }>,
-} = {
+  )=>Promise<{ user: Database.user, delete: ()=>void }>;
+  slot: (
+    slot?: {
+      is_booked?: boolean;
+      season_number?: number;
+      episode?: number;
+      publishing_date?: string;
+    }
+  )=>Promise<{ slot: Database.proposition_slot, delete: ()=>void }>;
+}
+
+export const ressourcesCreator: ressourcesCreator = {
   user: async (user) => {
     let u = {
       pseudo: faker.internet.userName(),
@@ -43,7 +53,40 @@ export const ressourcesCreator: {
                   WHERE id = $1;`,
           values: [rows[0].id],
         });
-      }  
+      },
     };
-  }
+  },
+  slot: async (slot) => {
+    let s = {
+      is_booked: false,
+      season_number: 3,
+      episode: 1,
+      publishing_date: faker.date.past().toISOString(),
+    };
+    if (slot) s = { ...s, ...slot };
+    await pgClient.query({
+      text: ` INSERT INTO "proposition_slot" (is_booked, season_number, episode, publishing_date)
+              VALUES ($1, $2, $3, $4);`,
+      values: [s.is_booked, s.season_number, s.episode, s.publishing_date],
+    });
+    const { rows } = await pgClient.query({
+      text: ` SELECT * FROM "proposition_slot"
+              WHERE is_booked = $1
+              AND season_number = $2
+              AND episode = $3
+              AND publishing_date = $4;`,
+      values: [s.is_booked, s.season_number, s.episode, s.publishing_date],
+    });
+
+    return {
+      slot: rows[0],
+      delete: async () => {
+        await pgClient.query({
+          text: ` DELETE FROM "proposition_slot"
+                  WHERE id = $1;`,
+          values: [rows[0].id],
+        });
+      },
+    };
+  },
 };

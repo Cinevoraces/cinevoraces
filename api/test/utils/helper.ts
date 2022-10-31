@@ -25,6 +25,7 @@ export function build() {
   // Prepare ressources
   const res = {
     users: [] as Array<{ user: Database.user, delete: ()=>void }>,
+    slots: [] as Array<{ slot: Database.proposition_slot, delete: ()=>void }>,
   };
 
   beforeAll(async () => {
@@ -34,6 +35,7 @@ export function build() {
     res.users.push(await ressourcesCreator.user({ role: 'admin' }));
     res.users.push(await ressourcesCreator.user());
     res.users.push(await ressourcesCreator.user());
+    res.slots.push(await ressourcesCreator.slot());
   });
 
   afterAll(async () => {
