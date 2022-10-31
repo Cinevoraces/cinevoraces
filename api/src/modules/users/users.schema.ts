@@ -44,12 +44,12 @@ export const getUsersSchema: FastifySchema = {
   },
 };
 
-export const putUserByIdSchema: FastifySchema = {
+export const putUserSchema: FastifySchema = {
   description: `
   **Modify user by token**.
   Modify property in *update_user* object sent in the body.
   *update_user* **can** contain one or more of the following properties: *pseudo*, *mail* or *password*.
-  Password must match the following requirments: *8 Characters, at least 1 Number, at least 1 letter.*
+  Password must match the following requirments: *8 Characters, at least 1 Number, at least 1 letter. Max 64 characters*
   It can contain the following special characters: !#$&%*+=?|
   You must provide the current password as well.
   `,
@@ -62,9 +62,18 @@ export const putUserByIdSchema: FastifySchema = {
       update_user: {
         type: 'object',
         properties: {
-          pseudo: { type: 'string' },
-          mail: { type: 'string' },
-          password: { type: 'string' },
+          pseudo: { 
+            type: 'string',
+            maxLength: 32,
+          },
+          mail: { 
+            type: 'string', 
+            maxLength: 64,
+          },
+          password: { 
+            type: 'string', 
+            maxLength: 64, 
+          },
         },
       },
     },

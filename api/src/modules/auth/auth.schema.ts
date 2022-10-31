@@ -11,9 +11,18 @@ export const registerSchema: FastifySchema = {
     type: 'object',
     required: ['mail', 'pseudo', 'password'],
     properties: {
-      password: { type: 'string' },
-      mail: { type: 'string' },
-      pseudo: { type: 'string' },
+      password: { 
+        type: 'string', 
+        maxLength: 64,
+      },
+      mail: { 
+        type: 'string', 
+        maxLength: 64,
+      },
+      pseudo: { 
+        type: 'string', 
+        maxLength: 32, 
+      },
     },
   },
   response: {
@@ -39,8 +48,14 @@ export const loginSchema: FastifySchema = {
     type: 'object',
     required: ['pseudo', 'password'],
     properties: {
-      pseudo: { type: 'string' },
-      password: { type: 'string' },
+      pseudo: { 
+        type: 'string', 
+        maxLength: 32,
+      },
+      password: { 
+        type: 'string', 
+        maxLength: 64,
+      },
     },
   },
   response: {
