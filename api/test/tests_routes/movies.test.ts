@@ -8,6 +8,10 @@ describe('MOVIES ENDPOINTS', () => {
       method: 'POST',
       url: '/login',
     },
+    putReview: {
+      method: 'PUT',
+      url: '/reviews/1',
+    },
     getMovies: { 
       method: 'GET',
       url: '/movies',
@@ -83,6 +87,24 @@ describe('MOVIES ENDPOINTS', () => {
       url: '/movies?limit=1&select[casting]=true&select[directors]=true&select[runtime]=true&select[release_date]=true&select[genres]=true&select[countries]=true&select[languages]=true&select[presentation]=true&select[metrics]=true&select[comments]=true'
     });
     expect(await getMoviesWithPopulators.json()).toEqual(expect.arrayContaining([expectedObjects.movieFullObject]));
+
+    // GET MOVIES AS LOGGED USER
+    inject.getMovies = {
+      ...inject.getMovies,
+      headers: { Authorization: `Bearer ${token}` },
+    };
+    await app.inject({
+      ...inject.putReview,
+      payload: { rating: 5 },
+      headers: { authorization: `Bearer ${token}` },
+    });
+    const getAllMoviesAsUser = await app.inject({
+      ...inject.getMovies,
+      url: '/movies?limit=2&sort=asc'
+    });
+    expect(await getAllMoviesAsUser.json()[0]).toEqual(expect.objectContaining({ user_review: expect.any(Object) }));
+    expect(await getAllMoviesAsUser.json()[1]).toEqual(expect.not.objectContaining({ user_review: expect.any(Object) }));
+  
   });
 
   test('MOVIE PROPOSITION', async () => {

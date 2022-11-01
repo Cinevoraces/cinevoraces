@@ -1,7 +1,7 @@
 import type { FastifyReply as Reply, FastifyRequest } from 'fastify';
 import type { Database } from '@src/types/Database';
 import type { Query } from '@src/types/Query';
-import { updateReview, getOneReview, adminDeleteComment, adminGetReviews } from '@modules/reviews/review.datamapper';
+import { updateReview, getOneReview, adminDeleteComment, adminGetReviews } from '@modules/reviews/reviews.datamapper';
 import reviewResponseFactory from '@src/utils/reviewResponseFactory';
 
 type Request = FastifyRequest<{

@@ -3,6 +3,24 @@ import type { Query } from '@src/types/Query';
 import { queryBuilder } from '@src/utils/queryBuilder';
 
 /**
+ * **getReviewsByUserId**
+ * @param id - user id
+ * @returns SQL query object
+ */
+export const getReviewsByUserId = (
+  id: number
+): Query.preparedQuery => {
+  return {
+    text: `
+      SELECT movie_id, user_id, bookmarked, liked, viewed, rating
+      FROM "review"
+      WHERE user_id = $1
+    `,
+    values: [id],
+  };
+};
+
+/**
  * **getOneReview**
  * @description
  * Get one review object containing the following fields:  

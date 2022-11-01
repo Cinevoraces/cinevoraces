@@ -10,5 +10,6 @@ export const movies = async (fastify: FastifyInstance) => {
     url: '/movies',
     schema: getMoviesSchema,
     handler: handleGetMovies,
+    onRequest: [fastify.isLogged],
   });
 };

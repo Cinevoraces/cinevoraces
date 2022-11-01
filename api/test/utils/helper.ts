@@ -38,10 +38,6 @@ export function build() {
     res.users.push(await ressourcesCreator.user());
     res.slots.push(await ressourcesCreator.slot());
     res.movies.push(await ressourcesCreator.movie({ user_id: 1 }, true));
-    res.movies.push(await ressourcesCreator.movie({ user_id: 2 }));
-    res.movies.push(await ressourcesCreator.movie({ user_id: 3 }));
-    res.movies.push(await ressourcesCreator.movie({ user_id: 4 }));
-    res.movies.push(await ressourcesCreator.movie({ user_id: 5 }));
   });
 
   afterAll(async () => {
