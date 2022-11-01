@@ -3,11 +3,15 @@ import type { FastifySchema } from 'fastify';
 export const getSlotsSchema: FastifySchema = {
   description: `**Get slots**.
   Use query parameters to filter the results using the following format: */slots?where[is_booked]=true*  
-  **Available query parameters:**
-  - where[id]: filter by id
-  - where[is_booked]: filter by booked status
-  - where[season_number]: filter by season number
-  - where[episode]: filter by episode number
+  **Available filters:**
+  - where[id] -> number
+  - where[is_booked] -> boolean
+  - where[season_number] -> number
+  - where[episode] -> number
+
+  **Misc:**
+  - limit -> number: *limit the number of results*.
+  - sort -> 'asc' | 'desc' as string *(Will sort by id)*
   `,
   tags: ['Slots'],
   querystring: {
@@ -22,6 +26,8 @@ export const getSlotsSchema: FastifySchema = {
           episode: { type: 'number' },
         },
       },
+      limit: { type: 'number' },
+      sort: { type: 'string' },
     },
   },
   response: {

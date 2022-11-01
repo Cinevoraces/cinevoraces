@@ -3,8 +3,7 @@ import { queryBuilder } from '@src/utils/queryBuilder';
 
 /**
  * **getUsers**
- * @description
- * Get users according to query.
+ * @description Get users according to query.
  * @param querystring - URL querystring.
  * @returns SQL query object
  */
@@ -15,17 +14,29 @@ export const getUsers = (
     where: [ 'id', 'pseudo', 'mail', 'role'],
     select: ['propositions', 'reviews', 'metrics']
   };
-  let values = [] as Array<unknown>;
-  const { select: selectQuery, where: whereQuery } = querystring;
-  let SELECT: string = undefined;
-  let WHERE = { query: '', count: 0, values: [] as Array<unknown> };
+  const { select, where, limit, sort } = querystring;
+  let values = [] as Array<unknown>,
+    SELECT: string = undefined,
+    WHERE = { query: '', count: 0, values: [] as Array<unknown> },
+    ORDERBY = '',
+    LIMIT = '';
 
-  if (selectQuery) {
-    SELECT = queryBuilder.select(selectQuery, enums.select);
+  // Build SELECT query
+  if (select) {
+    SELECT = queryBuilder.select(select, enums.select);
   }
-  if (whereQuery) {
-    WHERE = queryBuilder.where(whereQuery, 'AND', enums.where);
+  // Build WHERE query
+  if (where) {
+    WHERE = queryBuilder.where(where, 'AND', enums.where);
     values = WHERE.values as Array<unknown>;
+  }
+  // Build ORDERBY query
+  if (sort === 'asc' || sort === 'desc') {
+    ORDERBY = `ORDER BY id ${sort}`;
+  }
+  // Build LIMIT query
+  if (typeof limit === 'number' && limit > 0) {
+    LIMIT = `LIMIT ${limit}`;
   }
 
   return {
@@ -33,6 +44,8 @@ export const getUsers = (
             ${SELECT ? `,${SELECT}` : ''}
             FROM userview
             ${WHERE?.count ? `WHERE ${WHERE.query}` : ''}
+            ${ORDERBY}
+            ${LIMIT}
     ;`,
     values,
   };
@@ -40,8 +53,7 @@ export const getUsers = (
 
 /**
  * **updateUser**
- * @description
- * Get users according to query.
+ * @description Update one user.
  * @param id - User id.
  * @param set - Object containing *pseudo | mail | password*.
  * @returns SQL query object
@@ -65,8 +77,7 @@ export const updateUser = (
 
 /**
  * **deleteUser**
- * @description
- * Delete one user.
+ * @description Delete one user.
  * @param id - User's id.
  * @returns SQL query object
  */

@@ -3,26 +3,39 @@ import { queryBuilder } from '@src/utils/queryBuilder';
 
 /**
  * **getSlots**
- * @description
- * All slots where is_booked is false.
+ * @description Get slots according to query.
+ * @param querystring - URL querystring.
  * @returns SQL query object
 */
 export const getSlots = (
   querystring: Query.querystring
 ): Query.preparedQuery => {
   const enumerator = [ 'id', 'is_booked', 'season_number', 'episode'];
-  const { where } = querystring;
-  let values = [] as Array<unknown>;
-  let WHERE = { query: '', count: 0, values: [] as Array<unknown> };
+  const { where, limit, sort } = querystring;
+  let values = [] as Array<unknown>,
+    WHERE = { query: '', count: 0, values: [] as Array<unknown> },
+    ORDERBY = '',
+    LIMIT = '';
 
+  // Build WHERE query
   if (where) {
     WHERE = queryBuilder.where(where, 'AND', enumerator);
     values = WHERE.values as Array<unknown>;
   }
-  return {
+  // Build ORDERBY query
+  if (sort === 'asc' || sort === 'desc') {
+    ORDERBY = `ORDER BY id ${sort}`;
+  }
+  // Build LIMIT query
+  if (typeof limit === 'number' && limit > 0) {
+    LIMIT = `LIMIT ${limit}`;
+  }
 
+  return {
     text: ` SELECT * FROM "proposition_slot"
             ${WHERE?.count ? `WHERE ${WHERE.query}` : ''}
+            ${ORDERBY}
+            ${LIMIT}
           ;`,
     values,
   };

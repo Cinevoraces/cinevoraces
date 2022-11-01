@@ -94,6 +94,15 @@ describe('USERS ENDPOINTS', () => {
     });
     expect(get404WhenNoResults.statusCode).toEqual(404);
 
+    // GET ALL USERS WITH LIMIT AND ORDERBY QUERY
+    const getUsersOrderedAndLimited = await app.inject({
+      ...inject.getUsers,
+      url: '/users?limit=3&sort=desc'
+    });
+    const fullArray = await getUsersOrderedAndLimited.json();
+    expect(fullArray.length).toEqual(3);
+    expect(fullArray[0].id > fullArray[fullArray.length -1].id).toBeTruthy();
+
   });
 
   test('UPDATE USER', async () =>{

@@ -3,15 +3,21 @@ import type { FastifySchema } from 'fastify';
 export const getUsersSchema: FastifySchema = {
   description: `
   **Get users**.
-  Use query parameters to populate the results using the following format: */users?pop[movies]=true&pop[reviews]=true*  
-  **Available query parameters:**
-  - where[id]: filter by user id
-  - where[pseudo]: filter by user pseudo
-  - where[mail]: filter by user mail
-  - where[role]: filter by user role
-  - select[propositions]: populate with user posted movies
-  - select[reviews]: populate with user posted reviews
-  - select[metrics]: populate with user metrics
+  Use query parameters to populate the results using the following format: */users?select[reviews]=true&where[id]=1*  
+  **Available filters:**
+  - where[id] -> number
+  - where[pseudo] -> string
+  - where[mail] -> string
+  - where[role] -> string
+
+  **Available populators**
+  - select[propositions] -> boolean
+  - select[reviews] -> boolean
+  - select[metrics] -> boolean
+
+  **Misc:**
+  - limit -> number: *limit the number of results*.
+  - sort -> 'asc' | 'desc' as string *(Will sort by id)*
   `,
   tags: ['Users'],
   querystring: {
@@ -34,6 +40,8 @@ export const getUsersSchema: FastifySchema = {
           reviews: { type: 'boolean' },
         },
       },
+      limit: { type: 'number' },
+      sort: { type: 'string' },
     },
   },
   response: {

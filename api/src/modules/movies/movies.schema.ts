@@ -32,8 +32,7 @@ export const getMoviesSchema: FastifySchema = {
   
   **Misc:**
   - limit -> number: *limit the number of results*.
-  - sort[asc] -> *columnName* as string
-  - sort[desc] -> *columnName* as string
+  - sort -> 'asc' | 'desc' as string *(Will sort by id)*
   `,
   tags: ['Movies'],
   querystring: {
@@ -69,13 +68,7 @@ export const getMoviesSchema: FastifySchema = {
         },
       },
       limit: { type: 'number' },
-      sort: { 
-        type: 'object',
-        properties: {
-          asc: { type: 'string' },
-          desc: { type: 'string' },
-        },
-      },
+      sort: { type: 'string' },
     },
   },
   response: {

@@ -9,13 +9,7 @@ type Request = FastifyRequest<{
 
 /**
  * **Get slots**
- * @description
- * Get all users from database
- * @query
- * - where[id]: filter by id
- * - where[is_booked]: filter by booked status
- * - where[season_number]: filter by season number
- * - where[episode]: filter by episode number
+ * @description Get slots according to query.
 */
 export const handleGetSlots = async (request: Request, reply: Reply) => {
   const { pgClient, query } = request;
@@ -38,8 +32,7 @@ export const handleGetSlots = async (request: Request, reply: Reply) => {
 
 /**
  * **Book slot**
- * @description
- * Book a slot as user
+ * @description Book a slot as user
 */
 export const handleBookSlot = async (request: Request, reply: Reply) => {
   const { pgClient, params } = request;
@@ -62,8 +55,7 @@ export const handleBookSlot = async (request: Request, reply: Reply) => {
 
 /**
  * **Unbook slot (ADMIN)**
- * @description
- * Unbook a slot as Admin
+ * @description Unbook a slot as Admin
 */
 export const handleUnbookSlot = async (request: Request, reply: Reply) => {
   const { pgClient, params } = request;

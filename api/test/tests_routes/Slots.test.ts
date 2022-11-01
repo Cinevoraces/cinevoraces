@@ -56,6 +56,15 @@ describe('SLOTS ENDPOINTS', () => {
       url: '/slots?where[is_booked]=false'
     });
     expect(await getSlotByStatus.json()).toEqual(expect.arrayContaining([expect.objectContaining({ is_booked: false })]));
+
+    // GET SLOTS WITH LIMIT AND ORDERBY QUERY
+    const getSlotOrderedAndLimited = await app.inject({
+      ...inject.getSlots,
+      url: '/slots?limit=3&sort=desc'
+    });
+    const fullArray = await getSlotOrderedAndLimited.json();
+    expect(fullArray.length).toEqual(3);
+    expect(fullArray[0].id > fullArray[fullArray.length -1].id).toBeTruthy();
   });
 
   test('BOOK SLOT', async () => {

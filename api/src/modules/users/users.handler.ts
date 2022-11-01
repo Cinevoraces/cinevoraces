@@ -18,16 +18,7 @@ type Request = FastifyRequest<{
 
 /**
  * **Get users**
- * @description
- * Get all users from database
- * @query
- * - where[id]: filter by user id
- * - where[pseudo]: filter by user pseudo
- * - where[mail]: filter by user mail
- * - where[role]: filter by user role
- * - select[propositions]: populate with user posted movies
- * - select[reviews]: populate with user posted reviews
- * - select[metrics]: populate with user metrics
+ * @description Get users according to query.
 */
 export const handleGetUsers = async (request: Request, reply: Reply) => {
   const { pgClient, query } = request;
@@ -48,14 +39,7 @@ export const handleGetUsers = async (request: Request, reply: Reply) => {
 
 /**
  * **Put user**
- * @description
- * Put user by token
- * @body
- * - password: user password
- * - update_user: user to update
- * - update_user[pseudo]: user pseudo (Max 32 characters)
- * - update_user[mail]: user mail (Max 64 characters)
- * - update_user[password]: user password (Max 64 characters)
+ * @description Put user by token
 */
 export const handlePutUser = async (request: Request, reply: Reply) => {
   const { pgClient, user, body } = request;
@@ -85,10 +69,7 @@ export const handlePutUser = async (request: Request, reply: Reply) => {
 
 /**
  * **Delete one user (ADMIN)**
- * @description
- * Delete one user by id
- * @params
- * - id: user id
+ * @description Delete one user by id
 */
 export const handleDeleteUserById = async (request: Request, reply: Reply) => {
   const { pgClient, params } = request;
