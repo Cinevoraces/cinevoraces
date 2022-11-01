@@ -3,46 +3,6 @@ import type { Query } from '@src/types/Query';
 import { queryBuilder } from '@src/utils/queryBuilder';
 
 /**
- * **getReviews**
- * @description Get reviews according to query.
- * @param querystring - URL querystring.
- * @returns SQL query object
- */
-export const getReviews = (
-  querystring: Query.querystring
-): Query.preparedQuery => {
-  const enumerator = [ 'author_id', 'movie_id'];
-  const { where, limit, sort } = querystring;
-  let values = [] as Array<unknown>,
-    WHERE = { query: '', count: 0, values: [] as Array<unknown> },
-    ORDERBY = '',
-    LIMIT = '';
-
-  // Build WHERE query
-  if (where) {
-    WHERE = queryBuilder.where(where, 'AND', enumerator);
-    values = WHERE.values as Array<unknown>;
-  }
-  // Build ORDERBY query
-  if (sort === 'asc' || sort === 'desc') {
-    ORDERBY = `ORDER BY id ${sort}`;
-  }
-  // Build LIMIT query
-  if (typeof limit === 'number' && limit > 0) {
-    LIMIT = `LIMIT ${limit}`;
-  }
-
-  return {
-    text: ` SELECT * FROM reviewview
-            ${WHERE?.count ? `WHERE ${WHERE.query}` : ''}
-            ${ORDERBY}
-            ${LIMIT}
-    ;`,
-    values,
-  };
-};
-
-/**
  * **getOneReview**
  * @description
  * Get one review object containing the following fields:  
@@ -90,7 +50,47 @@ export const updateReview = (
 };
 
 /**
- * **deleteComment**
+ * **adminGetReviews**
+ * @description Get reviews according to query.
+ * @param querystring - URL querystring.
+ * @returns SQL query object
+ */
+export const adminGetReviews = (
+  querystring: Query.querystring
+): Query.preparedQuery => {
+  const enumerator = [ 'author_id', 'movie_id'];
+  const { where, limit, sort } = querystring;
+  let values = [] as Array<unknown>,
+    WHERE = { query: '', count: 0, values: [] as Array<unknown> },
+    ORDERBY = '',
+    LIMIT = '';
+
+  // Build WHERE query
+  if (where) {
+    WHERE = queryBuilder.where(where, 'AND', enumerator);
+    values = WHERE.values as Array<unknown>;
+  }
+  // Build ORDERBY query
+  if (sort === 'asc' || sort === 'desc') {
+    ORDERBY = `ORDER BY id ${sort}`;
+  }
+  // Build LIMIT query
+  if (typeof limit === 'number' && limit > 0) {
+    LIMIT = `LIMIT ${limit}`;
+  }
+
+  return {
+    text: ` SELECT * FROM reviewview
+            ${WHERE?.count ? `WHERE ${WHERE.query}` : ''}
+            ${ORDERBY}
+            ${LIMIT}
+    ;`,
+    values,
+  };
+};
+
+/**
+ * **adminDeleteComment**
  * @description
  * Update one review with comment set to "null".
  * @param ids - Object containing *movie_id, user_id*.
@@ -99,7 +99,7 @@ export const updateReview = (
  * This route is protected with schema validation. 
  * **column** can't be anything else than *'bookmarked' | 'viewed' | 'liked' | 'rating' | 'comment'*. 
  */
-export const deleteComment = (
+export const adminDeleteComment = (
   ids: Record<keyof Pick<Database.review, 'user_id' | 'movie_id'>, number>
 ): Query.preparedQuery => {
   const { user_id, movie_id } = ids;

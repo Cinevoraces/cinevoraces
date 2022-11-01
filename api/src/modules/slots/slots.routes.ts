@@ -2,12 +2,12 @@ import type { FastifyInstance } from 'fastify';
 import { 
   getSlotsSchema, 
   bookSlotSchema,
-  unbookSlotSchema,
+  adminUnbookSlotSchema,
 } from '@modules/slots/slots.schema';
 import { 
   handleGetSlots, 
   handleBookSlot,
-  handleUnbookSlot,
+  handleAdminUnbookSlot,
 } from '@modules/slots/slots.handler';
 
 export const slots = async (fastify: FastifyInstance) => {
@@ -30,9 +30,9 @@ export const slots = async (fastify: FastifyInstance) => {
 
   fastify.route({
     method: 'PUT',
-    url: '/slots/unbook/:id',
-    schema: unbookSlotSchema,
-    handler: handleUnbookSlot,
+    url: '/admin/slots/unbook/:id',
+    schema: adminUnbookSlotSchema,
+    handler: handleAdminUnbookSlot,
     onRequest: [fastify.isAdmin],
     preValidation: [fastify.passwordVerify, fastify.isSlotBooked],
   });

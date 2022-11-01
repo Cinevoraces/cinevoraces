@@ -42,7 +42,7 @@ export const reviewMovieSchema: FastifySchema = {
   },
 };
 
-export const getReviewsSchema: FastifySchema = {
+export const adminGetReviewsSchema: FastifySchema = {
   description: `
   **Get reviews**.
   Use query parameters to filter the results using the following format: */reviews?select[user_id]=2&select[movie_id]=3*
@@ -54,7 +54,7 @@ export const getReviewsSchema: FastifySchema = {
   - limit -> number: *limit the number of results*.
   - sort -> 'asc' | 'desc' as string *(Will sort by id)*
   `,
-  tags: ['Reviews'],
+  tags: ['Admin'],
   querystring: {
     type: 'object',
     properties: {
@@ -80,12 +80,11 @@ export const getReviewsSchema: FastifySchema = {
   },
 };
 
-export const deleteReviewSchema: FastifySchema = {
-  summary: 'Admin only',
+export const adminDeleteReviewSchema: FastifySchema = {
   description: `
   **Delete one review by user and movie id**.
   `,
-  tags: ['Reviews'],
+  tags: ['Admin'],
   params: {
     type: 'object',
     properties: {

@@ -15,9 +15,9 @@ describe('REVIEWS ENDPOINTS', () => {
     deleteReview: {
       method: 'DELETE',
     },
-    getReviews: {
+    adminGetReviews: {
       method: 'GET',
-      url: '/reviews',
+      url: '/admin/reviews',
     },
   };
 
@@ -128,7 +128,7 @@ describe('REVIEWS ENDPOINTS', () => {
       ...inject.deleteReview,
       headers: { authorization: `Bearer ${user_token}` },
       payload: { password: res.users[1].user.password },
-      url: `/reviews/1/${res.users[1].user.id}`,
+      url: `/admin/reviews/1/${res.users[1].user.id}`,
     };
     const deleteReviewAsUser = await app.inject(inject.deleteReview);
     expect(deleteReviewAsUser.statusCode).toEqual(403);
@@ -165,22 +165,22 @@ describe('REVIEWS ENDPOINTS', () => {
       payload: { comment: 'Tester c\'est douter' },
       headers: { authorization: `Bearer ${token}` },
     });
-    inject.getReviews = {
-      ...inject.getReviews,
+    inject.adminGetReviews = {
+      ...inject.adminGetReviews,
       headers: { authorization: `Bearer ${token}` },
     };
 
-    const withoutQueryString = await app.inject(inject.getReviews);
+    const withoutQueryString = await app.inject(inject.adminGetReviews);
     expect(await withoutQueryString.json()).toEqual(expect.arrayContaining([expectedObjects.review]));
     expect(withoutQueryString.statusCode).toEqual(200);
 
     const withQueryString = await app.inject({
-      ...inject.getReviews,
+      ...inject.adminGetReviews,
       query: `where[movie_id]=1&where[author_id]=${res.users[0].user.id}`,
     });
 
     const UnauthorizedQueryString = await app.inject({
-      ...inject.getReviews,
+      ...inject.adminGetReviews,
       query: `where[jambon]=1&where[author_id]=${res.users[0].user.id}`,
     });
 

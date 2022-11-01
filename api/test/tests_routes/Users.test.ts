@@ -14,7 +14,7 @@ describe('USERS ENDPOINTS', () => {
     },
     deleteUser: {
       method: 'DELETE',
-      url: '/users/:id'
+      url: '/admin/users/:id'
     },
     updateUser: {
       method: 'PUT',
@@ -180,14 +180,14 @@ describe('USERS ENDPOINTS', () => {
       ...inject.deleteUser,
       headers: { Authorization: `Bearer ${AdminLogin.json().token}` },
       payload: { password: res.users[0].user.password },
-      url: `/users/${res.users[2].user.id}`,
+      url: `/admin/users/${res.users[2].user.id}`,
     };
     const success = await app.inject(deleteUser);
     expect(success.statusCode).toEqual(200);
 
     const fail = await app.inject({
       ...deleteUser,
-      url: '/users/156468',
+      url: '/admin/users/156468',
     });
     expect(fail.statusCode).toEqual(404);
   });

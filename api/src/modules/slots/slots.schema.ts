@@ -62,13 +62,12 @@ export const bookSlotSchema: FastifySchema = {
   },
 };
 
-export const unbookSlotSchema: FastifySchema = {
-  summary: 'Admin only',
+export const adminUnbookSlotSchema: FastifySchema = {
   description: `**Unbook a slot by id**.
   Route protected by *admin* role.
   You must provide the password as well.
   `,
-  tags: ['Slots'],
+  tags: ['Admin'],
   params: {
     type: 'object',
     properties: {

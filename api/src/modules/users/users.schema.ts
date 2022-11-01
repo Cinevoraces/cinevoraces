@@ -98,14 +98,13 @@ export const putUserSchema: FastifySchema = {
   },
 };
 
-export const deleteUserByIdSchema: FastifySchema = {
-  summary: 'Admin only',
+export const adminDeleteUserByIdSchema: FastifySchema = {
   description: `
   **Delete user by id**.
   Route protected by *admin* role.
   You must provide the password as well.
   `,
-  tags: ['Users'],
+  tags: ['Admin'],
   body: {
     type: 'object',
     required: ['password'],

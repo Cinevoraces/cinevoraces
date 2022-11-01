@@ -57,7 +57,7 @@ export const handleBookSlot = async (request: Request, reply: Reply) => {
  * **Unbook slot (ADMIN)**
  * @description Unbook a slot as Admin
 */
-export const handleUnbookSlot = async (request: Request, reply: Reply) => {
+export const handleAdminUnbookSlot = async (request: Request, reply: Reply) => {
   const { pgClient, params } = request;
   const { id: slotId } = params;
 

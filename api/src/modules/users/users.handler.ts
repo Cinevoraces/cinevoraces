@@ -71,7 +71,7 @@ export const handlePutUser = async (request: Request, reply: Reply) => {
  * **Delete one user (ADMIN)**
  * @description Delete one user by id
 */
-export const handleDeleteUserById = async (request: Request, reply: Reply) => {
+export const handleAdminDeleteUserById = async (request: Request, reply: Reply) => {
   const { pgClient, params } = request;
   const { id } = params;
 

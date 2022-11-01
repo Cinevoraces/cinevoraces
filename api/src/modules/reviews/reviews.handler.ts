@@ -1,7 +1,7 @@
 import type { FastifyReply as Reply, FastifyRequest } from 'fastify';
 import type { Database } from '@src/types/Database';
 import type { Query } from '@src/types/Query';
-import { updateReview, deleteComment, getOneReview, getReviews } from '@modules/reviews/review.datamapper';
+import { updateReview, getOneReview, adminDeleteComment, adminGetReviews } from '@modules/reviews/review.datamapper';
 import reviewResponseFactory from '@src/utils/reviewResponseFactory';
 
 type Request = FastifyRequest<{
@@ -45,12 +45,12 @@ export const handleReviewMovie = async (request: Request, reply: Reply) => {
  * **Get reviews object (ADMIN)**
  * @description Get reviews according to query.
 */
-export const handleGetReviews = async (request: Request, reply: Reply) => {
+export const handleAdminGetReviews = async (request: Request, reply: Reply) => {
   const { pgClient, query } = request;
 
   try {
     const { rows: reviews, rowCount } = await pgClient.query(
-      getReviews(query)
+      adminGetReviews(query)
     );
 
     if (!rowCount) {
@@ -68,13 +68,13 @@ export const handleGetReviews = async (request: Request, reply: Reply) => {
  * **Delete one review object (ADMIN)**
  * @description Delete one review object using movie id and user id from params.
 */
-export const handleDeleteReview = async (request: Request, reply: Reply) => {
+export const handleAdminDeleteReview = async (request: Request, reply: Reply) => {
   const { pgClient, params } = request;
   const { movieId: movie_id, userId: user_id } = params;
 
   try {
     await pgClient.query(
-      deleteComment({ movie_id, user_id })
+      adminDeleteComment({ movie_id, user_id })
     );
 
     reply.send({

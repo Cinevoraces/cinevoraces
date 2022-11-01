@@ -18,7 +18,7 @@ describe('SLOTS ENDPOINTS', () => {
     },
     unbookSlot: {
       method: 'PUT',
-      url: '/slots/unbook/:id',
+      url: '/admin/slots/unbook/:id',
     },
   };
 
@@ -115,7 +115,7 @@ describe('SLOTS ENDPOINTS', () => {
     // UNBOOK SLOT AS USER
     inject.unbookSlot = {
       ...inject.unbookSlot,
-      url: `/slots/unbook/${res.slots[0].slot.id}`,
+      url: `/admin/slots/unbook/${res.slots[0].slot.id}`,
       headers: { authorization: `Bearer ${userToken}` },
     };
     const unbookSlotFail = await app.inject(inject.unbookSlot);
