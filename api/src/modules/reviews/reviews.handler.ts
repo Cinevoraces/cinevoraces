@@ -11,9 +11,8 @@ type Request = FastifyRequest<{
 }>;
 
 /**
- * **Update one review object**
- * @description
- * Update one review object using movie id from params and user id from token.
+ * **Update one review**
+ * @description Update one review object using movie id from params and user id from token.
  * @body {review} - Review object
 */
 export const handleReviewMovie = async (request: Request, reply: Reply) => {
@@ -44,18 +43,14 @@ export const handleReviewMovie = async (request: Request, reply: Reply) => {
 
 /**
  * **Get reviews object (ADMIN)**
- * @description
- * Get reviews from database
- * @query
- * - where[movie_id]: filter by movie id
- * - where[author_id]: filter by user id
+ * @description Get reviews according to query.
 */
 export const handleGetReviews = async (request: Request, reply: Reply) => {
   const { pgClient, query } = request;
-  const { where } = query;
+
   try {
     const { rows: reviews, rowCount } = await pgClient.query(
-      getReviews(where)
+      getReviews(query)
     );
 
     if (!rowCount) {
@@ -71,8 +66,7 @@ export const handleGetReviews = async (request: Request, reply: Reply) => {
 
 /**
  * **Delete one review object (ADMIN)**
- * @description
- * Delete one review object using movie id and user id from params.
+ * @description Delete one review object using movie id and user id from params.
 */
 export const handleDeleteReview = async (request: Request, reply: Reply) => {
   const { pgClient, params } = request;

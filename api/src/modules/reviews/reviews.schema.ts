@@ -46,9 +46,13 @@ export const getReviewsSchema: FastifySchema = {
   description: `
   **Get reviews**.
   Use query parameters to filter the results using the following format: */reviews?select[user_id]=2&select[movie_id]=3*
-  Available query parameters:
-  - where[movie_id]: filter by movie id
-  - where[author_id]: filter by user id
+  **Available filters:**
+  - where[movie_id] -> number
+  - where[author_id] -> number
+  
+  **Misc:**
+  - limit -> number: *limit the number of results*.
+  - sort -> 'asc' | 'desc' as string *(Will sort by id)*
   `,
   tags: ['Reviews'],
   querystring: {
@@ -61,6 +65,8 @@ export const getReviewsSchema: FastifySchema = {
           author_id: { type: 'number' },
         },
       },
+      limit: { type: 'number' },
+      sort: { type: 'string' },
     },
   },
   response: {
