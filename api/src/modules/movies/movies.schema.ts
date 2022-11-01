@@ -12,7 +12,6 @@ export const getMoviesSchema: FastifySchema = {
   - where[is_published] -> boolean
 
   **Available populators**
-  - select[author] -> boolean
   - select[casting] -> boolean
   - select[directors] -> boolean
   - select[runtime] -> boolean
@@ -23,12 +22,6 @@ export const getMoviesSchema: FastifySchema = {
   - select[presentation] -> boolean
   - select[metrics] -> boolean
   - select[comments] -> boolean
-
-  **logged user only:**
-  - where[bookmarked] -> boolean
-  - where[viewed] -> boolean
-  - where[liked] -> boolean
-  - where[rating] -> boolean
   
   **Misc:**
   - limit -> number: *limit the number of results*.
@@ -54,7 +47,6 @@ export const getMoviesSchema: FastifySchema = {
       select: {
         type: 'object',
         properties: {
-          author: { type: 'boolean' },
           casting: { type: 'boolean' },
           directors: { type: 'boolean' },
           runtime: { type: 'boolean' },

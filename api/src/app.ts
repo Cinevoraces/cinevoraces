@@ -7,7 +7,7 @@ import swagger from '@plugins/swagger';
 import cookie from '@src/plugins/fastifyCookie';
 import { auth } from '@modules/auth/auth.routes';
 import { metrics } from '@modules/metrics/metrics.routes';
-// import { movies } from '@modules/movies/movies.routes';
+import { movies } from '@modules/movies/movies.routes';
 import { slots } from '@modules/slots/slots.routes';
 import { reviews } from '@modules/reviews/reviews.routes';
 import { users } from '@modules/users/users.routes';
@@ -28,7 +28,7 @@ const app = async (fastify: FastifyInstance) => {
   // Register routes
   fastify.register(auth);
   fastify.register(metrics);
-  // fastify.register(movies);
+  fastify.register(movies);
   fastify.register(slots);
   fastify.register(reviews);
   fastify.register(users);

@@ -109,3 +109,13 @@ export const deleteReviewSchema: FastifySchema = {
     '404': { $ref: 'apiError#' },
   },
 };
+
+// properties: {
+//   movie_id: { type: 'number' },
+//   user_id: { type: 'number' },
+//   bookmarked: { type: 'boolean' },
+//   liked: { type: 'boolean' },
+//   viewed: { type: 'boolean' },
+//   rating: { type: 'number' },
+//   comment: { type: 'string' },
+// },

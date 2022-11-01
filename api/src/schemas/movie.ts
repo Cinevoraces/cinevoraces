@@ -68,18 +68,6 @@ const movieSchema = {
         },
       },
     },
-    // user_review: {
-    //   type: 'object',
-    //   properties: {
-    //     bookmarked: { type: 'boolean' },
-    //     liked: { type: 'boolean' },
-    //     viewed: { type: 'boolean' },
-    //     rating: { type: 'number' },
-    //     comment: { type: 'string' },
-    //     created_at: { type: 'string' },
-    //     updated_at: { type: 'string' },
-    //   },
-    // },
     created_at: { type: 'string' },
     updated_at: { type: 'null' },
   },
@@ -92,8 +80,6 @@ const movieSchema = {
     'original_title',
     'poster_url',
     'publishing_date',
-    'created_at',
-    'updated_at',
   ],
 };
 

@@ -13,6 +13,6 @@ describe('METRICS ENDPOINTS', () => {
   test('GET GLOBAL METRICS', async () => {
     const res = await app.inject(inject.getGlobalMetrics);
     expect(res.statusCode).toEqual(200);
-    expect(await res.json()).toEqual(expectedObjects.metricsGlobal);
+    expect(await res.json()).toEqual(expectedObjects.metrics);
   });
 });

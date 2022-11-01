@@ -1,50 +1,29 @@
-// import type { FastifyReply as Reply, FastifyRequest } from 'fastify';
-// import type { rawMovie } from '@src/types/Movies';
-// import type PrismaQuery from '@src/types/Query';
-// import prismaQueryFactory from '@src/utils/prismaQueryFactory';
-// import transformResponse from '@src/utils/transformResponse';
+import type { FastifyReply as Reply, FastifyRequest } from 'fastify';
+import type { Query } from '@src/types/Query';
+import { getMovies } from '@modules/movies/movies.dataMapper';
 
-// type Request = FastifyRequest<{
-//   Querystring: PrismaQuery.Querystring;
-//   Params: { id: number };
-// }>;
+type Request = FastifyRequest<{
+  Querystring: Query.querystring;
+}>;
 
-// export const handleGetMovies = async (request: Request, reply: Reply) => {
-//   const { prisma, query, user } = request;
-//   const prismaQuery = prismaQueryFactory(query, 'Movie', user?.id);
+/**
+ * **Get movies**
+ * @description Get movies according to query.
+*/
+export const handleGetMovies = async (request: Request, reply: Reply) => {
+  const { pgClient, query } = request;
 
-//   try {
-//     const movies = await prisma.movie.findMany(prismaQuery);
-//     const lol = await prisma.movie.findMany({
-//       include: {
-//         user: true,
-//       }
-//     });
+  try {
+    const { rows: movies, rowCount } = await pgClient.query(
+      getMovies(query)
+    );
+    if (!rowCount) {
+      reply.code(404);
+      throw new Error('Aucun film trouvé');
+    }
 
-//     if (movies.length === 0) {
-//       reply.code(404);
-//       throw new Error('Aucun film trouvé');
-//     }
-
-//     reply.send(transformResponse.manyMovies(movies as rawMovie[], user?.id));
-//   } catch (error) {
-//     reply.send(error);
-//   }
-// };
-
-// export const handleGetMovieById = async (request: Request, reply: Reply) => {
-//   const { prisma, query, params, user } = request;
-//   const prismaQuery = prismaQueryFactory({ pop: query?.pop }, 'Movie', user?.id);
-//   const { id } = params;
-
-//   try {
-//     const movie = await prisma.movie.findUnique({ 
-//       where: { id },
-//       include: prismaQuery.include,
-//     });
-
-//     reply.send(transformResponse.oneMovie(movie as rawMovie, user?.id));
-//   } catch (error) {
-//     reply.send(error);
-//   }
-// };
+    reply.send(movies);
+  } catch (error) {
+    reply.send(error);
+  }
+};

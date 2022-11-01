@@ -41,7 +41,7 @@ export const queryBuilder = {
     columns: Record<string, unknown>,
     join: 'AND' | 'OR' | ',',
     safeCheck: Array<string>,
-    count?: number 
+    count?: number
   ): { query: string, count: number, values: Array<unknown> } => {
     if (columns === undefined || columns === null) return { query: '', count: 0, values: []};
     const keys = Object.keys(columns);
