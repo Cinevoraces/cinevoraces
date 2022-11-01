@@ -35,8 +35,11 @@ beforeAll(async () => {
   res.users.push(await ressourcesCreator.user());
   res.users.push(await ressourcesCreator.user());
   res.slots.push(await ressourcesCreator.slot());
+  res.slots.push(await ressourcesCreator.slot());
   res.movies.push(await ressourcesCreator.movie({ user_id: 1 }, true));
   res.movies.push(await ressourcesCreator.movie({ user_id: 2 }, false));
+  res.movies.push(await ressourcesCreator.movie({ user_id: 3 }, false));
+  res.movies.push(await ressourcesCreator.movie({ user_id: 4 }, false));
 });
 afterAll(async () => {
   res.users.forEach(async (u) => await u.delete());
@@ -48,10 +51,10 @@ afterAll(async () => {
 // Prepare server object
 const server = { app, res, pgClient, expectedObjects, password, faker };
 
-// Launch tests
+// Launch tests (Order matters)
 AUTHENTICATION(server);
 METRICS_ENDPOINTS(server);
+SLOTS_ENDPOINTS(server);
 MOVIES_ENDPOINTS(server);
 REVIEWS_ENDPOINTS(server);
-SLOTS_ENDPOINTS(server);
 USERS_ENDPOINTS(server);

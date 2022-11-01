@@ -3,6 +3,7 @@ import type {
   FastifyReply as Reply,
   FastifyPluginCallback,
 } from 'fastify';
+import type { Payload } from '@src/types/Payload';
 import { comparePassword } from '@src/utils/bcryptHandler';
 import plugin from 'fastify-plugin';
 
@@ -14,6 +15,7 @@ declare module 'fastify' {
     isLogged: (Request: Request, reply: Reply)=>void;
     passwordVerify: (request: Request, reply: Reply)=>void;
     userHasProposition: (request: Request, reply: Reply)=>void;
+    doesMovieExist: (request: Request, reply: Reply)=>void;
     isSlotBooked: (request: Request, reply: Reply)=>void;
     findOrCreateReviewObject: (request: Request, reply: Reply)=>void;
   }
@@ -122,6 +124,35 @@ const hooks: FastifyPluginCallback = async (fastify, opts, done) => {
       if (isPropositionBooked) {
         reply.code(401);
         throw new Error('Ce créneau est déjà réservé.');
+      }
+    } catch (error) {
+      reply.send(error);
+    }
+  });
+
+  /**
+   * **Movie's existence verification**
+   * @preValidation
+   * @description
+   * This hook verifies if a movie already exist before proposition.
+  */
+  fastify.decorate('doesMovieExist', async (
+    request: Request<{ Body: Payload.proposeMovie }>,
+    reply: Reply
+  ) => {
+    const { pgClient, body } = request;
+    const { french_title, original_title } = body;
+    try {
+      // Check if movie has already been proposed
+      const { rowCount: movieExist } = await pgClient.query({
+        text: ` SELECT french_title, original_title, release_date
+                  FROM movie
+                  WHERE french_title = $1 AND original_title = $2;`,
+        values: [french_title, original_title],
+      });
+      if (movieExist) {
+        reply.code(422);
+        throw new Error('Ce film à déjà été proposé.');
       }
     } catch (error) {
       reply.send(error);

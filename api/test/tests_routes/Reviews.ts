@@ -68,7 +68,6 @@ export async function REVIEWS_ENDPOINTS(server: server) {
       expect(await likedTest.json()).toEqual(expect.objectContaining({
         message: 'Film marqué comme aimé.',
       }));
-      console.log(await likedTest.json());
 
       const ratingTest = await app.inject({
         ...inject.putReview, payload: { rating: 5 },

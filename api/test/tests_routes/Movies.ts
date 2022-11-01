@@ -3,7 +3,7 @@ import type { server } from '../utils/testsType';
 
 export async function MOVIES_ENDPOINTS(server: server) {
   describe('MOVIES ENDPOINTS', () => {
-    const { app, res, expectedObjects } = server;
+    const { app, res, expectedObjects, faker } = server;
     const inject: Record<string, InjectOptions> = {
       login: { 
         method: 'POST',
@@ -23,16 +23,37 @@ export async function MOVIES_ENDPOINTS(server: server) {
       },
       putProposition: { 
         method: 'PUT',
-        url: '/movies/:id',
+        url: '/movies',
       },
       publishMovie: { 
         method: 'PUT',
-        url: '/movies/publish/:id',
+        url: '/admin/movies/publish/:id',
       },
       deleteMovie: { 
         method: 'DELETE',
-        url: '/movies/:id',
+        url: '/admin/movies/:id',
       }
+    };
+
+    const validPropositionPayload = {
+      french_title: faker.lorem.words(2),
+      original_title: faker.lorem.words(2),
+      poster_url: faker.image.imageUrl(),
+      directors: [faker.name.fullName()],
+      release_date: faker.date.past(),
+      runtime: 150,
+      casting: [faker.name.firstName()],
+      presentation: faker.lorem.paragraph(),
+      publishing_date: faker.date.past(),
+      season_id: 3,
+      movie_genres: ['Suspense insoutenable'],
+      movie_languages: ['Français'],
+      movie_countries: ['France du Nord'],
+    };
+    const wrongPropositionPayload = {
+      ...validPropositionPayload, 
+      french_title: 'Les Chaussons rouges', 
+      original_title: 'The Red Shoes'
     };
 
     test('GET MOVIES', async () => {
@@ -106,15 +127,41 @@ export async function MOVIES_ENDPOINTS(server: server) {
       expect(await getAllMoviesAsUser.json()[0]).toEqual(expect.objectContaining({ user_review: expect.any(Object) }));
       expect(await getAllMoviesAsUser.json()[1]).toEqual(expect.not.objectContaining({ user_review: expect.any(Object) }));
   
+      // GET PROPOSITIONS
       const test = await app.inject({
         ...inject.getMovies,
-        url: '/movies?where[is_published]=false'
+        url: '/movies?where[is_published]=false&select[presentation]=true'
       });
-      console.log(await test.json());
+      expect(await test.json()).toEqual(expect.arrayContaining([
+        expect.objectContaining({ presentation: expect.any(Object), is_published: false })
+      ]));
     });
 
-    test('MOVIE PROPOSITION', async () => {
-    // TODO: Write tests
+    test('PROPOSE MOVIE', async () => {
+      inject.login = {
+        ...inject.login,
+        payload: { pseudo: res.users[1].user.pseudo, password: res.users[1].user.password },
+      };
+      const login = await app.inject(inject.login);
+      const { token } = await login.json();
+
+      // PROPOSE EXISTING MOVIE
+      inject.postProposition = {
+        ...inject.postProposition,
+        payload: wrongPropositionPayload,
+        headers: { Authorization: `Bearer ${token}` },
+      };
+      const failPostProposition = await app.inject(inject.postProposition);
+      expect(failPostProposition.statusCode).toEqual(422);
+
+      // SUCCESSFULLY PROPOSE MOVIE
+      inject.postProposition = {
+        ...inject.postProposition,
+        payload: validPropositionPayload,
+        headers: { Authorization: `Bearer ${token}` },
+      };
+      const validPostProposition = await app.inject(inject.postProposition);
+      expect(validPostProposition.statusCode).toEqual(201);
     });
 
     test('UPDATE MOVIE PROPOSITION', async () => {

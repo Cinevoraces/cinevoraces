@@ -71,3 +71,37 @@ export const getMoviesSchema: FastifySchema = {
     '404': { $ref: 'apiError#' },
   },
 };
+
+export const proposeMovieSchema: FastifySchema = {
+  description: `
+  **Propose movie**.
+  `,
+  tags: ['Movies'],
+  body: {
+    type: 'object',
+    properties: {
+      french_title: { type: 'string' },
+      original_title: { type: 'string' },
+      poster_url: { type: 'string' },
+      directors: { type: 'array', items: { type: 'string' } },
+      release_date: { type: 'string' },
+      runtime: { type: 'number' },
+      casting: { type: 'array', items: { type: 'string' } },
+      presentation: { type: 'string' },
+      publishing_date: { type: 'string' },
+      season_id: { type: 'number' },
+      movie_genres: { type: 'array', items: { type: 'string' } },
+      movie_languages: { type: 'array', items: { type: 'string' } },
+      movie_countries: { type: 'array', items: { type: 'string' } },
+    },
+  },
+  response: {
+    '201': { 
+      type: 'object',
+      properties: {
+        message: { type: 'string' },
+      },
+    },
+    '422': { $ref: 'apiError#' },
+  },
+};
