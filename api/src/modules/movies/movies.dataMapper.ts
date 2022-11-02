@@ -83,3 +83,49 @@ export const proposeMovie = (
     values: Object.values(payload)
   };
 };
+
+/**
+ * **updateProposedMovie**
+ * @description update a proposed movie.
+ * @param payload updateMovie object.
+ * @returns SQL query object
+ */
+export const updateProposedMovie = (
+  payload: Payload.updateProposedMovie
+): Query.preparedQuery => {
+  const { movie_id, presentation } = payload;
+  return {
+    text: 'UPDATE movie SET presentation = $1 WHERE id = $2;',
+    values: [presentation, movie_id]
+  };
+};
+
+/**
+ * **publishMovie**
+ * @description publish a proposed movie.
+ * @param id movie id.
+ * @returns SQL query object
+ */
+export const publishMovie = (
+  id: number
+): Query.preparedQuery => {
+  return {
+    text: 'UPDATE movie SET is_published = true WHERE id = $1;',
+    values: [id]
+  };
+};
+
+/**
+ * **deleteMovie**
+ * @description delete a movie.
+ * @param id movie id.
+ * @returns SQL query object
+ */
+export const deleteMovie = (
+  id: number
+): Query.preparedQuery => {
+  return {
+    text: 'DELETE FROM movie WHERE id = $1;',
+    values: [id]
+  };
+};

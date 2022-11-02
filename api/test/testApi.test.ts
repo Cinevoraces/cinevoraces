@@ -40,6 +40,7 @@ beforeAll(async () => {
   res.movies.push(await ressourcesCreator.movie({ user_id: 2 }, false));
   res.movies.push(await ressourcesCreator.movie({ user_id: 3 }, false));
   res.movies.push(await ressourcesCreator.movie({ user_id: 4 }, false));
+  res.movies.push(await ressourcesCreator.movie({ user_id: res.users[2].user.id }, false));
 });
 afterAll(async () => {
   res.users.forEach(async (u) => await u.delete());

@@ -1,12 +1,17 @@
 import type { FastifyReply as Reply, FastifyRequest } from 'fastify';
 import type { Query } from '@src/types/Query';
 import type { Payload } from '@src/types/Payload';
-import { getMovies, proposeMovie } from '@modules/movies/movies.dataMapper';
 import { getReviewsByUserId } from '@modules/reviews/reviews.datamapper';
+import { 
+  getMovies, 
+  proposeMovie, 
+  updateProposedMovie, 
+  publishMovie, 
+  deleteMovie 
+} from '@modules/movies/movies.dataMapper';
 
 type Request = FastifyRequest<{
   Querystring: Query.querystring;
-  Body: Payload.proposeMovie;
 }>;
 
 /**
@@ -51,7 +56,13 @@ export const handleGetMovies = async (request: Request, reply: Reply) => {
  * **Propose Movie**
  * @description Propose a movie.
 */
-export const handleProposeMovie = async (request: Request, reply: Reply) => {
+export const handleProposeMovie = async (
+  request: FastifyRequest<{
+    Querystring: Query.querystring;
+    Body: Payload.proposeMovie;
+  }>, 
+  reply: Reply
+) => {
   const { pgClient, body, user } = request;
   // Payload must be declared this way to add user_id with token
   // and keep keys order.
@@ -80,6 +91,78 @@ export const handleProposeMovie = async (request: Request, reply: Reply) => {
     reply
       .code(201) // Created
       .send({ message: 'Votre proposition a bien été enregistrée.' });
+  } catch (error) {
+    reply.send(error);
+  }
+};
+
+/**
+ * **Update Proposed Movie**
+ * @description Update a proposed movie.
+ */
+export const handleUpdateProposedMovie = async (
+  request: FastifyRequest<{
+    Querystring: Query.querystring;
+    Body: Payload.updateProposedMovie;
+  }>,
+  reply: Reply
+) => {
+  const { pgClient, body } = request;
+
+  try {
+    await pgClient.query(
+      updateProposedMovie(body)
+    );
+
+    reply
+      .code(201) // OK
+      .send({ message: 'Votre proposition a bien été mise à jour.' });
+  } catch (error) {
+    reply.send(error);
+  }
+};
+
+/**
+ * **Publish a pending proposition**
+ * @description Publish a pending proposition.
+ */
+export const handleAdminPublishMovie = async (
+  request: FastifyRequest<{ Params: { id: number } }>,
+  reply: Reply
+) => {
+  const { pgClient, params } = request;
+  const { id } = params;
+  try {
+    await pgClient.query(
+      publishMovie(id)
+    );
+
+    reply
+      .code(204) // No Content
+      .send({ message: 'Film publié.' });
+  } catch (error) {
+    reply.send(error);
+  }
+};
+
+/**
+ * **Delete one movie**
+ * @description Delete one movie.
+ */
+export const handleAdminDeleteMovie = async (
+  request: FastifyRequest<{ Params: { id: number } }>,
+  reply: Reply
+) => {
+  const { pgClient, params } = request;
+  const { id } = params;
+  try {
+    await pgClient.query(
+      deleteMovie(id)
+    );
+
+    reply
+      .code(204) // No Content
+      .send({ message: 'Film supprimé.' });
   } catch (error) {
     reply.send(error);
   }

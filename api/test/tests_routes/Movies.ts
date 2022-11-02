@@ -165,15 +165,92 @@ export async function MOVIES_ENDPOINTS(server: server) {
     });
 
     test('UPDATE MOVIE PROPOSITION', async () => {
-    // TODO: Write tests
+      // LOG USER
+      inject.login = {
+        ...inject.login,
+        payload: { pseudo: res.users[2].user.pseudo, password: res.users[2].user.password },
+      };
+      const login = await app.inject(inject.login);
+      const { token } = await login.json();
+
+      // FAIL UPDATE MOVIE PROPOSITION
+      inject.putProposition = {
+        ...inject.putProposition,
+        payload: {
+          presentation: 'LOOOOOOOOOOL',
+          movie_id: res.movies[1].movie.id,
+        },
+        headers: { Authorization: `Bearer ${token}` },
+      };
+      const failPutProposition = await app.inject(inject.putProposition);
+      expect(failPutProposition.statusCode).toEqual(404);
+
+      // UPDATE EXISTING MOVIE PROPOSITION
+      inject.putProposition = {
+        ...inject.putProposition,
+        payload: {
+          presentation: 'LOOOOOOOOOOL',
+          movie_id: res.movies[4].movie.id,
+        },
+      };
+      const successPutProposition = await app.inject(inject.putProposition);
+      expect(successPutProposition.statusCode).toEqual(201);
     });
 
     test('PUBLISH MOVIE PROPOSITION AS ADMIN', async () => {
-    // TODO: Write tests
+      // LOG ADMIN
+      inject.login = {
+        ...inject.login,
+        payload: { pseudo: res.users[0].user.pseudo, password: res.users[0].user.password },
+      };
+      const login = await app.inject(inject.login);
+      const { token } = await login.json();
+
+      // FAIL PUBLISH MOVIE PROPOSITION
+      inject.publishMovie = {
+        ...inject.publishMovie,
+        url: `/admin/movies/publish/${res.movies[0].movie.id}`,
+        headers: { Authorization: `Bearer ${token}` },
+      };
+      const failPublishMovie = await app.inject(inject.publishMovie);
+      expect(failPublishMovie.statusCode).toEqual(404);
+
+      // SUCCESS PUBLISH MOVIE PROPOSITION
+      inject.publishMovie = {
+        ...inject.publishMovie,
+        url: `/admin/movies/publish/${res.movies[1].movie.id}`,
+        headers: { Authorization: `Bearer ${token}` },
+      };
+      const successPublishMovie = await app.inject(inject.publishMovie);
+      expect(successPublishMovie.statusCode).toEqual(204);
     });
 
     test('DELETE MOVIE AS ADMIN', async () => {
-    // TODO: Write tests
+      // LOG ADMIN
+      inject.login = {
+        ...inject.login,
+        payload: { pseudo: res.users[0].user.pseudo, password: res.users[0].user.password },
+      };
+      const login = await app.inject(inject.login);
+      const { token } = await login.json();
+
+      // DELETE ONE MOVIE SUCCESSFULLY
+      inject.deleteMovie = {
+        ...inject.deleteMovie,
+        url: `/admin/movies/${res.movies[0].movie.id}`,
+        headers: { Authorization: `Bearer ${token}` },
+      };
+      const deleteOneMovie = await app.inject(inject.deleteMovie);
+      expect(deleteOneMovie.statusCode).toEqual(204);
+      
+      // DELETE ONE MOVIE FAIL
+      inject.deleteMovie = {
+        ...inject.deleteMovie,
+        url: `/admin/movies/${res.movies[0].movie.id}`,
+        headers: { Authorization: `Bearer ${token}` },
+      };
+      const failDeleteOneMovie = await app.inject(inject.deleteMovie);
+      expect(failDeleteOneMovie.statusCode).toEqual(404);
     });
   });
 }

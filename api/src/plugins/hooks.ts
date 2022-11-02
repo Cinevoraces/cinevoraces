@@ -15,6 +15,9 @@ declare module 'fastify' {
     isLogged: (Request: Request, reply: Reply)=>void;
     passwordVerify: (request: Request, reply: Reply)=>void;
     userHasProposition: (request: Request, reply: Reply)=>void;
+    hasMovieBeenProposed: (request: Request, reply: Reply)=>void;
+    isMoviePublishedAsUser: (request: Request, reply: Reply)=>void;
+    isMoviePublishedAsAdmin: (request: Request, reply: Reply)=>void;
     doesMovieExist: (request: Request, reply: Reply)=>void;
     isSlotBooked: (request: Request, reply: Reply)=>void;
     findOrCreateReviewObject: (request: Request, reply: Reply)=>void;
@@ -136,7 +139,7 @@ const hooks: FastifyPluginCallback = async (fastify, opts, done) => {
    * @description
    * This hook verifies if a movie already exist before proposition.
   */
-  fastify.decorate('doesMovieExist', async (
+  fastify.decorate('hasMovieBeenProposed', async (
     request: Request<{ Body: Payload.proposeMovie }>,
     reply: Reply
   ) => {
@@ -153,6 +156,85 @@ const hooks: FastifyPluginCallback = async (fastify, opts, done) => {
       if (movieExist) {
         reply.code(422);
         throw new Error('Ce film à déjà été proposé.');
+      }
+    } catch (error) {
+      reply.send(error);
+    }
+  });
+
+  /**
+   * **Movie's is_published state verification as user**
+   * @preValidation
+   * @description
+   * This hook verifies if a movie has been published.
+  */
+  fastify.decorate('isMoviePublishedAsUser', async (
+    request: Request<{ Body: Payload.updateProposedMovie }>,
+    reply: Reply
+  ) => {
+    const { pgClient, user, body } = request;
+    try {
+      // Check if movie has already been published AND if user is the owner
+      const { rowCount: hasProposition } = await pgClient.query({
+        text: ` SELECT is_published FROM movie
+                  WHERE user_id = $1 AND is_published = false AND id = $2;`,
+        values: [user.id, body.movie_id],
+      });
+      if (!hasProposition) {
+        reply.code(404);
+        throw new Error('Aucune proposition en cours n\'a été trouvé.');
+      }
+    } catch (error) {
+      reply.send(error);
+    }
+  });
+
+  /**
+   * **Movie's is_published state verification as admin**
+   * @preValidation
+   * @description
+   * This hook verifies if a movie has been published.
+  */
+  fastify.decorate('isMoviePublishedAsAdmin', async (
+    request: Request<{ Params: { id: number } }>,
+    reply: Reply
+  ) => {
+    const { pgClient, params } = request;
+    try {
+      // Check if movie has already been published
+      const { rowCount: isPublished } = await pgClient.query({
+        text: ` SELECT is_published FROM movie
+                  WHERE id = $1 AND is_published = false;`,
+        values: [params.id],
+      });
+      if (!isPublished) {
+        reply.code(404);
+        throw new Error('Le film demandé n\'a pas été trouvé parmis les proposition en cours.');
+      }
+    } catch (error) {
+      reply.send(error);
+    }
+  });
+
+  /**
+   * **Movie existence verification**
+   * @preValidation
+   * @description
+   * This hook verifies if a movie exist in database.
+  */
+  fastify.decorate('doesMovieExist', async (
+    request: Request<{ Params: { id: number } }>,
+    reply: Reply
+  ) => {
+    const { pgClient, params } = request;
+    try {
+      const { rowCount: movies } = await pgClient.query({
+        text: ' SELECT * FROM movie WHERE id = $1;',
+        values: [params.id],
+      });
+      if (!movies) {
+        reply.code(404);
+        throw new Error('Le film demandé n\'a pas été trouvé dans la base de données.');
       }
     } catch (error) {
       reply.send(error);

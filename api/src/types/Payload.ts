@@ -16,6 +16,11 @@ declare namespace Payload {
     };
   }
 
+  interface updateProposedMovie {
+    movie_id: number;
+    presentation: string;
+  }
+
   type reviewMovie = Record<keyof Pick<Database.review, 'bookmarked' | 'viewed' | 'liked' | 'rating' | 'comment'>, boolean | number | string>;
 
   interface proposeMovie {

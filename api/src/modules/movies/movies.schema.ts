@@ -95,6 +95,21 @@ export const proposeMovieSchema: FastifySchema = {
       movie_languages: { type: 'array', items: { type: 'string' } },
       movie_countries: { type: 'array', items: { type: 'string' } },
     },
+    required: [
+      'french_title',
+      'original_title',
+      'poster_url',
+      'directors',
+      'release_date',
+      'runtime',
+      'casting',
+      'presentation',
+      'publishing_date',
+      'season_id',
+      'movie_genres',
+      'movie_languages',
+      'movie_countries',
+    ],
   },
   response: {
     '201': { 
@@ -103,6 +118,80 @@ export const proposeMovieSchema: FastifySchema = {
         message: { type: 'string' },
       },
     },
+    '401': { $ref: 'apiError#' },
     '422': { $ref: 'apiError#' },
+  },
+};
+
+export const updateProposedMovieSchema: FastifySchema = {
+  summary: '(TOKEN REQUIRED)',
+  description: `
+  **Propose movie**.
+  `,
+  tags: ['Movies'],
+  body: {
+    type: 'object',
+    properties: {
+      movie_id: { type: 'number' },
+      presentation: { type: 'string' },
+    },
+    required: ['movie_id', 'presentation'],
+  },
+  response: {
+    '201': { 
+      type: 'object',
+      properties: {
+        message: { type: 'string' },
+      },
+    },
+    '401': { $ref: 'apiError#' },
+  },
+};
+
+export const adminPublishMovieSchema: FastifySchema = {
+  description: `
+  **Publish movie**.
+  `,
+  tags: ['Admin'],
+  params: {
+    type: 'object',
+    properties: {
+      id: { type: 'number' },
+    },
+    required: ['id'],
+  },
+  response: {
+    '204': {
+      type: 'object',
+      properties: {
+        message: { type: 'string' },
+      },
+    },
+    '401': { $ref: 'apiError#' },
+    '404': { $ref: 'apiError#' },
+  },
+};
+
+export const adminDeleteMovieSchema: FastifySchema = {
+  description: `
+  **Delete movie**.
+  `,
+  tags: ['Admin'],
+  params: {
+    type: 'object',
+    properties: {
+      id: { type: 'number' },
+    },
+    required: ['id'],
+  },
+  response: {
+    '204': {
+      type: 'object',
+      properties: {
+        message: { type: 'string' },
+      },
+    },
+    '401': { $ref: 'apiError#' },
+    '404': { $ref: 'apiError#' },
   },
 };
