@@ -10,11 +10,12 @@ import { comparePassword, hashPassword } from '../src/utils/bcryptHandler';
 import { ressourcesCreator } from './utils/createRessource';
 import expectedObjects from './utils/expectedObjects';
 import { AUTHENTICATION } from './tests_routes/Authentication';
-import { METRICS_ENDPOINTS } from './tests_routes/Metrics';
-import { MOVIES_ENDPOINTS } from './tests_routes/Movies';
-import { REVIEWS_ENDPOINTS } from './tests_routes/Reviews';
-import { SLOTS_ENDPOINTS } from './tests_routes/Slots';
-import { USERS_ENDPOINTS } from './tests_routes/Users';
+import { ENDPOINTS_METRICS } from './tests_routes/Metrics';
+import { ENDPOINTS_MOVIES } from './tests_routes/Movies';
+import { ENDPOINTS_REVIEWS } from './tests_routes/Reviews';
+import { ENDPOINTS_SLOTS } from './tests_routes/Slots';
+import { ENDPOINTS_USERS } from './tests_routes/Users';
+import { SECURITY_SANITIZER } from './security_tests/sanitizer';
 
 // Create App instance
 const app = Fastify({ querystringParser: (str) => qs.parse(str, parseOptions) });
@@ -54,8 +55,9 @@ const server = { app, res, pgClient, expectedObjects, password, faker };
 
 // Launch tests (Order matters)
 AUTHENTICATION(server);
-METRICS_ENDPOINTS(server);
-SLOTS_ENDPOINTS(server);
-MOVIES_ENDPOINTS(server);
-REVIEWS_ENDPOINTS(server);
-USERS_ENDPOINTS(server);
+ENDPOINTS_METRICS(server);
+ENDPOINTS_SLOTS(server);
+ENDPOINTS_MOVIES(server);
+ENDPOINTS_REVIEWS(server);
+ENDPOINTS_USERS(server);
+SECURITY_SANITIZER(server);
