@@ -2,6 +2,7 @@ import type { Database } from '@src/types/Database';
 import type { Query } from '@src/types/Query';
 import { queryBuilder } from '@src/utils/queryBuilder';
 
+// TODO: 2. This function can be deleted once getMovies has been modified.
 /**
  * **getReviewsByUserId**
  * @description Get all reviews from a user.

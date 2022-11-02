@@ -24,6 +24,8 @@ declare module 'fastify' {
   }
 }
 
+// TODO: 3. Hooks must be categorized in seperate files.
+
 /**
  * **Hooks**
  * @description

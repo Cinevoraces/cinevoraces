@@ -2,6 +2,8 @@
 
 BEGIN;
 
+-- TODO: 1. Change SQL Function to allow user_id to be declared at the last index
+-- WARNING. version_2.sql contain db seeding that will be impacted
 CREATE OR REPLACE FUNCTION new_movie(
 	title TEXT,
 	original_title TEXT,
