@@ -1,9 +1,8 @@
 export const queryBuilder = {
   /**
  * **queryBuilder.select**
- * @description
- * Reduce objects of fields to a "SELECT" SQL query.
- * @param columns - Object containing the fields to be selected.
+ * @description Reduce objects of fields to a "SELECT" SQL query.
+ * @param columns Object containing the fields to be selected.
  * @param safeCheck Array of strings containing an enum of authorized columns.
 */
   select: (
@@ -30,9 +29,8 @@ export const queryBuilder = {
 
   /**
  * **queryBuilder.where**
- * @description
- * Reduce objects of fields to a "WHERE" SQL query.
- * @param columns - Object containing the fields to be selected.
+ * @description Reduce objects of fields to a "WHERE" SQL query.
+ * @param columns Object containing the fields to be selected.
  * @param join 'AND' | 'OR' | ','
  * @param safeCheck Array of strings containing an enum of authorized columns.
  * @param count Where values counter should start.

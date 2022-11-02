@@ -1,19 +1,24 @@
 import type { FastifyReply as Reply, FastifyRequest } from 'fastify';
 import type { Database } from '@src/types/Database';
 import type { Query } from '@src/types/Query';
-import { updateReview, getOneReview, adminDeleteComment, adminGetReviews } from '@modules/reviews/reviews.datamapper';
+import type { Payload } from '@src/types/Payload';
+import { 
+  updateReview, 
+  getOneReview, 
+  adminDeleteComment, 
+  adminGetReviews 
+} from '@modules/reviews/reviews.datamapper';
 import reviewResponseFactory from '@src/utils/reviewResponseFactory';
 
 type Request = FastifyRequest<{
   Querystring: Query.querystring;
   Params: { movieId: number, userId: number };
-  Body: Record<keyof Pick<Database.review, 'bookmarked' | 'viewed' | 'liked' | 'rating' | 'comment'>, boolean | number | string>,
+  Body: Payload.reviewMovie,
 }>;
 
 /**
  * **Update one review**
  * @description Update one review object using movie id from params and user id from token.
- * @body {review} - Review object
 */
 export const handleReviewMovie = async (request: Request, reply: Reply) => {
   const { pgClient, body, params, user } = request;
@@ -32,10 +37,12 @@ export const handleReviewMovie = async (request: Request, reply: Reply) => {
       previous_review
     );
       
-    reply.send({
-      message,
-      review: review[0],
-    });
+    reply
+      .code(201) // Created
+      .send({
+        message,
+        review: review[0],
+      });
   } catch (error) {
     reply.send(error);
   }
@@ -58,7 +65,9 @@ export const handleAdminGetReviews = async (request: Request, reply: Reply) => {
       throw new Error('Aucun résultat.');
     }
 
-    reply.send(reviews);
+    reply
+      .code(200) // OK
+      .send(reviews);
   } catch (error) {
     reply.send(error);
   }
@@ -77,9 +86,9 @@ export const handleAdminDeleteReview = async (request: Request, reply: Reply) =>
       adminDeleteComment({ movie_id, user_id })
     );
 
-    reply.send({
-      message: 'Commentaire supprimé avec succés.',
-    });  
+    reply
+      .code(204) // No Content
+      .send({ message: 'Commentaire supprimé avec succés.' });  
   } catch (error) {
     reply.send(error);
   }

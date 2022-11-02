@@ -167,7 +167,7 @@ export async function USERS_ENDPOINTS(server: server) {
           password: res.users[1].user.password 
         },
       });
-      expect(success1.statusCode).toEqual(200);
+      expect(success1.statusCode).toEqual(204);
     });
 
     test('DELETE USERS', async () =>{
@@ -184,7 +184,7 @@ export async function USERS_ENDPOINTS(server: server) {
         url: `/admin/users/${res.users[2].user.id}`,
       };
       const success = await app.inject(deleteUser);
-      expect(success.statusCode).toEqual(200);
+      expect(success.statusCode).toEqual(204);
 
       const fail = await app.inject({
         ...deleteUser,

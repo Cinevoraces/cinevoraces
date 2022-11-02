@@ -2,10 +2,9 @@ import type { Query } from '@src/types/Query';
 
 /**
  * **findUserByPseudoOrMail**
+ * @description Find a user by pseudo or mail, returns only those fields.
  * @param pseudo user pseudo
  * @param mail user mail
- * @description
- * Find a user by pseudo or mail, returns only those fields.
  * @returns SQL query object
 */
 export const findUserByPseudoOrMail = (
@@ -22,9 +21,8 @@ export const findUserByPseudoOrMail = (
 
 /**
  * **createUser**
- * @param values - Object containing *pseudo, mail, password*.
- * @description
- * Create a new user.
+ * @description Create a new user.
+ * @param values Object containing *pseudo, mail, password*.
  * @returns SQL query object
  */
 export const createUser = (
@@ -40,8 +38,7 @@ export const createUser = (
 
 /**
  * **getTokenObject**
- * @description 
- * Find a user by id or pseudo and return object for token construction.
+ * @description Find a user by id or pseudo and return object for token construction.
  * @param value object containing *id or pseudo*
 */
 export const getTokenObject = (

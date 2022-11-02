@@ -1,13 +1,14 @@
 import type { FastifyReply as Reply, FastifyRequest } from 'fastify';
+import type { Payload } from '@src/types/Payload';
 import { comparePassword, hashPassword } from '@src/utils/bcryptHandler';
-import { createUser, findUserByPseudoOrMail, getTokenObject } from '@modules/auth/auth.datamapper';
+import { 
+  createUser, 
+  findUserByPseudoOrMail, 
+  getTokenObject 
+} from '@modules/auth/auth.datamapper';
 
 type Request = FastifyRequest<{
-  Body: {
-    pseudo: string;
-    mail: string;
-    password: string;
-  };
+  Body: Payload.register;
 }>;
 
 /**
@@ -16,7 +17,6 @@ type Request = FastifyRequest<{
  * - Check if user exists and password validity
  * - Hash password and create user
  * - Send success message
- * @body { *pseudo*, *mail*, *password* }
  */
 export const handleRegister = async (request: Request, reply: Reply) => {
   const { pgClient, body } = request;
@@ -62,7 +62,6 @@ export const handleRegister = async (request: Request, reply: Reply) => {
  * - Check if user exists and password match
  * - Prepare user data and access/refresh tokens
  * - Send user object, tokens and success message
- * @body { *pseudo*, *password* }
  */
 export const handleLogin = async (request: Request, reply: Reply) => {
   const { pgClient, body } = request;
@@ -101,6 +100,7 @@ export const handleLogin = async (request: Request, reply: Reply) => {
     );
 
     reply
+      .code(200) // OK
       .setCookie('refresh_token', refreshToken, {
         signed: true,
       })
@@ -146,6 +146,7 @@ export const handleRefreshToken = async (request: Request, reply: Reply) => {
     );
 
     reply
+      .code(200) // OK
       .setCookie('refresh_token', refreshToken, {
         signed: true,
       })

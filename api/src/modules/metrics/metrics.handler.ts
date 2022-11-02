@@ -8,8 +8,7 @@ type Request = FastifyRequest<{
 
 /**
 * **Get global metrics**
-* @description
-* Get Website global metrics from database
+* @description Get Website global metrics from database
 */
 export const handleGetGlobalMetrics = async (request: Request, reply: Reply) => {
   const { pgClient } = request;
@@ -19,7 +18,9 @@ export const handleGetGlobalMetrics = async (request: Request, reply: Reply) => 
       getGlobalMetrics()
     );
     
-    reply.send(globalMetrics[0]);
+    reply
+      .code(200) // OK
+      .send(globalMetrics[0]);
   } catch (error) {
     reply.send(error);
   }

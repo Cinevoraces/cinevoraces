@@ -5,7 +5,7 @@ import { queryBuilder } from '@src/utils/queryBuilder';
 /**
  * **getMovies**
  * @description Get movies according to query.
- * @param querystring - URL querystring.
+ * @param querystring URL querystring.
  * @returns SQL query object
  */
 export const getMovies = (
@@ -72,7 +72,7 @@ export const getMovies = (
 /**
  * **proposeMovie**
  * @description create a movie.
- * @param payload - movie object.
+ * @param payload movie object.
  * @returns SQL query object
  */
 export const proposeMovie = (

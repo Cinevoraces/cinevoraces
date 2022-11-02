@@ -2,10 +2,17 @@ import type { Database } from '@src/types/Database';
 
 type reviewKeys = keyof Pick<Database.review, 'bookmarked' | 'viewed' | 'liked' | 'rating' | 'comment'>;
 
+/**
+ * **reviewResponseFactory**
+ * @description Return a string depending on the review object key updated.
+ * @param review Object containing only one of the following keys: *bookmarked, viewed, liked, rating, comment*.
+ * @returns String
+ */
 export default function reviewResponseFactory(
   review: Partial<Database.review>,
   previousReview: Partial<Database.review>
 ): string {
+  // Select the first key of the review object
   const keys = Object.keys(review)[0] as reviewKeys;
   const value = review[keys];
   const { comment, rating } = previousReview;

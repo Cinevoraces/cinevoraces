@@ -86,7 +86,7 @@ export async function SLOTS_ENDPOINTS(server: server) {
         ...inject.bookSlot,
         url: `/slots/book/${res.slots[0].slot.id}`,
       });
-      expect(bookSlotSuccess.statusCode).toEqual(200);
+      expect(bookSlotSuccess.statusCode).toEqual(204);
 
       // BOOK UNAVAILABLE SLOT
       const bookSlotFail = await app.inject({
@@ -136,7 +136,7 @@ export async function SLOTS_ENDPOINTS(server: server) {
       };
 
       const unbookSlotSuccess = await app.inject(inject.unbookSlot);
-      expect(unbookSlotSuccess.statusCode).toEqual(200);
+      expect(unbookSlotSuccess.statusCode).toEqual(204);
 
       const unbookSlotFreeSlot = await app.inject(inject.unbookSlot);
       expect(unbookSlotFreeSlot.statusCode).toEqual(406);

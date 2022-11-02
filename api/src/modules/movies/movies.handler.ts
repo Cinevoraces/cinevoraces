@@ -39,7 +39,9 @@ export const handleGetMovies = async (request: Request, reply: Reply) => {
       });
     }
 
-    reply.send(movies);
+    reply
+      .code(200) // OK
+      .send(movies);
   } catch (error) {
     reply.send(error);
   }
@@ -76,7 +78,7 @@ export const handleProposeMovie = async (request: Request, reply: Reply) => {
     );
 
     reply
-      .code(201)
+      .code(201) // Created
       .send({ message: 'Votre proposition a bien été enregistrée.' });
   } catch (error) {
     reply.send(error);

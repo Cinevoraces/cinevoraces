@@ -1,19 +1,13 @@
 import type { FastifyReply as Reply, FastifyRequest } from 'fastify';
 import type { Query } from '@src/types/Query';
+import type { Payload } from '@src/types/Payload';
 import { hashPassword } from '@src/utils/bcryptHandler';
 import { getUsers, updateUser, deleteUser } from '@modules/users/users.datamapper';
 
 type Request = FastifyRequest<{
   Querystring: Query.querystring;
   Params: { id: number };
-  Body: {
-    password: string;
-    update_user?: {
-      pseudo?: string;
-      mail?: string;
-      password?: string;
-    };
-  };
+  Body: Payload.updateUser,
 }>;
 
 /**
@@ -31,7 +25,9 @@ export const handleGetUsers = async (request: Request, reply: Reply) => {
       throw new Error('Aucun utilisateur trouvé.');
     }
 
-    reply.send(users);
+    reply
+      .code(200) // OK
+      .send(users);
   } catch (error) {
     reply.send(error);
   }
@@ -61,7 +57,9 @@ export const handlePutUser = async (request: Request, reply: Reply) => {
       updateUser(id, update_user)
     );
 
-    reply.send({ message: 'Données utilisateur modifiées avec succés.' });
+    reply
+      .code(204) // No Content
+      .send({ message: 'Données utilisateur modifiées avec succés.' });
   } catch (error) {
     reply.send(error);
   }
@@ -90,7 +88,9 @@ export const handleAdminDeleteUserById = async (request: Request, reply: Reply) 
       deleteUser(id)
     );
     
-    reply.send({ message: 'Utilisateur supprimé avec succés.' });
+    reply
+      .code(204) // No Content
+      .send({ message: 'Utilisateur supprimé avec succés.' });
   } catch (error) {
     reply.send(error);
   }

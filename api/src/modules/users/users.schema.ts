@@ -87,7 +87,7 @@ export const putUserSchema: FastifySchema = {
     },
   },
   response: {
-    '200': {
+    '204': {
       required: ['message'],
       properties: {
         message: { type: 'string' },
@@ -119,7 +119,7 @@ export const adminDeleteUserByIdSchema: FastifySchema = {
     },
   },
   response: {
-    '200': {
+    '204': {
       type: 'object',
       required: ['message'],
       properties: {

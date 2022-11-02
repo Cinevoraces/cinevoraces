@@ -1,4 +1,23 @@
+import type { Database } from '@src/types/Database';
+
 declare namespace Payload {
+  interface register {
+    pseudo: string;
+    mail: string;
+    password: string;
+  }
+
+  interface updateUser {
+    password: string;
+    update_user?: {
+      pseudo?: string;
+      mail?: string;
+      password?: string;
+    };
+  }
+
+  type reviewMovie = Record<keyof Pick<Database.review, 'bookmarked' | 'viewed' | 'liked' | 'rating' | 'comment'>, boolean | number | string>;
+
   interface proposeMovie {
     french_title: string;
     original_title: string;

@@ -48,7 +48,7 @@ export async function REVIEWS_ENDPOINTS(server: server) {
       const bookmarkedTest = await app.inject({
         ...inject.putReview, payload: { bookmarked: true },
       });
-      expect(bookmarkedTest.statusCode).toEqual(200);
+      expect(bookmarkedTest.statusCode).toEqual(201);
       expect(await bookmarkedTest.json()).toEqual(expect.objectContaining({
         message: 'Film ajouté à ma liste.',
       }));
@@ -56,7 +56,7 @@ export async function REVIEWS_ENDPOINTS(server: server) {
       const viewedTest = await app.inject({
         ...inject.putReview, payload: { viewed: true },
       });
-      expect(viewedTest.statusCode).toEqual(200);
+      expect(viewedTest.statusCode).toEqual(201);
       expect(await viewedTest.json()).toEqual(expect.objectContaining({
         message: 'Film marqué comme vu.',
       }));
@@ -64,7 +64,7 @@ export async function REVIEWS_ENDPOINTS(server: server) {
       const likedTest = await app.inject({
         ...inject.putReview, payload: { liked: true },
       });
-      expect(likedTest.statusCode).toEqual(200);
+      expect(likedTest.statusCode).toEqual(201);
       expect(await likedTest.json()).toEqual(expect.objectContaining({
         message: 'Film marqué comme aimé.',
       }));
@@ -72,7 +72,7 @@ export async function REVIEWS_ENDPOINTS(server: server) {
       const ratingTest = await app.inject({
         ...inject.putReview, payload: { rating: 5 },
       });
-      expect(ratingTest.statusCode).toEqual(200);
+      expect(ratingTest.statusCode).toEqual(201);
       expect(await ratingTest.json()).toEqual(expect.objectContaining({
         message: 'Film noté.',
       }));
@@ -80,7 +80,7 @@ export async function REVIEWS_ENDPOINTS(server: server) {
       const commentTest = await app.inject({
         ...inject.putReview, payload: { comment: 'Tester c\'est douter' },
       });
-      expect(commentTest.statusCode).toEqual(200);
+      expect(commentTest.statusCode).toEqual(201);
       expect(await commentTest.json()).toEqual(expect.objectContaining({
         message: 'Commentaire ajouté.',
       }));
@@ -88,7 +88,7 @@ export async function REVIEWS_ENDPOINTS(server: server) {
       const ratingUpdateTest = await app.inject({
         ...inject.putReview, payload: { rating: 2 },
       });
-      expect(ratingUpdateTest.statusCode).toEqual(200);
+      expect(ratingUpdateTest.statusCode).toEqual(201);
       expect(await ratingUpdateTest.json()).toEqual(expect.objectContaining({
         message: 'Note mise à jour.',
       }));
@@ -96,7 +96,7 @@ export async function REVIEWS_ENDPOINTS(server: server) {
       const commentUpdateTest = await app.inject({
         ...inject.putReview, payload: { comment: 'Tester autant de fois, c\'est plus douter, c\'est un manque de respect!' },
       });
-      expect(commentUpdateTest.statusCode).toEqual(200);
+      expect(commentUpdateTest.statusCode).toEqual(201);
       expect(await commentUpdateTest.json()).toEqual(expect.objectContaining({
         message: 'Commentaire mis à jour.',
       }));
@@ -147,7 +147,7 @@ export async function REVIEWS_ENDPOINTS(server: server) {
         payload: { password: res.users[0].user.password },
       };
       const deleteReview = await app.inject(inject.deleteReview);
-      expect(deleteReview.statusCode).toEqual(200);
+      expect(deleteReview.statusCode).toEqual(204);
       expect(await deleteReview.json()).toEqual(expect.objectContaining({
         message: expect.any(String),
       }));

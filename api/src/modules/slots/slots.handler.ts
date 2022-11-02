@@ -24,7 +24,9 @@ export const handleGetSlots = async (request: Request, reply: Reply) => {
       throw new Error('Aucun créneau disponible.');
     }
 
-    reply.send(slots);
+    reply
+      .code(200) // OK
+      .send(slots);
   } catch (error) {
     reply.send(error);
   }
@@ -43,11 +45,9 @@ export const handleBookSlot = async (request: Request, reply: Reply) => {
       updateSlot(slotId, true)
     );
 
-    const response = {
-      message: 'Ce créneau a bien été réservé.',
-    };
-
-    reply.send(response);
+    reply
+      .code(204) // No Content
+      .send({ message: 'Ce créneau a bien été réservé.' });
   } catch (error) {
     reply.send(error);
   }
@@ -66,11 +66,9 @@ export const handleAdminUnbookSlot = async (request: Request, reply: Reply) => {
       updateSlot(slotId, false)
     );
 
-    const response = {
-      message: 'Ce créneau a bien été libéré.',
-    };
-
-    reply.send(response);
+    reply
+      .code(204) // No Content
+      .send({ message: 'Ce créneau a bien été libéré.' });
   } catch (error) {
     reply.send(error);
   }

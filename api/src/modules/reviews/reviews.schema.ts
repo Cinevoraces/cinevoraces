@@ -25,7 +25,7 @@ export const reviewMovieSchema: FastifySchema = {
     },
   },
   response: {
-    '200': {
+    '201': {
       message: { type: 'string' },
       review: {
         type: 'object',
@@ -100,7 +100,7 @@ export const adminDeleteReviewSchema: FastifySchema = {
     },
   },
   response: {
-    200: {
+    204: {
       message: { type: 'string' },
     },
     '401': { $ref: 'apiError#' },

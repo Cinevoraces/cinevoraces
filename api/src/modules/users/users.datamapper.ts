@@ -4,7 +4,7 @@ import { queryBuilder } from '@src/utils/queryBuilder';
 /**
  * **getUsers**
  * @description Get users according to query.
- * @param querystring - URL querystring.
+ * @param querystring URL querystring.
  * @returns SQL query object
  */
 export const getUsers = (
@@ -45,8 +45,7 @@ export const getUsers = (
             FROM userview
             ${WHERE?.count ? `WHERE ${WHERE.query}` : ''}
             ${ORDERBY}
-            ${LIMIT}
-    ;`,
+            ${LIMIT};`,
     values,
   };
 };
@@ -54,8 +53,8 @@ export const getUsers = (
 /**
  * **updateUser**
  * @description Update one user.
- * @param id - User id.
- * @param set - Object containing *pseudo | mail | password*.
+ * @param id User id.
+ * @param set Object containing *pseudo | mail | password*.
  * @returns SQL query object
  */
 export const updateUser = (
@@ -78,7 +77,7 @@ export const updateUser = (
 /**
  * **deleteUser**
  * @description Delete one user.
- * @param id - User's id.
+ * @param id User's id.
  * @returns SQL query object
  */
 export const deleteUser = (

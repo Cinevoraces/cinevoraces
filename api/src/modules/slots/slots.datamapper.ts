@@ -4,7 +4,7 @@ import { queryBuilder } from '@src/utils/queryBuilder';
 /**
  * **getSlots**
  * @description Get slots according to query.
- * @param querystring - URL querystring.
+ * @param querystring URL querystring.
  * @returns SQL query object
 */
 export const getSlots = (
@@ -35,18 +35,16 @@ export const getSlots = (
     text: ` SELECT * FROM "proposition_slot"
             ${WHERE?.count ? `WHERE ${WHERE.query}` : ''}
             ${ORDERBY}
-            ${LIMIT}
-          ;`,
+            ${LIMIT};`,
     values,
   };
 };
 
 /**
  * **updateSlot**
- * @param id - Slot id.
- * @param is_booked - *is_booked* new value.
- * @description
- * Update booking status of one slot.
+ * @param id Slot id.
+ * @param is_booked *is_booked* new value.
+ * @description Update booking status of one slot.
  * @returns SQL query object
  */
 export const updateSlot = (
@@ -56,16 +54,14 @@ export const updateSlot = (
   return {
     text: ` UPDATE "proposition_slot"
             SET is_booked=$2
-            WHERE id=$1
-    ;`,
+            WHERE id=$1;`,
     values: [id, is_booked],
   };
 };
 
 /**
  * **getTokenObject**
- * @description 
- * Find a user by id or pseudo and return object for token construction.
+ * @description Find a user by id or pseudo and return object for token construction.
  * @param value object containing *id or pseudo*
 */
 export const getTokenObject = (

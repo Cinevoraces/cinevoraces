@@ -4,7 +4,8 @@ import { queryBuilder } from '@src/utils/queryBuilder';
 
 /**
  * **getReviewsByUserId**
- * @param id - user id
+ * @description Get all reviews from a user.
+ * @param id user id
  * @returns SQL query object
  */
 export const getReviewsByUserId = (
@@ -14,8 +15,7 @@ export const getReviewsByUserId = (
     text: `
       SELECT movie_id, user_id, bookmarked, liked, viewed, rating
       FROM "review"
-      WHERE user_id = $1
-    `,
+      WHERE user_id = $1;`,
     values: [id],
   };
 };
@@ -25,7 +25,7 @@ export const getReviewsByUserId = (
  * @description
  * Get one review object containing the following fields:  
  * *bookmarked, viewed, liked, rating, comment*.
- * @param ids - Object containing *movie_id, user_id*.
+ * @param ids Object containing *movie_id, user_id*.
  * @returns SQL query object
  */
 export const getOneReview = (
@@ -45,7 +45,7 @@ export const getOneReview = (
  * @description
  * Update one review object with only one given value.
  * @param updateValue - Object containing only one of the following keys: *bookmarked, viewed, liked, rating, comment*.
- * @param ids - Object containing *movie_id, user_id*.
+ * @param ids Object containing *movie_id, user_id*.
  * @returns SQL query object
  * @securityNote
  * This route is protected with schema validation. 
@@ -70,7 +70,7 @@ export const updateReview = (
 /**
  * **adminGetReviews**
  * @description Get reviews according to query.
- * @param querystring - URL querystring.
+ * @param querystring URL querystring.
  * @returns SQL query object
  */
 export const adminGetReviews = (
@@ -101,21 +101,16 @@ export const adminGetReviews = (
     text: ` SELECT * FROM reviewview
             ${WHERE?.count ? `WHERE ${WHERE.query}` : ''}
             ${ORDERBY}
-            ${LIMIT}
-    ;`,
+            ${LIMIT};`,
     values,
   };
 };
 
 /**
  * **adminDeleteComment**
- * @description
- * Update one review with comment set to "null".
- * @param ids - Object containing *movie_id, user_id*.
+ * @description Update one review with comment set to "null".
+ * @param ids Object containing *movie_id, user_id*.
  * @returns SQL query object
- * @securityNote
- * This route is protected with schema validation. 
- * **column** can't be anything else than *'bookmarked' | 'viewed' | 'liked' | 'rating' | 'comment'*. 
  */
 export const adminDeleteComment = (
   ids: Record<keyof Pick<Database.review, 'user_id' | 'movie_id'>, number>

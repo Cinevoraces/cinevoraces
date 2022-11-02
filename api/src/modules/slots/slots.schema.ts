@@ -50,7 +50,7 @@ export const bookSlotSchema: FastifySchema = {
     },
   },
   response: {
-    '200': { 
+    '204': { 
       type: 'object',
       properties: {
         message: { type: 'string' },
@@ -82,7 +82,7 @@ export const adminUnbookSlotSchema: FastifySchema = {
     },
   },
   response: {
-    '200': { 
+    '204': { 
       type: 'object',
       properties: {
         message: { type: 'string' },
