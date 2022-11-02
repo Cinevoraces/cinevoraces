@@ -1,13 +1,13 @@
 import type { FastifyPluginCallback } from 'fastify';
-import { Client } from 'pg';
+import { Pool } from 'pg';
 import plugin from 'fastify-plugin';
 
 declare module 'fastify' {
   interface FastifyRequest {
-    pgClient: Client;
+    pgClient: Pool;
   }
   interface FastifyInstance {
-    pgClient: Client;
+    pgClient: Pool;
   }
 }
 
@@ -26,7 +26,7 @@ const pgClient: FastifyPluginCallback = async (
     return fastify.log.warn('pg client already registered');
   }
 
-  const pgClient = new Client({
+  const pgClient = new Pool({
     user: process.env.POSTGRES_USER,
     database: process.env.POSTGRES_DB,
     password: process.env.POSTGRES_PASSWORD,
