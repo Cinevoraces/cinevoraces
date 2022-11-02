@@ -1,6 +1,7 @@
 import type { FastifySchema } from 'fastify';
 
 export const reviewMovieSchema: FastifySchema = {
+  summary: '(TOKEN REQUIRED)',
   description: `
   **Update one review by user and movie id**.
   Movie's *id* must be set in *params* and access token in bearer to pass user id.

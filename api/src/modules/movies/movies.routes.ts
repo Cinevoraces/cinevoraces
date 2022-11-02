@@ -22,7 +22,7 @@ export const movies = async (fastify: FastifyInstance) => {
     url: '/movies',
     schema: proposeMovieSchema,
     handler: handleProposeMovie,
-    onRequest: [fastify.isLogged],
+    onRequest: [fastify.accessVerify],
     preValidation: [fastify.doesMovieExist],
   });
 };

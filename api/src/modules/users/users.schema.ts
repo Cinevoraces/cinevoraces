@@ -53,6 +53,7 @@ export const getUsersSchema: FastifySchema = {
 };
 
 export const putUserSchema: FastifySchema = {
+  summary: '(TOKEN REQUIRED)',
   description: `
   **Modify user by token**.
   Modify property in *update_user* object sent in the body.

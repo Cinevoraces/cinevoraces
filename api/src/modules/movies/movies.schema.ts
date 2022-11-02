@@ -73,6 +73,7 @@ export const getMoviesSchema: FastifySchema = {
 };
 
 export const proposeMovieSchema: FastifySchema = {
+  summary: '(TOKEN REQUIRED)',
   description: `
   **Propose movie**.
   `,

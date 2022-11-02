@@ -1,6 +1,7 @@
 import type { FastifySchema } from 'fastify';
 
 export const getSlotsSchema: FastifySchema = {
+  summary: '(TOKEN REQUIRED)',
   description: `**Get slots**.
   Use query parameters to filter the results using the following format: */slots?where[is_booked]=true*  
   **Available filters:**
@@ -40,6 +41,7 @@ export const getSlotsSchema: FastifySchema = {
 };
 
 export const bookSlotSchema: FastifySchema = {
+  summary: '(TOKEN REQUIRED)',
   description: `**Book a slot by token**.
   Slot's *id* must be set in *params* and access token in bearer to pass user id.`,
   tags: ['Slots'],

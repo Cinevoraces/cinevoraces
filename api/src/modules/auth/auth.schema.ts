@@ -84,6 +84,7 @@ export const loginSchema: FastifySchema = {
 };
 
 export const refreshSchema: FastifySchema = {
+  summary: '(TOKEN REQUIRED)',
   description: `
   **New token requesting endpoint.**
   The refresh token must be sent in the *authorization headers*.
