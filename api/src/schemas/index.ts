@@ -5,7 +5,6 @@ import movieSchema from './movie';
 import userSchema from './user';
 import reviewSchema from './review';
 import slotSchema from './slot';
-import propositionSchema from './proposition';
 
 import plugin from 'fastify-plugin';
 
@@ -16,7 +15,6 @@ const schemasRegister: FastifyPluginCallback = async (fastify, opts, done) => {
     userSchema, 
     reviewSchema, 
     slotSchema, 
-    propositionSchema, 
     globalMetricsSchema, 
     userMetricsSchema];
 

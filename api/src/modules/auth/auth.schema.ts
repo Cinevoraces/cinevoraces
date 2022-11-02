@@ -3,7 +3,7 @@ import type { FastifySchema } from 'fastify';
 export const registerSchema: FastifySchema = {
   description: `
   **Registering endpoint.**
-  Password must match the following requirments: *8 Characters, at least 1 Number, at least 1 letter.*
+  Password must match the following requirments: *8 Characters, at least 1 Number, at least 1 letter. Max 64 characters*
   It can contain the following special characters: !#$&%*+=?|
   `,
   tags: ['Authentication'],
@@ -11,9 +11,18 @@ export const registerSchema: FastifySchema = {
     type: 'object',
     required: ['mail', 'pseudo', 'password'],
     properties: {
-      password: { type: 'string' },
-      mail: { type: 'string' },
-      pseudo: { type: 'string' },
+      password: { 
+        type: 'string', 
+        maxLength: 64,
+      },
+      mail: { 
+        type: 'string', 
+        maxLength: 64,
+      },
+      pseudo: { 
+        type: 'string', 
+        maxLength: 32, 
+      },
     },
   },
   response: {
@@ -39,8 +48,14 @@ export const loginSchema: FastifySchema = {
     type: 'object',
     required: ['pseudo', 'password'],
     properties: {
-      pseudo: { type: 'string' },
-      password: { type: 'string' },
+      pseudo: { 
+        type: 'string', 
+        maxLength: 32,
+      },
+      password: { 
+        type: 'string', 
+        maxLength: 64,
+      },
     },
   },
   response: {
@@ -69,6 +84,7 @@ export const loginSchema: FastifySchema = {
 };
 
 export const refreshSchema: FastifySchema = {
+  summary: '(TOKEN REQUIRED)',
   description: `
   **New token requesting endpoint.**
   The refresh token must be sent in the *authorization headers*.

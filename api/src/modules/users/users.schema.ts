@@ -2,23 +2,46 @@ import type { FastifySchema } from 'fastify';
 
 export const getUsersSchema: FastifySchema = {
   description: `
-  **Get all users**.
-  Use query parameters to populate the results using the following format: */users?pop[movies]=true&pop[reviews]=true*
-  Available query parameters:
-  - pop[movies]: populate with user posted movies
-  - pop[reviews]: populate with user posted reviews
+  **Get users**.
+  Use query parameters to populate the results using the following format: */users?select[reviews]=true&where[id]=1*  
+  **Available filters:**
+  - where[id] -> number
+  - where[pseudo] -> string
+  - where[mail] -> string
+  - where[role] -> string
+
+  **Available populators**
+  - select[propositions] -> boolean
+  - select[reviews] -> boolean
+  - select[metrics] -> boolean
+
+  **Misc:**
+  - limit -> number: *limit the number of results*.
+  - sort -> 'asc' | 'desc' as string *(Will sort by id)*
   `,
   tags: ['Users'],
   querystring: {
     type: 'object',
     properties: {
-      pop: {
+      where: {
         type: 'object',
         properties: {
+          id: { type: 'number' },
+          pseudo: { type: 'string' },
+          mail: { type: 'string' },
+          role: { type: 'string' },
+        },
+      },
+      select: {
+        type: 'object',
+        properties: {
+          propositions: { type: 'boolean' },
           movies: { type: 'boolean' },
           reviews: { type: 'boolean' },
         },
       },
+      limit: { type: 'number' },
+      sort: { type: 'string' },
     },
   },
   response: {
@@ -29,88 +52,60 @@ export const getUsersSchema: FastifySchema = {
   },
 };
 
-export const getUserByIdSchema: FastifySchema = {
-  description: `
-  **Get one user by id**.
-  Use query parameters to populate the results using the following format: */users?pop[movies]=true&pop[reviews]=true&pop[metrics]=true*
-  Available query parameters:
-  - pop[movies]: populate with user posted movies
-  - pop[reviews]: populate with user posted reviews
-  - pop[metrics]: populate with user metrics
-  `,
-  tags: ['Users'],
-  params: {
-    type: 'object',
-    properties: {
-      id: { type: 'number' },
-    },
-  },
-  querystring: {
-    type: 'object',
-    properties: {
-      pop: {
-        type: 'object',
-        properties: {
-          movies: { type: 'boolean' },
-          reviews: { type: 'boolean' },
-          metrics: { type: 'boolean' },
-        },
-      },
-    },
-  },
-  response: {
-    '200': {
-      $ref: 'user#',
-    },
-    '404': { $ref: 'apiError#' },
-  },
-};
-
-export const putUserByIdSchema: FastifySchema = {
+export const putUserSchema: FastifySchema = {
+  summary: '(TOKEN REQUIRED)',
   description: `
   **Modify user by token**.
   Modify property in *update_user* object sent in the body.
   *update_user* **can** contain one or more of the following properties: *pseudo*, *mail* or *password*.
-  Password must match the following requirments: *8 Characters, at least 1 Number, at least 1 letter.*
+  Password must match the following requirments: *8 Characters, at least 1 Number, at least 1 letter. Max 64 characters*
   It can contain the following special characters: !#$&%*+=?|
   You must provide the current password as well.
   `,
   tags: ['Users'],
   body: {
     type: 'object',
-    required: ['password'],
+    required: ['password', 'update_user'],
     properties: {
       password: { type: 'string' },
       update_user: {
         type: 'object',
         properties: {
-          pseudo: { type: 'string' },
-          mail: { type: 'string' },
-          password: { type: 'string' },
+          pseudo: { 
+            type: 'string',
+            maxLength: 32,
+          },
+          mail: { 
+            type: 'string', 
+            maxLength: 64,
+          },
+          password: { 
+            type: 'string', 
+            maxLength: 64, 
+          },
         },
       },
     },
   },
   response: {
-    '200': {
-      required: ['message'],
+    '204': {
       properties: {
         message: { type: 'string' },
       },
+      required: ['message'],
     },
     '401': { $ref: 'apiError#' },
     '422': { $ref: 'apiError#' },
   },
 };
 
-export const deleteUserByIdSchema: FastifySchema = {
-  summary: 'Admin only',
+export const adminDeleteUserByIdSchema: FastifySchema = {
   description: `
   **Delete user by id**.
   Route protected by *admin* role.
   You must provide the password as well.
   `,
-  tags: ['Users'],
+  tags: ['Admin'],
   body: {
     type: 'object',
     required: ['password'],
@@ -123,14 +118,15 @@ export const deleteUserByIdSchema: FastifySchema = {
     properties: {
       id: { type: 'number' },
     },
+    required: ['id'],
   },
   response: {
-    '200': {
+    '204': {
       type: 'object',
-      required: ['message'],
       properties: {
         message: { type: 'string' },
       },
+      required: ['message'],
     },
     '401': { $ref: 'apiError#' },
     '403': { $ref: 'apiError#' },

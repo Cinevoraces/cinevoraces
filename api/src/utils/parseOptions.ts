@@ -1,5 +1,9 @@
 import type { defaultDecoder } from 'qs';
 
+/**
+ * **parseOptions**
+ * @description Parse options from querystring.
+ */
 const parseOptions = {
   ignoreQueryPrefix: true,
   decoder(str: string, decoder: defaultDecoder, charset: unknown) {

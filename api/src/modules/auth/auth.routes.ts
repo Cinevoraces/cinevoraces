@@ -4,7 +4,11 @@ import {
   handleRegister,
   handleRefreshToken,
 } from '@modules/auth/auth.handler';
-import { loginSchema, registerSchema, refreshSchema } from '@modules/auth/auth.schema';
+import { 
+  loginSchema, 
+  registerSchema, 
+  refreshSchema 
+} from '@modules/auth/auth.schema';
 
 export const auth = async (fastify: FastifyInstance) => {
   fastify.route({

@@ -1,29 +1,15 @@
-declare namespace PrismaQuery {
-  interface Querystring {
-    filter?: Record<string, unknown>;
-    pop?: Record<string, unknown>;
+declare namespace Query {
+  interface querystring {
+    select?: Record<string, unknown>;
+    where?: Record<string, unknown>;
+    sort?: 'asc' | 'desc';
     limit?: number;
   }
-  type FactoredQuery = where & include & take & orderBy;
+  interface preparedQuery {
+    text: string;
+    values?: Array<unknown>;
+  }
 
-  interface where {
-    where?: { 
-      AND?: Array<Record<string, unknown>>;
-    }
-  }
-  interface include {
-    include?: {
-      [key: string]: boolean;
-    }
-  }
-  interface take {
-    take?: number;
-  }
-  interface orderBy {
-    orderBy?: {
-      [key: string]: 'asc' | 'desc';
-    }
-  }
 }
 
-export default PrismaQuery;
+export type { Query };

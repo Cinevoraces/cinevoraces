@@ -2,20 +2,65 @@ import type { FastifySchema } from 'fastify';
 
 export const getMoviesSchema: FastifySchema = {
   description: `
-  **Get all movies**.
-  Use query parameters to filter the results using the following format: */movies?filter[is_published]=true&filter[season_id]=3*
-  Available query parameters:
-  - filter[is_published]: filter by published status
-  - filter[season_id]: filter by season number
-  - Filter[user_id]: filter by user id
+  **Get movies**.
+  Use query parameters to filter the results using the following format: */movies?where[is_published]=true&select[metrics]=true&limit=5&sort[desc]=id*.
+  To access users related filters, the accessToken is needed. Using thoses will return only movies where the user has an **review object**.  
+  **Available filters:**
+  - where[id] -> number
+  - where[author_id] -> number
+  - where[season_number] -> number
+  - where[is_published] -> boolean
+
+  **Available populators**
+  - select[casting] -> boolean
+  - select[directors] -> boolean
+  - select[runtime] -> boolean
+  - select[release_date] -> boolean
+  - select[genres] -> boolean
+  - select[countries] -> boolean
+  - select[languages] -> boolean
+  - select[presentation] -> boolean
+  - select[metrics] -> boolean
+  - select[comments] -> boolean
+  
+  **Misc:**
+  - limit -> number: *limit the number of results*.
+  - sort -> 'asc' | 'desc' as string *(Will sort by id)*
   `,
   tags: ['Movies'],
   querystring: {
     type: 'object',
     properties: {
-      filter: {
+      where: {
         type: 'object',
+        properties: {
+          id: { type: 'number' },
+          author_id: { type: 'number' },
+          season_number: { type: 'number' },
+          is_published: { type: 'boolean' },
+          bookmarked: { type: 'boolean' },
+          viewed: { type: 'boolean' },
+          liked: { type: 'boolean' },
+          rating: { type: 'boolean' },
+        },
       },
+      select: {
+        type: 'object',
+        properties: {
+          casting: { type: 'boolean' },
+          directors: { type: 'boolean' },
+          runtime: { type: 'boolean' },
+          release_date: { type: 'boolean' },
+          genres: { type: 'boolean' },
+          countries: { type: 'boolean' },
+          languages: { type: 'boolean' },
+          presentation: { type: 'boolean' },
+          metrics: { type: 'boolean' },
+          comments: { type: 'boolean' },
+        },
+      },
+      limit: { type: 'number' },
+      sort: { type: 'string' },
     },
   },
   response: {
@@ -23,22 +68,134 @@ export const getMoviesSchema: FastifySchema = {
       type: 'array',
       items: { $ref: 'movie#' },
     },
+    '404': { $ref: 'apiError#' },
   },
 };
 
-export const getMovieSchema: FastifySchema = {
-  description: '**Get one movie by id**.',
+export const proposeMovieSchema: FastifySchema = {
+  summary: '(TOKEN REQUIRED)',
+  description: `
+  **Propose movie**.
+  `,
   tags: ['Movies'],
+  body: {
+    type: 'object',
+    properties: {
+      french_title: { type: 'string' },
+      original_title: { type: 'string' },
+      poster_url: { type: 'string' },
+      directors: { type: 'array', items: { type: 'string' } },
+      release_date: { type: 'string' },
+      runtime: { type: 'number' },
+      casting: { type: 'array', items: { type: 'string' } },
+      presentation: { type: 'string' },
+      publishing_date: { type: 'string' },
+      season_id: { type: 'number' },
+      movie_genres: { type: 'array', items: { type: 'string' } },
+      movie_languages: { type: 'array', items: { type: 'string' } },
+      movie_countries: { type: 'array', items: { type: 'string' } },
+    },
+    required: [
+      'french_title',
+      'original_title',
+      'poster_url',
+      'directors',
+      'release_date',
+      'runtime',
+      'casting',
+      'presentation',
+      'publishing_date',
+      'season_id',
+      'movie_genres',
+      'movie_languages',
+      'movie_countries',
+    ],
+  },
+  response: {
+    '201': { 
+      type: 'object',
+      properties: {
+        message: { type: 'string' },
+      },
+      required: ['message'],
+    },
+    '401': { $ref: 'apiError#' },
+    '422': { $ref: 'apiError#' },
+  },
+};
+
+export const updateProposedMovieSchema: FastifySchema = {
+  summary: '(TOKEN REQUIRED)',
+  description: `
+  **Propose movie**.
+  `,
+  tags: ['Movies'],
+  body: {
+    type: 'object',
+    properties: {
+      movie_id: { type: 'number' },
+      presentation: { type: 'string' },
+    },
+    required: ['movie_id', 'presentation'],
+  },
+  response: {
+    '201': { 
+      type: 'object',
+      properties: {
+        message: { type: 'string' },
+      },
+      required: ['message'],
+    },
+    '401': { $ref: 'apiError#' },
+  },
+};
+
+export const adminPublishMovieSchema: FastifySchema = {
+  description: `
+  **Publish movie**.
+  `,
+  tags: ['Admin'],
   params: {
     type: 'object',
     properties: {
       id: { type: 'number' },
     },
+    required: ['id'],
   },
   response: {
-    200: {
-      $ref: 'movie#',
+    '204': {
+      type: 'object',
+      properties: {
+        message: { type: 'string' },
+      },
+      required: ['message'],
     },
+    '401': { $ref: 'apiError#' },
+    '404': { $ref: 'apiError#' },
+  },
+};
+
+export const adminDeleteMovieSchema: FastifySchema = {
+  description: `
+  **Delete movie**.
+  `,
+  tags: ['Admin'],
+  params: {
+    type: 'object',
+    properties: {
+      id: { type: 'number' },
+    },
+    required: ['id'],
+  },
+  response: {
+    '204': {
+      type: 'object',
+      properties: {
+        message: { type: 'string' },
+      },
+      required: ['message'],
+    },
+    '401': { $ref: 'apiError#' },
     '404': { $ref: 'apiError#' },
   },
 };

@@ -1,75 +1,46 @@
 import type { FastifyReply as Reply, FastifyRequest } from 'fastify';
-import type { userMetrics } from '@src/types/Metrics';
-import type PrismaQuery from '@src/types/Query';
-
+import type { Query } from '@src/types/Query';
+import type { Payload } from '@src/types/Payload';
 import { hashPassword } from '@src/utils/bcryptHandler';
-import prismaQueryFactory from '@src/utils/prismaQueryFactory';
+import { getUsers, updateUser, deleteUser } from '@modules/users/users.datamapper';
 
 type Request = FastifyRequest<{
-  Querystring: PrismaQuery.Querystring;
+  Querystring: Query.querystring;
   Params: { id: number };
-  Body: {
-    password: string;
-    update_user?: {
-      pseudo?: string;
-      mail?: string;
-      password?: string;
-    };
-  };
+  Body: Payload.updateUser,
 }>;
 
+/**
+ * **Get users**
+ * @description Get users according to query.
+*/
 export const handleGetUsers = async (request: Request, reply: Reply) => {
-  const { prisma } = request;
-  const prismaQuery = prismaQueryFactory(request.query, 'User');
-
+  const { pgClient, query } = request;
   try {
-    const users = await prisma.user.findMany({
-      ...prismaQuery,
-      orderBy: { id: 'asc' },
-    });
-
-    reply.send(users);
-  } catch (error) {
-    reply.send(error);
-  }
-};
-
-export const handleGetUserById = async (request: Request, reply: Reply) => {
-  const { prisma } = request;
-  const { id } = request.params;
-  const metrics = request.query.pop?.metrics;
-  const prismaQuery = prismaQueryFactory(request.query, 'User');
-
-  try {
-    let response;
-
-    const user = await prisma.user.findFirst({
-      ...prismaQuery,
-      where: { id },
-    });
-
-    if (metrics) {
-      const rawQuery = await prisma.$queryRaw`
-        SELECT * FROM indiv_actions_metrics WHERE id = ${id};
-      `;
-      response = { 
-        ...user,
-        metrics: (rawQuery as Array<userMetrics>)[0] 
-      };
-    } else {
-      response = user;
+    const { rows: users, rowCount } = await pgClient.query(
+      getUsers(query)
+    );
+    if (!rowCount) {
+      reply.code(404); // Not found
+      throw new Error('Aucun utilisateur trouvé.');
     }
 
-    reply.send(response);
+    reply
+      .code(200) // OK
+      .send(users);
   } catch (error) {
     reply.send(error);
   }
 };
 
-export const handlePutUserById = async (request: Request, reply: Reply) => {
-  const { prisma } = request;
-  const { update_user } = request.body;
-  const { id } = request.user;
+/**
+ * **Put user**
+ * @description Put user by token
+*/
+export const handlePutUser = async (request: Request, reply: Reply) => {
+  const { pgClient, user, body } = request;
+  const { update_user } = body;
+  const { id } = user;
 
   try {
     if (update_user.password) {
@@ -82,30 +53,44 @@ export const handlePutUserById = async (request: Request, reply: Reply) => {
     }
     
     // Update user
-    await prisma.user.update({
-      where: { id },
-      data: { ...update_user },
-    });
-    
-    reply.send('Données utilisateur modifiées avec succés.');
+    await pgClient.query(
+      updateUser(id, update_user)
+    );
+
+    reply
+      .code(204) // No Content
+      .send({ message: 'Données utilisateur modifiées avec succés.' });
   } catch (error) {
     reply.send(error);
   }
 };
 
-// Admin only
-export const handleDeleteUserById = async (request: Request, reply: Reply) => {
-  const { prisma } = request;
-  const { id } = request.params;
+/**
+ * **Delete one user (ADMIN)**
+ * @description Delete one user by id
+*/
+export const handleAdminDeleteUserById = async (request: Request, reply: Reply) => {
+  const { pgClient, params } = request;
+  const { id } = params;
 
   try {
-    const user = await prisma.user.delete({ where: { id: Number(id) } });
-    if (!user) {
-      reply.code(404);
-      throw new Error('Utilisateur introuvable.');
+    // Check if user exists
+    const { rowCount } = await pgClient.query(
+      getUsers({ where: { id } })
+    );
+    if (!rowCount) {
+      reply.code(404); // Not found
+      throw new Error('Aucun utilisateur trouvé.');
     }
 
-    reply.send(`Utilisateur "${user.pseudo}" supprimé avec succés.`);
+    // Delete user
+    await pgClient.query(
+      deleteUser(id)
+    );
+    
+    reply
+      .code(204) // No Content
+      .send({ message: 'Utilisateur supprimé avec succés.' });
   } catch (error) {
     reply.send(error);
   }

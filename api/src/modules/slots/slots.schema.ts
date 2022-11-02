@@ -1,18 +1,34 @@
 import type { FastifySchema } from 'fastify';
 
-export const getAllSlotsSchema: FastifySchema = {
-  description: `**Get all slots**.
-  Use query parameters to filter the results using the following format: */slots?filter[is_booked]=true*
-  Available query parameters:
-  - filter[is_booked]: filter by booked status.
+export const getSlotsSchema: FastifySchema = {
+  summary: '(TOKEN REQUIRED)',
+  description: `**Get slots**.
+  Use query parameters to filter the results using the following format: */slots?where[is_booked]=true*  
+  **Available filters:**
+  - where[id] -> number
+  - where[is_booked] -> boolean
+  - where[season_number] -> number
+  - where[episode] -> number
+
+  **Misc:**
+  - limit -> number: *limit the number of results*.
+  - sort -> 'asc' | 'desc' as string *(Will sort by id)*
   `,
-  tags: ['Propositions'],
+  tags: ['Slots'],
   querystring: {
     type: 'object',
     properties: {
-      filter: {
+      where: {
         type: 'object',
+        properties: {
+          id: { type: 'number' },
+          is_booked: { type: 'boolean' },
+          season_number: { type: 'number' },
+          episode: { type: 'number' },
+        },
       },
+      limit: { type: 'number' },
+      sort: { type: 'string' },
     },
   },
   response: {
@@ -20,14 +36,16 @@ export const getAllSlotsSchema: FastifySchema = {
       type: 'array',
       items: { $ref: 'slot#' },
     },
+    '401': { $ref: 'apiError#' },
     '404': { $ref: 'apiError#' },
   },
 };
 
 export const bookSlotSchema: FastifySchema = {
+  summary: '(TOKEN REQUIRED)',
   description: `**Book a slot by token**.
   Slot's *id* must be set in *params* and access token in bearer to pass user id.`,
-  tags: ['Propositions'],
+  tags: ['Slots'],
   params: {
     type: 'object',
     properties: {
@@ -35,11 +53,12 @@ export const bookSlotSchema: FastifySchema = {
     },
   },
   response: {
-    '200': { 
+    '204': { 
       type: 'object',
       properties: {
         message: { type: 'string' },
       },
+      required: ['message'],
     },
     '401': { $ref: 'apiError#' },
     '404': { $ref: 'apiError#' },
@@ -47,18 +66,18 @@ export const bookSlotSchema: FastifySchema = {
   },
 };
 
-export const unbookSlotSchema: FastifySchema = {
-  summary: 'Admin only',
+export const adminUnbookSlotSchema: FastifySchema = {
   description: `**Unbook a slot by id**.
   Route protected by *admin* role.
   You must provide the password as well.
   `,
-  tags: ['Propositions'],
+  tags: ['Admin'],
   params: {
     type: 'object',
     properties: {
       id: { type: 'number' },
     },
+    required: ['id'],
   },
   body: {
     type: 'object',
@@ -68,39 +87,15 @@ export const unbookSlotSchema: FastifySchema = {
     },
   },
   response: {
-    '200': { 
+    '204': { 
       type: 'object',
       properties: {
         message: { type: 'string' },
       },
+      required: ['message'],
     },
     '401': { $ref: 'apiError#' },
-  },
-};
-
-export const getAllUsersPropositionSchema: FastifySchema = {
-  description: '**Get all users proposition**.',
-  tags: ['Propositions'],
-  response: {
-    '200': { 
-      type: 'array',
-      items: { $ref: 'proposition#' },
-    },
-    '404': { $ref: 'apiError#' },
-  },
-};
-
-export const getUsersPropositionByIdSchema: FastifySchema = {
-  description: '**Get user proposition by id**.',
-  tags: ['Propositions'],
-  params: {
-    type: 'object',
-    properties: {
-      id: { type: 'number' },
-    },
-  },
-  response: {
-    '200': { $ref: 'proposition#' },
+    '403': { $ref: 'apiError#' },
     '404': { $ref: 'apiError#' },
   },
 };
