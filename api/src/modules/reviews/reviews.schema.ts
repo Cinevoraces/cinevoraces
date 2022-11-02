@@ -27,17 +27,21 @@ export const reviewMovieSchema: FastifySchema = {
   },
   response: {
     '201': {
-      message: { type: 'string' },
-      review: {
-        type: 'object',
-        properties: {
-          bookmarked: { type: 'boolean' },
-          viewed: { type: 'boolean' },
-          liked: { type: 'boolean' },
-          rating: { type: 'number' },
-          comment: { type: 'string' }
+      type: 'object',
+      properties: {
+        message: { type: 'string' },
+        review: {
+          type: 'object',
+          properties: {
+            bookmarked: { type: 'boolean' },
+            viewed: { type: 'boolean' },
+            liked: { type: 'boolean' },
+            rating: { type: 'number' },
+            comment: { type: 'string' }
+          },
         },
       },
+      required: ['message', 'review'],
     },
     '401': { $ref: 'apiError#' },
     '404': { $ref: 'apiError#' },
@@ -93,6 +97,7 @@ export const adminDeleteReviewSchema: FastifySchema = {
       movieId: { type: 'number' },
       userId: { type: 'number' },
     },
+    required: ['movieId', 'userId'],
   },
   body: {
     type: 'object',
@@ -102,8 +107,12 @@ export const adminDeleteReviewSchema: FastifySchema = {
     },
   },
   response: {
-    204: {
-      message: { type: 'string' },
+    '204': {
+      type: 'object',
+      properties: {
+        message: { type: 'string' },
+      },
+      required: ['message'],
     },
     '401': { $ref: 'apiError#' },
     '403': { $ref: 'apiError#' },

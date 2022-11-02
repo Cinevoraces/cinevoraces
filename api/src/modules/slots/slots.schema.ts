@@ -58,6 +58,7 @@ export const bookSlotSchema: FastifySchema = {
       properties: {
         message: { type: 'string' },
       },
+      required: ['message'],
     },
     '401': { $ref: 'apiError#' },
     '404': { $ref: 'apiError#' },
@@ -76,6 +77,7 @@ export const adminUnbookSlotSchema: FastifySchema = {
     properties: {
       id: { type: 'number' },
     },
+    required: ['id'],
   },
   body: {
     type: 'object',
@@ -90,6 +92,7 @@ export const adminUnbookSlotSchema: FastifySchema = {
       properties: {
         message: { type: 'string' },
       },
+      required: ['message'],
     },
     '401': { $ref: 'apiError#' },
     '403': { $ref: 'apiError#' },

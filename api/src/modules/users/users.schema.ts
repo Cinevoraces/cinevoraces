@@ -65,7 +65,7 @@ export const putUserSchema: FastifySchema = {
   tags: ['Users'],
   body: {
     type: 'object',
-    required: ['password'],
+    required: ['password', 'update_user'],
     properties: {
       password: { type: 'string' },
       update_user: {
@@ -89,10 +89,10 @@ export const putUserSchema: FastifySchema = {
   },
   response: {
     '204': {
-      required: ['message'],
       properties: {
         message: { type: 'string' },
       },
+      required: ['message'],
     },
     '401': { $ref: 'apiError#' },
     '422': { $ref: 'apiError#' },
@@ -118,14 +118,15 @@ export const adminDeleteUserByIdSchema: FastifySchema = {
     properties: {
       id: { type: 'number' },
     },
+    required: ['id'],
   },
   response: {
     '204': {
       type: 'object',
-      required: ['message'],
       properties: {
         message: { type: 'string' },
       },
+      required: ['message'],
     },
     '401': { $ref: 'apiError#' },
     '403': { $ref: 'apiError#' },

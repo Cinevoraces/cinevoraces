@@ -117,6 +117,7 @@ export const proposeMovieSchema: FastifySchema = {
       properties: {
         message: { type: 'string' },
       },
+      required: ['message'],
     },
     '401': { $ref: 'apiError#' },
     '422': { $ref: 'apiError#' },
@@ -143,6 +144,7 @@ export const updateProposedMovieSchema: FastifySchema = {
       properties: {
         message: { type: 'string' },
       },
+      required: ['message'],
     },
     '401': { $ref: 'apiError#' },
   },
@@ -166,6 +168,7 @@ export const adminPublishMovieSchema: FastifySchema = {
       properties: {
         message: { type: 'string' },
       },
+      required: ['message'],
     },
     '401': { $ref: 'apiError#' },
     '404': { $ref: 'apiError#' },
@@ -190,6 +193,7 @@ export const adminDeleteMovieSchema: FastifySchema = {
       properties: {
         message: { type: 'string' },
       },
+      required: ['message'],
     },
     '401': { $ref: 'apiError#' },
     '404': { $ref: 'apiError#' },
