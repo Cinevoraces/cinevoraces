@@ -49,6 +49,15 @@ export function SECURITY_SANITIZER(server: server) {
       });
       const { token } = await login.json();
 
+      const payloadSanitizerTest = await app.inject({
+        method: 'PUT',
+        url: '/reviews/1',
+        headers: { authorization: `Bearer ${token}` },
+        payload: {
+          comment: '<script>alert("tésterCdouter");</script>',
+        },
+      });
+      expect(await payloadSanitizerTest.json().review.comment).toStrictEqual('');
     });
   });
 }

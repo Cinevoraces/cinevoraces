@@ -24,6 +24,7 @@ export const users = async (fastify: FastifyInstance) => {
     schema: putUserSchema,
     handler: handlePutUser,
     onRequest: [fastify.accessVerify],
+    preHandler: [fastify.sanitizePayload],
     preValidation: [fastify.passwordVerify],
   });
 

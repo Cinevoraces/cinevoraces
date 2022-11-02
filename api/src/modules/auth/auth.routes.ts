@@ -16,6 +16,7 @@ export const auth = async (fastify: FastifyInstance) => {
     url: '/register',
     schema: registerSchema,
     handler: handleRegister,
+    preHandler: [fastify.sanitizePayload],
   });
 
   fastify.route({
@@ -23,6 +24,7 @@ export const auth = async (fastify: FastifyInstance) => {
     url: '/login',
     schema: loginSchema,
     handler: handleLogin,
+    preHandler: [fastify.sanitizePayload],
   });
 
   fastify.route({
