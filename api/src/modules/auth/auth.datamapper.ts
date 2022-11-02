@@ -37,11 +37,11 @@ export const createUser = (
 };
 
 /**
- * **getTokenObject**
+ * **getPrivateUser**
  * @description Find a user by id or pseudo and return object for token construction.
  * @param value object containing *id or pseudo*
 */
-export const getTokenObject = (
+export const getPrivateUser = (
   value: { id: number } | { pseudo: string },
 ): Query.preparedQuery => {
   const column: string = Object.keys(value)[0];

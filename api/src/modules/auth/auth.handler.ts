@@ -4,7 +4,7 @@ import { comparePassword, hashPassword } from '@src/utils/bcryptHandler';
 import { 
   createUser, 
   findUserByPseudoOrMail, 
-  getTokenObject 
+  getPrivateUser 
 } from '@modules/auth/auth.datamapper';
 
 type Request = FastifyRequest<{
@@ -69,7 +69,7 @@ export const handleLogin = async (request: Request, reply: Reply) => {
 
   try {
     const { rows: user, rowCount: isUser } = await pgClient.query(
-      getTokenObject({ pseudo })
+      getPrivateUser({ pseudo })
     );
 
     if (!isUser) {
@@ -129,7 +129,7 @@ export const handleRefreshToken = async (request: Request, reply: Reply) => {
   try {
     // Look for user in DB
     const { rows, rowCount: isUser } = await pgClient.query(
-      getTokenObject({ id })
+      getPrivateUser({ id })
     );
 
     if (!isUser) {
