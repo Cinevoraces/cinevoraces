@@ -36,6 +36,7 @@ export const getSlotsSchema: FastifySchema = {
       type: 'array',
       items: { $ref: 'slot#' },
     },
+    '401': { $ref: 'apiError#' },
     '404': { $ref: 'apiError#' },
   },
 };

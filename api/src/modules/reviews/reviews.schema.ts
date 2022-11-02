@@ -39,6 +39,7 @@ export const reviewMovieSchema: FastifySchema = {
         },
       },
     },
+    '401': { $ref: 'apiError#' },
     '404': { $ref: 'apiError#' },
   },
 };
@@ -109,13 +110,3 @@ export const adminDeleteReviewSchema: FastifySchema = {
     '404': { $ref: 'apiError#' },
   },
 };
-
-// properties: {
-//   movie_id: { type: 'number' },
-//   user_id: { type: 'number' },
-//   bookmarked: { type: 'boolean' },
-//   liked: { type: 'boolean' },
-//   viewed: { type: 'boolean' },
-//   rating: { type: 'number' },
-//   comment: { type: 'string' },
-// },
