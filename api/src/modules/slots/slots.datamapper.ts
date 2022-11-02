@@ -58,22 +58,3 @@ export const updateSlot = (
     values: [id, is_booked],
   };
 };
-
-/**
- * **getTokenObject**
- * @description Find a user by id or pseudo and return object for token construction.
- * @param value object containing *id or pseudo*
-*/
-export const getTokenObject = (
-  value: { id: number } | { pseudo: string },
-): Query.preparedQuery => {
-  const column: string = Object.keys(value)[0];
-  return {
-    text: ` SELECT 
-              id, pseudo, mail,
-              password, role, avatar_url
-            FROM "proposition_slot"
-            WHERE ${Object.keys(value)[0]} = $1;`,
-    values: [(value[column as keyof typeof value])],
-  };
-};
