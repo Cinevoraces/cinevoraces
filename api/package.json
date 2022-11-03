@@ -18,7 +18,8 @@
     "fastify-plugin": "^4.2.1",
     "module-alias": "^2.2.2",
     "pg": "^8.8.0",
-    "qs": "^6.11.0"
+    "qs": "^6.11.0",
+    "sanitize-html": "^2.7.3"
   },
   "devDependencies": {
     "@faker-js/faker": "^7.5.0",
@@ -27,6 +28,7 @@
     "@types/node": "^18.7.16",
     "@types/pg": "^8.6.5",
     "@types/qs": "^6.9.7",
+    "@types/sanitize-html": "^2.6.2",
     "@typescript-eslint/eslint-plugin": "^5.40.0",
     "@typescript-eslint/parser": "^5.40.0",
     "eslint": "^8.25.0",

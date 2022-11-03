@@ -30,6 +30,7 @@ export const handleGetMovies = async (request: Request, reply: Reply) => {
       throw new Error('Aucun film trouvé');
     }
 
+    // TODO: 2. This solution must be treated using SQL.
     // Populate movies with user existing reviews if logged
     if (user) {
       const { rows: reviews, rowCount: reviewCount } = await pgClient.query(
@@ -64,7 +65,7 @@ export const handleProposeMovie = async (
   reply: Reply
 ) => {
   const { pgClient, body, user } = request;
-  // TODO: Change SQL Function to allow user_id to be declared at the last index
+  // TODO: 1. Change SQL Function to allow user_id to be declared at the last index
   // Payload must be declared this way to add user_id with token
   // and keep keys order.
   const payload = { 
