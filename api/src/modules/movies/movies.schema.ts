@@ -162,6 +162,13 @@ export const adminPublishMovieSchema: FastifySchema = {
     },
     required: ['id'],
   },
+  body: {
+    type: 'object',
+    properties: {
+      password: { type: 'string' },
+    },
+    required: ['password'],
+  },
   response: {
     '204': {
       type: 'object',
@@ -186,6 +193,13 @@ export const adminDeleteMovieSchema: FastifySchema = {
       id: { type: 'number' },
     },
     required: ['id'],
+  },
+  body: {
+    type: 'object',
+    properties: {
+      password: { type: 'string' },
+    },
+    required: ['password'],
   },
   response: {
     '204': {

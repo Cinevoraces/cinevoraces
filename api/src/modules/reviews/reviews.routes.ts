@@ -16,8 +16,8 @@ export const reviews = async (fastify: FastifyInstance) => {
     url: '/reviews/:movieId',
     schema: reviewMovieSchema,
     handler: handleReviewMovie,
-    onRequest: [fastify.accessVerify],
-    preHandler: [fastify.findOrCreateReviewObject],
+    onRequest: [fastify.verifyAccessToken],
+    preHandler: [fastify.findOrCreateReview],
   });
 
   fastify.route({
@@ -34,6 +34,6 @@ export const reviews = async (fastify: FastifyInstance) => {
     schema: adminDeleteReviewSchema,
     handler: handleAdminDeleteReview,
     onRequest: [fastify.isAdmin],
-    preValidation: [fastify.passwordVerify],
+    preValidation: [fastify.verifyPassword],
   });
 };

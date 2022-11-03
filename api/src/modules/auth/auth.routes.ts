@@ -30,6 +30,6 @@ export const auth = async (fastify: FastifyInstance) => {
     url: '/refresh',
     schema: refreshSchema,
     handler: handleRefreshToken,
-    onRequest: [fastify.refreshVerify],
+    onRequest: [fastify.verifyRefreshToken],
   });
 };
