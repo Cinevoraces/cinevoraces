@@ -1,7 +1,7 @@
 import type { InjectOptions } from 'fastify';
 import type { server } from '../utils/testsType';
 
-export async function SLOTS_ENDPOINTS(server: server) {
+export async function ENDPOINTS_SLOTS(server: server) {
   describe('SLOTS ENDPOINTS', () => {
     const { app, res, expectedObjects } = server;
     const inject: Record<string, InjectOptions> = {

@@ -29,6 +29,7 @@ export const movies = async (fastify: FastifyInstance) => {
     schema: proposeMovieSchema,
     handler: handleProposeMovie,
     onRequest: [fastify.accessVerify],
+    preHandler: [fastify.sanitizePayload],
     preValidation: [fastify.hasMovieBeenProposed],
   });
 
@@ -38,6 +39,7 @@ export const movies = async (fastify: FastifyInstance) => {
     schema: updateProposedMovieSchema,
     handler: handleUpdateProposedMovie,
     onRequest: [fastify.accessVerify],
+    preHandler: [fastify.sanitizePayload],
     preValidation: [fastify.isMoviePublishedAsUser],
   });
 

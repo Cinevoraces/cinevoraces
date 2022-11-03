@@ -17,7 +17,7 @@ export const reviews = async (fastify: FastifyInstance) => {
     schema: reviewMovieSchema,
     handler: handleReviewMovie,
     onRequest: [fastify.accessVerify],
-    preHandler: [fastify.findOrCreateReviewObject],
+    preHandler: [fastify.findOrCreateReviewObject, fastify.sanitizePayload],
   });
 
   fastify.route({

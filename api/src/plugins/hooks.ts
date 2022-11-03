@@ -5,6 +5,7 @@ import type {
 } from 'fastify';
 import type { Payload } from '@src/types/Payload';
 import { comparePassword } from '@src/utils/bcryptHandler';
+import { sanitizeObject } from '@src/utils/sanitizeHtmlHandler';
 import plugin from 'fastify-plugin';
 
 declare module 'fastify' {
@@ -21,6 +22,7 @@ declare module 'fastify' {
     doesMovieExist: (request: Request, reply: Reply)=>void;
     isSlotBooked: (request: Request, reply: Reply)=>void;
     findOrCreateReviewObject: (request: Request, reply: Reply)=>void;
+    sanitizePayload: (request: Request, reply: Reply)=>void;
   }
 }
 
@@ -347,7 +349,19 @@ const hooks: FastifyPluginCallback = async (fastify, opts, done) => {
       reply.send(err);
     }
   });
-  
+
+  /**
+   * **Sanitize Payload**
+   * @preHandler
+   * @description Look for any HTML tags in the payload and remove them.
+   */
+  fastify.decorate('sanitizePayload', async (
+    request: Request<{ Body: Record<string, unknown> }>,
+  ) => {
+    const { body } = request;
+    request.body = sanitizeObject(body);
+  });
+
   done();
 };
 
