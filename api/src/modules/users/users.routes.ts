@@ -23,9 +23,8 @@ export const users = async (fastify: FastifyInstance) => {
     url: '/users',
     schema: putUserSchema,
     handler: handlePutUser,
-    onRequest: [fastify.accessVerify],
-    preHandler: [fastify.sanitizePayload],
-    preValidation: [fastify.passwordVerify],
+    onRequest: [fastify.verifyAccessToken],
+    preValidation: [fastify.verifyPassword],
   });
 
   fastify.route({
@@ -34,6 +33,6 @@ export const users = async (fastify: FastifyInstance) => {
     schema: adminDeleteUserByIdSchema,
     handler: handleAdminDeleteUserById,
     onRequest: [fastify.isAdmin],
-    preValidation: [fastify.passwordVerify],
+    preValidation: [fastify.verifyPassword],
   });
 };

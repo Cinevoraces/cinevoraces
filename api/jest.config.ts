@@ -10,5 +10,6 @@ export default {
     "@routes/(.*)$": "<rootDir>/src/routes/$1",
     "@plugins/(.*)$": "<rootDir>/src/plugins/$1",
     "@modules/(.*)$": "<rootDir>/src/modules/$1",
+    "@hooks/(.*)$": "<rootDir>/src/hooks/$1",
   },
 };

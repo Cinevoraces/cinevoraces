@@ -27,6 +27,7 @@
       "@routes/*": ["src/routes/*"],
       "@plugins/*": ["src/plugins/*"],
       "@modules/*": ["src/modules/*"],
+      "@hooks/*": ["src/hooks/*"],
       "@utils/*": ["src/utils/*"]
     }
   }

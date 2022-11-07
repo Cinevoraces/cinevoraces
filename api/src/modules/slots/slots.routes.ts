@@ -16,7 +16,7 @@ export const slots = async (fastify: FastifyInstance) => {
     url: '/slots',
     schema: getSlotsSchema,
     handler: handleGetSlots,
-    onRequest: [fastify.accessVerify],
+    onRequest: [fastify.verifyAccessToken],
   });
 
   fastify.route({
@@ -24,8 +24,8 @@ export const slots = async (fastify: FastifyInstance) => {
     url: '/slots/book/:id',
     schema: bookSlotSchema,
     handler: handleBookSlot,
-    onRequest: [fastify.accessVerify],
-    preValidation: [fastify.userHasProposition],
+    onRequest: [fastify.verifyAccessToken],
+    preValidation: [fastify.hasProposition, fastify.isSlotBooked],
   });
 
   fastify.route({
@@ -34,6 +34,6 @@ export const slots = async (fastify: FastifyInstance) => {
     schema: adminUnbookSlotSchema,
     handler: handleAdminUnbookSlot,
     onRequest: [fastify.isAdmin],
-    preValidation: [fastify.passwordVerify, fastify.isSlotBooked],
+    preValidation: [fastify.verifyPassword, fastify.isSlotBooked],
   });
 };

@@ -48,6 +48,7 @@
     "@routes": "dist/src/routes",
     "@plugins": "dist/src/plugins",
     "@modules": "dist/src/modules",
+    "@hooks": "dist/src/hooks",
     "@utils": "dist/src/utils"
   }
 }

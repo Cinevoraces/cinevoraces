@@ -211,6 +211,7 @@ export async function ENDPOINTS_MOVIES(server: server) {
         ...inject.publishMovie,
         url: `/admin/movies/publish/${res.movies[0].movie.id}`,
         headers: { Authorization: `Bearer ${token}` },
+        payload: { password: res.users[0].user.password },
       };
       const failPublishMovie = await app.inject(inject.publishMovie);
       expect(failPublishMovie.statusCode).toEqual(404);
@@ -220,6 +221,7 @@ export async function ENDPOINTS_MOVIES(server: server) {
         ...inject.publishMovie,
         url: `/admin/movies/publish/${res.movies[1].movie.id}`,
         headers: { Authorization: `Bearer ${token}` },
+        payload: { password: res.users[0].user.password },
       };
       const successPublishMovie = await app.inject(inject.publishMovie);
       expect(successPublishMovie.statusCode).toEqual(204);
@@ -239,15 +241,17 @@ export async function ENDPOINTS_MOVIES(server: server) {
         ...inject.deleteMovie,
         url: `/admin/movies/${res.movies[0].movie.id}`,
         headers: { Authorization: `Bearer ${token}` },
+        payload: { password: res.users[0].user.password },
       };
       const deleteOneMovie = await app.inject(inject.deleteMovie);
       expect(deleteOneMovie.statusCode).toEqual(204);
-      
+
       // DELETE ONE MOVIE FAIL
       inject.deleteMovie = {
         ...inject.deleteMovie,
         url: `/admin/movies/${res.movies[0].movie.id}`,
         headers: { Authorization: `Bearer ${token}` },
+        payload: { password: res.users[0].user.password },
       };
       const failDeleteOneMovie = await app.inject(inject.deleteMovie);
       expect(failDeleteOneMovie.statusCode).toEqual(404);

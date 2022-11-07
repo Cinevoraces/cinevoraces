@@ -20,7 +20,7 @@ export const movies = async (fastify: FastifyInstance) => {
     url: '/movies',
     schema: getMoviesSchema,
     handler: handleGetMovies,
-    onRequest: [fastify.isLogged],
+    onRequest: [fastify.verifyAccessTokenOptionnal],
   });
 
   fastify.route({
@@ -28,9 +28,8 @@ export const movies = async (fastify: FastifyInstance) => {
     url: '/movies',
     schema: proposeMovieSchema,
     handler: handleProposeMovie,
-    onRequest: [fastify.accessVerify],
-    preHandler: [fastify.sanitizePayload],
-    preValidation: [fastify.hasMovieBeenProposed],
+    onRequest: [fastify.verifyAccessToken],
+    preValidation: [fastify.doesPropositionExist],
   });
 
   fastify.route({
@@ -38,9 +37,8 @@ export const movies = async (fastify: FastifyInstance) => {
     url: '/movies',
     schema: updateProposedMovieSchema,
     handler: handleUpdateProposedMovie,
-    onRequest: [fastify.accessVerify],
-    preHandler: [fastify.sanitizePayload],
-    preValidation: [fastify.isMoviePublishedAsUser],
+    onRequest: [fastify.verifyAccessToken],
+    preValidation: [fastify.isMoviePublished],
   });
 
   fastify.route({
@@ -49,7 +47,7 @@ export const movies = async (fastify: FastifyInstance) => {
     schema: adminPublishMovieSchema,
     handler: handleAdminPublishMovie,
     onRequest: [fastify.isAdmin],
-    preValidation: [fastify.isMoviePublishedAsAdmin],
+    preValidation: [fastify.verifyPassword, fastify.isMoviePublished],
   });
 
   fastify.route({
@@ -58,6 +56,7 @@ export const movies = async (fastify: FastifyInstance) => {
     schema: adminDeleteMovieSchema,
     handler: handleAdminDeleteMovie,
     onRequest: [fastify.isAdmin],
-    preValidation: [fastify.doesMovieExist],
+    preValidation: [fastify.verifyPassword, fastify.doesMovieExist],
+
   });
 };
