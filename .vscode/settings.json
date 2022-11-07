@@ -1,10 +1,13 @@
 {
   "eslint.format.enable": true,
   "editor.codeActionsOnSave": {
-      "source.fixAll": true
+      "source.fixAll.eslint": true
       },
   "eslint.workingDirectories": [
     "./app",
     "./api"
-  ]
+  ],
+  "css.lint.unknownAtRules": "ignore",
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode"
 }

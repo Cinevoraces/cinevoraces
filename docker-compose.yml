@@ -36,12 +36,12 @@ services:
     volumes:
       - ./api:/api
 
-  app:
-    depends_on:
-      - api
-    build:
-      context: ./app
-      dockerfile: Dockerfile.dev
-    restart: always
-    volumes:
-      - ./app/:/app
+  # app:
+  #   depends_on:
+  #     - api
+  #   build:
+  #     context: ./app
+  #     dockerfile: Dockerfile.dev
+  #   restart: always
+  #   volumes:
+  #     - ./app/:/app
