@@ -6,5 +6,6 @@
   "eslint.workingDirectories": [
     "./app",
     "./api"
-  ]
+  ],
+  "css.lint.unknownAtRules": "ignore"
 }
