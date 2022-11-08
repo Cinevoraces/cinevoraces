@@ -1,11 +1,6 @@
 module.exports = {
   plugins: ['@typescript-eslint'],
   parserOptions: {
-    extends: [
-      'next',
-      'next/core-web-vitals',
-      'prettier'
-    ],
     tsconfigRootDir: __dirname,
     project: ['./tsconfig.json'],
   },
@@ -41,4 +36,9 @@ module.exports = {
     "eol-last": ["error", "always"],
     'no-multiple-empty-lines': ['warn', { max: 1 }]
   },
+  extends: [
+    'next',
+    'next/core-web-vitals',
+    'prettier'
+  ]
 };
