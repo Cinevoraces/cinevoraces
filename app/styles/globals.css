@@ -12,6 +12,22 @@
     @apply bg-dark-gray;
   }
 }
+  /* Reset for special range inputs*/
+input[type='range'] {
+  @apply z-0 appearance-none w-full h-2 rounded-full cursor-pointer bg-orange-primary/20 focus:outline-none focus:ring-4 focus:ring-offset-0 focus:ring-white/5
+}
+input[type='range']::-moz-range-thumb {
+  @apply z-10 appearance-none pointer-events-auto w-5 h-5 rounded-full border-none ring-4 ring-medium-gray/50 bg-orange-secondary active:scale-110
+}
+input[type='range']::-moz-range-progress {
+  @apply appearance-none pointer-events-auto w-full h-2 rounded-full bg-orange-secondary 
+}
+input[type='range']::-webkit-slider-thumb {
+  @apply z-10 appearance-none -mt-[.4rem] pointer-events-auto w-5 h-5 rounded-full border-none ring-4 ring-medium-gray/50 bg-orange-secondary active:scale-110
+}
+input[type='range']::-webkit-slider-runnable-track {
+  @apply bg-orange-secondary/50 w-full h-2 rounded-full
+}
 
 /*
 @media (prefers-color-scheme: dark) {

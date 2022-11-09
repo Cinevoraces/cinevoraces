@@ -1,7 +1,6 @@
 import React from 'react';
 
 interface RadioProps {
-  style?: string;
   name: string;
   value: string;
   isChecked?: string;
@@ -10,13 +9,12 @@ interface RadioProps {
 
 /**
  * @return              \<input\> type checkbox
- * @param style         custom style
  * @param name          set 'value' and 'id' param and \<label\> content
  * @param value         set 'value' and 'id' param and \<label\> content
  * @param isChecked     define if default checked
  * @param handler       state setter
  */
-export default function Radio({ style, name, value, isChecked, handler }: RadioProps) {
+export default function Radio({ name, value, isChecked, handler }: RadioProps) {
   return (
     <label
       htmlFor={name}

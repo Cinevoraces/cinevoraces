@@ -1,9 +1,12 @@
 import type { NextPage } from 'next';
-import Button from 'components/Input/Button';
-import CheckBox from '@components/Input/CheckBox';
-import Radio from '@components/Input/Radio';
+import { useState } from 'react';
+import { Button, CheckBox, Radio, Range, DoubleRange } from '@components/Input';
 
 const Home: NextPage = () => {
+  const [value, setValue] = useState(18);
+  const [minValue, setMinValue] = useState(18);
+  const [maxValue, setMaxValue] = useState(100);
+
   return (
     <main className="flex flex-col items-center gap-6">
       <h1 className="text-3xl font-bold text-orange-primary">
@@ -17,7 +20,26 @@ const Home: NextPage = () => {
         name="Remember me ?"
         value="isRemember"
       />
-      <Radio name='France' value='france'/>
+      <Radio
+        name="France"
+        value="france"
+      />
+      <Range
+        label="Ton âge"
+        min={18}
+        max={100}
+        stateValue={value}
+        setter={setValue}
+      />
+      <DoubleRange
+        label="Durée du film"
+        min={18}
+        max={100}
+        stateValueMin={minValue}
+        stateValueMax={maxValue}
+        minSetter={setMinValue}
+        maxSetter={setMaxValue}
+      />
     </main>
   );
 };
