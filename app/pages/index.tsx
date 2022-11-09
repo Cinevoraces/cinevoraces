@@ -1,6 +1,13 @@
 import type { NextPage } from 'next';
 import { useState } from 'react';
-import { Button, CheckBox, Radio, Range, DoubleRange } from '@components/Input';
+import {
+  Button,
+  CheckBox,
+  RadioInput,
+  RangeInput,
+  DoubleRangeInput,
+  TextInput,
+} from '@components/Input';
 
 const Home: NextPage = () => {
   const [value, setValue] = useState(18);
@@ -13,33 +20,41 @@ const Home: NextPage = () => {
         Bonjour et bienvenue chez Cinévoraces !
       </h1>
       <Button>Clique</Button>
-      <Button style="empty">Clique</Button>
-      <Button style="rounded">Clique</Button>
-      <Button style="white">Clique</Button>
+      <Button customStyle="empty">Clique</Button>
+      <Button customStyle="rounded">Clique</Button>
+      <Button customStyle="white">Clique</Button>
       <CheckBox
-        name="Remember me ?"
+        id="remember"
+        label="Remember me ?"
         value="isRemember"
       />
-      <Radio
-        name="France"
+      <RadioInput
+        label="France"
+        id="france"
         value="france"
       />
-      <Range
+      <RangeInput
         label="Ton âge"
+        id="age"
         min={18}
         max={100}
-        stateValue={value}
+        value={value}
         setter={setValue}
       />
-      <DoubleRange
+      <DoubleRangeInput
         label="Durée du film"
+        id="length"
         min={18}
         max={100}
-        stateValueMin={minValue}
-        stateValueMax={maxValue}
+        minValue={minValue}
+        maxValue={maxValue}
         minSetter={setMinValue}
         maxSetter={setMaxValue}
       />
+      <TextInput 
+        id='firstName'
+        label='Votre prénom'
+        placeholder='Votre prénom...' />
     </main>
   );
 };

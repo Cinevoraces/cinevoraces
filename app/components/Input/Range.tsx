@@ -3,61 +3,66 @@ import { useEffect } from 'react';
 
 interface RangeCommonProps {
   label: string;
+  id: string;
   min: number;
   max: number;
 }
 
 interface RangeProps extends RangeCommonProps {
-  stateValue: number;
+  value: number;
   setter(value: number): void;
 }
 
 /**
  * @return              \<input\> type range
- * @param label         set \<label\> content and 'id' param
+ * @param label         set \<label\>
+ * @param id            set id param content
  * @param min           set range minimal value
  * @param max           set range maximal value 
  * @param stateValue    controlled state
  * @param setter        state setter
  */
-const Range = ({ label, min, max, stateValue, setter }: RangeProps) => {
+const Range = (props: RangeProps) => {
+  const { id, label, max, value, setter } = props;
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setter(Number(e.currentTarget.value));
   };
 
   return (
-    <fieldset className='flex justify-between items-center gap-3'>
-      <p className='min-w-[2rem]'>{stateValue}</p>
-      <input
-        id={label}
-        type="range"
-        min={min}
-        max={max}
-        value={stateValue}
-        onChange={handleOnChange} />
-      <p className='min-w-[2rem]'>{max}</p>
+    <fieldset>
+      <label htmlFor={id}>{label}</label>
+      <div className='flex justify-between items-center gap-3'>
+        <p className='min-w-[2rem]'>{value}</p>
+        <input
+          type="range"
+          {...props}
+          onChange={handleOnChange} />
+        <p className='min-w-[2rem]'>{max}</p>
+      </div>
     </fieldset>
   );
 };
 
 interface DoubleRangeProps extends RangeCommonProps{
-  stateValueMin: number;
-  stateValueMax: number;
+  minValue: number;
+  maxValue: number;
   minSetter(value: number): void;
   maxSetter(value: number): void;
 }
 
 /**
  * @return              \<input\> type range
- * @param label         set \<label\> content and 'id' param
+ * @param label         set \<label\> content
+ * @param id            set id param content
  * @param min           set range minimal value
  * @param max           set range maximal value 
- * @param stateValueMin      controlled state
- * @param stateValueMax      controlled state
- * @param minSetter     state setter
- * @param maxSetter     state setter
+ * @param minValue      controlled state 1
+ * @param maxValue      controlled state 2
+ * @param minSetter     state setter 1
+ * @param maxSetter     state setter 2
  */
-const DoubleRange = ({ label, min, max, stateValueMin, stateValueMax, minSetter, maxSetter }: DoubleRangeProps) => {
+const DoubleRange = (props: DoubleRangeProps) => {
+  const { id, label, minValue, maxValue, minSetter, maxSetter } = props;
   const minHandleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     minSetter(Number(e.currentTarget.value));
   };
@@ -66,27 +71,26 @@ const DoubleRange = ({ label, min, max, stateValueMin, stateValueMax, minSetter,
   };
 
   return (
-    <fieldset className='w-2/3 px-auto flex justify-between items-center gap-4'>
-      <p className='min-w-[2rem]'>{stateValueMin}</p>
-      <div className='relative w-full -mt-2'>
-        <input
-          id={label}
-          type="range"
-          min={min}
-          max={max}
-          value={stateValueMin}
-          onChange={minHandleOnChange}
-          className="absolute" />
-        <input
-          id='bis'
-          type="range"
-          min={min}
-          max={max}
-          value={stateValueMax}
-          onChange={maxHandleOnChange}
-          className="absolute" />
+    <fieldset className='w-2/3 px-auto'>
+      <label htmlFor={id}>{label}</label>
+      <div className='flex justify-between items-center gap-4'>
+        <p className='min-w-[2rem]'>{minValue}</p>
+        <div className='relative w-full -mt-2'>
+          <input
+            type="range"
+            {...props}
+            value={minValue}
+            onChange={minHandleOnChange}
+            className="absolute" />
+          <input
+            type="range"
+            {...props}
+            value={maxValue}
+            onChange={maxHandleOnChange}
+            className="absolute" />
+        </div>
+        <p className='min-w-[2rem]'>{maxValue}</p>
       </div>
-      <p className='min-w-[2rem]'>{stateValueMax}</p>
     </fieldset>
   );
 };

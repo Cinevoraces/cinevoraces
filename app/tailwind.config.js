@@ -19,6 +19,7 @@ module.exports = {
         'medium-gray':'#393945',
         'white':'#F2F2F3'
       },
+      backgroundImage:{}
     }
   },
   plugins: [

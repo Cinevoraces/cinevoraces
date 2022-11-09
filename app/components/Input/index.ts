@@ -1,6 +1,17 @@
 import Button from 'components/Input/Button';
 import CheckBox from '@components/Input/CheckBox';
-import Radio from '@components/Input/Radio';
-import { Range, DoubleRange } from '@components/Input/Range';
+import RadioInput from '@components/Input/Radio';
+import {
+  Range as RangeInput,
+  DoubleRange as DoubleRangeInput,
+} from '@components/Input/Range';
+import TextInput from '@components/Input/Text';
 
-export { Button, CheckBox, Radio, Range, DoubleRange };
+export {
+  Button,
+  CheckBox,
+  RadioInput,
+  RangeInput,
+  DoubleRangeInput,
+  TextInput,
+};

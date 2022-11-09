@@ -3,24 +3,23 @@ import Link from 'next/link';
 
 interface ButtonProps {
   children?: React.ReactNode;
-  style?: string;
+  customStyle?: string;
   handler?: React.MouseEventHandler<HTMLButtonElement>;
   to?: string;
   href?: string;
 }
 
 /**
- *
- * @param style custom styles
+ * @returns custom Button component
+ * @param customStyle custom styles
  * @param children text & / or img
  * @param handler specific handler outside forms and redirection
  * @param to to specify for internal Link redirection
  * @param href for external links only
- * @returns custom Button component
  */
 export default function Button({
   children,
-  style,
+  customStyle,
   handler,
   to,
   href,
@@ -34,7 +33,7 @@ export default function Button({
   ];
 
   let className = basicStyles;
-  switch (style) {
+  switch (customStyle) {
     case 'empty':
       className += ' ' + empty;
       break;

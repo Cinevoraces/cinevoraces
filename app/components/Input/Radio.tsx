@@ -1,31 +1,31 @@
 import React from 'react';
 
 interface RadioProps {
-  name: string;
+  label?: string;
+  id: string;
   value: string;
-  isChecked?: string;
-  handler?: React.ChangeEventHandler<HTMLInputElement>;
+  defaultChecked?: boolean;
+  onChange?: React.ChangeEventHandler<HTMLInputElement>;
 }
 
 /**
  * @return              \<input\> type checkbox
- * @param name          set 'value' and 'id' param and \<label\> content
+ * @param label          set \<label\> content
+ * @param id          set 'value' and 'id' param and \<label\> content
  * @param value         set 'value' and 'id' param and \<label\> content
  * @param isChecked     define if default checked
  * @param handler       state setter
  */
-export default function Radio({ name, value, isChecked, handler }: RadioProps) {
+export default function Radio(props: RadioProps) {
+  const { id, label } = props;
   return (
     <label
-      htmlFor={name}
+      htmlFor={id}
       className="flex gap-3 items-center text-lg font-thin">
-      {name}
+      {label}
       <input
         type="radio"
-        value={value}
-        id={name}
-        onChange={handler}
-        defaultChecked={isChecked ? true : false}
+        {...props}
         className="w-5 h-5 border border-transparent rounded-full
         bg-orange-primary/20 text-orange-secondary
         focus:border-orange-primary focus:ring-4 focus:ring-offset-0 focus:ring-white/5"
