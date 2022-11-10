@@ -4,7 +4,7 @@ import Link from 'next/link';
 interface ButtonProps {
   children?: React.ReactNode;
   customStyle?: string;
-  handler?: React.MouseEventHandler<HTMLButtonElement>;
+  onClick?: React.MouseEventHandler<HTMLButtonElement>;
   to?: string;
   href?: string;
 }
@@ -13,20 +13,21 @@ interface ButtonProps {
  * @returns custom Button component
  * @param customStyle custom styles
  * @param children text & / or img
- * @param handler specific handler outside forms and redirection
+ * @param onClick specific handler outside forms and redirection
  * @param to to specify for internal Link redirection
  * @param href for external links only
  */
 export default function Button({
   children,
   customStyle,
-  handler,
+  onClick,
   to,
   href,
 }: ButtonProps) {
   const [basicStyles, empty, rounded, white] = [
     `px-6 py-3 rounded-3xl shadow-inner bg-orange-primary font-sans text-dark-gray font-semibold 
-      focus:ring-none focus:outline-none focus:ring-4 focus:ring-offset-0 focus:ring-white/5`,
+    focus:ring-none focus:outline-none focus:ring-4 focus:ring-offset-0 focus:ring-white/5
+    hover:ring-none hover:outline-none hover:ring-4 hover:ring-offset-0 hover:ring-white/5 hover:scale-105`,
     'bg-opacity-0 text-white border border-orange-primary',
     'rounded-4xl',
     'bg-white focus:ring-white/20',
@@ -67,7 +68,7 @@ export default function Button({
       {!href && !to && (
         <button
           className={className}
-          onClick={handler}>
+          onClick={onClick}>
           {children}
         </button>
       )}
