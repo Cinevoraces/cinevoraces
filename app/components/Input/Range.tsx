@@ -31,7 +31,7 @@ const Range = (props: RangeProps) => {
   return (
     <fieldset>
       <label htmlFor={id}>{label}</label>
-      <div className="flex justify-between items-center gap-3">
+      <div className="mt-1 flex justify-between items-center gap-3">
         <p className="min-w-[2rem]">{value}</p>
         <input
           type="range"
@@ -75,7 +75,7 @@ const DoubleRange = (props: DoubleRangeProps) => {
   return (
     <fieldset className="w-2/3 px-auto">
       <label htmlFor={id}>{label}</label>
-      <div className="flex justify-between items-center gap-4">
+      <div className="mt-1 flex justify-between items-center gap-4">
         <p className="min-w-[2rem]">{minValue}</p>
         <div className="relative w-full -mt-2">
           <input

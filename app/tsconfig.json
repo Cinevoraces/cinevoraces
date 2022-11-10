@@ -16,6 +16,7 @@
     "incremental": true,
     "baseUrl": ".",
     "paths": {
+      "@public/*" : ["public/*"],
       "@components/*" : ["components/*"],
       "@hooks/*" : ["hooks/*"],
       "@pages/*" : ["pages/*"],
