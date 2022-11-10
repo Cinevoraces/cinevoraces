@@ -13,6 +13,7 @@ import {
 
 const Home: NextPage = () => {
   const defaultChecked = false;
+  const [isRequired, setIsRequired] = useState(false);
   const [isRememberChecked, setIsRememberChecked] = useState(defaultChecked);
   const [value, setValue] = useState(18);
   const [minValue, setMinValue] = useState(18);
@@ -28,10 +29,10 @@ const Home: NextPage = () => {
       <Button customStyle="white">Clique</Button>
       {
         <form
-          action="submit"
           onSubmit={(e) => {
-            e.preventDefault;
-            e.currentTarget.reportValidity();
+            e.preventDefault();
+            !isRequired && setIsRequired(true);
+            console.log(e.currentTarget.reportValidity());
           }}
           className="flex flex-col w-1/4 gap-3">
           <CheckBox
@@ -63,11 +64,7 @@ const Home: NextPage = () => {
             id="firstName"
             label="Votre prénom"
             placeholder="Votre prénom..."
-            onChange={(e) => {
-              console.log(e.currentTarget.value, e.currentTarget.checkValidity());
-              (e.currentTarget.value) && e.currentTarget.checkValidity();
-            }}
-            required
+            required={isRequired}
             minLength={3}
             errorMessage="Saisir un prénom d'au moins 3 lettres." />
           <TextInput
@@ -75,7 +72,7 @@ const Home: NextPage = () => {
             id="email"
             label="Votre addresse mail"
             placeholder="Votre email..."
-            required
+            required={isRequired}
             errorMessage="Addresse mail invalide."
           />
           <TextInput
@@ -83,6 +80,8 @@ const Home: NextPage = () => {
             id="password"
             label="Entrez votre mot de passe"
             placeholder="Mot de passe..."
+            required={isRequired}
+            errorMessage="Le mot de passe ne respecte pas les règles de sécurité."
           />
           <Toggle
             id="showPassword"
@@ -94,6 +93,8 @@ const Home: NextPage = () => {
             id="message"
             label="Entrez votre message"
             placeholder="Mon message..."
+            required={isRequired}
+            errorMessage="Votre message doit comporter a minima 15 caractères."
           />
           <Button>Submit</Button>
         </form>}

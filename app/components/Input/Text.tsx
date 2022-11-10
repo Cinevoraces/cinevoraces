@@ -7,18 +7,20 @@ interface TextProps<T> {
   placeholder?: string;
   value?: string;
   onChange?: React.ChangeEventHandler<T>;
+  onInput?: React.ChangeEventHandler<T>
   required?: boolean;
   pattern?: string;
   minLength?: number;
   errorMessage?: string;
 }
 
-const basicStyles = `peer valid
+const basicStyles = `peer
   rounded-full rounded-md bg-medium-gray border border-transparent
   px-3 py-2
   placeholder:font-extralight placeholder:text-gray-400
   focus:outline-none focus:border-orange-primary focus:ring-4 focus:ring-offset-0 focus:ring-white/5
-  focus:placeholder:text-gray-600`;
+  focus:placeholder:text-gray-600
+  invalid:border-red-500`;
 
 /**
  * @return                   \<input\> type text/mail/psw/search
@@ -45,7 +47,7 @@ export const Text = (props: TextProps<HTMLInputElement>) => {
         name={id}
         className={basicStyles}
       />
-      <p className='hidden peer-invalid:block'>{errorMessage}</p>
+      <p className='hidden peer-invalid:block text-md font-light text-red-500'>{errorMessage}</p>
     </div>
   );
 };
@@ -71,6 +73,7 @@ export const TextArea = (props: TextProps<HTMLTextAreaElement>) => {
         name={id}
         className={basicStyles}
       />
+      <p className='hidden peer-invalid:block text-md font-light text-red-500'>{errorMessage}</p>
     </div>
   );
 };
