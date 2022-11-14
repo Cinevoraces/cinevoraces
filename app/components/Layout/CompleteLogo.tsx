@@ -9,6 +9,6 @@ export default function CompleteLogo() {
       alt="Home Logo"
       width={190}
       height={40}
-      className="h-[40px] w-auto"/>
+      className="h-[35px] w-auto lg:h-[45px]"/>
   );
 }
