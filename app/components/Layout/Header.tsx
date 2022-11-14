@@ -55,6 +55,13 @@ export default function Header() {
       { (isConnectionModalOpen) &&
         <Modal stateValue={isConnectionModalOpen} setter={setIsConnectionModalOpen}>
           <h1>COUCOU !</h1>
+          <h1>COUCOU !</h1>
+          <h1>COUCOU !</h1>
+          <h1>COUCOU !</h1>
+          <h1>COUCOU !</h1>
+          <h1>COUCOU !</h1>
+          <h1>COUCOU !</h1>
+          <h1>COUCOU !</h1>
         </Modal>
       }
     </>
