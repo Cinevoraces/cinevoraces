@@ -3,7 +3,7 @@ import Link from 'next/link';
 
 interface ButtonProps {
   children?: React.ReactNode;
-  customStyle?: string;
+  customStyle?: 'text' | 'empty' | 'rounded' | 'white';
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
   to?: string;
   href?: string;

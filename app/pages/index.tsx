@@ -24,7 +24,7 @@ const Home: NextPage = () => {
   return (
     <>
       <Header />
-      <main className="flex flex-col items-center gap-6">
+      <main className="container mx-auto px-4 flex flex-col items-center gap-6">
         <h1 className="text-3xl font-bold text-orange-primary">Bonjour et bienvenue chez Cinévoraces !</h1>
         <Button>Clique</Button>
         <Button customStyle="empty">Clique</Button>
@@ -37,7 +37,7 @@ const Home: NextPage = () => {
               !isRequired && setIsRequired(true);
               console.log(e.currentTarget.reportValidity());
             }}
-            className="flex flex-col w-1/4 gap-3">
+            className="flex flex-col w-full gap-3">
             <CheckBox
               id="remember"
               label="Remember me ?"
@@ -70,28 +70,6 @@ const Home: NextPage = () => {
               required={isRequired}
               minLength={3}
               errorMessage="Saisir un prénom d'au moins 3 lettres." />
-            <TextInput
-              type="email"
-              id="email"
-              label="Votre addresse mail"
-              placeholder="Votre email..."
-              required={isRequired}
-              errorMessage="Addresse mail invalide."
-            />
-            <TextInput
-              type={!isPwVisible ? 'password' : undefined}
-              id="password"
-              label="Entrez votre mot de passe"
-              placeholder="Mot de passe..."
-              required={isRequired}
-              errorMessage="Le mot de passe ne respecte pas les règles de sécurité."
-            />
-            <Toggle
-              id="showPassword"
-              label="Montrer le mot de passe ?"
-              checked={isPwVisible}
-              onChange={() => setIsPwVisible(!isPwVisible)}
-            />
             <TextArea
               id="message"
               label="Entrez votre message"

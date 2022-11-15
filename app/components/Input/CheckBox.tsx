@@ -50,7 +50,7 @@ export const Toggle = (props: CheckBoxProps) => {
   return (
     <label
       htmlFor={id}
-      className="relative inline-flex items-center mr-5 cursor-pointer">
+      className="relative inline-flex items-center mr-5 cursor-pointer text-sm font-light">
       <input
         type="checkbox"
         name={id}

@@ -47,7 +47,7 @@ export const Text = (props: TextProps<HTMLInputElement>) => {
         name={id}
         className={basicStyles}
       />
-      <p className='hidden peer-invalid:block text-md font-light text-red-500'>{errorMessage}</p>
+      <p className='hidden peer-invalid:block text-sm font-light text-red-500'>{errorMessage}</p>
     </div>
   );
 };
@@ -73,7 +73,7 @@ export const TextArea = (props: TextProps<HTMLTextAreaElement>) => {
         name={id}
         className={basicStyles}
       />
-      <p className='hidden peer-invalid:block text-md font-light text-red-500'>{errorMessage}</p>
+      <p className='hidden peer-invalid:block text-sm font-light text-red-500'>{errorMessage}</p>
     </div>
   );
 };
