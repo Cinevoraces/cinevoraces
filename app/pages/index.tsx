@@ -1,6 +1,7 @@
-import type { NextPage } from 'next';
 import React, { useState } from 'react';
-import Layout from '@components/Layout';
+import type { NextPage } from 'next';
+import Image from 'next/image';
+import Link from 'next/link';
 import {
   Button,
   CheckBox,
@@ -11,6 +12,7 @@ import {
   TextInput,
   TextArea,
 } from '@components/Input';
+import PosterComponent from '@components/PosterComponents';
 
 const Home: NextPage = () => {
   const defaultChecked = false;
@@ -21,62 +23,68 @@ const Home: NextPage = () => {
   const [maxValue, setMaxValue] = useState(100);
   const [isPwVisible, setIsPwVisible] = useState(false);
 
+  const last3Movies = ['/movie_posters/1.jpg', '/movie_posters/2.jpg', '/movie_posters/3.jpg'];
+  const posterStyles = 'flex-1 rounded-lg w-1/3 object-cover';
+  const h2Style = 'mt-8 text-2xl font-semibold';
+
   return (
     <>
-      <h1 className="text-3xl font-bold text-orange-primary">Bonjour et bienvenue chez Cinévoraces !</h1>
-      <Button>Clique</Button>
-      <Button customStyle="empty">Clique</Button>
-      <Button customStyle="rounded">Clique</Button>
-      <Button customStyle="white">Clique</Button>
-      {
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            !isRequired && setIsRequired(true);
-            console.log(e.currentTarget.reportValidity());
-          }}
-          className="flex flex-col w-full gap-3">
-          <CheckBox
-            id="remember"
-            label="Remember me ?"
-            checked={isRememberChecked}
-            onChange={() => setIsRememberChecked(!isRememberChecked)} />
-          <RadioInput
-            label="France"
-            id="france"
-            value="france" />
-          <RangeInput
-            label="Ton âge"
-            id="age"
-            min={18}
-            max={100}
-            value={value}
-            setter={setValue} />
-          <DoubleRangeInput
-            label="Durée du film"
-            id="length"
-            min={18}
-            max={100}
-            minValue={minValue}
-            maxValue={maxValue}
-            minSetter={setMinValue}
-            maxSetter={setMaxValue} />
-          <TextInput
-            id="firstName"
-            label="Votre prénom"
-            placeholder="Votre prénom..."
-            required={isRequired}
-            minLength={3}
-            errorMessage="Saisir un prénom d'au moins 3 lettres." />
-          <TextArea
-            id="message"
-            label="Entrez votre message"
-            placeholder="Mon message..."
-            required={isRequired}
-            errorMessage="Votre message doit comporter a minima 15 caractères."
-          />
-          <Button>Submit</Button>
-        </form>}
+      <section>
+        <h1 className="mt-16 text-4xl font-bold">
+          Bienvenue dans votre <span className="text-orange-primary">ciné-club</span> virtuel !
+        </h1>
+        <div className="mt-8 flex justify-between">
+          <Button to={'/films'}>Découvrir les films</Button>
+          <Button
+            to={'/inscription'}
+            customStyle={'empty'}>
+            {'S\'inscrire'}
+          </Button>
+        </div>
+        <h2 className={h2Style}>Les derniers ajouts de la communauté :</h2>
+        <div className="w-full mt-8 flex gap-2">
+          {
+            //to be adapted with the fetched datas
+            last3Movies.map((imageUrl) => (
+              <Image
+                src={imageUrl}
+                alt={`${imageUrl} movie poster`}
+                width={200}
+                height={(200 * 9) / 16}
+                key={imageUrl}
+                className={posterStyles}
+              />
+            ))
+          }
+        </div>
+      </section>
+      <section className="relative z-10 before:absolute before:-z-10 before:inset-y-0 before:-inset-x-[100px] before:w-[5000px] before:bg-medium-gray ">
+        <h2 className={h2Style + ' mb-8'}>Chaque semaine, un film à découvrir !</h2>
+        <PosterComponent number={2} />
+        <p className="-mt-8">
+          <span className="text-orange-primary font-medium">Cinévoraces </span>
+          <span>
+            rassemble depuis 2020 des passionnés de tous les cinémas. Comédies, blockbusters d'action, drames, horreur,
+            thrillers, films d’auteurs... tous les genres sont représentés !
+          </span>
+          <br/>
+          <span>Sur le même principe qu’un club de lecture, chaque semaine, un membre de la communauté propose un film à
+          visionner. Il est ensuite commenté et noté directement sur la page du film, ou fait l'objet de débats et discussions sur </span></p>
+        <Link href={'#/Discord'} className='text-orange-primary font-medium'>notre serveur Discord.</Link>
+        <p>
+          <br/>
+          Envie de rejoindre l'aventure ?
+        </p>
+        <Link href={'/inscription'} className='text-orange-primary font-medium'>inscrivez-vous</Link>
+        <p className='mb-8'> pour échanger entre cinéphages et partager vos films préférés avec la communauté.</p>
+        <div className='flex'>
+          <Button
+            to={'/inscription'}
+            customStyle='rounded'>
+            {'S\'inscrire'}
+          </Button>
+        </div>
+      </section>
     </>
   );
 };

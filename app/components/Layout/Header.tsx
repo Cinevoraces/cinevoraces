@@ -1,12 +1,11 @@
 import React, { useState, useRef } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
 import useCloseMenuOnOutsideClick from '@hooks/useCloseMenuOnOutsideClick';
 import HeaderMenu from './HeaderMenu';
 import CompleteLogo from './CompleteLogo';
-import Button from '@components/Input/Button';
-import { TextInput, Toggle } from '@components/Input';
 import Modal from '@components/Modal/Modal';
+import Button from '@components/Input/Button';
+import { Form, TextInput, Toggle } from '@components/Input';
 
 export default function Header() {
   const navLinks = [
@@ -80,7 +79,7 @@ export default function Header() {
             className="flex flex-col w-full gap-3">
             <TextInput
               id="identifier"
-              label="Mail ou nom d'utilisateur"
+              label="Email ou nom d'utilisateur"
               placeholder="Votre identifiant..."
               required={isRequired}
               minLength={3}

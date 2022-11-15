@@ -1,3 +1,4 @@
+import Form from './Form';
 import Button from 'components/Input/Button';
 import { CheckBox, Toggle } from '@components/Input/CheckBox';
 import RadioInput from '@components/Input/Radio';
@@ -8,6 +9,7 @@ import {
 import { Text as TextInput, TextArea } from '@components/Input/Text';
 
 export {
+  Form,
   Button,
   CheckBox,
   Toggle,
