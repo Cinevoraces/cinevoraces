@@ -53,7 +53,8 @@ export default function Button({
       {to && (
         <Link
           className={className}
-          href={to}>
+          href={to}
+          onClick={onClick}>
           {children}
         </Link>
       )}

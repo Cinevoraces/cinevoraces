@@ -1,5 +1,6 @@
 import React, { useState, useRef } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import useCloseMenuOnOutsideClick from '@hooks/useCloseMenuOnOutsideClick';
 import HeaderMenu from './HeaderMenu';
 import CompleteLogo from './CompleteLogo';
@@ -30,6 +31,8 @@ export default function Header() {
   useCloseMenuOnOutsideClick(userMenuRef, 'user', isUserMenuOpen, setIsUserMenuOpen);
   useCloseMenuOnOutsideClick(connexionModalRef, 'modal', isConnectionModalOpen, setIsConnectionModalOpen);
 
+  // Close menus
+
   return (
     <>
       <header
@@ -43,7 +46,11 @@ export default function Header() {
             links={navLinks}
             ref={burgerMenuRef}
           />
-          <CompleteLogo />
+          <Link
+            href={'/'}
+            aria-label="Return to homepage on logo click">
+            <CompleteLogo />
+          </Link>
         </div>
         <nav className="hidden justify-between lg:flex">
           {navLinks.map((link) => (
@@ -93,9 +100,14 @@ export default function Header() {
               checked={isPwVisible}
               onChange={() => setIsPwVisible(!isPwVisible)}
             />
-            <div className='flex justify-between'>
+            <div className="flex justify-between">
               <Button>Se connecter</Button>
-              <Button customStyle='empty' to={'/inscription'} onClick={() => setIsConnectionModalOpen(!isConnectionModalOpen)}>{'S\'inscrire'}</Button>
+              <Button
+                customStyle="empty"
+                onClick={() => setIsConnectionModalOpen(!isConnectionModalOpen)}
+                to={'/inscription'}>
+                {'S\'inscrire'}
+              </Button>
             </div>
           </form>
         </Modal>
