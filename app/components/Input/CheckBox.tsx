@@ -58,8 +58,8 @@ export const Toggle = (props: CheckBoxProps) => {
         className="sr-only peer"
       />
       <div
-        className="peer w-11 h-6 bg-orange-primary/20 rounded-full border border-transparent
-          after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:border after:rounded-full after:h-5 after:w-5  after:bg-medium-gray after:border-gray-300
+        className="relative peer w-11 h-6 bg-orange-primary/20 rounded-full border border-transparent
+          after:content-[''] after:absolute after:top-[1px] after:left-[2px] after:border after:rounded-full after:h-5 after:w-5  after:bg-medium-gray after:border-gray-300
           peer-focus:border-orange-primary peer-focus:ring-4 peer-focus:ring-offset-0 peer-focus:ring-white/5
           peer-hover:border-orange-primary peer-hover:ring-4 peer-hover:ring-offset-0 peer-hover:ring-white/5
           peer-checked:bg-orange-secondary peer-checked:after:bg-white peer-checked:after:border-white

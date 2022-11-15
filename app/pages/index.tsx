@@ -58,22 +58,20 @@ const Home: NextPage = () => {
           }
         </div>
       </section>
-      <section className="relative z-10 before:absolute before:-z-10 before:inset-y-0 before:-inset-x-[100px] before:w-[5000px] before:bg-medium-gray ">
+      <section className="relative z-10 pb-8 before:absolute before:-z-10 before:inset-y-0 before:-inset-x-[100px] before:w-[5000px] before:bg-medium-gray ">
         <h2 className={h2Style + ' mb-8'}>Chaque semaine, un film à découvrir !</h2>
         <PosterComponent number={2} />
         <p className="-mt-8">
           <span className="text-orange-primary font-medium">Cinévoraces </span>
           <span>
-            rassemble depuis 2020 des passionnés de tous les cinémas. Comédies, blockbusters d'action, drames, horreur,
-            thrillers, films d’auteurs... tous les genres sont représentés !
+            {'rassemble depuis 2020 des passionnés de tous les cinémas. Comédies, blockbusters d\'action, drames, horreur, thrillers, films d’auteurs... tous les genres sont représentés !'}
           </span>
           <br/>
-          <span>Sur le même principe qu’un club de lecture, chaque semaine, un membre de la communauté propose un film à
-          visionner. Il est ensuite commenté et noté directement sur la page du film, ou fait l'objet de débats et discussions sur </span></p>
+          <span>{'Sur le même principe qu’un club de lecture, chaque semaine, un membre de la communauté propose un film à visionner. Il est ensuite commenté et noté directement sur la page du film, ou fait l\'objet de débats et discussions sur '}</span></p>
         <Link href={'#/Discord'} className='text-orange-primary font-medium'>notre serveur Discord.</Link>
         <p>
           <br/>
-          Envie de rejoindre l'aventure ?
+          {'Envie de rejoindre l\'aventure ?'}
         </p>
         <Link href={'/inscription'} className='text-orange-primary font-medium'>inscrivez-vous</Link>
         <p className='mb-8'> pour échanger entre cinéphages et partager vos films préférés avec la communauté.</p>

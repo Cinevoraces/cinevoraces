@@ -25,10 +25,10 @@ export default function Button({
   href,
 }: ButtonProps) {
   const [basicStyles, empty, rounded, white] = [
-    `px-5 py-2 flex gap-2
-    rounded-2xl shadow-inner bg-orange-primary font-sans text-dark-gray font-semibold 
-    focus:ring-none focus:outline-none focus:ring-4 focus:ring-offset-0 focus:ring-white/5
-    hover:ring-none hover:outline-none hover:ring-4 hover:ring-offset-0 hover:ring-white/5 hover:scale-105`,
+    `px-5 py-2 flex gap-2 justify-center
+      rounded-2xl shadow-inner bg-orange-primary font-sans text-dark-gray font-semibold
+      focus:ring-none focus:outline-none focus:ring-4 focus:ring-offset-0 focus:ring-white/5
+      hover:ring-none hover:outline-none hover:ring-4 hover:ring-offset-0 hover:ring-white/5 hover:scale-105`,
     'bg-opacity-0 text-white border border-orange-primary',
     'py-1.5 rounded-full ',
     'bg-white focus:ring-white/20',

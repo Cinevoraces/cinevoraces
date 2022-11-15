@@ -30,8 +30,6 @@ export default function Header() {
   useCloseMenuOnOutsideClick(userMenuRef, 'user', isUserMenuOpen, setIsUserMenuOpen);
   useCloseMenuOnOutsideClick(connexionModalRef, 'modal', isConnectionModalOpen, setIsConnectionModalOpen);
 
-  // Close menus
-
   return (
     <>
       <header
@@ -99,7 +97,7 @@ export default function Header() {
               checked={isPwVisible}
               onChange={() => setIsPwVisible(!isPwVisible)}
             />
-            <div className="flex justify-between">
+            <div className="mt-4 flex flex-col justify-center gap-6 sm:flex-row">
               <Button>Se connecter</Button>
               <Button
                 customStyle="empty"

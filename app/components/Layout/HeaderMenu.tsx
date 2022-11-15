@@ -17,7 +17,7 @@ const BurgerMenuButton = (props: HeaderMenuButtonProps) => {
   return (
     <button
       onClick={() => setter(!stateValue)}
-      className="burger relative z-10 w-10 h-10 pt-2.5 flex flex-col gap-1.5 items-center lg:hidden">
+      className="burger relative z-[100] w-10 h-10 pt-2.5 flex flex-col gap-1.5 items-center lg:hidden">
       <div className={lineStyle + `${stateValue && ' rotate-45 translate-y-2'}`} />
       <div className={lineStyle + `${stateValue && ' opacity-0'}`} />
       <div className={lineStyle + `${stateValue && ' -rotate-45 -translate-y-2'}`} />
@@ -33,7 +33,7 @@ interface HeaderMenuProps extends HeaderMenuButtonProps {
 const HeaderMenu = React.forwardRef<HTMLElement, HeaderMenuProps>((props, ref) => {
   HeaderMenu.displayName = 'HeaderMenu';
   const { type, setter, stateValue, links } = props;
-  const basicMenuStyle = 'absolute top-0 left-0 w-full max-w-md pt-10 pb-2 px-4 flex flex-col bg-medium-gray shadow-lg lg:rounded-b-lg';
+  const basicMenuStyle = 'absolute z-[99] top-0 left-0 w-full max-w-md pt-10 pb-2 px-4 flex flex-col bg-medium-gray shadow-lg lg:rounded-b-lg';
   const basicLinksStyle = 'py-2.5 border-b border-b-white last:border-b-transparent';
   const menuStyle = basicMenuStyle;
   let linkStyle = basicLinksStyle;
