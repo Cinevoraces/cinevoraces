@@ -9,9 +9,7 @@ export default function Layout({ children }: LayoutProps) {
   return (
     <>
       <Header />
-      <main className="container mx-auto px-4 flex flex-col overflow-clip">
-        {children}
-      </main>
+      {children}
     </>
   );
 }
