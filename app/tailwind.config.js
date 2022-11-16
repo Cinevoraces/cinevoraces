@@ -1,3 +1,5 @@
+const plugin = require('tailwindcss/plugin');
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
@@ -21,9 +23,35 @@ module.exports = {
         'white':'#F2F2F3'
       },
       backgroundImage:{}
+    },
+    variants: {
+      extend: {
+        '4thchild': ':nth-child(4)'
+      }
     }
   },
   plugins: [
-    require("@tailwindcss/forms")
+    require("@tailwindcss/forms"),
+    plugin(({ addVariant, e }) => {
+      addVariant('fourth-child', ({ modifySelectors, separator }) => {
+        modifySelectors(({ className }) => {
+          return `.${e(`fourth-child${separator}${className}`)}:nth-child(4)`
+        })
+      })
+    }),
+    plugin(({ addVariant, e }) => {
+      addVariant('fifth-child', ({ modifySelectors, separator }) => {
+        modifySelectors(({ className }) => {
+          return `.${e(`fifth-child${separator}${className}`)}:nth-child(5)`
+        })
+      })
+    }),
+    plugin(({ addVariant, e }) => {
+      addVariant('sixth-child', ({ modifySelectors, separator }) => {
+        modifySelectors(({ className }) => {
+          return `.${e(`sixth-child${separator}${className}`)}:nth-child(6)`
+        })
+      })
+    })
   ],
 };

@@ -21,7 +21,7 @@ interface PostersComponentProps {
 export default function PostersComponent({ number }: PostersComponentProps) {
   const posters = generatePosterArray('/movie_posters/', '.jpg', number);
   const posterStyles = 'absolute w-1/2 rounded-lg object-cover shadow-lg';
-  const indivStyles = ['left-[10%]', 'z-10 left-[40%] top-8', 'z-20 left-[20%] top-[30%]'];
+  const indivStyles = ['left-0 top-[5%]', 'z-10 left-[40%] top-[20%]', 'z-20 left-[20%] top-[30%]'];
   return (
     <div className='relative w-full aspect-square max-w-md'>
       {

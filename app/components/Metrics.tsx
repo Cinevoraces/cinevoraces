@@ -19,9 +19,9 @@ export default function Metrics(props: MetricsProps) {
 
   const baseMetricsStyle = 'flex flex-col gap-1 items-center font-bold ';
   return (
-    <section id='metrics' className='py-8 flex flex-col gap-6 text-3xl font-semibold'>
+    <section id='metrics' className='py-8 w-full flex flex-col gap-6 items-center text-3xl font-semibold'>
       <h2 className='text-2xl font-semibold text-center'>Cinévoraces en quelques chiffres :</h2>
-      <div className='flex justify-around'>
+      <div className='w-full flex justify-around max-w-2xl'>
         {
           metrics.map((metric, i) => (
             <div className={baseMetricsStyle + metricsColors[i]} key={metricsLabel[i]}>
