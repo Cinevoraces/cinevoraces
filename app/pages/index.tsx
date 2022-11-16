@@ -25,12 +25,12 @@ const Home: NextPage = () => {
   const [minValue, setMinValue] = useState(18);
   const [maxValue, setMaxValue] = useState(100);
   const [isPwVisible, setIsPwVisible] = useState(false);
-  
+
   const last3Movies = ['/movie_posters/1.jpg', '/movie_posters/2.jpg', '/movie_posters/3.jpg'];
   const posterStyles = 'flex-1 rounded-lg w-1/3 object-cover';
   const h2Style = 'text-2xl font-semibold ';
   const emStyle = 'text-orange-primary font-medium';
-  
+
   const discordInvitation = 'https://discord.gg/r6tK5PGyE7';
 
   // To delete later
@@ -39,10 +39,12 @@ const Home: NextPage = () => {
     movies_count: 137,
     countries_count: 46,
   };
-  
+
   return (
     <>
-      <section id="hero" className='pt-16 pb-8 flex flex-col gap-8'>
+      <section
+        id="hero"
+        className="pt-16 pb-8 flex flex-col gap-8">
         <h1 className="text-4xl font-bold">
           Bienvenue dans votre <span className="text-orange-primary">ciné-club</span> virtuel !
         </h1>
@@ -89,7 +91,7 @@ const Home: NextPage = () => {
           <br />
           <span>
             {
-              'Sur le même principe qu’un club de lecture, chaque semaine, un membre de la communauté propose un film à visionner. Il est ensuite commenté et noté directement sur la page du film, ou fait l\'objet de débats et discussions sur '
+              'Sur le même principe qu’un club de lecture, chaque semaine, un membre de la communauté propose un film à visionner. Il est ensuite commenté et noté directement sur la page du film et fait l\'objet de discussions sur '
             }
           </span>
           <Link
@@ -102,15 +104,14 @@ const Home: NextPage = () => {
           <br />
           {'Envie de rejoindre l\'aventure ?'}
         </p>
-        <p>
+        <p className="mb-8">
           <Link
             href={'/inscription'}
             className={emStyle}>
             Inscrivez-vous{' '}
           </Link>
-          pour échanger entre cinéphages et partager vos films préférés avec la communauté.
+          pour partager votre passion pour le cinéma avec nous.
         </p>
-        <p className="mb-8"> pour échanger entre cinéphages et partager vos films préférés avec la communauté.</p>
         <div className="flex">
           <Button
             to={'/inscription'}
@@ -119,7 +120,28 @@ const Home: NextPage = () => {
           </Button>
         </div>
       </section>
-      <section id="discord" className='py-8 flex flex-col items-center'>
+      <section
+        id="share"
+        className="py-8 flex flex-col items-center gap-6">
+        <h2 className={h2Style}>Partagez vos avis sur les films proposés</h2>
+        <p>
+          CinéVoraces est une <span className={emStyle}>proposition communautaire</span>. Pour pleinement en profiter,
+          rejoignez la communauté et <span className={emStyle}>intéragissez</span> avec les films. <br />
+          <br />
+          Ajoutez-les dans votre liste de lecture, likez, notez, commentez : on veut savoir ce que vous en avez pensé !
+        </p>
+        <Image
+          src={commentsSample}
+          alt="Comments section illustration"
+          width={549}
+          height={260}
+          className="w-full border-4 border-black/20 rounded-2xl"
+        />
+      </section>
+      <section
+        id="discord"
+        className="relative z-10 py-8 flex flex-col items-center 
+          before:absolute before:-z-10 before:inset-y-0 before:-inset-x-[100px] before:w-[5000px] before:bg-medium-gray">
         <h2 className={h2Style + 'mb-8'}>Rejoignez le serveur Discord</h2>
         <Image
           src={discordLogo}
@@ -130,15 +152,15 @@ const Home: NextPage = () => {
         />
         <div className="flex flex-col items-center gap-6">
           <p>
-            Vous souhaitez rejoindre la communauté active de Cinévoraces ? <br/>
-            {
-              'Participer à des événements et parler de cinéma et de beaucoup d\'autres sujets ?'
-            }
-            <br/>
-            <br/>
+            Vous souhaitez rejoindre la communauté active de Cinévoraces ? <br />
+            Participer à des <span className={emStyle}>événements</span> et parler de cinéma et de beaucoup
+            {' d\''}
+            <span className={emStyle}>autres sujets</span> ?
+            <br />
+            <br />
             Rejoignez-nous aussi sur Discord !
           </p>
-          <div className='self-start'>
+          <div className="self-start">
             <Button
               href={discordInvitation}
               customStyle="rounded">
@@ -147,15 +169,7 @@ const Home: NextPage = () => {
           </div>
         </div>
       </section>
-      <section id="share" className='py-8 flex flex-col items-center gap-6'>
-        <h2 className={h2Style}>Partagez votre avis et vos dernières découvertes</h2>
-        <p>
-          CinéVoraces est une <span className={emStyle}>proposition communautaire</span>. Pour pleinement en profiter, rejoignez la communauté et <span className={emStyle}>intéragissez</span> avec les films. <br/><br/>
-          Ajoutez-les dans votre liste de lecture, likez, notez, commentez : on veut savoir ce que vous en avez pensé !
-        </p>
-        <Image src={commentsSample} alt='Comments section illustration' width={549} height={260} className='w-full border-4 border-black/20 rounded-2xl' />
-      </section>
-      <Metrics {...metrics}/>
+      <Metrics {...metrics} />
     </>
   );
 };

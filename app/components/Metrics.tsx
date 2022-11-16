@@ -15,7 +15,7 @@ interface MetricsProps {
 export default function Metrics(props: MetricsProps) {
   const metrics = Object.values(props);
   const metricsLabel = ['Saisons', 'Films', 'Pays'];
-  const metricsColors = ['purple', 'yellow', 'green'];
+  const metricsColors = ['text-purple', 'text-yellow', 'text-green'];
 
   const baseMetricsStyle = 'flex flex-col gap-1 items-center font-bold ';
   return (
@@ -24,7 +24,7 @@ export default function Metrics(props: MetricsProps) {
       <div className='flex justify-around'>
         {
           metrics.map((metric, i) => (
-            <div className={baseMetricsStyle + `text-${metricsColors[i]}`} key={metricsLabel[i]}>
+            <div className={baseMetricsStyle + metricsColors[i]} key={metricsLabel[i]}>
               <p>{metric}</p>
               <p className='text-xl'>{metricsLabel[i]}</p>
             </div>
