@@ -10,11 +10,15 @@ const generatePosterArray = (path: string, extension: string, number: number) =>
   return posterArray.map((randNum) => path + randNum + extension);
 };
 
-interface PosterComponentProps {
+interface PostersComponentProps {
   number: 2 | 3 | 8;
 }
 
-export default function PosterComponent({ number }: PosterComponentProps) {
+/**
+ * @returns Component composed of a various number of movie posters
+ * @param number number of posters to display
+ */
+export default function PostersComponent({ number }: PostersComponentProps) {
   const posters = generatePosterArray('/movie_posters/', '.jpg', number);
   const posterStyles = 'absolute w-1/2 rounded-lg object-cover shadow-lg';
   const indivStyles = ['left-[10%]', 'z-10 left-[40%] top-8', 'z-20 left-[20%] top-[30%]'];

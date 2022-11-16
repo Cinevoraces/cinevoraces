@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 import { Form, Button, TextInput, Toggle } from '@components/Input';
 import SendLogo from '@public/icons/send-icon.svg';
-import PosterComponent from '@components/PosterComponents';
+import PosterComponent from '@components/PostersComponent';
 interface FormProps {
   children: React.ReactNode;
 }
