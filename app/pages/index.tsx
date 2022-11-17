@@ -63,7 +63,7 @@ const Home: NextPage = () => {
                 </Button>
               </div>
             </div>
-            <div className='hidden md:flex md:w-full md:max-w-lg md:justify-end md:flex-1'>
+            <div className='hidden lg:flex lg:w-full lg:max-w-lg lg:justify-end lg:flex-1'>
               <PosterComponent number={8} />
             </div>
           </div>

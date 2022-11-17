@@ -3,6 +3,7 @@ import Image from 'next/image';
 import { Form, Button, TextInput, Toggle } from '@components/Input';
 import SendLogo from '@public/icons/send-icon.svg';
 import PosterComponent from '@components/PostersComponent';
+import Metrics from '@components/Metrics';
 interface FormProps {
   children: React.ReactNode;
 }
@@ -11,10 +12,17 @@ export default function Inscription() {
   const [isRequired, setIsRequired] = useState(false);
   const [isPwVisible, setIsPwVisible] = useState(false);
   const helpingTextStyle = 'px-1 text-sm font-light italic text-gray-300';
+  // To delete later
+  const metrics = {
+    seasons_count: 3,
+    movies_count: 137,
+    countries_count: 46,
+  };
+    
   return (
     <main className='container mx-auto px-4'>
-      <div className='w-full flex flex-col items-center md:flex-row-reverse'>
-        <section className='w-full mt-8 mb-16 px-auto md:max-w-1/2 xl:mr-[10vh]'>
+      <div className='container mx-auto px-4 py-8 lg:py-16 flex flex-col items-center justify-between gap-8 md:flex-row-reverse '>
+        <section className='w-full px-auto md:max-w-1/2 xl:mr-[10vh]'>
           <h1 className="text-3xl mb-10 font-bold lg:text-6xl">Créer un compte</h1>
           <form
             action="submit"
@@ -75,6 +83,7 @@ export default function Inscription() {
           <PosterComponent number={3} />
         </section>
       </div>
+      <Metrics {...metrics}/>
     </main>
   );
 }
