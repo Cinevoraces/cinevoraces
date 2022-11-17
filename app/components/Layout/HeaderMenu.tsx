@@ -51,7 +51,7 @@ const HeaderMenu = React.forwardRef<HTMLElement, HeaderMenuProps>((props, ref) =
             href={link[1]}
             key={link[0]}
             className={linkStyle}
-            onClick={() => setter(!stateValue)}>
+            onClick={setter}>
             {link[0]}
           </Link>
         ))}

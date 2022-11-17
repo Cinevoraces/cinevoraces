@@ -1,5 +1,19 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useCallback } from 'react';
 import Link from 'next/link';
+import { useAppSelector, useAppDispatch } from '@store/store';
+
+import {
+  toggleBurgerMenu,
+  toggleUserMenu,
+  toggleConnectionModal,
+  globals,
+} from '@store/slices/global';
+import {
+  toggleIsRequired,
+  toggleIsPWVisible,
+  connection,
+} from '@store/slices/connection';
+
 import useCloseMenuOnOutsideClick from '@hooks/useCloseMenuOnOutsideClick';
 import HeaderMenu from './HeaderMenu';
 import CompleteLogo from './CompleteLogo';
@@ -15,20 +29,25 @@ export default function Header() {
     ['Proposer un film', '/proposition'],
   ];
 
-  // States for demo, to be replaced later
-  const [isBurgerMenuOpen, setIsBurgerMenuOpen] = useState(false);
-  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
-  const [isConnectionModalOpen, setIsConnectionModalOpen] = useState(false);
-  const [isRequired, setIsRequired] = useState(false);
-  const [isPwVisible, setIsPwVisible] = useState(false);
+  const {
+    isBurgerMenuOpen,
+    isUserMenuOpen,
+    isConnectionModalOpen,
+  } = useAppSelector(globals);
+  const {
+    isRequired,
+    isPWVisible,
+  } = useAppSelector(connection);
+  const dispatch = useAppDispatch();
 
   //Toggle menu display when clicking outside them
   const burgerMenuRef = useRef<HTMLElement>(null);
   const userMenuRef = useRef<HTMLElement>(null);
   const connexionModalRef = useRef<HTMLElement>(null);
-  useCloseMenuOnOutsideClick(burgerMenuRef, 'burger', isBurgerMenuOpen, setIsBurgerMenuOpen);
-  useCloseMenuOnOutsideClick(userMenuRef, 'user', isUserMenuOpen, setIsUserMenuOpen);
-  useCloseMenuOnOutsideClick(connexionModalRef, 'modal', isConnectionModalOpen, setIsConnectionModalOpen);
+
+  useCloseMenuOnOutsideClick(burgerMenuRef, 'burger', isBurgerMenuOpen, () => dispatch(toggleBurgerMenu()));
+  useCloseMenuOnOutsideClick(userMenuRef, 'user', isUserMenuOpen, () => dispatch(toggleUserMenu()));
+  useCloseMenuOnOutsideClick(connexionModalRef, 'modal', isConnectionModalOpen, () => dispatch(toggleConnectionModal()));
 
   return (
     <>
@@ -39,7 +58,7 @@ export default function Header() {
           <HeaderMenu
             type="burger"
             stateValue={isBurgerMenuOpen}
-            setter={setIsBurgerMenuOpen}
+            setter={() => dispatch(toggleBurgerMenu())}
             links={navLinks}
             ref={burgerMenuRef}
           />
@@ -61,18 +80,18 @@ export default function Header() {
             </Link>
           ))}
         </nav>
-        <Button onClick={() => setIsConnectionModalOpen(!isConnectionModalOpen)}>Connexion</Button>
+        <Button onClick={() => dispatch(toggleConnectionModal())}>Connexion</Button>
       </header>
       {isConnectionModalOpen && (
         <Modal
           stateValue={isConnectionModalOpen}
-          setter={setIsConnectionModalOpen}
+          setter={() => dispatch(toggleConnectionModal())}
           ref={connexionModalRef}>
           <form
             action="submit"
             onSubmit={(e) => {
               e.preventDefault();
-              !isRequired && setIsRequired(true);
+              !isRequired && dispatch(toggleIsRequired());
             }}
             className="flex flex-col w-full gap-3">
             <TextInput
@@ -84,7 +103,7 @@ export default function Header() {
               errorMessage="Saisissez un identifiant"
             />
             <TextInput
-              type={!isPwVisible ? 'password' : undefined}
+              type={!isPWVisible ? 'password' : undefined}
               id="password"
               label="Entrez votre mot de passe"
               placeholder="Mot de passe..."
@@ -94,14 +113,14 @@ export default function Header() {
             <Toggle
               id="showPassword"
               label="Montrer le mot de passe ?"
-              checked={isPwVisible}
-              onChange={() => setIsPwVisible(!isPwVisible)}
+              checked={isPWVisible}
+              onChange={() => dispatch(toggleIsPWVisible())}
             />
             <div className="mt-4 flex flex-col justify-center gap-6 sm:flex-row">
               <Button>Se connecter</Button>
               <Button
                 customStyle="empty"
-                onClick={() => setIsConnectionModalOpen(!isConnectionModalOpen)}
+                onClick={() => dispatch(toggleConnectionModal())}
                 to={'/inscription'}>
                 {'S\'inscrire'}
               </Button>
