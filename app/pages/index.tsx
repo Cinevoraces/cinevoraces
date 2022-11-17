@@ -1,17 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 import type { NextPage } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
-import {
-  Button,
-  CheckBox,
-  Toggle,
-  RadioInput,
-  RangeInput,
-  DoubleRangeInput,
-  TextInput,
-  TextArea,
-} from '@components/Input';
+import { Button } from '@components/Input';
 import PosterComponent from '@components/PostersComponent';
 import discordLogo from '@public/icons/discord.svg';
 import discordInvite from '@public/discord_invite.png';
@@ -19,6 +10,10 @@ import commentsSample from '@public/comments_sample.jpg';
 import Metrics from '@components/Metrics';
 
 const Home: NextPage = () => {
+
+  console.log('process.env.API_URL: ', process.env.API_URL);
+  console.log('process.env.API_URL_BIS: ', process.env.API_URL_BIS);
+
   const lastMovies = [
     '/movie_posters/1.jpg',
     '/movie_posters/2.jpg',
@@ -43,6 +38,12 @@ const Home: NextPage = () => {
     movies_count: 137,
     countries_count: 46,
   };
+
+  useEffect(() => {
+    fetch('http://localhost:8080/metrics')
+      .then(res => res.json())
+      .then(data => console.log(data));
+  }, []);
 
   return (
     <main>
@@ -206,3 +207,14 @@ const Home: NextPage = () => {
 };
 
 export default Home;
+
+// export async function getServerSideProps(){
+//   const data = await fetch('http://localhost:3005/metrics');
+//   console.log(data);
+//   const metrics = await data.json();
+//   return {
+//     props: {
+//       metrics,
+//     }
+//   };
+// }

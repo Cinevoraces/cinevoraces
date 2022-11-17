@@ -14,7 +14,7 @@ services:
   pgadmin:
     image: dpage/pgadmin4
     ports:
-      - 80:80
+      - 5431:5431
     env_file:
       - .env.db
     depends_on:
@@ -37,11 +37,17 @@ services:
       - ./api:/api
 
   app:
+    env_file:
+      - .env.app
+    environment:
+      - API_URL=http://localhost:8080
     depends_on:
       - api
     build:
       context: ./app
       dockerfile: Dockerfile.dev
+    ports:
+      - 3000:3000
     restart: always
     volumes:
-      - ./app/:/app
+      - ./app:/app
