@@ -6,7 +6,7 @@ import {
   Range as RangeInput,
   DoubleRange as DoubleRangeInput,
 } from '@components/Input/Range';
-import { Text as TextInput, TextArea } from '@components/Input/Text';
+import { TextRef as TextInputRef, Text as TextInput, TextAreaRef, TextArea } from '@components/Input/Text';
 
 export {
   Form,
@@ -16,6 +16,8 @@ export {
   RadioInput,
   RangeInput,
   DoubleRangeInput,
+  TextInputRef,
   TextInput,
+  TextAreaRef,
   TextArea,
 };

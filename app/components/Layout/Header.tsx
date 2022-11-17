@@ -1,25 +1,13 @@
-import React, { useState, useRef, useCallback } from 'react';
+import React, { useRef } from 'react';
 import Link from 'next/link';
 import { useAppSelector, useAppDispatch } from '@store/store';
-
-import {
-  toggleBurgerMenu,
-  toggleUserMenu,
-  toggleConnectionModal,
-  globals,
-} from '@store/slices/global';
-import {
-  toggleIsRequired,
-  toggleIsPWVisible,
-  connection,
-} from '@store/slices/connection';
-
+import { toggleBurgerMenu, toggleUserMenu, toggleConnectionModal, globals } from '@store/slices/global';
 import useCloseMenuOnOutsideClick from '@hooks/useCloseMenuOnOutsideClick';
 import HeaderMenu from './HeaderMenu';
 import CompleteLogo from './CompleteLogo';
 import Modal from '@components/Modal/Modal';
 import Button from '@components/Input/Button';
-import { Form, TextInput, Toggle } from '@components/Input';
+import { ConnectionForm } from '@components/Forms';
 
 export default function Header() {
   const navLinks = [
@@ -29,15 +17,7 @@ export default function Header() {
     ['Proposer un film', '/proposition'],
   ];
 
-  const {
-    isBurgerMenuOpen,
-    isUserMenuOpen,
-    isConnectionModalOpen,
-  } = useAppSelector(globals);
-  const {
-    isRequired,
-    isPWVisible,
-  } = useAppSelector(connection);
+  const { isBurgerMenuOpen, isUserMenuOpen, isConnectionModalOpen } = useAppSelector(globals);
   const dispatch = useAppDispatch();
 
   //Toggle menu display when clicking outside them
@@ -47,7 +27,9 @@ export default function Header() {
 
   useCloseMenuOnOutsideClick(burgerMenuRef, 'burger', isBurgerMenuOpen, () => dispatch(toggleBurgerMenu()));
   useCloseMenuOnOutsideClick(userMenuRef, 'user', isUserMenuOpen, () => dispatch(toggleUserMenu()));
-  useCloseMenuOnOutsideClick(connexionModalRef, 'modal', isConnectionModalOpen, () => dispatch(toggleConnectionModal()));
+  useCloseMenuOnOutsideClick(connexionModalRef, 'modal', isConnectionModalOpen, () =>
+    dispatch(toggleConnectionModal())
+  );
 
   return (
     <>
@@ -87,45 +69,7 @@ export default function Header() {
           stateValue={isConnectionModalOpen}
           setter={() => dispatch(toggleConnectionModal())}
           ref={connexionModalRef}>
-          <form
-            action="submit"
-            onSubmit={(e) => {
-              e.preventDefault();
-              !isRequired && dispatch(toggleIsRequired());
-            }}
-            className="flex flex-col w-full gap-3">
-            <TextInput
-              id="identifier"
-              label="Email ou nom d'utilisateur"
-              placeholder="Votre identifiant..."
-              required={isRequired}
-              minLength={3}
-              errorMessage="Saisissez un identifiant"
-            />
-            <TextInput
-              type={!isPWVisible ? 'password' : undefined}
-              id="password"
-              label="Entrez votre mot de passe"
-              placeholder="Mot de passe..."
-              required={isRequired}
-              errorMessage="Le mot de passe ne respecte pas les règles de sécurité."
-            />
-            <Toggle
-              id="showPassword"
-              label="Montrer le mot de passe ?"
-              checked={isPWVisible}
-              onChange={() => dispatch(toggleIsPWVisible())}
-            />
-            <div className="mt-4 flex flex-col justify-center gap-6 sm:flex-row">
-              <Button>Se connecter</Button>
-              <Button
-                customStyle="empty"
-                onClick={() => dispatch(toggleConnectionModal())}
-                to={'/inscription'}>
-                {'S\'inscrire'}
-              </Button>
-            </div>
-          </form>
+          <ConnectionForm />
         </Modal>
       )}
     </>

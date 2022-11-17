@@ -2,18 +2,18 @@ import { createSlice } from '@reduxjs/toolkit';
 import type { RootState } from '../store';
 import type { PayloadAction } from '@reduxjs/toolkit';
 
-interface connectionStateInterface {
+interface inscriptionStateInterface {
   isRequired: boolean;
   isPWVisible: boolean;
 }
 
-const initialState: connectionStateInterface = {
+const initialState: inscriptionStateInterface = {
   isRequired: false,
   isPWVisible: false,
 };
 
-const connectionSlice = createSlice({
-  name: 'connection',
+const inscriptionSlice = createSlice({
+  name: 'inscription',
   initialState,
   reducers: {
     toggleIsRequired(state) {
@@ -25,9 +25,9 @@ const connectionSlice = createSlice({
   },
 });
 
-export const connection = (state: RootState) => state.connection;
+export const inscription = (state: RootState) => state.inscription;
 export const {
   toggleIsRequired,
   toggleIsPWVisible,
-} = connectionSlice.actions;
-export default connectionSlice.reducer;
+} = inscriptionSlice.actions;
+export default inscriptionSlice.reducer;

@@ -11,6 +11,7 @@ interface ModalProps {
  * @param stateValue open status
  * @param setter state mutator to toggle on / off
  * @param children content of the modal
+ * @param ref ref used for useCloseMenuOnOutsideClick
  */
 const Modal = React.forwardRef<HTMLElement, ModalProps>((props, ref) => {
   Modal.displayName = 'Modal';
