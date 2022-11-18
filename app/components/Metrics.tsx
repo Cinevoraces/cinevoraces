@@ -1,6 +1,6 @@
 import React from 'react';
 
-interface MetricsProps {
+export interface MetricsProps {
   seasons_count: number;
   movies_count: number;
   countries_count: number;

@@ -8,11 +8,27 @@ import discordLogo from '@public/icons/discord.svg';
 import discordInvite from '@public/discord_invite.png';
 import commentsSample from '@public/comments_sample.jpg';
 import Metrics from '@components/Metrics';
+import type { MetricsProps } from '@components/Metrics';
 
-const Home: NextPage = () => {
+interface HomeProps {
+  metrics: MetricsProps;
+}
 
-  console.log('process.env.API_URL: ', process.env.API_URL);
-  console.log('process.env.API_URL_BIS: ', process.env.API_URL_BIS);
+const getMetrics = async() => {
+  const data = await fetch('http://localhost:3005/metrics');
+  const metrics = await data.json();
+  return metrics;
+};
+const getMetricsBis = async() => {
+  const data = await fetch('http://cinevoraces_api:3005/metrics');
+  const metrics = await data.json();
+  return metrics;
+};
+
+const Home: NextPage<HomeProps> = (props) => {
+
+  // console.log('process.env.API_URL: ', process.env.API_URL);
+  // console.log('process.env.API_URL_BIS: ', process.env.API_URL_BIS);
 
   const lastMovies = [
     '/movie_posters/1.jpg',
@@ -32,18 +48,13 @@ const Home: NextPage = () => {
 
   const discordInvitation = 'https://discord.gg/r6tK5PGyE7';
 
-  // To delete later
-  const metrics = {
-    seasons_count: 3,
-    movies_count: 137,
-    countries_count: 46,
-  };
+  const { metrics } = props;
+  console.log(metrics);
 
-  useEffect(() => {
-    fetch('http://localhost:8080/metrics')
-      .then(res => res.json())
-      .then(data => console.log(data));
-  }, []);
+  // useEffect(() => {
+  //   getMetrics().then(data => console.log(data));
+  //   // getMetricsBis().then(data => console.log(data));
+  // }, []);
 
   return (
     <main>
@@ -73,7 +84,7 @@ const Home: NextPage = () => {
             <div className="mt-8 grid grid-cols-3 gap-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
               {
                 //to be adapted with the fetched datas
-                lastMovies.map((imageUrl, i) => (
+                lastMovies.map((imageUrl) => (
                   <Image
                     src={imageUrl}
                     alt={`${imageUrl} movie poster`}
@@ -123,7 +134,7 @@ const Home: NextPage = () => {
               <Link
                 href={'/inscription'}
                 className={emStyle}>
-                Inscrivez-vous{' '}
+                Inscrivez-vous
               </Link>
               pour partager votre passion pour le cinéma avec nous.
             </p>
@@ -206,15 +217,13 @@ const Home: NextPage = () => {
   );
 };
 
-export default Home;
+export async function getServerSideProps(){
+  const metrics = await getMetricsBis();
+  return {
+    props: {
+      metrics,
+    }
+  };
+}
 
-// export async function getServerSideProps(){
-//   const data = await fetch('http://localhost:3005/metrics');
-//   console.log(data);
-//   const metrics = await data.json();
-//   return {
-//     props: {
-//       metrics,
-//     }
-//   };
-// }
+export default Home;

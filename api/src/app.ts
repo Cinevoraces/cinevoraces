@@ -5,6 +5,7 @@ import jwt from '@src/plugins/fastifyJwt';
 import hooks from '@plugins/hooks';
 import swagger from '@plugins/swagger';
 import cookie from '@src/plugins/fastifyCookie';
+import cors from '@src/plugins/fastifyCors';
 import { auth } from '@modules/auth/auth.routes';
 import { metrics } from '@modules/metrics/metrics.routes';
 import { movies } from '@modules/movies/movies.routes';
@@ -21,6 +22,7 @@ const app = async (fastify: FastifyInstance) => {
   fastify.register(envCheck);
   fastify.register(pgClient);
   fastify.register(cookie);
+  fastify.register(cors);
   fastify.register(jwt);
   fastify.register(hooks);
   fastify.register(swagger);

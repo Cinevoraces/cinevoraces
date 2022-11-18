@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@fastify/cookie": "^8.3.0",
+    "@fastify/cors": "^8.2.0",
     "@fastify/jwt": "^6.3.2",
     "@fastify/swagger": "^7.6.1",
     "bcryptjs": "^2.4.3",
