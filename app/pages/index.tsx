@@ -9,26 +9,30 @@ import discordInvite from '@public/discord_invite.png';
 import commentsSample from '@public/comments_sample.jpg';
 import Metrics from '@components/Metrics';
 import type { MetricsProps } from '@components/Metrics';
+import type { Movie } from '@custom_types/types';
 
 interface HomeProps {
   metrics: MetricsProps;
+  lastSixMovies: Movie[];
 }
 
-const getMetrics = async() => {
-  const data = await fetch('http://localhost:3005/metrics');
+const getDataFromEndpoint = async (baseUrl: string, endpoint: string) => {
+  const data = await fetch(`${baseUrl + endpoint}`);
   const metrics = await data.json();
   return metrics;
 };
-const getMetricsBis = async() => {
-  const data = await fetch('http://cinevoraces_api:3005/metrics');
-  const metrics = await data.json();
-  return metrics;
-};
+
+const baseUrlCSR = process.env.API_BASE_URL_CSR || 'http://localhost:8080';
+const baseUrlSSR = process.env.API_BASE_URL_SSR || 'http://cinevoraces_api:3005';
 
 const Home: NextPage<HomeProps> = (props) => {
-
-  // console.log('process.env.API_URL: ', process.env.API_URL);
-  // console.log('process.env.API_URL_BIS: ', process.env.API_URL_BIS);
+  const { metrics, lastSixMovies } = props;
+  const lastSixMoviesInfos = lastSixMovies.map((m) => ({
+    id: m.id,
+    french_title: m.french_title,
+    poster_url: m.poster_url,
+  }));
+  console.log(lastSixMoviesInfos);
 
   const lastMovies = [
     '/movie_posters/1.jpg',
@@ -39,29 +43,25 @@ const Home: NextPage<HomeProps> = (props) => {
     '/movie_posters/6.jpg',
   ];
   const sectionStyle = 'even:bg-medium-gray even:md:text-end ';
-  const sectionContentStyle = 'container mx-auto px-4 py-8 lg:py-16 flex flex-col items-center justify-between gap-8 md:flex-row ';
+  const sectionContentStyle =
+    'container mx-auto px-4 py-8 lg:py-16 flex flex-col items-center justify-between gap-8 md:flex-row ';
   const posterStyles = `rounded-lg w-full h-full object-cover shadow-lg max-w-[250px] 
     fourth-child:hidden fifth-child:hidden sixth-child:hidden
-    md:fourth-child:block lg:fifth-child:block xl:sixth-child:block`;
+    md:fourth-child:block lg:fifth-child:block xl:sixth-child:block
+    hover:scale-105`;
   const h2Style = 'text-2xl font-semibold lg:text-3xl ';
   const emStyle = 'text-orange-primary font-medium';
 
   const discordInvitation = 'https://discord.gg/r6tK5PGyE7';
 
-  const { metrics } = props;
-  console.log(metrics);
-
-  // useEffect(() => {
-  //   getMetrics().then(data => console.log(data));
-  //   // getMetricsBis().then(data => console.log(data));
-  // }, []);
-
   return (
     <main>
-      <section id="hero" className={sectionStyle}>
+      <section
+        id="hero"
+        className={sectionStyle}>
         <div className={sectionContentStyle + 'md:flex-col'}>
-          <div className='w-full flex justify-between'>
-            <div className='flex flex-col gap-8 flex-1'>
+          <div className="w-full flex justify-between">
+            <div className="flex flex-col gap-8 flex-1">
               <h1 className="text-4xl font-bold lg:text-6xl">
                 Bienvenue dans votre <span className="text-orange-primary">ciné-club</span> virtuel !
               </h1>
@@ -75,26 +75,27 @@ const Home: NextPage<HomeProps> = (props) => {
                 </Button>
               </div>
             </div>
-            <div className='hidden lg:flex lg:w-full lg:max-w-lg lg:justify-end lg:flex-1'>
+            <div className="hidden lg:flex lg:w-full lg:max-w-lg lg:justify-end lg:flex-1">
               <PosterComponent number={8} />
             </div>
           </div>
           <div>
             <h2 className={h2Style}>Les derniers ajouts de la communauté :</h2>
             <div className="mt-8 grid grid-cols-3 gap-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
-              {
-                //to be adapted with the fetched datas
-                lastMovies.map((imageUrl) => (
+              {lastSixMoviesInfos.map((movie) => (
+                <Link
+                  href={`/films/${movie.french_title}`}
+                  className="fourth-child:hidden fifth-child:hidden sixth-child:hidden md:fourth-child:block lg:fifth-child:block xl:sixth-child:block"
+                  key={movie.french_title}>
                   <Image
-                    src={imageUrl}
-                    alt={`${imageUrl} movie poster`}
+                    src={movie.poster_url}
+                    alt={`${movie.french_title} movie poster`}
                     width={200}
                     height={(200 * 9) / 16}
-                    key={imageUrl}
                     className={posterStyles}
                   />
-                ))
-              }
+                </Link>
+              ))}
             </div>
           </div>
         </div>
@@ -134,7 +135,7 @@ const Home: NextPage<HomeProps> = (props) => {
               <Link
                 href={'/inscription'}
                 className={emStyle}>
-                Inscrivez-vous
+                { 'Inscrivez-vous ' }
               </Link>
               pour partager votre passion pour le cinéma avec nous.
             </p>
@@ -146,7 +147,6 @@ const Home: NextPage<HomeProps> = (props) => {
               </Button>
             </div>
           </div>
-
         </div>
       </section>
       <section
@@ -160,8 +160,8 @@ const Home: NextPage<HomeProps> = (props) => {
               Pour pleinement en profiter, rejoignez la communauté et <span className={emStyle}>intéragissez</span> avec
               les films. <br />
               <br />
-              Ajoutez-les dans votre liste de lecture, likez, notez, commentez : on veut savoir ce que vous en avez pensé
-              !
+              Ajoutez-les dans votre liste de lecture, likez, notez, commentez : on veut savoir ce que vous en avez
+              pensé !
             </p>
           </div>
           <Image
@@ -217,12 +217,14 @@ const Home: NextPage<HomeProps> = (props) => {
   );
 };
 
-export async function getServerSideProps(){
-  const metrics = await getMetricsBis();
+export async function getServerSideProps() {
+  const metrics = await getDataFromEndpoint(baseUrlSSR, '/metrics');
+  const lastSixMovies = await getDataFromEndpoint(baseUrlSSR, '/movies?where[is_published]=true&limit=6');
   return {
     props: {
       metrics,
-    }
+      lastSixMovies,
+    },
   };
 }
 
