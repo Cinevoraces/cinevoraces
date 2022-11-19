@@ -10,20 +10,12 @@ import commentsSample from '@public/comments_sample.jpg';
 import Metrics from '@components/Metrics';
 import type { MetricsProps } from '@components/Metrics';
 import type { Movie } from '@custom_types/types';
+import { getDataFromEndpoint } from '@utils/fetchApi';
 
 interface HomeProps {
   metrics: MetricsProps;
   lastSixMovies: Movie[];
 }
-
-const getDataFromEndpoint = async (baseUrl: string, endpoint: string) => {
-  const data = await fetch(`${baseUrl + endpoint}`);
-  const metrics = await data.json();
-  return metrics;
-};
-
-const baseUrlCSR = process.env.API_BASE_URL_CSR || 'http://localhost:8080';
-const baseUrlSSR = process.env.API_BASE_URL_SSR || 'http://cinevoraces_api:3005';
 
 const Home: NextPage<HomeProps> = (props) => {
   const { metrics, lastSixMovies } = props;
@@ -32,16 +24,8 @@ const Home: NextPage<HomeProps> = (props) => {
     french_title: m.french_title,
     poster_url: m.poster_url,
   }));
-  console.log(lastSixMoviesInfos);
 
-  const lastMovies = [
-    '/movie_posters/1.jpg',
-    '/movie_posters/2.jpg',
-    '/movie_posters/3.jpg',
-    '/movie_posters/4.jpg',
-    '/movie_posters/5.jpg',
-    '/movie_posters/6.jpg',
-  ];
+  // Prepared Tailwind Styles
   const sectionStyle = 'even:bg-medium-gray even:md:text-end ';
   const sectionContentStyle =
     'container mx-auto px-4 py-8 lg:py-16 flex flex-col items-center justify-between gap-8 md:flex-row ';
@@ -218,14 +202,17 @@ const Home: NextPage<HomeProps> = (props) => {
 };
 
 export async function getServerSideProps() {
-  const metrics = await getDataFromEndpoint(baseUrlSSR, '/metrics');
-  const lastSixMovies = await getDataFromEndpoint(baseUrlSSR, '/movies?where[is_published]=true&limit=6');
-  return {
-    props: {
-      metrics,
-      lastSixMovies,
-    },
-  };
+  const baseUrlSSR = process.env.API_BASE_URL_SSR;
+  if (baseUrlSSR) {
+    const metrics = await getDataFromEndpoint(baseUrlSSR, '/metrics');
+    const lastSixMovies = await getDataFromEndpoint(baseUrlSSR, '/movies?where[is_published]=true&limit=6');
+    return {
+      props: {
+        metrics,
+        lastSixMovies,
+      },
+    };
+  }
 }
 
 export default Home;

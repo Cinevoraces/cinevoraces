@@ -1,21 +1,15 @@
 import React, { useState } from 'react';
-import Image from 'next/image';
 import { InscriptionForm } from '@components/Forms';
 import PosterComponent from '@components/PostersComponent';
 import Metrics from '@components/Metrics';
-interface FormProps {
-  children: React.ReactNode;
+import type { MetricsProps } from '@components/Metrics';
+import { getDataFromEndpoint } from '@utils/fetchApi';
+
+interface InscriptonProps {
+  metrics: MetricsProps;
 }
 
-export default function Inscription() {
-
-  // To delete later
-  const metrics = {
-    seasons_count: 3,
-    movies_count: 137,
-    countries_count: 46,
-  };
-    
+export default function Inscription({ metrics }: InscriptonProps) {
   return (
     <main className='container mx-auto px-4'>
       <div className='container mx-auto px-4 py-8 lg:py-16 flex flex-col items-center justify-between gap-8 md:flex-row-reverse '>
@@ -30,4 +24,16 @@ export default function Inscription() {
       <Metrics {...metrics}/>
     </main>
   );
+}
+
+export async function getServerSideProps() {
+  const baseUrlSSR = process.env.API_BASE_URL_SSR;
+  if (baseUrlSSR) {
+    const metrics = await getDataFromEndpoint(baseUrlSSR, '/metrics');
+    return {
+      props: {
+        metrics,
+      },
+    };
+  }
 }
