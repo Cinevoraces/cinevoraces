@@ -202,16 +202,17 @@ const Home: NextPage<HomeProps> = (props) => {
 };
 
 export async function getServerSideProps() {
-  const baseUrlSSR = process.env.API_BASE_URL_SSR;
-  if (baseUrlSSR) {
-    const metrics = await getDataFromEndpoint(baseUrlSSR, '/metrics');
-    const lastSixMovies = await getDataFromEndpoint(baseUrlSSR, '/movies?where[is_published]=true&limit=6');
+  try {
+    const metrics = await getDataFromEndpoint('/metrics');
+    const lastSixMovies = await getDataFromEndpoint('/movies?where[is_published]=true&limit=6');
     return {
       props: {
         metrics,
         lastSixMovies,
       },
     };
+  } catch (err){
+    console.error(err);
   }
 }
 

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { forwardRef } from 'react';
 
 interface BaseTextProps<T> {
   type?: 'email' | 'password' | 'search' | 'textarea';
@@ -50,7 +50,7 @@ export const Text = (props: ControlledTextProps<HTMLInputElement>) => {
         name={id}
         className={basicStyles}
       />
-      <p className='hidden peer-invalid:block text-sm font-light text-red-500'>{errorMessage}</p>
+      <p className="hidden peer-invalid:block text-sm font-light text-red-500">{errorMessage}</p>
     </div>
   );
 };
@@ -78,7 +78,7 @@ export const TextArea = (props: ControlledTextProps<HTMLTextAreaElement>) => {
         name={id}
         className={basicStyles}
       />
-      <p className='hidden peer-invalid:block text-sm font-light text-red-500'>{errorMessage}</p>
+      <p className="hidden peer-invalid:block text-sm font-light text-red-500">{errorMessage}</p>
     </div>
   );
 };
@@ -96,7 +96,7 @@ export const TextArea = (props: ControlledTextProps<HTMLTextAreaElement>) => {
  */
 export const TextRef = React.forwardRef<HTMLInputElement, BaseTextProps<HTMLInputElement>>((props, ref) => {
   TextRef.displayName = 'TextRef';
-  const { errorMessage, ...inputProps } = props;
+  const { errorMessage, required, ...inputProps } = props;
   const { label, id } = inputProps;
   return (
     <div className="relative flex flex-col gap-1">
@@ -106,8 +106,12 @@ export const TextRef = React.forwardRef<HTMLInputElement, BaseTextProps<HTMLInpu
         name={id}
         className={basicStyles}
         ref={ref}
+        // using the setCustomValidity() method needs a clearance, only possible here...
+        onInput={() => {
+          if (ref && typeof ref !== 'function' && ref.current) ref.current.setCustomValidity('');
+        }}
       />
-      <p className='hidden peer-invalid:block text-sm font-light text-red-500'>{errorMessage}</p>
+      <p className="hidden peer-invalid:block text-sm font-light text-red-500">{errorMessage}</p>
     </div>
   );
 });
@@ -134,8 +138,11 @@ export const TextAreaRef = React.forwardRef<HTMLTextAreaElement, BaseTextProps<H
         name={id}
         className={basicStyles}
         ref={ref}
+        onInput={() => {
+          if (ref && typeof ref !== 'function' && ref.current) ref.current.setCustomValidity('');
+        }}
       />
-      <p className='hidden peer-invalid:block text-sm font-light text-red-500'>{errorMessage}</p>
+      <p className="hidden peer-invalid:block text-sm font-light text-red-500">{errorMessage}</p>
     </div>
   );
 });

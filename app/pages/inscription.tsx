@@ -27,13 +27,14 @@ export default function Inscription({ metrics }: InscriptonProps) {
 }
 
 export async function getServerSideProps() {
-  const baseUrlSSR = process.env.API_BASE_URL_SSR;
-  if (baseUrlSSR) {
-    const metrics = await getDataFromEndpoint(baseUrlSSR, '/metrics');
+  try {
+    const metrics = await getDataFromEndpoint('/metrics');
     return {
       props: {
         metrics,
       },
     };
+  } catch (err){
+    console.error(err);
   }
 }
