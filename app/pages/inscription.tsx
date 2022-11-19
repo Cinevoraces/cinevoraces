@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { InscriptionForm } from '@components/Forms';
 import PosterComponent from '@components/PostersComponent';
 import Metrics from '@components/Metrics';
 import type { MetricsProps } from '@components/Metrics';
-import { getDataFromEndpoint } from '@utils/fetchApi';
+import getDataFromEndpoint from '@utils/getDataFromEndpoint';
 
 interface InscriptonProps {
   metrics: MetricsProps;

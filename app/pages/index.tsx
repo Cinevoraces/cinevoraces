@@ -10,7 +10,7 @@ import commentsSample from '@public/comments_sample.jpg';
 import Metrics from '@components/Metrics';
 import type { MetricsProps } from '@components/Metrics';
 import type { Movie } from '@custom_types/types';
-import { getDataFromEndpoint } from '@utils/fetchApi';
+import getDataFromEndpoint from '@utils/getDataFromEndpoint';
 
 interface HomeProps {
   metrics: MetricsProps;
