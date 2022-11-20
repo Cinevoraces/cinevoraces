@@ -15,31 +15,35 @@ export default function ConnectionForm() {
   const passwordRef = useRef<HTMLInputElement>(null);
   const allInputsRef = [identifierRef, passwordRef];
 
+  const handleSubmit = async(e: React.FormEvent<HTMLFormElement>, allInputsRef: React.RefObject<HTMLInputElement>[]) => {
+    e.preventDefault();
+    // Passing all inputs as required
+    allInputsRef.forEach((inputRef) => {
+      if (inputRef.current) inputRef.current.required = true;
+    });
+    // Checking all inputs validation status
+    const inputValidationStatus = allInputsRef.map((inputRef) => inputRef.current?.reportValidity());
+    if (!inputValidationStatus.includes(false)) {
+      const data = {
+        password: passwordRef.current!.value,
+        pseudo: identifierRef.current!.value,
+      };
+      const responseData = await postRequestCSR('/login', data);
+      // Send a confirmation toast -> To do later
+      console.log(responseData.response);
+      // State Mutation
+      dispatch(login(responseData.user));
+      // Save the accessToken in the localStorage
+      window.localStorage.setItem('accessToken', responseData.token);
+      // Closing modal
+      dispatch(toggleConnectionModal());
+    };
+  };
+
   return (
     <form
       action="submit"
-      onSubmit={ async (e) => {
-        e.preventDefault();
-        // Passing all inputs as required
-        allInputsRef.forEach((inputRef) => {
-          if (inputRef.current) inputRef.current.required = true;
-        });
-        // Checking all inputs validation status
-        const inputValidationStatus = allInputsRef.map((inputRef) => inputRef.current?.reportValidity());
-        if (!inputValidationStatus.includes(false)) {
-          const data = {
-            password: passwordRef.current!.value,
-            pseudo: identifierRef.current!.value,
-          };
-          const responseData = await postRequestCSR('/login', data);
-          // Send a confirmation toast -> To do later
-          console.log(responseData.response);
-          // State Mutation
-          dispatch(login(responseData.user));
-          // Closing modal
-          dispatch(toggleConnectionModal());
-        }
-      }}
+      onSubmit={ async (e) => handleSubmit(e, allInputsRef)}
       className="flex flex-col w-full gap-3">
       <TextInputRef
         id="identifier"
