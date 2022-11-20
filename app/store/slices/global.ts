@@ -19,13 +19,13 @@ const globalSlice = createSlice({
   initialState,
   reducers: {
     toggleBurgerMenu(state) {
-      state.isBurgerMenuOpen = !state.isBurgerMenuOpen;
+      return { ...state, isBurgerMenuOpen: !state.isBurgerMenuOpen };
     },
     toggleUserMenu(state) {
-      state.isBurgerMenuOpen = !state.isUserMenuOpen;
+      return { ...state, isUserMenuOpen: !state.isUserMenuOpen };
     },
     toggleConnectionModal(state) {
-      state.isConnectionModalOpen = !state.isConnectionModalOpen;
+      return { ...state, isConnectionModalOpen: !state.isConnectionModalOpen };
     },
   },
 });

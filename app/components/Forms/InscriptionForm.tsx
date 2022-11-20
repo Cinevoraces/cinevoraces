@@ -22,7 +22,7 @@ export default function InscriptionForm() {
   return (
     <form
       action="submit"
-      onSubmit={(e) => {
+      onSubmit={ async (e) => {
         e.preventDefault();
         // Passing all inputs as required
         allInputsRef.forEach((inputRef) => {
@@ -42,7 +42,8 @@ export default function InscriptionForm() {
             mail: emailRef.current!.value,
             pseudo: usernameRef.current!.value,
           };
-          postRequestCSR('/register', data);
+          const responseData = await postRequestCSR('/register', data);
+          // Send a confirmation toast -> To do later          console.log(responseData.message);
         }
       }}
       className="flex flex-col w-full gap-6">
