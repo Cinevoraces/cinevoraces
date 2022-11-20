@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useRef } from 'react';
 import Image from 'next/image';
 import { useAppSelector, useAppDispatch } from '@store/store';
 import { TextInputRef, Toggle } from '@components/Input';
@@ -8,7 +8,7 @@ import SendLogo from '@public/icons/send-icon.svg';
 import { postRequestCSR } from '@utils/fetchApi';
 
 export default function InscriptionForm() {
-  const { isPWVisible } = useAppSelector(inscription);
+  const isPWVisible = useAppSelector(inscription).isPWVisible;
   const dispatch = useAppDispatch();
 
   const emailRef = useRef<HTMLInputElement>(null);
@@ -18,13 +18,6 @@ export default function InscriptionForm() {
   const allInputsRef = [emailRef, usernameRef, PWRef, confirmPWRef];
 
   const helpingTextStyle = 'px-1 text-sm font-light italic text-gray-300';
-
-  //Test purposes, to delete later
-  useEffect(() => {
-    fetch('http://localhost:3005/metrics')
-      .then((res) => res.json())
-      .then((data) => console.log(data));
-  });
 
   return (
     <form

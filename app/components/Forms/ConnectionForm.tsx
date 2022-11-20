@@ -3,22 +3,34 @@ import { useAppSelector, useAppDispatch } from '@store/store';
 import Button from '@components/Input/Button';
 import { TextInputRef, Toggle } from '@components/Input';
 import { toggleConnectionModal } from '@store/slices/global';
-import { toggleIsRequired, toggleIsPWVisible, connection } from '@store/slices/connection';
+import { toggleIsPWVisible, connection } from '@store/slices/connection';
+import { postRequestCSR } from '@utils/fetchApi';
 
 export default function ConnectionForm() {
-  const { isRequired, isPWVisible } = useAppSelector(connection);
+  const isPWVisible = useAppSelector(connection).isPWVisible;
   const dispatch = useAppDispatch();
 
   const identifierRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
+  const allInputsRef = [identifierRef, passwordRef];
 
   return (
     <form
       action="submit"
       onSubmit={(e) => {
         e.preventDefault();
-        if (identifierRef.current && passwordRef.current) {
-          !isRequired && dispatch(toggleIsRequired());
+        // Passing all inputs as required
+        allInputsRef.forEach((inputRef) => {
+          if (inputRef.current) inputRef.current.required = true;
+        });
+        // Checking all inputs validation status
+        const inputValidationStatus = allInputsRef.map((inputRef) => inputRef.current?.reportValidity());
+        if (!inputValidationStatus.includes(false)) {
+          const data = {
+            password: passwordRef.current!.value,
+            pseudo: identifierRef.current!.value,
+          };
+          postRequestCSR('/login', data);
         }
       }}
       className="flex flex-col w-full gap-3">
@@ -26,7 +38,6 @@ export default function ConnectionForm() {
         id="identifier"
         label="Email ou nom d'utilisateur"
         placeholder="Votre identifiant..."
-        required={isRequired}
         minLength={3}
         errorMessage="Saisissez un identifiant"
         ref={identifierRef}
@@ -36,7 +47,6 @@ export default function ConnectionForm() {
         id="password"
         label="Entrez votre mot de passe"
         placeholder="Mot de passe..."
-        required={isRequired}
         errorMessage="Le mot de passe ne respecte pas les règles de sécurité."
         ref={passwordRef}
       />

@@ -1,4 +1,5 @@
-const baseUrlSSR = process.env.API_BASE_URL_SSR, baseUrlCSR = process.env.API_BASE_URL_CSR;
+const baseUrlSSR = process.env.NEXT_PUBLIC_API_BASE_URL_SSR,
+  baseUrlCSR = process.env.NEXT_PUBLIC_API_BASE_URL_CSR;
 console.log('CSR: ', baseUrlCSR, 'SSR: ', baseUrlSSR);
 
 const getDataFromEndpointSSR = async (endpoint: string) => {
@@ -19,18 +20,15 @@ const postRequestCSR = async (endpoint: string, data: BodyData) => {
       method: 'POST',
       // mode: 'cors',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
-      body: JSON.stringify(data)
+      body: JSON.stringify(data),
     })
-      .then(res => res.json())
-      .then(data => console.log(data));
-  } catch (err){
+      .then((res) => res.json())
+      .then((data) => console.log(data));
+  } catch (err) {
     console.error(err);
   }
 };
 
-export {
-  getDataFromEndpointSSR,
-  postRequestCSR,
-};
+export { getDataFromEndpointSSR, postRequestCSR };
