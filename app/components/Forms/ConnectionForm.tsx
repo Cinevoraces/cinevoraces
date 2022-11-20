@@ -6,6 +6,7 @@ import { toggleConnectionModal } from '@store/slices/global';
 import { toggleIsPWVisible, connection } from '@store/slices/connection';
 import { postRequestCSR } from '@utils/fetchApi';
 import { login } from '@store/slices/user';
+import { toast } from 'react-hot-toast';
 
 export default function ConnectionForm() {
   const isPWVisible = useAppSelector(connection).isPWVisible;
@@ -31,6 +32,7 @@ export default function ConnectionForm() {
       const responseData = await postRequestCSR('/login', data);
       // Send a confirmation toast -> To do later
       console.log(responseData.response);
+      toast.success(responseData.response);
       // State Mutation
       dispatch(login(responseData.user));
       // Save the accessToken in the localStorage
