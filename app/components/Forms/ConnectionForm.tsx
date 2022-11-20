@@ -5,6 +5,7 @@ import { TextInputRef, Toggle } from '@components/Input';
 import { toggleConnectionModal } from '@store/slices/global';
 import { toggleIsPWVisible, connection } from '@store/slices/connection';
 import { postRequestCSR } from '@utils/fetchApi';
+import { login } from '@store/slices/user';
 
 export default function ConnectionForm() {
   const isPWVisible = useAppSelector(connection).isPWVisible;
@@ -17,7 +18,7 @@ export default function ConnectionForm() {
   return (
     <form
       action="submit"
-      onSubmit={(e) => {
+      onSubmit={ async (e) => {
         e.preventDefault();
         // Passing all inputs as required
         allInputsRef.forEach((inputRef) => {
@@ -30,7 +31,13 @@ export default function ConnectionForm() {
             password: passwordRef.current!.value,
             pseudo: identifierRef.current!.value,
           };
-          postRequestCSR('/login', data);
+          const responseData = await postRequestCSR('/login', data);
+          // Send a confirmation toast -> To do later
+          console.log(responseData.response);
+          // State Mutation
+          dispatch(login(responseData.user));
+          // Closing modal
+          dispatch(toggleConnectionModal());
         }
       }}
       className="flex flex-col w-full gap-3">

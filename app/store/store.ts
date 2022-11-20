@@ -1,11 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit';
 import type { TypedUseSelectorHook } from 'react-redux';
 import { useSelector, useDispatch } from 'react-redux';
-import { globalSliceReducer, connectionReducer, inscriptionReducer } from './slices';
+import { globalSliceReducer, userSliceReducer, connectionReducer, inscriptionReducer } from './slices';
 
 const store = configureStore({
   reducer: { 
     global: globalSliceReducer,
+    user: userSliceReducer,
     connection: connectionReducer, 
     inscription:inscriptionReducer 
   },

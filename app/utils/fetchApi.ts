@@ -16,16 +16,15 @@ interface BodyData {
 
 const postRequestCSR = async (endpoint: string, data: BodyData) => {
   try {
-    fetch(baseUrlCSR + endpoint, {
+    const response = await fetch(baseUrlCSR + endpoint, {
       method: 'POST',
-      // mode: 'cors',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(data),
-    })
-      .then((res) => res.json())
-      .then((data) => console.log(data));
+    });
+    const responseData = await response.json();
+    return responseData;
   } catch (err) {
     console.error(err);
   }
