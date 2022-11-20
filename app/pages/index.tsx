@@ -10,7 +10,7 @@ import commentsSample from '@public/comments_sample.jpg';
 import Metrics from '@components/Metrics';
 import type { MetricsProps } from '@components/Metrics';
 import type { Movie } from '@custom_types/types';
-import getDataFromEndpoint from '@utils/getDataFromEndpoint';
+import { getDataFromEndpointSSR } from '@utils/fetchApi';
 
 interface HomeProps {
   metrics: MetricsProps;
@@ -203,8 +203,8 @@ const Home: NextPage<HomeProps> = (props) => {
 
 export async function getServerSideProps() {
   try {
-    const metrics = await getDataFromEndpoint('/metrics');
-    const lastSixMovies = await getDataFromEndpoint('/movies?where[is_published]=true&limit=6');
+    const metrics = await getDataFromEndpointSSR('/metrics');
+    const lastSixMovies = await getDataFromEndpointSSR('/movies?where[is_published]=true&limit=6');
     return {
       props: {
         metrics,

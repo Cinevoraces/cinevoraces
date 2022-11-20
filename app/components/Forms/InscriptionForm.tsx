@@ -1,10 +1,11 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import Image from 'next/image';
 import { useAppSelector, useAppDispatch } from '@store/store';
 import { TextInputRef, Toggle } from '@components/Input';
 import { toggleIsPWVisible, inscription } from '@store/slices/inscription';
 import Button from '@components/Input/Button';
 import SendLogo from '@public/icons/send-icon.svg';
+import { postRequestCSR } from '@utils/fetchApi';
 
 export default function InscriptionForm() {
   const { isPWVisible } = useAppSelector(inscription);
@@ -17,6 +18,13 @@ export default function InscriptionForm() {
   const allInputsRef = [emailRef, usernameRef, PWRef, confirmPWRef];
 
   const helpingTextStyle = 'px-1 text-sm font-light italic text-gray-300';
+
+  //Test purposes, to delete later
+  useEffect(() => {
+    fetch('http://localhost:3005/metrics')
+      .then((res) => res.json())
+      .then((data) => console.log(data));
+  });
 
   return (
     <form
@@ -35,7 +43,14 @@ export default function InscriptionForm() {
         }
         // Checking all inputs validation status
         const inputValidationStatus = allInputsRef.map((inputRef) => inputRef.current?.reportValidity());
-        if (!inputValidationStatus.includes(false)) console.log('Tout est bon, on lance le formulaire !');
+        if (!inputValidationStatus.includes(false)) {
+          const data = {
+            password: PWRef.current!.value,
+            mail: emailRef.current!.value,
+            pseudo: usernameRef.current!.value,
+          };
+          postRequestCSR('/register', data);
+        }
       }}
       className="flex flex-col w-full gap-6">
       <TextInputRef
@@ -62,16 +77,16 @@ export default function InscriptionForm() {
           id="password"
           label="Entrez votre mot de passe"
           placeholder="Mot de passe..."
-          pattern='^(?=.*[A-Za-z])(?=.*\d)[!#$&%*+=?|\-A-Za-z\d]{8,}$'
-          errorMessage='La saisie ne réponds aux exigences de sécurité.'
+          pattern="^(?=.*[A-Za-z])(?=.*\d)[!#$&%*+=?|\-A-Za-z\d]{8,}$"
+          errorMessage="La saisie ne réponds aux exigences de sécurité."
           ref={PWRef}
         />
         <TextInputRef
           type={!isPWVisible ? 'password' : undefined}
           id="password"
           placeholder="Confirmer votre mot de passe..."
-          pattern='^(?=.*[A-Za-z])(?=.*\d)[!#$&%*+=?|\-A-Za-z\d]{8,}$'
-          errorMessage='La saisie ne réponds aux exigences de sécurité.'
+          pattern="^(?=.*[A-Za-z])(?=.*\d)[!#$&%*+=?|\-A-Za-z\d]{8,}$"
+          errorMessage="La saisie ne réponds aux exigences de sécurité."
           ref={confirmPWRef}
         />
         <Toggle

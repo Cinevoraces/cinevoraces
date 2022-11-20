@@ -10,7 +10,8 @@ import plugin from 'fastify-plugin';
 const fastifyCors: FastifyPluginCallback = async (fastify, opts, done) => {
   fastify.register(cors,
     {
-      origin: 'http://localhost',
+      // origin: ['http://localhost:3000', 'http://cinevoraces_app'],
+      origin: ['http://localhost:3000'],
       allowedHeaders: ['Content-Type', 'Authorization'],
 
     }
