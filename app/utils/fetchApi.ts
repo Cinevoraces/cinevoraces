@@ -21,6 +21,7 @@ const postRequestCSR = async (endpoint: string, data: BodyData) => {
       headers: {
         'Content-Type': 'application/json',
       },
+      credentials: 'include',
       body: JSON.stringify(data),
     });
     const responseData = await response.json();
