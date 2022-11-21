@@ -29,8 +29,9 @@ export default function Header() {
     ['Accueil', '/'],
     ['Les films', '/films'],
     ['Le film de la semaine', '/films/1'], // à pimper
-    ['Proposer un film', '/proposition'],
   ];
+  isConnected && navLinks.push(['Proposer un film', '/proposition'],);
+  
   const userMenuLinks = [
     ['Mon Profil', `/profil/${id}`],
   ];
