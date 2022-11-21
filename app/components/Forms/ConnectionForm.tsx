@@ -7,6 +7,9 @@ import { toggleIsPWVisible, connection } from '@store/slices/connection';
 import { postRequestCSR } from '@utils/fetchApi';
 import { login } from '@store/slices/user';
 import { toast } from 'react-hot-toast';
+import tryCatchWrapper from '@utils/tryCatchWrapper';
+
+import type { BodyData } from '@utils/fetchApi';
 
 export default function ConnectionForm() {
   const isPWVisible = useAppSelector(connection).isPWVisible;
@@ -15,6 +18,18 @@ export default function ConnectionForm() {
   const identifierRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
   const allInputsRef = [identifierRef, passwordRef];
+
+  const submitSuccess = async (method: 'POST' | 'PUT' | 'DELETE', endpoint: string, data?: BodyData) => {
+    const responseData = await postRequestCSR(method, endpoint, data);
+    // Send a confirmation toast -> To do later
+    toast.success(responseData.response);
+    // State Mutation
+    dispatch(login(responseData.user));
+    // Save the accessToken in the localStorage
+    window.localStorage.setItem('accessToken', responseData.token);
+    // Closing modal
+    dispatch(toggleConnectionModal());
+  };
 
   const handleSubmit = async(e: React.FormEvent<HTMLFormElement>, allInputsRef: React.RefObject<HTMLInputElement>[]) => {
     e.preventDefault();
@@ -29,17 +44,8 @@ export default function ConnectionForm() {
         password: passwordRef.current!.value,
         pseudo: identifierRef.current!.value,
       };
-      const responseData = await postRequestCSR('/login', data);
-      // Send a confirmation toast -> To do later
-      console.log(responseData.response);
-      toast.success(responseData.response);
-      // State Mutation
-      dispatch(login(responseData.user));
-      // Save the accessToken in the localStorage
-      window.localStorage.setItem('accessToken', responseData.token);
-      // Closing modal
-      dispatch(toggleConnectionModal());
-    };
+      tryCatchWrapper(submitSuccess)('POST', '/login', data);
+    }
   };
 
   return (

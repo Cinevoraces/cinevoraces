@@ -1,12 +1,15 @@
 const baseUrlSSR = process.env.NEXT_PUBLIC_API_BASE_URL_SSR,
   baseUrlCSR = process.env.NEXT_PUBLIC_API_BASE_URL_CSR;
-console.log('CSR: ', baseUrlCSR, 'SSR: ', baseUrlSSR);
 
+/**
+ * Generic function for SSR & ISR data fetching
+ * @param endpoint string
+ * @returns response payload
+ */
 const getDataFromEndpointSSR = async (endpoint: string) => {
   if (baseUrlSSR) {
-    const data = await fetch(baseUrlSSR + endpoint);
-    const metrics = await data.json();
-    return metrics;
+    return fetch(baseUrlSSR + endpoint)
+      .then(res => res.json());
   }
 };
 
@@ -14,21 +17,29 @@ interface BodyData {
   [key: string]: string | number | boolean;
 }
 
-const postRequestCSR = async (endpoint: string, data: BodyData) => {
-  try {
-    const response = await fetch(baseUrlCSR + endpoint, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      credentials: 'include',
-      body: JSON.stringify(data),
-    });
-    const responseData = await response.json();
-    return responseData;
-  } catch (err) {
-    console.error(err);
+/**
+ * Generic function for mutation methods, specific to client side requests
+ * @param method string 'POST' | 'PUT' | 'DELETE'
+ * @param endpoint string -> localhost:3005/dev-docs/static/index.htm
+ * @param data facultative request payload
+ * @returns 
+ */
+const postRequestCSR = async (method: 'POST' | 'PUT' | 'DELETE', endpoint: string, data?: BodyData) => {
+  const res = await fetch(baseUrlCSR + endpoint, {
+    method,
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    credentials: 'include',
+    body: JSON.stringify(data),
+  });
+  const responsePayload = await res.json();
+  if (responsePayload.error){
+    const { message } = responsePayload;
+    throw new Error(message);
   }
+  return responsePayload;
 };
 
 export { getDataFromEndpointSSR, postRequestCSR };
+export type { BodyData };
