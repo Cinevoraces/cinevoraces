@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import type { NextPage } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -11,6 +11,8 @@ import Metrics from '@components/Metrics';
 import type { MetricsProps } from '@components/Metrics';
 import type { Movie } from '@custom_types/types';
 import { getDataFromEndpointSSR } from '@utils/fetchApi';
+import { useAppSelector } from '@store/store';
+import { user } from '@store/slices/user';
 
 interface HomeProps {
   metrics: MetricsProps;
@@ -19,6 +21,7 @@ interface HomeProps {
 
 const Home: NextPage<HomeProps> = (props) => {
   const { metrics, lastSixMovies } = props;
+  const isConnected = useAppSelector(user).isConnected;
   const lastSixMoviesInfos = lastSixMovies.map((m) => ({
     id: m.id,
     french_title: m.french_title,
@@ -52,11 +55,14 @@ const Home: NextPage<HomeProps> = (props) => {
               <h2 className={h2Style}>Chaque semaine, un film à découvrir</h2>
               <div className="flex justify-start gap-4">
                 <Button to={'/films'}>Découvrir les films</Button>
-                <Button
-                  to={'/inscription'}
-                  customStyle={'empty'}>
-                  {'S\'inscrire'}
-                </Button>
+                {
+                  !isConnected &&
+                  <Button
+                    to={'/inscription'}
+                    customStyle={'empty'}>
+                    {'S\'inscrire'}
+                  </Button>
+                }
               </div>
             </div>
             <div className="hidden lg:flex lg:w-full lg:max-w-lg lg:justify-end lg:flex-1">
@@ -116,20 +122,27 @@ const Home: NextPage<HomeProps> = (props) => {
               <br />
               {'Envie de rejoindre l\'aventure ?'}
               <br />
-              <Link
-                href={'/inscription'}
-                className={emStyle}>
-                { 'Inscrivez-vous ' }
-              </Link>
+              {
+                !isConnected ?
+                  <Link
+                    href={'/inscription'}
+                    className={emStyle}>
+                    { 'Inscrivez-vous ' }
+                  </Link>
+                  : <span className={emStyle}>{'Inscrivez-vous '}</span>
+              }
               pour partager votre passion pour le cinéma avec nous.
             </p>
-            <div className="flex justify-end">
-              <Button
-                to={'/inscription'}
-                customStyle="rounded">
-                {'S\'inscrire'}
-              </Button>
-            </div>
+            {
+              !isConnected &&
+              <div className="flex justify-end">
+                <Button
+                  to={'/inscription'}
+                  customStyle="rounded">
+                  {'S\'inscrire'}
+                </Button>
+              </div>
+            }
           </div>
         </div>
       </section>
