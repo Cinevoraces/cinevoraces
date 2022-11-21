@@ -1,12 +1,13 @@
 import Form from './Form';
-import Button from 'components/Input/Button';
-import { CheckBox, Toggle } from '@components/Input/CheckBox';
-import RadioInput from '@components/Input/Radio';
+import Button from './Button';
+import { CheckBox, Toggle } from './CheckBox';
+import RadioInput from './Radio';
 import {
   Range as RangeInput,
   DoubleRange as DoubleRangeInput,
-} from '@components/Input/Range';
-import { TextRef as TextInputRef, Text as TextInput, TextAreaRef, TextArea } from '@components/Input/Text';
+} from './Range';
+import { TextRef as TextInputRef, Text as TextInput, TextAreaRef, TextArea } from './Text';
+import Interaction from './Interaction/Interaction';
 
 export {
   Form,
@@ -20,4 +21,5 @@ export {
   TextInput,
   TextAreaRef,
   TextArea,
+  Interaction,
 };
