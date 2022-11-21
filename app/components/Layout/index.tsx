@@ -21,17 +21,8 @@ export default function Layout({ children }: LayoutProps) {
           className: '',
           duration: 5000,
           style: {
-            background: '#363636',
-            color: '#fff',
-          },
-        
-          // Default options for specific types
-          success: {
-            duration: 3000,
-            theme: {
-              primary: 'green',
-              secondary: 'black',
-            },
+            background: '#393945',
+            color: '#F2F2F3',
           },
         }}/>
       <Header />

@@ -1,10 +1,11 @@
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { useAppSelector } from '@store/store';
-import { user } from '@store/slices/user';
+import { useAppSelector, useAppDispatch } from '@store/store';
+import { logout, user } from '@store/slices/user';
 import defaultUserPic from '@public/icons/user_default.svg';
-
+import { toggleUserMenu } from '@store/slices/global';
+import { toast } from 'react-hot-toast';
 interface HeaderMenuButtonProps {
   type: 'burger' | 'user';
   stateValue: boolean;
@@ -58,6 +59,7 @@ const HeaderMenu = React.forwardRef<HTMLElement, HeaderMenuProps>((props, ref) =
   HeaderMenu.displayName = 'HeaderMenu';
   const { type, setter, stateValue, links } = props;
   const pseudo = useAppSelector(user).pseudo;
+  const dispatch = useAppDispatch();
 
   const basicMenuStyle =
     'absolute z-[90] top-0 w-full max-w-md pb-2 px-4 flex flex-col bg-medium-gray shadow-lg sm:rounded-b-lg ';
@@ -68,6 +70,17 @@ const HeaderMenu = React.forwardRef<HTMLElement, HeaderMenuProps>((props, ref) =
   (type === 'burger') ? (menuStyle += burgerCustomStyle) : (menuStyle += userCustomStyle);
   let linkStyle = basicLinksStyle;
   type === 'user' && (linkStyle += ' text-right');
+
+  const logoutHandler = () => {
+    // State clearing
+    dispatch(logout());
+    // localStorage cleaning
+    window.localStorage.clear();
+    // refresh_token cleaning
+    document.cookie = 'refresh_token=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+    dispatch(toggleUserMenu());
+    toast.success('À bientôt !');
+  };
 
   return (
     <>
@@ -87,6 +100,16 @@ const HeaderMenu = React.forwardRef<HTMLElement, HeaderMenuProps>((props, ref) =
             {link[0]}
           </Link>
         ))}
+        {
+          type === 'user' &&
+            <Link
+              href='#'
+              key='logout'
+              className={linkStyle}
+              onClick={logoutHandler}>
+              Se déconnecter
+            </Link>
+        }
       </nav>
     </>
   );

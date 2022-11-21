@@ -1,6 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { RootState } from '../store';
-import type { PayloadAction } from '@reduxjs/toolkit';
 
 interface UserProps {
   id?: number;
@@ -20,15 +19,15 @@ const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    login(state, action) {
+    login(_, action) {
       const user = action.payload;
       return { 
         isConnected: true,
         ...user
       };
     },
-    loggout(state){
-      state = initialState;
+    logout(){
+      return initialState;
     }
   },
 });
@@ -36,6 +35,6 @@ const userSlice = createSlice({
 export const user = (state: RootState) => state.user;
 export const {
   login,
-  loggout,
+  logout,
 } = userSlice.actions;
 export default userSlice.reducer;
