@@ -1,12 +1,32 @@
+/* Important : custom fonts must be imported at the top of flobals.css*/
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
-  @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400&display=swap');
   html, body {
-    font-family: 'Montserrat', sans-serif;
+    @apply font-sans;
+    @apply text-white;
+    @apply bg-dark-gray;
   }
+}
+  /* Reset for special range inputs*/
+input[type='range'] {
+  @apply z-0 appearance-none w-full h-2 rounded-full cursor-pointer bg-orange-primary/20 focus:outline-none focus:ring-4 focus:ring-offset-0 focus:ring-white/5 hover:outline-none hover:ring-4 hover:ring-offset-0 hover:ring-white/5
+}
+input[type='range']::-moz-range-thumb {
+  @apply z-10 appearance-none pointer-events-auto w-5 h-5 rounded-full border-none ring-4 ring-medium-gray/50 bg-orange-secondary hover:scale-110
+}
+input[type='range']::-moz-range-progress {
+  @apply appearance-none pointer-events-auto w-full h-2 rounded-full bg-orange-secondary 
+}
+input[type='range']::-webkit-slider-thumb {
+  @apply z-10 appearance-none -mt-[.4rem] pointer-events-auto w-5 h-5 rounded-full border-none ring-4 ring-medium-gray/50 bg-orange-secondary hover:scale-110
+}
+input[type='range']::-webkit-slider-runnable-track {
+  @apply bg-orange-secondary/50 w-full h-2 rounded-full
 }
 
 /*
