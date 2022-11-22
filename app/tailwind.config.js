@@ -22,6 +22,26 @@ module.exports = {
         'medium-gray':'#393945',
         'white':'#F2F2F3'
       },
+      animation: {
+        'slidein': 'slidein 400ms ease-in',
+        'slideout': 'slidein 400ms ease-out reverse',
+      },
+      transitionProperty: {
+        'width': 'width',
+      },
+      transitionDuration: {
+        '400': '400ms',
+      },
+      keyframes: {
+        'slidein': {
+          '0%': { transform: 'translate(-10rem)'},
+          '100%': { transform: 'translate(0)'},
+        },
+        'slideout': {
+          '0%': { transform: 'translate(0)'},
+          '100%': { transform: 'translate(10rem)'},
+        },
+      },
       backgroundImage:{}
     },
     variants: {
