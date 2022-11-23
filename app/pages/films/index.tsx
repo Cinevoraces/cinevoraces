@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Interaction } from '@components/Input';
+import Rate from '@components/Rate';
 
 export default function Films() {
   const [isClickedBookmark, setIsClickedBookmark] = useState(false);
@@ -46,6 +47,7 @@ export default function Films() {
           setIsClickedView(!isClickedView);
         }}
       />
+      <Rate rate={4.2}/>
     </main>
   );
 }
