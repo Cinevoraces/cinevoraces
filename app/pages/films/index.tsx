@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Interaction } from '@components/Input';
-import StarRadio from '@components/Input/Interaction/StarRadio';
 
 export default function Films() {
   const [isClickedBookmark, setIsClickedBookmark] = useState(false);
@@ -47,7 +46,6 @@ export default function Films() {
           setIsClickedView(!isClickedView);
         }}
       />
-      <StarRadio />
     </main>
   );
 }

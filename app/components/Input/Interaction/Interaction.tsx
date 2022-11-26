@@ -2,6 +2,7 @@ import type { ReactNode } from 'react';
 import React, { useState } from 'react';
 import { BookmarkSvg, LikeSvg, StarSvg, ViewSvg } from './SVG';
 import type { SvgProps } from './SVG';
+import StarRadio from './StarRadio';
 
 interface InteractionProps {
   type: 'bookmark' | 'like' | 'starButton' | 'starRating' | 'view';
@@ -35,18 +36,9 @@ export default function Interaction({ type, counter, isClicked, onClick }: Inter
     focus:scale-105 hover:scale-105
     transition ease-out duration-200 `;
   const customExpandedStarContainerStyle =
-    buttonStyle + 'overflow-hidden w-60 flex transition-width ease-in duration-400 focus-within:scale-105';
+    buttonStyle + 'overflow-hidden w-72 flex transition-width ease-in duration-400 focus-within:scale-105';
   const customStarButtonStyle = 'relative z-10 w-16 h-18 bg-medium-gray outline-none ';
-  const ratingMenuContainer = 'relative h-full w-52 pl-16 text-transparent';
-  const ratingMenuStyle = 'absolute inset-y-4 right-4 w-40 flex flex-row-reverse justify-between items-center '; // Row reverse to use the sibling selector
-  const ratingLabelStyle = `peer group relative w-8 h-8 
-  bg-dark-gray bg-clip-text 
-  hover:bg-yellow
-  peer-focus-within:bg-yellow peer-checked:bg-yellow 
-  transition delay-400 duration-200 `;
-  const ratingRadioInputStyle = 'radio-star peer absolute inset-2 w-4 h-4 ';
-
-  const starInputsNames = ['firstStar', 'secondStar', 'thirdStar', 'fourthStar', 'fifthStar'];
+  const ratingMenuContainer = 'relative h-full w-52 pl-0 ';
 
   return (
     <>
@@ -60,7 +52,7 @@ export default function Interaction({ type, counter, isClicked, onClick }: Inter
       ) : (
         <div
           className={
-            isClicked ? customExpandedStarContainerStyle : customExpandedStarContainerStyle.replace('w-60', 'w-16')
+            isClicked ? customExpandedStarContainerStyle : customExpandedStarContainerStyle.replace('w-72', 'w-16')
           }>
           <button
             onClick={onClick}
@@ -69,29 +61,9 @@ export default function Interaction({ type, counter, isClicked, onClick }: Inter
             <p className="text-sm mt-1">{counter}</p>
           </button>
           <div className={ratingMenuContainer}>
-            <fieldset className={ratingMenuStyle}>
-              <legend className="sr-only">Notez le film sur 5</legend>
-              {
-                //label is group to color the star background on hover
-                // input is peer to color star background when checked
-                // input are hidden
-                starInputsNames.map((inputName, i) => (
-                  <label
-                    htmlFor={inputName}
-                    className={ratingLabelStyle}
-                    key={inputName}>
-                      ★
-                    <input
-                      type="radio"
-                      name="rating"
-                      id={inputName}
-                      value={i}
-                      className={ratingRadioInputStyle}
-                    />
-                  </label>
-                ))
-              }
-            </fieldset>
+            <div className='absolute inset-y-4 right-8'>
+              <StarRadio />
+            </div>
           </div>
         </div>
       )}

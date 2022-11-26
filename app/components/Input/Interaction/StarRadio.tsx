@@ -3,7 +3,7 @@ import { StarSvg } from './SVG';
 
 export default function StarRadio() {
 
-  const radioStyle = ` absolute z-20 cursor-pointer 
+  const radioStyle = ` radio-input absolute z-20 cursor-pointer 
   peer w-6 h-6 border-none 
   bg-transparent text-transparent 
   checked:bg-none 
@@ -15,16 +15,16 @@ export default function StarRadio() {
   ease-out duration-300 `;
   const starEffectStyle = `absolute scale-[1.75] -top-[0.5px] fill-transparent 
   peer-hover:fill-white/5 peer-focus:fill-white/5 
-  peer-hover/star:fill-green 
   ease-out duration-300`;
 
   return (
-    <fieldset className='w-52 h-10 flex gap-10 py-2 px-3.5 bg-medium-gray'>
+    <fieldset className='w-52 h-10 flex flex-row-reverse gap-10'>
+      <legend className="sr-only">Notez le film sur 5</legend>
       {
         [...Array(5)].map((_, i) => (
           <label htmlFor="rating" className='relative ' key={`rating-${i + 1}`}>
             <input type="radio" value={i + 1} name='rating' className={radioStyle}/>
-            <StarSvg style={starStyle}/>
+            <StarSvg style={'star-icon ' + starStyle}/>
             <StarSvg style={starEffectStyle}/>
           </label>)
         )
