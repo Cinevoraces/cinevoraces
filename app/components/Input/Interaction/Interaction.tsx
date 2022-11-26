@@ -38,7 +38,7 @@ export default function Interaction({ type, counter, isClicked, onClick }: Inter
   const customExpandedStarContainerStyle =
     buttonStyle + 'overflow-hidden w-72 flex transition-width ease-in duration-400 focus-within:scale-105';
   const customStarButtonStyle = 'relative z-10 w-16 h-18 bg-medium-gray outline-none ';
-  const ratingMenuContainer = 'relative h-full w-52 pl-0 ';
+  const ratingMenuContainer = 'relative z-0 h-full w-52 pl-0 ';
 
   return (
     <>
