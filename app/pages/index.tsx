@@ -74,7 +74,7 @@ const Home: NextPage<HomeProps> = (props) => {
             <div className="mt-8 grid grid-cols-3 gap-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
               {lastSixMoviesInfos.map((movie) => (
                 <Link
-                  href={`/films/${movie.french_title}`}
+                  href={`/films/${movie.id}`}
                   className="fourth-child:hidden fifth-child:hidden sixth-child:hidden md:fourth-child:block lg:fifth-child:block xl:sixth-child:block"
                   key={movie.french_title}>
                   <Image

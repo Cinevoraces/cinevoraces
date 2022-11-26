@@ -20,6 +20,7 @@ module.exports = {
         'green':'#85F086',
         'dark-gray':'#202029',
         'medium-gray':'#393945',
+        'light-gray': '#8A8A92',
         'white':'#F2F2F3'
       },
       animation: {

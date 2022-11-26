@@ -17,6 +17,7 @@ export const getMovies = (
       'author_id', 
       'season_number', 
       'is_published',
+      'french_title',
     ],
     select: [
       'casting',

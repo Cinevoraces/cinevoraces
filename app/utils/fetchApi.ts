@@ -18,6 +18,27 @@ interface BodyData {
 }
 
 /**
+ * Generic function for get methods, specific to client side requests
+ * @param endpoint string -> localhost:3005/dev-docs/static/index.htm
+ * @returns data from API
+ */
+const getRequestCSR = async (endpoint: string) => {
+  const res = await fetch(baseUrlCSR + endpoint, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    credentials: 'include',
+  });
+  const responsePayload = await res.json();
+  if (responsePayload.error){
+    const { message } = responsePayload;
+    throw new Error(message);
+  }
+  return responsePayload;
+};
+
+/**
  * Generic function for mutation methods, specific to client side requests
  * @param method string 'POST' | 'PUT' | 'DELETE'
  * @param endpoint string -> localhost:3005/dev-docs/static/index.htm
@@ -41,5 +62,5 @@ const postRequestCSR = async (method: 'POST' | 'PUT' | 'DELETE', endpoint: strin
   return responsePayload;
 };
 
-export { getDataFromEndpointSSR, postRequestCSR };
+export { getDataFromEndpointSSR, getRequestCSR, postRequestCSR };
 export type { BodyData };
