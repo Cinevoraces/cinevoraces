@@ -9,14 +9,14 @@ import discordInvite from '@public/discord_invite.png';
 import commentsSample from '@public/comments_sample.jpg';
 import Metrics from '@components/Metrics';
 import type { MetricsProps } from '@components/Metrics';
-import type { Movie } from '@custom_types/types';
+import type { MinimalMovie } from '@custom_types/types';
 import { getDataFromEndpointSSR } from '@utils/fetchApi';
 import { useAppSelector } from '@store/store';
 import { user } from '@store/slices/user';
 
 interface HomeProps {
   metrics: MetricsProps;
-  lastSixMovies: Movie[];
+  lastSixMovies: MinimalMovie[];
 }
 
 const Home: NextPage<HomeProps> = (props) => {

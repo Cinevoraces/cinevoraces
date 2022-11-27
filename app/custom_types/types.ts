@@ -1,4 +1,4 @@
-export interface Movie {
+export interface MinimalMovie {
   id: number;
   author_id: number;
   season_number: number;
@@ -6,22 +6,24 @@ export interface Movie {
   french_title: string;
   original_title: string;
   poster_url: string;
-  casting?: string[];
-  directors?: string[];
-  runtime?: number;
+}
+export interface CompleteMovie extends MinimalMovie {
+  casting: string[];
+  directors: string[];
+  runtime: number;
   publishing_date: string;
-  release_date?: string;
-  genres?: string[];
-  countries?: string[];
-  languages?: string[];
-  presentation?: {
+  release_date: string;
+  genres: string[];
+  countries: string[];
+  languages: string[];
+  presentation: {
     author_id: number;
     author_pseudo: string;
     author_avatar: string;
     author_role: string;
     presentation: string;
   },
-  metrics?: {
+  metrics: {
     watchlist_count: number;
     views_count: number;
     likes_count: number;
@@ -40,7 +42,7 @@ export interface Movie {
       updated_at: string
     }
   ],
-  user_review: {
+  user_review?: {
     bookmarked: boolean;
     viewed: boolean;
     liked: boolean;
