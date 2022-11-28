@@ -1,45 +1,41 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
-import { Interaction } from '@components/Input';
+import Interactions from './Interactions';
 import Rate from '@components/Rate';
 import PostCard from '@components/PostCard';
 
 interface PresentationSectionProps {
-  french_title: string;
   poster_url: string;
+  french_title: string;
   release_date: string;
-  publishing_date: string;
+  original_title: string;
+  genres: string[];
+  directors: string[];
+  countries: string[];
+  languages: string[];
+  runtime: number;
+  casting: string[];
   watchlist_count: number;
   views_count: number;
   likes_count: number;
   ratings_count: number;
   avg_rating: number;
-  directors: string[];
-  genres: string[];
-  countries: string[];
-  languages: string[];
-  casting: string[];
   author_avatar: string;
   author_pseudo: string;
+  publishing_date: string;
   author_role: string;
   presentation: string;
 }
 
 export default function PresentationSection({
-  french_title, poster_url, release_date, publishing_date,
-  watchlist_count, views_count, likes_count, ratings_count, avg_rating,
-  directors, genres, countries, languages, casting,
-  author_avatar, author_pseudo, author_role, presentation,
+  poster_url, french_title, release_date, original_title,
+  genres, directors, countries, languages, runtime, casting,
+  watchlist_count, views_count, likes_count, ratings_count,
+  avg_rating,
+  author_avatar, author_pseudo, publishing_date, author_role, presentation,
 }: PresentationSectionProps) {
   const presentationProps = { author_avatar, author_pseudo, author_role, presentation, publishing_date };
-
-  // Temp states to delete later
-  const [isClickedBookmark, setIsClickedBookmark] = useState(false);
-  const [isClickedLike, setIsClickedLike] = useState(false);
-  const [isClickedStar, setIsClickedStar] = useState(false);
-  const [rating, setRating] = useState(null);
-  const [isClickedView, setIsClickedView] = useState(false);
-
+  const interactionsProps = { watchlist_count, likes_count, ratings_count, views_count };
   const dataTitleStyle = 'text-lg uppercase text-light-gray pr-4 ';
   const dataStyle = 'text-white ';
 
@@ -49,58 +45,20 @@ export default function PresentationSection({
       className="flex flex-col gap-10">
       <div
         id="poster-interactions"
-        className="flex gap-10 items-center">
+        className="flex gap-10">
         <div
           id="image-container"
-          className="relative h-fit before:content-[''] before:absolute before:-inset-0.5 before:bg-gradient-to-tr before:from-dark-gray before:to-orange-primary before:rounded-xl">
+          className="relative h-fit 
+          before:content-[''] before:absolute before:-inset-0.5 before:bg-gradient-to-tr before:from-dark-gray before:to-orange-primary before:rounded-xl">
           <Image
             src={poster_url}
             alt={`Affiche de ${french_title}`}
             width={240}
             height={(240 * 9) / 16}
-            className="relative z-10 rounded-xl "
+            className="relative z-10 rounded-xl self-center "
           />
         </div>
-        <div
-          id="interactions"
-          className="flex flex-col gap-6">
-          <Interaction
-            type="bookmark"
-            counter={watchlist_count}
-            isClicked={isClickedBookmark}
-            onClick={() => {
-              console.log('Coucou je viens juste de bookmark !!');
-              setIsClickedBookmark(!isClickedBookmark);
-            }}
-          />
-          <Interaction
-            type="like"
-            counter={likes_count}
-            isClicked={isClickedLike}
-            onClick={() => {
-              console.log('Coucou je viens juste de like !!');
-              setIsClickedLike(!isClickedLike);
-            }}
-          />
-          <Interaction
-            type="starButton"
-            counter={ratings_count}
-            isClicked={isClickedStar}
-            onClick={() => {
-              console.log('Coucou je viens juste de star !!');
-              setIsClickedStar(!isClickedStar);
-            }}
-          />
-          <Interaction
-            type="view"
-            counter={views_count}
-            isClicked={isClickedView}
-            onClick={() => {
-              console.log('Coucou je viens juste de view !!');
-              setIsClickedView(!isClickedView);
-            }}
-          />
-        </div>
+        <Interactions {...interactionsProps} />
       </div>
       <div id="metadatas">
         <h1 className="mb-6 text-3xl font-semibold text-white">
@@ -111,6 +69,12 @@ export default function PresentationSection({
           <div className="flex justify-between">
             <p className={dataTitleStyle}>Note des Membres :</p>
             <Rate rate={avg_rating} />
+          </div>
+          <div
+            id="original-title"
+            className="flex items-center">
+            <p className={dataTitleStyle}>Titre original :</p>
+            <p className={dataStyle}>{original_title}</p>
           </div>
           <div
             id="directors"
@@ -153,6 +117,12 @@ export default function PresentationSection({
             </ul>
           </div>
           <div
+            id="runtime"
+            className="flex items-center">
+            <p className={dataTitleStyle}>Durée :</p>
+            <p className={dataStyle}>{`${runtime} min.`}</p>
+          </div>
+          <div
             id="casting"
             className="flex justify-between items-center">
             <p className={dataTitleStyle + 'place-self-start'}>{'Casting :'}</p>
@@ -164,7 +134,10 @@ export default function PresentationSection({
           </div>
         </div>
       </div>
-      <PostCard type='presentation' {...presentationProps}/>
+      <PostCard
+        type="presentation"
+        {...presentationProps}
+      />
     </section>
   );
 }

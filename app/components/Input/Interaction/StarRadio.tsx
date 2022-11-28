@@ -22,8 +22,8 @@ export default function StarRadio() {
       <legend className="sr-only">Notez le film sur 5</legend>
       {
         [...Array(5)].map((_, i) => (
-          <label htmlFor="rating" className='relative ' key={`rating-${i + 1}`}>
-            <input type="radio" value={i + 1} name='rating' className={radioStyle}/>
+          <label htmlFor="rating" className='relative ' key={`rating-${5 - i}`}>
+            <input type="radio" value={5 - i} name='rating' className={radioStyle}/>
             <StarSvg style={'star-icon ' + starStyle}/>
             <StarSvg style={starEffectStyle}/>
           </label>)

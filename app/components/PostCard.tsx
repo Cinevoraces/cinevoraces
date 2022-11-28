@@ -15,6 +15,10 @@ interface PostCardProps {
   created_at?: string;
 }
 
+const basicStyle = 'w-full p-3 rounded-xl drop-shadow-sm flex flex-col gap-6 ';
+const presentationStyle = basicStyle + 'bg-medium-gray';
+const commentStyle = basicStyle + 'threeModulusZero-child: bg-card-bg-one threeModulusOne-child: bg-card-bg-two threeModulusTwo-child: bg-card-bg-three';
+
 export default function PostCardProps({
   type,
   author_avatar,
@@ -29,7 +33,7 @@ export default function PostCardProps({
   return (
     <div
       id={type === 'presentation' ? 'presentation-card' : 'comment-card'}
-      className="w-full p-3 rounded-xl drop-shadow-sm bg-medium-gray flex flex-col gap-6">
+      className={type === 'presentation' ? presentationStyle : commentStyle}>
       <div className="flex flex-col gap-2">
         <div
           id="card-header"
@@ -63,7 +67,7 @@ export default function PostCardProps({
         </div>
         {rating && <Rate rate={rating} />}
       </div>
-      <p className="w-full">{presentation ? presentation : comment}</p>
+      <p>{presentation ? presentation : comment}</p>
     </div>
   );
 }

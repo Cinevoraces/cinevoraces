@@ -35,9 +35,9 @@ const Film: NextPage<FilmProps> = (props: FilmProps) => {
   } = props.movie;
 
   const PresentationSectionProps = {
-    french_title, poster_url, release_date, publishing_date,
+    french_title, original_title, poster_url, release_date, publishing_date,
     watchlist_count, views_count, likes_count, ratings_count, avg_rating,
-    directors, genres, countries, languages, casting,
+    directors, genres, countries, languages, runtime, casting,
     author_avatar, author_pseudo, author_role, presentation
   };
 

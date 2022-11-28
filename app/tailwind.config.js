@@ -21,6 +21,9 @@ module.exports = {
         'dark-gray':'#202029',
         'medium-gray':'#393945',
         'light-gray': '#8A8A92',
+        'card-bg-one': '#434356',
+        'card-bg-two': '#565676',
+        'card-bg-three': '#393945',
         'white':'#F2F2F3'
       },
       animation: {
@@ -45,11 +48,6 @@ module.exports = {
       },
       backgroundImage:{}
     },
-    variants: {
-      extend: {
-        '4thchild': ':nth-child(4)'
-      }
-    }
   },
   plugins: [
     require("@tailwindcss/forms"),
@@ -73,6 +71,27 @@ module.exports = {
           return `.${e(`sixth-child${separator}${className}`)}:nth-child(6)`
         })
       })
-    })
+    }),
+    plugin(({ addVariant, e }) => {
+      addVariant('threeModulusZero-child', ({ modifySelectors, separator }) => {
+        modifySelectors(({ className }) => {
+          return `.${e(`threeModulusZero-child${separator}${className}`)}:nth-child(3n)`
+        })
+      })
+    }),
+    plugin(({ addVariant, e }) => {
+      addVariant('threeModulusOne-child', ({ modifySelectors, separator }) => {
+        modifySelectors(({ className }) => {
+          return `.${e(`threeModulusOne-child${separator}${className}`)}:nth-child(3n + 1)`
+        })
+      })
+    }),
+    plugin(({ addVariant, e }) => {
+      addVariant('threeModulusTwo-child', ({ modifySelectors, separator }) => {
+        modifySelectors(({ className }) => {
+          return `.${e(`threeModulusTwo-child${separator}${className}`)}:nth-child(3n + 2)`
+        })
+      })
+    }),
   ],
 };
