@@ -24,30 +24,31 @@ export default function Button({
   to,
   href,
 }: ButtonProps) {
-  const [basicStyles, empty, rounded, white] = [
+  const [baseStyle, classic, empty, rounded, white] = [
     `px-5 py-2 flex gap-2 justify-center
-      rounded-2xl shadow-inner bg-orange-primary font-sans text-dark-gray font-semibold ring-none
+      shadow-inner font-semibold ring-none
       focus:outline-none focus:ring-4 focus:ring-offset-0 focus:ring-white/5
       hover:outline-none hover:ring-4 hover:ring-offset-0 hover:ring-white/5 hover:scale-105
       transition duration-150 hover:ease-out`,
-    'bg-opacity-0 text-white border border-orange-primary',
-    'py-1.5 rounded-full ',
-    'bg-white focus:ring-white/20',
+    'bg-orange-primary text-dark-gray rounded-2xl',
+    'text-white border border-orange-primary rounded-2xl',
+    'bg-orange-primary text-dark-gray py-1.5 rounded-full ',
+    'bg-white text-dark-gray focus:ring-white/20 rounded-2xl',
   ];
 
-  let className = basicStyles;
+  let className = baseStyle;
   switch (customStyle) {
     case 'empty':
       className += ' ' + empty;
       break;
     case 'rounded':
-      className = className.replace('rounded-2xl', rounded); // Overloading with 'rounded-full' doesn't overwrite the basic parameter.
+      className += ' ' + rounded;
       break;
     case 'white':
       className += ' ' + white;
       break;
     default:
-      className;
+      className += ' ' + classic;
   }
 
   return (

@@ -7,6 +7,40 @@ export interface MinimalMovie {
   original_title: string;
   poster_url: string;
 }
+
+export interface Presentation{
+  author_id: number;
+  author_pseudo: string;
+  author_avatar: string;
+  author_role: string;
+  presentation: string;
+}
+
+export interface Metrics {
+  watchlist_count: number;
+  views_count: number;
+  likes_count: number;
+  ratings_count: number;
+  avg_rating: number;
+}
+
+export interface Comment {
+  author_id: number;
+  author_pseudo: string;
+  author_avatar: string;
+  author_role: string;
+  comment: string;
+  rating: number;
+  created_at: string;
+  updated_at: string
+}
+
+export interface UserReview {
+  bookmarked: boolean;
+  viewed: boolean;
+  liked: boolean;
+  rating: number;
+}
 export interface CompleteMovie extends MinimalMovie {
   casting: string[];
   directors: string[];
@@ -16,38 +50,10 @@ export interface CompleteMovie extends MinimalMovie {
   genres: string[];
   countries: string[];
   languages: string[];
-  presentation: {
-    author_id: number;
-    author_pseudo: string;
-    author_avatar: string;
-    author_role: string;
-    presentation: string;
-  },
-  metrics: {
-    watchlist_count: number;
-    views_count: number;
-    likes_count: number;
-    ratings_count: number;
-    avg_rating: number;
-  },
-  comments?: [
-    {
-      author_id: number;
-      author_pseudo: string;
-      author_avatar: string;
-      author_role: string;
-      comment: string;
-      rating: number;
-      created_at: string;
-      updated_at: string
-    }
-  ],
-  user_review?: {
-    bookmarked: boolean;
-    viewed: boolean;
-    liked: boolean;
-    rating: number;
-  },
+  presentation: Presentation;
+  metrics: Metrics;
+  comments: Comment[];
+  user_review: UserReview;
   created_at: string;
   updated_at: string | null;
 }
