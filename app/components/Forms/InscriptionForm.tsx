@@ -6,7 +6,7 @@ import { TextInputRef, Toggle } from '@components/Input';
 import { toggleIsPWVisible, inscription } from '@store/slices/inscription';
 import Button from '@components/Input/Button';
 import SendLogo from '@public/icons/send-icon.svg';
-import { postRequestCSR } from '@utils/fetchApi';
+import { mutationRequestCSR } from '@utils/fetchApi';
 import { toast } from 'react-hot-toast';
 import tryCatchWrapper from '@utils/tryCatchWrapper';
 import type { BodyData } from '@utils/fetchApi';
@@ -28,7 +28,7 @@ export default function InscriptionForm() {
 
   const router = useRouter();
   const submitSuccess = async (method: 'POST' | 'PUT' | 'DELETE', endpoint: string, data?: BodyData) => {
-    const responseData = await postRequestCSR(method, endpoint, data);
+    const responseData = await mutationRequestCSR(method, endpoint, data);
     toast.success(responseData.message);
     router.push('/');
   };

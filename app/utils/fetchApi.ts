@@ -45,7 +45,7 @@ const getRequestCSR = async (endpoint: string) => {
  * @param data facultative request payload
  * @returns 
  */
-const postRequestCSR = async (method: 'POST' | 'PUT' | 'DELETE', endpoint: string, data?: BodyData) => {
+const mutationRequestCSR = async (method: 'POST' | 'PUT' | 'DELETE', endpoint: string, data?: BodyData) => {
   const res = await fetch(baseUrlCSR + endpoint, {
     method,
     headers: {
@@ -62,5 +62,5 @@ const postRequestCSR = async (method: 'POST' | 'PUT' | 'DELETE', endpoint: strin
   return responsePayload;
 };
 
-export { getDataFromEndpointSSR, getRequestCSR, postRequestCSR };
+export { getDataFromEndpointSSR, getRequestCSR, mutationRequestCSR };
 export type { BodyData };

@@ -1,11 +1,7 @@
-import React from 'react';
-import type { NextPage, GetStaticPaths, GetStaticProps } from 'next';
+import React, { useRef } from 'react';
+import type { FormEvent } from 'react';
 import Head from 'next/head';
-import type { ParsedUrlQuery } from 'querystring';
-import { getDataFromEndpointSSR } from '@utils/fetchApi';
-import type { MinimalMovie, CompleteMovie } from '@custom_types/types';
-import { CommentsSection } from '@components/FilmPageComponents';
-import useSWR from 'swr';
+import useSWR, { useSWRConfig } from 'swr';
 import {
   Poster,
   Title,
@@ -18,9 +14,17 @@ import {
   Runtime,
   Casting,
 } from '@components/FilmPageComponents';
-import Interaction from '@components/Input/Interaction/Interaction';
+import { BaseInteraction, RatingInteraction } from '@components/Input/Interaction/Interaction';
 import PostCard from '@components/PostCard';
+import { CommentsSection } from '@components/FilmPageComponents';
+import { getDataFromEndpointSSR, mutationRequestCSR } from '@utils/fetchApi';
+import { toast } from 'react-hot-toast';
 
+import type { NextPage, GetStaticPaths, GetStaticProps } from 'next';
+import type { ParsedUrlQuery } from 'querystring';
+import type { MinimalMovie, CompleteMovie } from '@custom_types/types';
+import type { BodyData } from '@utils/fetchApi';
+import Metrics from '@components/Metrics';
 interface FilmProps {
   movies: CompleteMovie[];
 }
@@ -43,15 +47,63 @@ metadatas.forEach((dataName) => (selectQueryString += `&select[${dataName}]=true
 
 const Film: NextPage<FilmProps> = (props: FilmProps) => {
   const id = props.movies[0].id;
+  props.movies[0].french_title = 'Les chaussons bleus';
   // Defining cache management and inititializing it with initial props :
-  const { data } = useSWR(`/movies?where[id]=${id}` + selectQueryString, { fallbackData: props.movies });
+  const { data, mutate } = useSWR(`/movies?where[id]=${id}` + selectQueryString, { fallbackData: props.movies });
   // Safeguard mostly for TS type assertion
-  if (!data || data.length === 0) throw new Error('Le film demandé n\'a pas été retrouvé.');
+  if (!data || data?.length === 0) throw new Error('Le film demandé n\'a pas été retrouvé.');
   const movie = data[0];
   const { french_title, 
     metrics: { watchlist_count, views_count, likes_count, ratings_count, avg_rating }, 
     user_review,
   } = movie;
+  const interactionMutation = async (type: 'bookmarked' | 'viewed' | 'liked' | 'rating', data: CompleteMovie[] | undefined) => {
+    // Initial state for cache
+    const defaultUserReview = { bookmarked: false, viewed: false, liked:false, rating: null };
+    // Determinate property label for user_review
+    let metricProp = '';
+    switch (type) {
+      case 'bookmarked':
+        metricProp = 'watchlist_count';
+        break;
+      case 'viewed':
+        metricProp = 'views_count';
+        break;
+      case 'liked':
+        metricProp = 'likes_count';
+        break;
+      default :
+        metricProp = 'ratings_count';
+        break;
+    }
+    if (!user_review) {
+      return [
+        { ...movie, 
+          user_review: { ...defaultUserReview, [type]: !defaultUserReview[type] }, 
+          metrics:{ ...movie.metrics, [metricProp]: movie.metrics[metricProp] +1 }, 
+        }
+      ];
+    }
+    return [
+      { ...movie, 
+        user_review: { ...user_review, [type]: !user_review[type] }, 
+        metrics:{ ...movie.metrics, [metricProp]: (!user_review[type]) ? movie.metrics[metricProp] + 1 : movie.metrics[metricProp] - 1 }, 
+      }
+    ];
+  };
+  const handleClick = (type: 'bookmarked' | 'viewed' | 'liked' | 'rating') => {
+    mutate(interactionMutation(type, data), false)
+      .then(data => console.log(data![0].user_review)); // à supprimer plus tard
+  };
+
+  // Ref value for rating storage
+  const radioInputValue = useRef<number | null>(null);
+  const ratingHandler = (e: FormEvent) => {
+    if (radioInputValue && e.target && e.target instanceof HTMLInputElement){
+      radioInputValue.current = Number(e.target.value);
+      console.log(radioInputValue.current);
+    }
+  };
 
   return (
     <>
@@ -72,28 +124,21 @@ const Film: NextPage<FilmProps> = (props: FilmProps) => {
                 className="flex gap-10">
                 <Poster {...movie}/>
                 <div id="interactions" className="flex flex-col gap-6 ">
-                  <Interaction type="bookmark" counter={watchlist_count} isClicked={(!user_review || !user_review.bookmarked) && false}
-                    onClick={() => {
-                      console.log('Coucou je viens juste de bookmark !!');
-                    }}
+                  <BaseInteraction type="bookmark" counter={watchlist_count} isClicked={(!user_review || !user_review.bookmarked) ? false : true}
+                    onClick={() => handleClick('bookmarked')}
                   />
-                  <Interaction
-                    type="view" counter={views_count} isClicked={(!user_review || !user_review.viewed) && false}
-                    onClick={() => {
-                      console.log('Coucou je viens juste de view !!');
-                    }}
+                  <BaseInteraction
+                    type="view" counter={views_count} isClicked={(!user_review || !user_review.viewed) ? false : true}
+                    onClick={() => handleClick('viewed')}
                   />
-                  <Interaction
-                    type="like" counter={likes_count} isClicked={(!user_review || !user_review.liked) && false}
-                    onClick={() => {
-                      console.log('Coucou je viens juste de like !!');
-                    }}
+                  <BaseInteraction
+                    type="like" counter={likes_count} isClicked={(!user_review || !user_review.liked) ? false : true}
+                    onClick={() => handleClick('liked')}
                   />
-                  <Interaction
-                    type="starButton" counter={ratings_count} isClicked={(!user_review || !user_review.rating) ? false : true}
-                    onClick={() => {
-                      console.log('Coucou je viens juste de star !!');
-                    }}
+                  <RatingInteraction
+                    counter={ratings_count} isClicked={(!user_review || !user_review.rating) ? false : true}
+                    ref={radioInputValue}
+                    ratingHandler={ratingHandler}
                   />
                 </div>
               </div>

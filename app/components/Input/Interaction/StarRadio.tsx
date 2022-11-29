@@ -1,7 +1,12 @@
+import type { FormEvent } from 'react';
 import React from 'react';
 import { StarSvg } from './SVG';
 
-export default function StarRadio() {
+interface StarRadioProps {
+  onChange: (e: FormEvent)=>void;
+}
+
+export default function StarRadio(props: StarRadioProps) {
 
   const radioStyle = ` radio-input absolute z-20 cursor-pointer 
   peer w-6 h-6 border-none 
@@ -18,7 +23,7 @@ export default function StarRadio() {
   ease-out duration-300`;
 
   return (
-    <fieldset className='w-52 h-10 flex flex-row-reverse gap-10'>
+    <fieldset className='w-52 h-10 flex flex-row-reverse gap-10' {...props}>
       <legend className="sr-only">Notez le film sur 5</legend>
       {
         [...Array(5)].map((_, i) => (

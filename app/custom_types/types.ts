@@ -22,6 +22,7 @@ export interface Metrics {
   likes_count: number;
   ratings_count: number;
   avg_rating: number;
+  [key: string]: number;
 }
 
 export interface Comment {
@@ -39,7 +40,7 @@ export interface UserReview {
   bookmarked: boolean;
   viewed: boolean;
   liked: boolean;
-  rating: number;
+  rating: number | null;
 }
 export interface CompleteMovie extends MinimalMovie {
   casting: string[];
@@ -53,7 +54,7 @@ export interface CompleteMovie extends MinimalMovie {
   presentation: Presentation;
   metrics: Metrics;
   comments: Comment[];
-  user_review: UserReview;
+  user_review?: UserReview;
   created_at: string;
   updated_at: string | null;
 }

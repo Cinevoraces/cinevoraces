@@ -9,7 +9,7 @@ import { useEffect } from 'react';
  */
 export default function useCloseMenuOnOutsideClick(
   ref: React.RefObject<HTMLElement>,
-  name: 'user' | 'modal' | 'burger',
+  name: 'user' | 'modal' | 'burger' | 'rating',
   state: boolean,
   setter: (value: boolean)=>void
 ) {

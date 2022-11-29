@@ -4,7 +4,7 @@ import Button from '@components/Input/Button';
 import { TextInputRef, Toggle } from '@components/Input';
 import { toggleConnectionModal } from '@store/slices/global';
 import { toggleIsPWVisible, connection } from '@store/slices/connection';
-import { postRequestCSR } from '@utils/fetchApi';
+import { mutationRequestCSR } from '@utils/fetchApi';
 import { login } from '@store/slices/user';
 import { toast } from 'react-hot-toast';
 import tryCatchWrapper from '@utils/tryCatchWrapper';
@@ -19,7 +19,7 @@ export default function ConnectionForm() {
   const allInputsRef = [identifierRef, passwordRef];
 
   const submitSuccess = async (method: 'POST' | 'PUT' | 'DELETE', endpoint: string, data?: BodyData) => {
-    const responseData = await postRequestCSR(method, endpoint, data);
+    const responseData = await mutationRequestCSR(method, endpoint, data);
     // Send a confirmation toast -> To do later
     toast.success(responseData.response);
     // State Mutation
