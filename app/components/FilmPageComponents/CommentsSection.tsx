@@ -7,7 +7,6 @@ interface CommentsSectionProps {
 }
 
 export default function CommentsSection({ comments }: CommentsSectionProps) {
-  console.log(comments);
   return (
     <section id='comments-section' className='w-full flex flex-col gap-4'>
       { 

@@ -1,45 +1,57 @@
-import React, { useState } from 'react';
+import React from 'react';
 import type { NextPage, GetStaticPaths, GetStaticProps } from 'next';
 import Head from 'next/head';
-import Image from 'next/image';
 import type { ParsedUrlQuery } from 'querystring';
 import { getDataFromEndpointSSR } from '@utils/fetchApi';
 import type { MinimalMovie, CompleteMovie } from '@custom_types/types';
-import { PresentationSection, CommentsSection } from '@components/FilmPageComponents';
+import { CommentsSection } from '@components/FilmPageComponents';
+import useSWR from 'swr';
+import {
+  Poster,
+  Title,
+  OriginalTitle,
+  GlobalRating,
+  Directors,
+  Genres,
+  Countries,
+  Languages,
+  Runtime,
+  Casting,
+} from '@components/FilmPageComponents';
+import Interaction from '@components/Input/Interaction/Interaction';
+import PostCard from '@components/PostCard';
 
 interface FilmProps {
-  movie: CompleteMovie;
+  movies: CompleteMovie[];
 }
 
-const Film: NextPage<FilmProps> = (props: FilmProps) => {
-  const {
-    id,
-    author_id,
-    season_number,
-    is_published,
-    french_title,
-    original_title,
-    poster_url,
-    casting,
-    directors,
-    runtime,
-    publishing_date,
-    release_date,
-    genres,
-    countries,
-    languages,
-    presentation: { author_avatar, author_pseudo, author_role, presentation },
-    metrics: { watchlist_count, views_count, likes_count, ratings_count, avg_rating },
-    comments,
-    user_review,
-  } = props.movie;
+// Data fetching global conf for both ISR and SWR cache
+const metadatas = [
+  'casting',
+  'directors',
+  'runtime',
+  'release_date',
+  'genres',
+  'countries',
+  'languages',
+  'presentation',
+  'metrics',
+  'comments',
+];
+let selectQueryString: string = '';
+metadatas.forEach((dataName) => (selectQueryString += `&select[${dataName}]=true`));
 
-  const PresentationSectionProps = {
-    french_title, original_title, poster_url, release_date, publishing_date,
-    watchlist_count, views_count, likes_count, ratings_count, avg_rating,
-    directors, genres, countries, languages, runtime, casting,
-    author_avatar, author_pseudo, author_role, presentation
-  };
+const Film: NextPage<FilmProps> = (props: FilmProps) => {
+  const id = props.movies[0].id;
+  // Defining cache management and inititializing it with initial props :
+  const { data } = useSWR(`/movies?where[id]=${id}` + selectQueryString, { fallbackData: props.movies });
+  // Safeguard mostly for TS type assertion
+  if (!data || data.length === 0) throw new Error('Le film demandé n\'a pas été retrouvé.');
+  const movie = data[0];
+  const { french_title, 
+    metrics: { watchlist_count, views_count, likes_count, ratings_count, avg_rating }, 
+    user_review,
+  } = movie;
 
   return (
     <>
@@ -51,11 +63,54 @@ const Film: NextPage<FilmProps> = (props: FilmProps) => {
         />
       </Head>
       <main className="container mx-auto px-4 py-8 lg:py-16 flex flex-col items-center justify-between gap-8">
-        {Object.keys(props).length === 0 && <p>Loading</p>}
-        {props.movie && (
+        {Object.keys(movie).length === 0 && (<p>Loading</p>)}
+        {movie && (
           <>
-            <PresentationSection {...PresentationSectionProps}/>
-            <CommentsSection comments={comments} />
+            <section id="movie-presentation" className="flex flex-col gap-10">
+              <div
+                id="poster-interactions"
+                className="flex gap-10">
+                <Poster {...movie}/>
+                <div id="interactions" className="flex flex-col gap-6 ">
+                  <Interaction type="bookmark" counter={watchlist_count} isClicked={(!user_review || !user_review.bookmarked) && false}
+                    onClick={() => {
+                      console.log('Coucou je viens juste de bookmark !!');
+                    }}
+                  />
+                  <Interaction
+                    type="view" counter={views_count} isClicked={(!user_review || !user_review.viewed) && false}
+                    onClick={() => {
+                      console.log('Coucou je viens juste de view !!');
+                    }}
+                  />
+                  <Interaction
+                    type="like" counter={likes_count} isClicked={(!user_review || !user_review.liked) && false}
+                    onClick={() => {
+                      console.log('Coucou je viens juste de like !!');
+                    }}
+                  />
+                  <Interaction
+                    type="starButton" counter={ratings_count} isClicked={(!user_review || !user_review.rating) ? false : true}
+                    onClick={() => {
+                      console.log('Coucou je viens juste de star !!');
+                    }}
+                  />
+                </div>
+              </div>
+              <div className='flex flex-col gap-3'>
+                <Title {...movie}/>
+                <OriginalTitle {...movie}/>
+                <GlobalRating avg_rating={avg_rating}/>
+                <Directors {...movie}/>
+                <Genres {...movie}/>
+                <Countries {...movie}/>
+                <Languages {...movie}/>
+                <Runtime {...movie}/>
+                <Casting {...movie}/>
+                <PostCard type='presentation' {...movie.presentation}/>
+              </div>
+            </section>
+            <CommentsSection {...movie} />
           </>
         )}
       </main>
@@ -80,27 +135,13 @@ export const getStaticPaths: GetStaticPaths<Params> = async () => {
 
 export const getStaticProps: GetStaticProps<FilmProps, Params> = async (context) => {
   const { film: id } = context.params!;
-  const metadatas = [
-    'casting',
-    'directors',
-    'runtime',
-    'release_date',
-    'genres',
-    'countries',
-    'languages',
-    'presentation',
-    'metrics',
-    'comments',
-  ];
-  let selectQueryString: string = '';
-  metadatas.forEach((dataName) => (selectQueryString += `&select[${dataName}]=true`));
-
   try {
     const result = await getDataFromEndpointSSR(`/movies?where[id]=${id}` + selectQueryString);
     if (!result[0]) throw new Error('Le film demandé n\'existe pas');
+    // Type of result have to be a movie[] since we use SWR for cache management
     return {
       props: {
-        movie: result[0],
+        movies: result,
         revalidate: 60,
       },
     };
