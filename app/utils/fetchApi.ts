@@ -22,7 +22,7 @@ interface BodyData {
  * @param endpoint string -> localhost:3005/dev-docs/static/index.htm
  * @returns data from API
  */
-const getRequestCSR = async (endpoint: string, withToken?: boolean) => {
+const getRequestCSR = async (endpoint: string) => {
   const res = await fetch(baseUrlCSR + endpoint, {
     method: 'GET',
     headers: {
@@ -46,11 +46,12 @@ const getRequestCSR = async (endpoint: string, withToken?: boolean) => {
  * @param data facultative request payload
  * @returns 
  */
-const mutationRequestCSR = async (method: 'POST' | 'PUT' | 'DELETE', endpoint: string, body?: BodyData, withToken?: boolean) => {
+const mutationRequestCSR = async (method: 'POST' | 'PUT' | 'DELETE', endpoint: string, body?: BodyData) => {
   const res = await fetch(baseUrlCSR + endpoint, {
     method,
     headers: {
       'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + `${localStorage.accessToken}`,
     },
     credentials: 'include',
     body: JSON.stringify(body),
