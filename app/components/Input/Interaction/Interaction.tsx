@@ -6,7 +6,7 @@ import StarRadio from './StarRadio';
 import useCloseMenuOnOutsideClick from '@hooks/useCloseMenuOnOutsideClick';
 
 interface BaseInteractionProps {
-  type: 'bookmark' | 'like' | 'starButton' | 'starRating' | 'view';
+  type: 'bookmarked' | 'liked' | 'viewed' | 'rating';
   counter: number;
   isClicked: boolean;
   onClick: ()=>void;
@@ -27,10 +27,10 @@ const svgStyle = 'h-7 w-16 fill-none ';
 export const BaseInteraction = ({ type, counter, isClicked, onClick }: BaseInteractionProps) => {
   let SvgComponent: (props: SvgProps)=>JSX.Element;
   switch (type) {
-    case 'bookmark':
+    case 'bookmarked':
       SvgComponent = BookmarkSvg;
       break;
-    case 'like':
+    case 'liked':
       SvgComponent = LikeSvg;
       break;
     default:

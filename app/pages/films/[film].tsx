@@ -1,7 +1,7 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import type { FormEvent } from 'react';
 import Head from 'next/head';
-import useSWR, { useSWRConfig } from 'swr';
+import useSWR from 'swr';
 import {
   Poster,
   Title,
@@ -24,9 +24,13 @@ import type { NextPage, GetStaticPaths, GetStaticProps } from 'next';
 import type { ParsedUrlQuery } from 'querystring';
 import type { MinimalMovie, CompleteMovie } from '@custom_types/types';
 import type { BodyData } from '@utils/fetchApi';
-import Metrics from '@components/Metrics';
 interface FilmProps {
   movies: CompleteMovie[];
+}
+interface Interactions {
+  type: 'bookmarked' | 'viewed' | 'liked' | 'rating';
+  counterName: 'watchlist_count' | 'views_count' | 'likes_count' | 'ratings_count';
+  counter: number;
 }
 
 // Data fetching global conf for both ISR and SWR cache
@@ -47,51 +51,51 @@ metadatas.forEach((dataName) => (selectQueryString += `&select[${dataName}]=true
 
 const Film: NextPage<FilmProps> = (props: FilmProps) => {
   const id = props.movies[0].id;
-  props.movies[0].french_title = 'Les chaussons bleus';
   // Defining cache management and inititializing it with initial props :
   const { data, mutate } = useSWR(`/movies?where[id]=${id}` + selectQueryString, { fallbackData: props.movies });
   // Safeguard mostly for TS type assertion
   if (!data || data?.length === 0) throw new Error('Le film demandé n\'a pas été retrouvé.');
+  // Basic data extraction
   const movie = data[0];
   const { french_title, 
     metrics: { watchlist_count, views_count, likes_count, ratings_count, avg_rating }, 
     user_review,
   } = movie;
+
+  const baseInteractionsArray: Interactions[] = [
+    { type: 'bookmarked', counterName: 'watchlist_count', counter: watchlist_count }, 
+    { type: 'viewed', counterName: 'views_count', counter: views_count }, 
+    { type: 'liked', counterName: 'likes_count', counter: likes_count },
+    { type: 'rating', counterName: 'ratings_count', counter: ratings_count },
+  ];
+
   const interactionMutation = async (type: 'bookmarked' | 'viewed' | 'liked' | 'rating', data: CompleteMovie[] | undefined) => {
     // Initial state for cache
     const defaultUserReview = { bookmarked: false, viewed: false, liked:false, rating: null };
     // Determinate property label for user_review
-    let metricProp = '';
-    switch (type) {
-      case 'bookmarked':
-        metricProp = 'watchlist_count';
-        break;
-      case 'viewed':
-        metricProp = 'views_count';
-        break;
-      case 'liked':
-        metricProp = 'likes_count';
-        break;
-      default :
-        metricProp = 'ratings_count';
-        break;
+    const metricProp = baseInteractionsArray.filter((i) => i.type === type )[0].counterName;
+    // Deal both with user_review absence or presence in cache
+    const review = (user_review)? user_review : defaultUserReview;
+    if (type !== 'rating'){
+      return [ { ...movie, 
+        user_review: { ...review, [type]: !review[type] }, 
+        metrics:{ ...movie.metrics, 
+          [metricProp]: (!review[type]) ? movie.metrics[metricProp] + 1 : movie.metrics[metricProp] - 1 
+        }, 
+      } ];
     }
-    if (!user_review) {
-      return [
-        { ...movie, 
-          user_review: { ...defaultUserReview, [type]: !defaultUserReview[type] }, 
-          metrics:{ ...movie.metrics, [metricProp]: movie.metrics[metricProp] +1 }, 
-        }
-      ];
-    }
-    return [
-      { ...movie, 
-        user_review: { ...user_review, [type]: !user_review[type] }, 
-        metrics:{ ...movie.metrics, [metricProp]: (!user_review[type]) ? movie.metrics[metricProp] + 1 : movie.metrics[metricProp] - 1 }, 
-      }
-    ];
+    return [ { ...movie, 
+      user_review: { ...review, [type]: radioInputValue.current }, 
+      metrics:{ ...movie.metrics, 
+        ratings_count: (!review.rating) ? movie.metrics.ratings_count + 1 : movie.metrics.ratings_count,
+        avg_rating: (!review.rating) 
+          ? (movie.metrics.avg_rating * movie.metrics.ratings_count + radioInputValue.current!) / (movie.metrics.ratings_count + 1)
+          : (movie.metrics.avg_rating * movie.metrics.ratings_count - review.rating + radioInputValue.current!) / (movie.metrics.ratings_count)
+      }, 
+    } ];
   };
-  const handleClick = (type: 'bookmarked' | 'viewed' | 'liked' | 'rating') => {
+
+  const handleInteraction = (type: 'bookmarked' | 'viewed' | 'liked' | 'rating') => {
     mutate(interactionMutation(type, data), false)
       .then(data => console.log(data![0].user_review)); // à supprimer plus tard
   };
@@ -101,7 +105,7 @@ const Film: NextPage<FilmProps> = (props: FilmProps) => {
   const ratingHandler = (e: FormEvent) => {
     if (radioInputValue && e.target && e.target instanceof HTMLInputElement){
       radioInputValue.current = Number(e.target.value);
-      console.log(radioInputValue.current);
+      handleInteraction('rating');
     }
   };
 
@@ -124,17 +128,16 @@ const Film: NextPage<FilmProps> = (props: FilmProps) => {
                 className="flex gap-10">
                 <Poster {...movie}/>
                 <div id="interactions" className="flex flex-col gap-6 ">
-                  <BaseInteraction type="bookmark" counter={watchlist_count} isClicked={(!user_review || !user_review.bookmarked) ? false : true}
-                    onClick={() => handleClick('bookmarked')}
-                  />
-                  <BaseInteraction
-                    type="view" counter={views_count} isClicked={(!user_review || !user_review.viewed) ? false : true}
-                    onClick={() => handleClick('viewed')}
-                  />
-                  <BaseInteraction
-                    type="like" counter={likes_count} isClicked={(!user_review || !user_review.liked) ? false : true}
-                    onClick={() => handleClick('liked')}
-                  />
+                  {
+                    baseInteractionsArray.slice(0, 3).map((i) => (
+                      <BaseInteraction type={i.type}
+                        counter={i.counter} 
+                        isClicked={(!user_review || !user_review[i.type]) ? false : true}
+                        onClick={() => handleInteraction(i.type)}
+                        key={i.type}
+                      />
+                    ))
+                  }
                   <RatingInteraction
                     counter={ratings_count} isClicked={(!user_review || !user_review.rating) ? false : true}
                     ref={radioInputValue}
