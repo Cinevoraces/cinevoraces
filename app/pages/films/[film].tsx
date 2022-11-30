@@ -18,6 +18,9 @@ import { BaseInteraction, RatingInteraction } from '@components/Input/Interactio
 import PostCard from '@components/PostCard';
 import { CommentsSection } from '@components/FilmPageComponents';
 import { getDataFromEndpointSSR, mutationRequestCSR } from '@utils/fetchApi';
+import { useAppSelector } from '@store/store';
+import { user } from '@store/slices/user';
+
 import { toast } from 'react-hot-toast';
 
 import type { NextPage, GetStaticPaths, GetStaticProps } from 'next';
@@ -51,6 +54,7 @@ metadatas.forEach((dataName) => (selectQueryString += `&select[${dataName}]=true
 
 const Film: NextPage<FilmProps> = (props: FilmProps) => {
   const id = props.movies[0].id;
+  const isConnected = useAppSelector(user).isConnected;
   // Defining cache management and inititializing it with initial props :
   const { data, mutate } = useSWR(`/movies?where[id]=${id}` + selectQueryString, { fallbackData: props.movies });
   // Safeguard mostly for TS type assertion
@@ -96,6 +100,9 @@ const Film: NextPage<FilmProps> = (props: FilmProps) => {
   };
 
   const handleInteraction = (type: 'bookmarked' | 'viewed' | 'liked' | 'rating') => {
+    if (!isConnected){
+      return toast.error('Connectez-vous d\'abord.');
+    }
     mutate(interactionMutation(type, data), false)
       .then(data => console.log(data![0].user_review)); // à supprimer plus tard
   };
