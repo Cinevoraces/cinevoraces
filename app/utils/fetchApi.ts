@@ -14,7 +14,7 @@ const getDataFromEndpointSSR = async (endpoint: string) => {
 };
 
 interface BodyData {
-  [key: string]: string | number | boolean;
+  [key: string]: string | number | boolean | null;
 }
 
 /**
@@ -22,11 +22,12 @@ interface BodyData {
  * @param endpoint string -> localhost:3005/dev-docs/static/index.htm
  * @returns data from API
  */
-const getRequestCSR = async (endpoint: string) => {
+const getRequestCSR = async (endpoint: string, withToken?: boolean) => {
   const res = await fetch(baseUrlCSR + endpoint, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + `${localStorage.accessToken}`,
     },
     credentials: 'include',
   });
@@ -45,14 +46,14 @@ const getRequestCSR = async (endpoint: string) => {
  * @param data facultative request payload
  * @returns 
  */
-const mutationRequestCSR = async (method: 'POST' | 'PUT' | 'DELETE', endpoint: string, data?: BodyData) => {
+const mutationRequestCSR = async (method: 'POST' | 'PUT' | 'DELETE', endpoint: string, body?: BodyData, withToken?: boolean) => {
   const res = await fetch(baseUrlCSR + endpoint, {
     method,
     headers: {
       'Content-Type': 'application/json',
     },
     credentials: 'include',
-    body: JSON.stringify(data),
+    body: JSON.stringify(body),
   });
   const responsePayload = await res.json();
   if (responsePayload.error){

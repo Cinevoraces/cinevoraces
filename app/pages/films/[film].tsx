@@ -20,9 +20,7 @@ import { CommentsSection } from '@components/FilmPageComponents';
 import { getDataFromEndpointSSR, mutationRequestCSR } from '@utils/fetchApi';
 import { useAppSelector } from '@store/store';
 import { user } from '@store/slices/user';
-
 import { toast } from 'react-hot-toast';
-
 import type { NextPage, GetStaticPaths, GetStaticProps } from 'next';
 import type { ParsedUrlQuery } from 'querystring';
 import type { MinimalMovie, CompleteMovie } from '@custom_types/types';
@@ -61,56 +59,73 @@ const Film: NextPage<FilmProps> = (props: FilmProps) => {
   if (!data || data?.length === 0) throw new Error('Le film demandé n\'a pas été retrouvé.');
   // Basic data extraction
   const movie = data[0];
-  const { french_title, 
-    metrics: { watchlist_count, views_count, likes_count, ratings_count, avg_rating }, 
+  const {
+    french_title,
+    metrics: { watchlist_count, views_count, likes_count, ratings_count, avg_rating },
     user_review,
   } = movie;
 
   const baseInteractionsArray: Interactions[] = [
-    { type: 'bookmarked', counterName: 'watchlist_count', counter: watchlist_count }, 
-    { type: 'viewed', counterName: 'views_count', counter: views_count }, 
+    { type: 'bookmarked', counterName: 'watchlist_count', counter: watchlist_count },
+    { type: 'viewed', counterName: 'views_count', counter: views_count },
     { type: 'liked', counterName: 'likes_count', counter: likes_count },
     { type: 'rating', counterName: 'ratings_count', counter: ratings_count },
   ];
 
-  const interactionMutation = async (type: 'bookmarked' | 'viewed' | 'liked' | 'rating', data: CompleteMovie[] | undefined) => {
+  const interactionMutation = async (
+    type: 'bookmarked' | 'viewed' | 'liked' | 'rating',
+    data: CompleteMovie[] | undefined
+  ) => {
     // Initial state for cache
-    const defaultUserReview = { bookmarked: false, viewed: false, liked:false, rating: null };
+    const defaultUserReview = { bookmarked: false, viewed: false, liked: false, rating: null };
     // Determinate property label for user_review
-    const metricProp = baseInteractionsArray.filter((i) => i.type === type )[0].counterName;
+    const metricProp = baseInteractionsArray.filter((i) => i.type === type)[0].counterName;
     // Deal both with user_review absence or presence in cache
-    const review = (user_review)? user_review : defaultUserReview;
-    if (type !== 'rating'){
-      return [ { ...movie, 
-        user_review: { ...review, [type]: !review[type] }, 
-        metrics:{ ...movie.metrics, 
-          [metricProp]: (!review[type]) ? movie.metrics[metricProp] + 1 : movie.metrics[metricProp] - 1 
-        }, 
-      } ];
+    const review = user_review ? user_review : defaultUserReview;
+    if (type !== 'rating') {
+      return [
+        {
+          ...movie,
+          user_review: { ...review, [type]: !review[type] },
+          metrics: {
+            ...movie.metrics,
+            [metricProp]: !review[type] ? movie.metrics[metricProp] + 1 : movie.metrics[metricProp] - 1,
+          },
+        },
+      ];
     }
-    return [ { ...movie, 
-      user_review: { ...review, [type]: radioInputValue.current }, 
-      metrics:{ ...movie.metrics, 
-        ratings_count: (!review.rating) ? movie.metrics.ratings_count + 1 : movie.metrics.ratings_count,
-        avg_rating: (!review.rating) 
-          ? (movie.metrics.avg_rating * movie.metrics.ratings_count + radioInputValue.current!) / (movie.metrics.ratings_count + 1)
-          : (movie.metrics.avg_rating * movie.metrics.ratings_count - review.rating + radioInputValue.current!) / (movie.metrics.ratings_count)
-      }, 
-    } ];
+    return [
+      {
+        ...movie,
+        user_review: { ...review, rating: radioInputValue.current },
+        metrics: {
+          ...movie.metrics,
+          ratings_count: !review.rating ? movie.metrics.ratings_count + 1 : movie.metrics.ratings_count,
+          avg_rating: !review.rating
+            ? (movie.metrics.avg_rating * movie.metrics.ratings_count + radioInputValue.current!) /
+              (movie.metrics.ratings_count + 1)
+            : (movie.metrics.avg_rating * movie.metrics.ratings_count - review.rating + radioInputValue.current!) /
+              movie.metrics.ratings_count,
+        },
+      },
+    ];
   };
 
-  const handleInteraction = (type: 'bookmarked' | 'viewed' | 'liked' | 'rating') => {
-    if (!isConnected){
+  const handleInteraction = async (type: 'bookmarked' | 'viewed' | 'liked' | 'rating') => {
+    if (!isConnected) {
       return toast.error('Connectez-vous d\'abord.');
     }
-    mutate(interactionMutation(type, data), false)
-      .then(data => console.log(data![0].user_review)); // à supprimer plus tard
+    const body: BodyData = {};
+    const mutatedData = await mutate(interactionMutation(type, data), false);
+    body[type] = mutatedData![0].user_review![type];
+    const res = await mutationRequestCSR('PUT', `/reviews/${id}`, body );
+    console.log(res);
   };
 
   // Ref value for rating storage
   const radioInputValue = useRef<number | null>(null);
   const ratingHandler = (e: FormEvent) => {
-    if (radioInputValue && e.target && e.target instanceof HTMLInputElement){
+    if (radioInputValue && e.target && e.target instanceof HTMLInputElement) {
       radioInputValue.current = Number(e.target.value);
       handleInteraction('rating');
     }
@@ -126,43 +141,50 @@ const Film: NextPage<FilmProps> = (props: FilmProps) => {
         />
       </Head>
       <main className="container mx-auto px-4 py-8 lg:py-16 flex flex-col items-center justify-between gap-8">
-        {Object.keys(movie).length === 0 && (<p>Loading</p>)}
+        {Object.keys(movie).length === 0 && <p>Loading</p>}
         {movie && (
           <>
-            <section id="movie-presentation" className="flex flex-col gap-10">
+            <section
+              id="movie-presentation"
+              className="flex flex-col gap-10">
               <div
                 id="poster-interactions"
                 className="flex gap-10">
-                <Poster {...movie}/>
-                <div id="interactions" className="flex flex-col gap-6 ">
-                  {
-                    baseInteractionsArray.slice(0, 3).map((i) => (
-                      <BaseInteraction type={i.type}
-                        counter={i.counter} 
-                        isClicked={(!user_review || !user_review[i.type]) ? false : true}
-                        onClick={() => handleInteraction(i.type)}
-                        key={i.type}
-                      />
-                    ))
-                  }
+                <Poster {...movie} />
+                <div
+                  id="interactions"
+                  className="flex flex-col gap-6 ">
+                  {baseInteractionsArray.slice(0, 3).map((i) => (
+                    <BaseInteraction
+                      type={i.type}
+                      counter={i.counter}
+                      isClicked={!user_review || !user_review[i.type] ? false : true}
+                      onClick={() => handleInteraction(i.type)}
+                      key={i.type}
+                    />
+                  ))}
                   <RatingInteraction
-                    counter={ratings_count} isClicked={(!user_review || !user_review.rating) ? false : true}
+                    counter={ratings_count}
+                    isClicked={!user_review || !user_review.rating ? false : true}
                     ref={radioInputValue}
                     ratingHandler={ratingHandler}
                   />
                 </div>
               </div>
-              <div className='flex flex-col gap-3'>
-                <Title {...movie}/>
-                <OriginalTitle {...movie}/>
-                <GlobalRating avg_rating={avg_rating}/>
-                <Directors {...movie}/>
-                <Genres {...movie}/>
-                <Countries {...movie}/>
-                <Languages {...movie}/>
-                <Runtime {...movie}/>
-                <Casting {...movie}/>
-                <PostCard type='presentation' {...movie.presentation}/>
+              <div className="flex flex-col gap-3">
+                <Title {...movie} />
+                <OriginalTitle {...movie} />
+                <GlobalRating avg_rating={avg_rating} />
+                <Directors {...movie} />
+                <Genres {...movie} />
+                <Countries {...movie} />
+                <Languages {...movie} />
+                <Runtime {...movie} />
+                <Casting {...movie} />
+                <PostCard
+                  type="presentation"
+                  {...movie.presentation}
+                />
               </div>
             </section>
             <CommentsSection {...movie} />
