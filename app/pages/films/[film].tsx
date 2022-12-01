@@ -51,14 +51,15 @@ let selectQueryString: string = '';
 metadatas.forEach((dataName) => (selectQueryString += `&select[${dataName}]=true`));
 
 const Film: NextPage<FilmProps> = (props: FilmProps) => {
-  const id = props.movies[0].id;
-  const isConnected = useAppSelector(user).isConnected;
+  const movieId = props.movies[0].id;
+  const userId = useAppSelector(user).id;
   // Defining cache management and inititializing it with initial props :
-  const { data, mutate } = useSWR(`/movies?where[id]=${id}` + selectQueryString, { fallbackData: props.movies });
+  const { data, mutate } = useSWR(`/movies?where[id]=${movieId}` + selectQueryString, { fallbackData: props.movies });
   // Safeguard mostly for TS type assertion
   if (!data || data?.length === 0) throw new Error('Le film demandé n\'a pas été retrouvé.');
   // Basic data extraction
   const movie = data[0];
+  console.log(movie);
   const {
     french_title,
     metrics: { watchlist_count, views_count, likes_count, ratings_count, avg_rating },
@@ -72,7 +73,7 @@ const Film: NextPage<FilmProps> = (props: FilmProps) => {
     { type: 'rating', counterName: 'ratings_count', counter: ratings_count },
   ];
 
-  const interactionMutation = async (
+  const reviewMutation = async (
     type: 'bookmarked' | 'viewed' | 'liked' | 'rating',
     data: CompleteMovie[] | undefined
   ) => {
@@ -112,13 +113,17 @@ const Film: NextPage<FilmProps> = (props: FilmProps) => {
   };
 
   const handleInteraction = async (type: 'bookmarked' | 'viewed' | 'liked' | 'rating') => {
-    if (!isConnected) {
+    if (!userId) {
       return toast.error('Connectez-vous d\'abord.');
     }
     const body: BodyData = {};
-    const mutatedData = await mutate(interactionMutation(type, data), false);
+    // 1 - Mutate the cache first, without revalidation
+    const mutatedData = await mutate(reviewMutation(type, data), false);
+    // 2 - Do the API call
     body[type] = mutatedData![0].user_review![type];
-    const res = await mutationRequestCSR('PUT', `/reviews/${id}`, body );
+    const res = await mutationRequestCSR('PUT', `/reviews/${movieId}`, body);
+    //3 - Then enventually trigger cache revalidatio
+    mutate();
     console.log(res);
   };
 
@@ -184,7 +189,10 @@ const Film: NextPage<FilmProps> = (props: FilmProps) => {
                 <PostCard
                   type="presentation"
                   {...movie.presentation}
-                />
+                  created_at={movie.publishing_date}
+                >
+                  <p>{movie.presentation.presentation}</p>
+                </PostCard>
               </div>
             </section>
             <CommentsSection {...movie} />
@@ -226,3 +234,4 @@ export const getStaticProps: GetStaticProps<FilmProps, Params> = async (context)
     return { notFound: true };
   }
 };
+

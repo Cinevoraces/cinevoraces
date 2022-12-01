@@ -6,7 +6,7 @@ import { user } from '@store/slices/user';
 import useCloseMenuOnOutsideClick from '@hooks/useCloseMenuOnOutsideClick';
 import HeaderMenu from './HeaderMenu';
 import CompleteLogo from './CompleteLogo';
-import Modal from '@components/Modal/Modal';
+import Modal from '@components/Modal';
 import Button from '@components/Input/Button';
 import { ConnectionForm } from '@components/Forms';
 

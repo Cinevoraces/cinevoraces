@@ -7,7 +7,7 @@ interface UserProps {
   role?: string;
   avatar_url?: string;
 }
-interface UserState extends UserProps{
+export interface UserState extends UserProps{
   isConnected: boolean;
 }
 

@@ -7,7 +7,7 @@ import {
   DoubleRange as DoubleRangeInput,
 } from './Range';
 import { TextRef as TextInputRef, Text as TextInput, TextAreaRef, TextArea } from './Text';
-import Interaction from './Interaction/Interaction';
+import { BaseInteraction, RatingInteraction } from './Interaction/Interaction';
 
 export {
   Form,
@@ -21,5 +21,6 @@ export {
   TextInput,
   TextAreaRef,
   TextArea,
-  Interaction,
+  BaseInteraction,
+  RatingInteraction,
 };

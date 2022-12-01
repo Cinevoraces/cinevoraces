@@ -19,6 +19,7 @@ interface BodyData {
 
 /**
  * Generic function for get methods, specific to client side requests
+ * Send accessToken for needed auth
  * @param endpoint string -> localhost:3005/dev-docs/static/index.htm
  * @returns data from API
  */
@@ -41,6 +42,7 @@ const getRequestCSR = async (endpoint: string) => {
 
 /**
  * Generic function for mutation methods, specific to client side requests
+ * Send accessToken for needed auth
  * @param method string 'POST' | 'PUT' | 'DELETE'
  * @param endpoint string -> localhost:3005/dev-docs/static/index.htm
  * @param data facultative request payload

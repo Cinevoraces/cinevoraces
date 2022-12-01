@@ -76,7 +76,7 @@ export const TextArea = (props: ControlledTextProps<HTMLTextAreaElement>) => {
       <textarea
         {...inputProps}
         name={id}
-        className={basicStyles}
+        className={basicStyles.replace('bg-medium-gray', 'bg-dark-gray')}
       />
       <p className="hidden peer-invalid:block text-sm font-light text-red-500">{errorMessage}</p>
     </div>
@@ -136,7 +136,8 @@ export const TextAreaRef = React.forwardRef<HTMLTextAreaElement, BaseTextProps<H
       <textarea
         {...inputProps}
         name={id}
-        className={basicStyles}
+        rows={15}
+        className={basicStyles.replace('bg-medium-gray', 'bg-dark-gray')}
         ref={ref}
         onInput={() => {
           if (ref && typeof ref !== 'function' && ref.current) ref.current.setCustomValidity('');

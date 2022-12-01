@@ -27,7 +27,7 @@ export default function Button({
   const [baseStyle, classic, empty, rounded, white] = [
     `px-5 py-2 flex gap-2 justify-center
       shadow-inner font-semibold ring-none
-      focus:outline-none focus:ring-4 focus:ring-offset-0 focus:ring-white/5
+      focus:outline-none focus:ring-4 focus:ring-offset-0 focus:ring-white/5 focus:scale-105 
       hover:outline-none hover:ring-4 hover:ring-offset-0 hover:ring-white/5 hover:scale-105
       transition duration-150 hover:ease-out`,
     'bg-orange-primary text-dark-gray rounded-2xl',

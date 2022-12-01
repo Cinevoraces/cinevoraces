@@ -4,36 +4,35 @@ import defaultUserPic from '@public/icons/user_default.svg';
 import Rate from '@components/Rate';
 
 interface PostCardProps {
-  type: 'presentation' | 'comment';
+  type: 'presentation' | 'comment' | 'form';
   author_avatar: string;
   author_pseudo: string;
-  author_role: string;
-  presentation?: string;
   publishing_date?: string;
-  comment?: string;
   rating?: number;
   created_at?: string;
+  children: React.ReactNode;
 }
 
 const basicStyle = 'w-full p-3 rounded-xl drop-shadow-sm flex flex-col gap-6 ';
-const presentationStyle = basicStyle + 'bg-medium-gray';
-const commentStyle = basicStyle + 'threeModulusZero-child: bg-card-bg-one threeModulusOne-child: bg-card-bg-two threeModulusTwo-child: bg-card-bg-three';
+const presentationStyle = basicStyle + 'mt-6 bg-medium-gray';
+const commentStyle =
+  basicStyle +
+  'threeModulusZero-child: bg-card-bg-one threeModulusOne-child: bg-card-bg-two threeModulusTwo-child: bg-card-bg-three';
+const formStyle = basicStyle + 'bg-card-bg-one';
 
 export default function PostCardProps({
   type,
   author_avatar,
   author_pseudo,
-  author_role,
-  presentation,
   publishing_date,
-  comment,
+  children,
   rating,
   created_at,
 }: PostCardProps) {
   return (
     <div
-      id={type === 'presentation' ? 'presentation-card' : 'comment-card'}
-      className={type === 'presentation' ? presentationStyle : commentStyle}>
+      id={type === 'presentation' ? 'presentation-card' : type === 'comment' ? 'comment-card' : 'comment-form'}
+      className={type === 'presentation' ? presentationStyle : type === 'comment' ? commentStyle : formStyle}>
       <div className="flex flex-col gap-2">
         <div
           id="card-header"
@@ -50,8 +49,8 @@ export default function PostCardProps({
             className="flex flex-col justify-between">
             <p className="text-lg font-medium">{author_pseudo}</p>
             <p className="text-xs">
-              {publishing_date
-                && new Date(publishing_date.slice(0, 10)).toLocaleDateString('fr-FR', {
+              {publishing_date &&
+                new Date(publishing_date.slice(0, 10)).toLocaleDateString('fr-FR', {
                   day: 'numeric',
                   month: 'long',
                   year: 'numeric',
@@ -67,7 +66,7 @@ export default function PostCardProps({
         </div>
         {rating && <Rate rate={rating} />}
       </div>
-      <p>{presentation ? presentation : comment}</p>
+      {children}
     </div>
   );
 }
