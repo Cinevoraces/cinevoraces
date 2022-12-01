@@ -51,9 +51,10 @@ interface RatingInteractionProps {
   counter: number;
   isClicked: boolean;
   ratingHandler: (e: FormEvent)=>void;
+  value: number;
 }
 
-export const RatingInteraction = React.forwardRef<number | null, RatingInteractionProps>(({ isClicked, counter, ratingHandler }, ref) => {
+export const RatingInteraction = React.forwardRef<number | null, RatingInteractionProps>(({ isClicked, counter, ratingHandler, value }, ref) => {
   RatingInteraction.displayName = 'RatingInteraction';
   // Reference to control Rating Menu states and width
   const ratingMenuRef = useRef<HTMLDivElement>(null);
@@ -91,10 +92,12 @@ export const RatingInteraction = React.forwardRef<number | null, RatingInteracti
         </button>
         <div className={ratingMenuContainer}>
           <div className='absolute inset-y-4 right-8'>
-            <StarRadio onChange={(e) => {
-              ratingHandler(e);
-              closeRatingMenu();
-            }}/>
+            <StarRadio 
+              onChange={(e) => {
+                ratingHandler(e);
+                closeRatingMenu();
+              }}
+              value={value}/>
           </div>
         </div>
       </div>

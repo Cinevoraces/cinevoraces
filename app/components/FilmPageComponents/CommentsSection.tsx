@@ -1,3 +1,4 @@
+import type { FormEventHandler, ForwardedRef } from 'react';
 import React, { useState, useRef } from 'react';
 import Image from 'next/image';
 import { useAppSelector } from '@store/store';
@@ -10,21 +11,38 @@ import SendLogo from '@public/icons/send-icon.svg';
 
 interface CommentsSectionProps {
   comments: Comment[];
-  userId?: number;
+  onSubmit: FormEventHandler;
 }
 
-export default function CommentsSection({ comments }: CommentsSectionProps) {
+const CommentsSection = React.forwardRef<HTMLTextAreaElement, CommentsSectionProps>(({ comments, onSubmit }, ref) => {
+  CommentsSection.displayName = 'CommentsSection';
+  // Special state to handle form rendering
   const [isCommentFormOpened, setIsCommentFormOpened] = useState(false);
+  const [isEditionFormOpened, setIsEditionFormOpened] = useState(false);
+  const connectedUser = useAppSelector(user);
+  const id = Number(connectedUser.id);
+
   const toggleCommentForm = () => {
     setIsCommentFormOpened(!isCommentFormOpened);
   };
-  const connectedUser = useAppSelector(user);
-  const commentFormRef = useRef<HTMLTextAreaElement>(null);
+  const toggleEditionForm = () => {
+    setIsEditionFormOpened(!isEditionFormOpened);
+  };
+
+  const reorderComments = (id: number | undefined = undefined, comments: Comment[]) => {
+    const connectedUserComment = comments.filter((c) => (c.author_id === id));
+    if (!id || connectedUserComment.length === 0) return comments;
+    const otherComments = comments.filter((c) => (c.author_id !== id));
+    return [connectedUserComment[0], ...otherComments];
+  };
+
+  const orderedComments = reorderComments(id, comments);
+
   return (
     <section id='comments-section' className='w-full flex flex-col gap-4'>
       <h2 className='text-2xl font-semibold lg:text-3xl text-center'>{`Commentaires (${comments.length})`}</h2>
       {
-        (connectedUser.id && comments.filter((c) => c.author_id === connectedUser.id).length === 0 && !isCommentFormOpened) && 
+        (id && orderedComments.filter((c) => (c.author_id === id)).length === 0 && !isCommentFormOpened) && 
         <div className='flex justify-center'>
           <Button 
             customStyle='empty' 
@@ -40,12 +58,11 @@ export default function CommentsSection({ comments }: CommentsSectionProps) {
           author_avatar={connectedUser.avatar_url!}
           publishing_date={(new Date()).toISOString()}>
           <form id="comment-form" action="submit" className='flex flex-col gap-4'
-            onSubmit={(e) => { 
-              e.preventDefault();
-              console.log(commentFormRef.current.value);
+            onSubmit={(e) => {
+              onSubmit(e); toggleCommentForm(); 
             }}
           >
-            <TextAreaRef id='comment-form' ref={commentFormRef}/>
+            <TextAreaRef id='comment-form' ref={ref}/>
             <div id='comment-send-cancel' className='flex justify-end gap-4'>
               <Button>
                 <Image
@@ -61,17 +78,53 @@ export default function CommentsSection({ comments }: CommentsSectionProps) {
         </PostCard>
       }
       { 
-        comments.length === 0 ? 
+        orderedComments.length === 0 ? 
           (<p className='text-center'>Aucun commentaire pour ce film.</p>)
           : (
             <>
               {
-                comments.map((c) => (
+                orderedComments.map((c) => (
                   <PostCard 
                     key={c.author_pseudo} 
                     type='comment' 
                     {...c} >
-                    <p>c.comment</p>
+                    {
+                      (!isEditionFormOpened) &&
+                        ( <>
+                          <p>{c.comment}</p>
+                          <div className='flex justify-end'>
+                            {
+                              (id === c.author_id) &&
+                                <Button 
+                                  onClick={toggleEditionForm}>
+                                  Éditer
+                                </Button>
+                            }
+                          </div>
+                        </>)
+                    }
+                    {
+                      (isEditionFormOpened && id === c.author_id) &&
+                        <form id="comment-form" action="submit" className='flex flex-col gap-4'
+                          onSubmit={(e) => {
+                            onSubmit(e); toggleEditionForm(); 
+                          }}
+                        >
+                          <TextAreaRef id='comment-form' ref={ref} defaultValue={c.comment}/>
+                          <div id='comment-send-cancel' className='flex justify-end gap-4'>
+                            <Button>
+                              <Image
+                                src={SendLogo}
+                                alt=""
+                                width={16}
+                                height={16}
+                              />
+                              Confirmer
+                            </Button>
+                            <Button onClick={toggleEditionForm}>Annuler</Button>
+                          </div>
+                        </form>
+                    }
                   </PostCard>
                 ))
               }
@@ -79,6 +132,7 @@ export default function CommentsSection({ comments }: CommentsSectionProps) {
           )
       }
     </section>
-
   );
-}
+});
+
+export default CommentsSection;

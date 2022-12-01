@@ -45,7 +45,6 @@ export default function InscriptionForm() {
     // Checking PW correspondance
     arePWMatching = PWRef.current?.value === confirmPWRef.current?.value;
     if (!arePWMatching) {
-      console.log(arePWMatching);
       confirmPWRef.current?.setCustomValidity(matchingErrorMessage);
       return;
     }

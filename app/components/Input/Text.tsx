@@ -9,6 +9,7 @@ interface BaseTextProps<T> {
   pattern?: string;
   minLength?: number;
   errorMessage?: string;
+  defaultValue?: string;
 }
 interface ControlledTextProps<T> extends BaseTextProps<T> {
   value?: string;
@@ -124,6 +125,7 @@ export const TextRef = React.forwardRef<HTMLInputElement, BaseTextProps<HTMLInpu
  * @param required           set \<input\> 'required' param
  * @param minLength          set \<input\> 'minlength' param
  * @param errorMessage       set \<input\> 'pattern' param
+ * @param defaultValue       set \<input\> 'defaultValue' param
  */
 export const TextAreaRef = React.forwardRef<HTMLTextAreaElement, BaseTextProps<HTMLTextAreaElement>>((props, ref) => {
   TextAreaRef.displayName = 'TextAreaRef';

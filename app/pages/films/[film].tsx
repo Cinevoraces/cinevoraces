@@ -59,7 +59,6 @@ const Film: NextPage<FilmProps> = (props: FilmProps) => {
   if (!data || data?.length === 0) throw new Error('Le film demandé n\'a pas été retrouvé.');
   // Basic data extraction
   const movie = data[0];
-  console.log(movie);
   const {
     french_title,
     metrics: { watchlist_count, views_count, likes_count, ratings_count, avg_rating },
@@ -74,57 +73,71 @@ const Film: NextPage<FilmProps> = (props: FilmProps) => {
   ];
 
   const reviewMutation = async (
-    type: 'bookmarked' | 'viewed' | 'liked' | 'rating',
+    type: 'bookmarked' | 'viewed' | 'liked' | 'rating' | 'comment',
     data: CompleteMovie[] | undefined
   ) => {
     // Initial state for cache
-    const defaultUserReview = { bookmarked: false, viewed: false, liked: false, rating: null };
-    // Determinate property label for user_review
-    const metricProp = baseInteractionsArray.filter((i) => i.type === type)[0].counterName;
+    const defaultUserReview = { bookmarked: false, viewed: false, liked: false, rating: null, comment: null };
+    // Determinate property label for user_review properties other than comment
+    let metricProp ='';
+    if (type !== 'comment'){
+      metricProp = baseInteractionsArray.filter((i) => i.type === type)[0].counterName;
+    }
     // Deal both with user_review absence or presence in cache
     const review = user_review ? user_review : defaultUserReview;
-    if (type !== 'rating') {
-      return [
-        {
-          ...movie,
-          user_review: { ...review, [type]: !review[type] },
-          metrics: {
-            ...movie.metrics,
-            [metricProp]: !review[type] ? movie.metrics[metricProp] + 1 : movie.metrics[metricProp] - 1,
+    switch (type){
+      default:
+        return [
+          {
+            ...movie,
+            user_review: { ...review, [type]: !review[type] },
+            metrics: {
+              ...movie.metrics,
+              [metricProp]: !review[type] ? movie.metrics[metricProp] + 1 : movie.metrics[metricProp] - 1,
+            },
           },
-        },
-      ];
+        ];
+      case 'rating':
+        return [
+          {
+            ...movie,
+            user_review: { ...review, rating: radioInputValue.current },
+            metrics: {
+              ...movie.metrics,
+              ratings_count: !review.rating ? movie.metrics.ratings_count + 1 : movie.metrics.ratings_count,
+              avg_rating: !review.rating
+                ? (movie.metrics.avg_rating * movie.metrics.ratings_count + radioInputValue.current!) /
+                  (movie.metrics.ratings_count + 1)
+                : (movie.metrics.avg_rating * movie.metrics.ratings_count - review.rating + radioInputValue.current!) /
+                  movie.metrics.ratings_count,
+            },
+          },
+        ];
+      case 'comment':
+        if (!commentFormRef.current){
+          return;
+        }
+        return [
+          {
+            ...movie,
+            user_review: { ...review, comment: commentFormRef.current.value },
+          }
+        ];
     }
-    return [
-      {
-        ...movie,
-        user_review: { ...review, rating: radioInputValue.current },
-        metrics: {
-          ...movie.metrics,
-          ratings_count: !review.rating ? movie.metrics.ratings_count + 1 : movie.metrics.ratings_count,
-          avg_rating: !review.rating
-            ? (movie.metrics.avg_rating * movie.metrics.ratings_count + radioInputValue.current!) /
-              (movie.metrics.ratings_count + 1)
-            : (movie.metrics.avg_rating * movie.metrics.ratings_count - review.rating + radioInputValue.current!) /
-              movie.metrics.ratings_count,
-        },
-      },
-    ];
   };
 
-  const handleInteraction = async (type: 'bookmarked' | 'viewed' | 'liked' | 'rating') => {
+  const handleInteraction = async (type: 'bookmarked' | 'viewed' | 'liked' | 'rating' | 'comment') => {
     if (!userId) {
       return toast.error('Connectez-vous d\'abord.');
     }
     const body: BodyData = {};
     // 1 - Mutate the cache first, without revalidation
-    const mutatedData = await mutate(reviewMutation(type, data), false);
+    const mutatedData = await mutate(await reviewMutation(type, data), false);
     // 2 - Do the API call
     body[type] = mutatedData![0].user_review![type];
     const res = await mutationRequestCSR('PUT', `/reviews/${movieId}`, body);
-    //3 - Then enventually trigger cache revalidatio
+    //3 - Then enventually trigger cache revalidation
     mutate();
-    console.log(res);
   };
 
   // Ref value for rating storage
@@ -134,6 +147,12 @@ const Film: NextPage<FilmProps> = (props: FilmProps) => {
       radioInputValue.current = Number(e.target.value);
       handleInteraction('rating');
     }
+  };
+
+  const commentFormRef = useRef<HTMLTextAreaElement>(null);
+  const handleCommentSubmit = (e: FormEvent<Element>) => { 
+    e.preventDefault();
+    handleInteraction('comment');
   };
 
   return (
@@ -173,6 +192,7 @@ const Film: NextPage<FilmProps> = (props: FilmProps) => {
                     isClicked={!user_review || !user_review.rating ? false : true}
                     ref={radioInputValue}
                     ratingHandler={ratingHandler}
+                    value={(user_review?.rating) ? user_review.rating : 0}
                   />
                 </div>
               </div>
@@ -195,7 +215,7 @@ const Film: NextPage<FilmProps> = (props: FilmProps) => {
                 </PostCard>
               </div>
             </section>
-            <CommentsSection {...movie} />
+            <CommentsSection {...movie} ref={commentFormRef} onSubmit={(e) => handleCommentSubmit(e)} />
           </>
         )}
       </main>

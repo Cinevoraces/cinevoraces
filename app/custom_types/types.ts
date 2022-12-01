@@ -41,6 +41,7 @@ export interface UserReview {
   viewed: boolean;
   liked: boolean;
   rating: number | null;
+  comment: string | null;
 }
 export interface CompleteMovie extends MinimalMovie {
   casting: string[];

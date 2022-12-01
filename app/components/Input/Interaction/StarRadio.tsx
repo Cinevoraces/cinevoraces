@@ -4,6 +4,7 @@ import { StarSvg } from './SVG';
 
 interface StarRadioProps {
   onChange: (e: FormEvent)=>void;
+  value: number;
 }
 
 export default function StarRadio(props: StarRadioProps) {
@@ -28,7 +29,11 @@ export default function StarRadio(props: StarRadioProps) {
       {
         [...Array(5)].map((_, i) => (
           <label htmlFor="rating" className='relative ' key={`rating-${5 - i}`}>
-            <input type="radio" value={5 - i} name='rating' className={radioStyle}/>
+            <input type="radio"
+              value={5 - i} 
+              name='rating' 
+              className={radioStyle} 
+              defaultChecked={(props.value === (5 - i))}/>
             <StarSvg style={'star-icon ' + starStyle}/>
             <StarSvg style={starEffectStyle}/>
           </label>)
