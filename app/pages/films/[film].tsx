@@ -139,6 +139,7 @@ const Film: NextPage<FilmProps> = (props: FilmProps) => {
     // 2 - Do the API call
     body[type] = mutatedData![0].user_review![type];
     const res = await mutationRequestCSR('PUT', `/reviews/${movieId}`, body);
+    if (res.message && type === 'comment') toast.success('Votre commentaire a été publié / édité.');
     //3 - Then enventually trigger cache revalidation
     mutate();
   };
@@ -208,8 +209,8 @@ const Film: NextPage<FilmProps> = (props: FilmProps) => {
                 <OriginalTitle {...movie} />
                 <Rating rate={avg_rating} type='global' />
                 {
-                  (user_review?.rating) &&
-                  <Rating rate={ user_review!.rating} type='user' />
+                  (user_review && typeof user_review.rating === 'number' && user_review.rating !== 0 ) &&
+                  <Rating rate={user_review.rating} type='user' />
                 }
                 <Directors {...movie} />
                 <Genres {...movie} />

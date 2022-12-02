@@ -19,8 +19,8 @@ const CommentsSection = React.forwardRef<HTMLTextAreaElement, CommentsSectionPro
   // Special state to handle form rendering
   const [isCommentFormOpened, setIsCommentFormOpened] = useState(false);
   const [isEditionFormOpened, setIsEditionFormOpened] = useState(false);
-  const connectedUser = useAppSelector(user);
-  const id = Number(connectedUser.id);
+  const { pseudo, avatar_url } = useAppSelector(user);
+  const id = Number(useAppSelector(user).id) || undefined;
 
   const toggleCommentForm = () => {
     setIsCommentFormOpened(!isCommentFormOpened);
@@ -30,32 +30,36 @@ const CommentsSection = React.forwardRef<HTMLTextAreaElement, CommentsSectionPro
   };
 
   const reorderComments = (id: number | undefined = undefined, comments: Comment[]) => {
+    if (!id) return comments;
     const connectedUserComment = comments.filter((c) => (c.author_id === id));
-    if (!id || connectedUserComment.length === 0) return comments;
+    if (connectedUserComment.length === 0) return comments;
     const otherComments = comments.filter((c) => (c.author_id !== id));
     return [connectedUserComment[0], ...otherComments];
   };
 
   const orderedComments = reorderComments(id, comments);
 
+  console.log(id, typeof id);
+  console.log(orderedComments.filter((c) => (c.author_id == id)).length === 0);
+
   return (
     <section id='comments-section' className='w-full flex flex-col gap-4'>
       <h2 className='text-2xl font-semibold lg:text-3xl text-center'>{`Commentaires (${comments.length})`}</h2>
       {
         (id && orderedComments.filter((c) => (c.author_id === id)).length === 0 && !isCommentFormOpened) && 
-        <div className='flex justify-center'>
-          <Button 
-            customStyle='empty' 
-            onClick={toggleCommentForm}>
+          <div className='flex justify-center'>
+            <Button 
+              customStyle='empty' 
+              onClick={toggleCommentForm}>
               Ajouter un commentaire
-          </Button>
-        </div>
+            </Button>
+          </div>
       }
       {
         (isCommentFormOpened) &&
         <PostCard type='form'
-          author_pseudo={connectedUser.pseudo!}
-          author_avatar={connectedUser.avatar_url!}
+          author_pseudo={pseudo!}
+          author_avatar={avatar_url!}
           publishing_date={(new Date()).toISOString()}>
           <form id="comment-form" action="submit" className='flex flex-col gap-4'
             onSubmit={(e) => {
