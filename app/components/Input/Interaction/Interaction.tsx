@@ -1,7 +1,6 @@
 import type { FormEvent } from 'react';
-import React, { useEffect, useRef } from 'react';
+import React, { useRef } from 'react';
 import { BookmarkSvg, LikeSvg, StarSvg, ViewSvg } from './SVG';
-import type { SvgProps } from './SVG';
 import StarRadio from './StarRadio';
 import useCloseMenuOnOutsideClick from '@hooks/useCloseMenuOnOutsideClick';
 
@@ -25,18 +24,7 @@ const ratingMenuContainer = 'rating relative z-0 h-full w-52 pl-0 ';
 const svgStyle = 'h-7 w-16 fill-none ';
 
 export const BaseInteraction = ({ type, counter, isClicked, onClick }: BaseInteractionProps) => {
-  let SvgComponent: (props: SvgProps)=>JSX.Element;
-  switch (type) {
-    case 'bookmarked':
-      SvgComponent = BookmarkSvg;
-      break;
-    case 'liked':
-      SvgComponent = LikeSvg;
-      break;
-    default:
-      SvgComponent = ViewSvg;
-      break;
-  }
+  const SvgComponent = (type === 'bookmarked') ? BookmarkSvg : (type === 'liked') ? LikeSvg : ViewSvg;
   return (
     <button
       onClick={onClick}
@@ -51,11 +39,10 @@ interface RatingInteractionProps {
   counter: number;
   isClicked: boolean;
   ratingHandler: (e: FormEvent)=>void;
-  value: number;
+  value?: number | undefined;
 }
 
-export const RatingInteraction = React.forwardRef<number | null, RatingInteractionProps>(({ isClicked, counter, ratingHandler, value }, ref) => {
-  RatingInteraction.displayName = 'RatingInteraction';
+export const RatingInteraction = ({ isClicked, counter, ratingHandler, value }: RatingInteractionProps) => {
   // Reference to control Rating Menu states and width
   const ratingMenuRef = useRef<HTMLDivElement>(null);
   const isMenuOpened = ratingMenuRef.current?.classList.contains('w-16') || false;
@@ -103,4 +90,4 @@ export const RatingInteraction = React.forwardRef<number | null, RatingInteracti
       </div>
     </div>
   );
-});
+};

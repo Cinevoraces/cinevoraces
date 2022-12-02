@@ -92,15 +92,15 @@ const CommentsSection = React.forwardRef<HTMLTextAreaElement, CommentsSectionPro
                       (!isEditionFormOpened) &&
                         ( <>
                           <p>{c.comment}</p>
+                          {
+                            (id === c.author_id) &&
                           <div className='flex justify-end'>
-                            {
-                              (id === c.author_id) &&
-                                <Button 
-                                  onClick={toggleEditionForm}>
+                            <Button 
+                              onClick={toggleEditionForm}>
                                   Éditer
-                                </Button>
-                            }
+                            </Button>
                           </div>
+                          }
                         </>)
                     }
                     {

@@ -6,7 +6,7 @@ import {
   Poster,
   Title,
   OriginalTitle,
-  GlobalRating,
+  Rating,
   Directors,
   Genres,
   Countries,
@@ -65,6 +65,8 @@ const Film: NextPage<FilmProps> = (props: FilmProps) => {
     user_review,
   } = movie;
 
+  console.log(user_review);
+
   const baseInteractionsArray: Interactions[] = [
     { type: 'bookmarked', counterName: 'watchlist_count', counter: watchlist_count },
     { type: 'viewed', counterName: 'views_count', counter: views_count },
@@ -72,6 +74,7 @@ const Film: NextPage<FilmProps> = (props: FilmProps) => {
     { type: 'rating', counterName: 'ratings_count', counter: ratings_count },
   ];
 
+  // data isn't used here, just let for future improvements and manipulations
   const reviewMutation = async (
     type: 'bookmarked' | 'viewed' | 'liked' | 'rating' | 'comment',
     data: CompleteMovie[] | undefined
@@ -155,6 +158,11 @@ const Film: NextPage<FilmProps> = (props: FilmProps) => {
     handleInteraction('comment');
   };
 
+  // If user logs directly on this page after rendering, hydrate the page with its review
+  useEffect(() => {
+    mutate(); 
+  }, [mutate, userId]);
+
   return (
     <>
       <Head>
@@ -190,16 +198,19 @@ const Film: NextPage<FilmProps> = (props: FilmProps) => {
                   <RatingInteraction
                     counter={ratings_count}
                     isClicked={!user_review || !user_review.rating ? false : true}
-                    ref={radioInputValue}
                     ratingHandler={ratingHandler}
-                    value={(user_review?.rating) ? user_review.rating : 0}
+                    value={(user_review?.rating) ? user_review.rating : undefined}
                   />
                 </div>
               </div>
               <div className="flex flex-col gap-3">
                 <Title {...movie} />
                 <OriginalTitle {...movie} />
-                <GlobalRating avg_rating={avg_rating} />
+                <Rating rate={avg_rating} type='global' />
+                {
+                  (user_review?.rating) &&
+                  <Rating rate={ user_review!.rating} type='user' />
+                }
                 <Directors {...movie} />
                 <Genres {...movie} />
                 <Countries {...movie} />

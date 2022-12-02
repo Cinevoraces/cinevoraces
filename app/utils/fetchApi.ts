@@ -17,6 +17,12 @@ interface BodyData {
   [key: string]: string | number | boolean | null;
 }
 
+interface FetchOptions extends RequestInit {
+  headers: {
+    [key: string]: string;
+  }
+}
+
 /**
  * Generic function for get methods, specific to client side requests
  * Send accessToken for needed auth
@@ -24,14 +30,18 @@ interface BodyData {
  * @returns data from API
  */
 const getRequestCSR = async (endpoint: string) => {
-  const res = await fetch(baseUrlCSR + endpoint, {
+  const options: FetchOptions = {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': 'Bearer ' + `${localStorage.accessToken}`,
     },
     credentials: 'include',
-  });
+  };
+  if (localStorage.accessToken && options.headers) {
+    options.headers['Authorization'] = 'Bearer ' + localStorage.accessToken;
+  }
+
+  const res = await fetch(baseUrlCSR + endpoint, options);
   const responsePayload = await res.json();
   if (responsePayload.error){
     const { message } = responsePayload;
@@ -49,15 +59,18 @@ const getRequestCSR = async (endpoint: string) => {
  * @returns 
  */
 const mutationRequestCSR = async (method: 'POST' | 'PUT' | 'DELETE', endpoint: string, body?: BodyData) => {
-  const res = await fetch(baseUrlCSR + endpoint, {
+  const options: FetchOptions = {
     method,
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': 'Bearer ' + `${localStorage.accessToken}`,
     },
     credentials: 'include',
     body: JSON.stringify(body),
-  });
+  };
+  if (localStorage.accessToken && options.headers) {
+    options.headers['Authorization'] = 'Bearer ' + localStorage.accessToken;
+  }
+  const res = await fetch(baseUrlCSR + endpoint, options);
   const responsePayload = await res.json();
   if (responsePayload.error){
     const { message } = responsePayload;

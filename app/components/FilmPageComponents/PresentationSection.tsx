@@ -51,16 +51,21 @@ const OriginalTitle = ({ original_title }: OriginalTitleProps) => {
     </div>
   );
 };
-interface GlobalRatingProps {
-  avg_rating: number;
+interface RatingProps {
+  rate: number;
+  type: 'global' | 'user';
 }
-const GlobalRating = ({ avg_rating }: GlobalRatingProps) => {
+const Rating = ({ rate, type }: RatingProps) => {
   return (
     <div
       id="global-rating"
       className="flex justify-between">
-      <p className={dataTitleStyle}>Note des Membres :</p>
-      <Rate rate={avg_rating} />
+      <p className={dataTitleStyle}>
+        {
+          (type === 'global') ? 'Note des Membres :' : 'Ma note :'
+        }
+      </p>
+      <Rate rate={rate} />
     </div>
   );
 };
@@ -167,7 +172,7 @@ export {
   Poster,
   Title,
   OriginalTitle,
-  GlobalRating,
+  Rating,
   Directors,
   Genres,
   Countries,

@@ -4,7 +4,7 @@ import { StarSvg } from './SVG';
 
 interface StarRadioProps {
   onChange: (e: FormEvent)=>void;
-  value: number;
+  value?: number;
 }
 
 export default function StarRadio(props: StarRadioProps) {
