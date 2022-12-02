@@ -65,8 +65,6 @@ const Film: NextPage<FilmProps> = (props: FilmProps) => {
     user_review,
   } = movie;
 
-  console.log(user_review);
-
   const baseInteractionsArray: Interactions[] = [
     { type: 'bookmarked', counterName: 'watchlist_count', counter: watchlist_count },
     { type: 'viewed', counterName: 'views_count', counter: views_count },

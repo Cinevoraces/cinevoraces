@@ -13,11 +13,11 @@ interface PostCardProps {
   children: React.ReactNode;
 }
 
-const basicStyle = 'w-full p-3 rounded-xl drop-shadow-sm flex flex-col gap-6 ';
-const presentationStyle = basicStyle + 'mt-6 bg-medium-gray';
+const basicStyle = 'w-full p-3 rounded-xl drop-shadow-sm flex flex-col gap-4 ';
+const presentationStyle = basicStyle + 'mt-6 bg-medium-gray ';
 const commentStyle =
   basicStyle +
-  'threeModulusZero-child: bg-card-bg-one threeModulusOne-child: bg-card-bg-two threeModulusTwo-child: bg-card-bg-three';
+  'threeModulusZero-child:bg-card-bg-two threeModulusOne-child:bg-card-bg-three threeModulusTwo-child:bg-card-bg-one';
 const formStyle = basicStyle + 'bg-card-bg-one';
 
 export default function PostCardProps({
@@ -64,7 +64,7 @@ export default function PostCardProps({
             </p>
           </div>
         </div>
-        {rating && <Rate rate={rating} />}
+        {rating && <Rate rate={rating} type='user' />}
       </div>
       {children}
     </div>

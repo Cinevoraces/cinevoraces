@@ -55,17 +55,17 @@ interface RatingProps {
   rate: number;
   type: 'global' | 'user';
 }
-const Rating = ({ rate, type }: RatingProps) => {
+const Rating = (props: RatingProps) => {
   return (
     <div
       id="global-rating"
-      className="flex justify-between">
+      className="flex justify-between -mr-3">
       <p className={dataTitleStyle}>
         {
-          (type === 'global') ? 'Note des Membres :' : 'Ma note :'
+          (props.type === 'global') ? 'Note moyenne :' : 'Ma note :'
         }
       </p>
-      <Rate rate={rate} />
+      <Rate {...props} />
     </div>
   );
 };

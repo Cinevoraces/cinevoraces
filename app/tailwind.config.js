@@ -22,8 +22,8 @@ module.exports = {
         'medium-gray':'#393945',
         'light-gray': '#8A8A92',
         'card-bg-one': '#434356',
-        'card-bg-two': '#565676',
-        'card-bg-three': '#393945',
+        'card-bg-two': '#4D4D66',
+        'card-bg-three': '#565676',
         'white':'#F2F2F3'
       },
       animation: {

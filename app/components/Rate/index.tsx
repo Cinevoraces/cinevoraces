@@ -2,43 +2,42 @@ import React from 'react';
 
 interface RateProps {
   rate: number;
+  type: 'global' | 'user';
 }
 
 /**
  * @returns a component displaying an average note with colored stars and the number 
  * @param rate number 
- * Works properly only on Firefox, must be fixed for other browsers
- * One way to resolve it may : https://stackoverflow.com/questions/69801440/i-am-trying-to-clip-a-background-div-with-an-svg-text
+ * @param type essencially to display the number or not 
  */
-export default function Rate({ rate }: RateProps) {
+export default function Rate({ rate, type }: RateProps) {
   const floredRate = Math.floor(rate * 10)/10;
   const ratePercentage = Math.floor((rate / 5) * 100);
-  const container = 'relative w-[71.25px] h-10 text-md text-transparent font-extrabold bg-dark-gray ';
+  const container = 'relative w-[100px] h-[100px] text-md clip-stars ';
   const genericStarsStyle =
-    'absolute inset-y-0 h-[full] flex flex-nowrap flex-0 gap-.5 overflow-hidden bg-clip-text ';
+    'absolute inset-y-0 h-full ';
   const filledStarsStyle = genericStarsStyle +
-    `left-0 w-[${ratePercentage}%] bg-yellow `;
+    'left-0 bg-yellow ';
   const emptyStarsStyle = genericStarsStyle +
-  `right-0 w-[${100 - ratePercentage}%] bg-medium-gray mirrorX `;
+  'right-0 bg-medium-gray ';
   return (
-    <div className='flex gap-2'>
+    <div className='flex flex-grow-0 w-fit gap-3 px-3 py-1.5 items-start h-8 bg-dark-gray rounded-full'>
+      {
+        (type === 'global') &&
+        <p className='text-yellow -mt-[1px] w-6 text-right'>{floredRate}</p>
+      }
       <div className={container}>
         <div
           id="filled gauge"
-          className={filledStarsStyle}>
-          {[...Array(5)].map((_, i) => (
-            <span key={`filled-${i}`}>★</span>
-          ))}
+          className={filledStarsStyle}
+          style={{ 'width': ratePercentage }}>
         </div>
         <div
           id="empty gauge"
-          className={emptyStarsStyle}>
-          {[...Array(5)].map((_, i) => (
-            <span key={`empty-${i}`}>★</span>
-          ))}
+          className={emptyStarsStyle}
+          style={{ 'width': 100 - ratePercentage }}>
         </div>
       </div>
-      <p className='text-yellow'>{floredRate}</p>
     </div>
   );
 }
