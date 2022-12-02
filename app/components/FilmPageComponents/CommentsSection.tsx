@@ -68,7 +68,7 @@ const CommentsSection = React.forwardRef<HTMLTextAreaElement, CommentsSectionPro
           >
             <TextAreaRef id='comment-form' ref={ref}/>
             <div id='comment-send-cancel' className='flex justify-end gap-4'>
-              <Button>
+              <Button customStyle='rounded'>
                 <Image
                   src={SendLogo}
                   alt=""
@@ -76,7 +76,7 @@ const CommentsSection = React.forwardRef<HTMLTextAreaElement, CommentsSectionPro
                   height={16}
                 />
                 Poster</Button>
-              <Button onClick={toggleCommentForm}>Annuler</Button>
+              <Button onClick={toggleCommentForm} customStyle='rounded'>Annuler</Button>
             </div>
           </form>
         </PostCard>
@@ -100,7 +100,8 @@ const CommentsSection = React.forwardRef<HTMLTextAreaElement, CommentsSectionPro
                             (id === c.author_id) &&
                           <div className='flex justify-end'>
                             <Button 
-                              onClick={toggleEditionForm}>
+                              onClick={toggleEditionForm}
+                              customStyle='rounded'>
                                   Éditer
                             </Button>
                           </div>
