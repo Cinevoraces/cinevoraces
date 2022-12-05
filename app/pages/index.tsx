@@ -31,13 +31,13 @@ const Home: NextPage<HomeProps> = (props) => {
   // Prepared Tailwind Styles
   const sectionStyle = 'even:bg-medium-gray even:md:text-end ';
   const sectionContentStyle =
-    'container mx-auto px-4 py-8 lg:py-16 flex flex-col items-center justify-between gap-8 md:flex-row ';
+    'custom-container md:flex-row ';
   const posterStyles = `rounded-lg w-full h-full object-cover shadow-lg max-w-[250px] 
     fourth-child:hidden fifth-child:hidden sixth-child:hidden
     md:fourth-child:block lg:fifth-child:block xl:sixth-child:block
     hover:scale-105`;
-  const h2Style = 'text-2xl font-semibold lg:text-3xl ';
-  const emStyle = 'text-orange-primary font-medium';
+  const h2Style = 'title-section ';
+  const emStyle = 'emphasis ';
 
   const discordInvitation = 'https://discord.gg/r6tK5PGyE7';
 
@@ -49,7 +49,7 @@ const Home: NextPage<HomeProps> = (props) => {
         <div className={sectionContentStyle + 'md:flex-col'}>
           <div className="w-full flex justify-between">
             <div className="flex flex-col gap-8 flex-1">
-              <h1 className="text-4xl font-bold lg:text-6xl">
+              <h1 className="hero-text ">
                 Bienvenue dans votre <span className="text-orange-primary">ciné-club</span> virtuel !
               </h1>
               <h2 className={h2Style}>Chaque semaine, un film à découvrir</h2>

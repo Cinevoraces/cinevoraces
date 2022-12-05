@@ -14,7 +14,7 @@ interface PostCardProps {
 }
 
 const basicStyle = 'w-full p-3 rounded-xl drop-shadow-sm flex flex-col gap-4 ';
-const presentationStyle = basicStyle + 'mt-6 bg-medium-gray ';
+const presentationStyle = basicStyle + 'bg-medium-gray ';
 const commentStyle =
   basicStyle +
   'threeModulusZero-child:bg-card-bg-two threeModulusOne-child:bg-card-bg-three threeModulusTwo-child:bg-card-bg-one';

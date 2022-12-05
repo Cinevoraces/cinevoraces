@@ -11,17 +11,24 @@ interface BaseInteractionProps {
   onClick: ()=>void;
 }
 
-const buttonStyle = `bg-medium-gray w-16 h-16 pt-1 rounded-xl interaction outline-none
-focus:scale-105 hover:scale-105 origin-right
+const buttonStyle = `w-14 h-14 lg:w-16 lg:h-16 
+bg-medium-gray pt-1 rounded-xl interaction outline-none 
+origin-right sm:origin-left
+focus:scale-105 hover:scale-105 
 transition ease-out duration-200 `;
+// CSS trick : the opening direction depends of the margin-right/left
+// flex-direction : order betwwen button svg and stars
 const customExpandedStarContainerStyle =
-buttonStyle + ` absolute z-10 right-0 overflow-hidden flex 
-flex-row-reverse 
-transition-width ease-in duration-400 focus-within:scale-105 
+buttonStyle + ` absolute z-10 overflow-hidden flex 
+right-0 sm:left-0 
+flex-row-reverse sm:flex-row
+transition-width ease-in duration-400 
+focus-within:scale-105 
 rating `;
-const customStarButtonStyle = 'rating relative z-10 w-16 h-18 bg-medium-gray outline-none ';
-const ratingMenuContainer = 'rating relative z-0 h-full w-52 pl-0 ';
-const svgStyle = 'h-7 w-16 fill-none ';
+const customStarButtonStyle = `rating relative z-10 w-14 h-18 lg:w-16 
+bg-medium-gray outline-none `;
+const ratingMenuContainer = 'rating relative z-0 h-full w-52 -top-1 lg:top-0';
+const svgStyle = 'h-6 w-14 fill-none lg:h-8 lg:w-16 ';
 
 export const BaseInteraction = ({ type, counter, isClicked, onClick }: BaseInteractionProps) => {
   const SvgComponent = (type === 'bookmarked') ? BookmarkSvg : (type === 'liked') ? LikeSvg : ViewSvg;
@@ -45,11 +52,14 @@ interface RatingInteractionProps {
 export const RatingInteraction = ({ isClicked, counter, ratingHandler, value }: RatingInteractionProps) => {
   // Reference to control Rating Menu states and width
   const ratingMenuRef = useRef<HTMLDivElement>(null);
-  const isMenuOpened = ratingMenuRef.current?.classList.contains('w-16') || false;
+  const isMenuOpened = ratingMenuRef.current?.classList.contains('w-14') || ratingMenuRef.current?.classList.contains('w-16') || false;
+  // Handling button expansion throught ref
   const toggleRatingMenu = () => {
     if (ratingMenuRef && ratingMenuRef.current) {
       ratingMenuRef.current.classList.toggle('w-72');
-      ratingMenuRef.current.classList.toggle('w-16');
+      ratingMenuRef.current.classList.toggle('lg:w-72');
+      ratingMenuRef.current.classList.toggle('w-14');
+      ratingMenuRef.current.classList.toggle('lg:w-16');
     }
   };
   const closeRatingMenu = () => {
@@ -65,7 +75,7 @@ export const RatingInteraction = ({ isClicked, counter, ratingHandler, value }: 
   );
 
   return (
-    <div className='w-16 h-16 relative'>
+    <div className='w-14 h-14 relative lg:w-16 lg:h-16 '>
       <div
         ref={ratingMenuRef}
         className={ isClicked 
@@ -78,7 +88,7 @@ export const RatingInteraction = ({ isClicked, counter, ratingHandler, value }: 
           <p className="text-sm mt-1">{counter}</p>
         </button>
         <div className={ratingMenuContainer}>
-          <div className='absolute inset-y-4 right-8'>
+          <div className='absolute inset-y-4 right-8 '>
             <StarRadio 
               onChange={(e) => {
                 ratingHandler(e);

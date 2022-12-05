@@ -30,6 +30,18 @@ input[type='range']::-webkit-slider-runnable-track {
 }
 
 @layer components {
+  .custom-container {
+    @apply container mx-auto px-2 py-8 lg:py-16 flex flex-col items-center justify-between gap-6 xl:px-0 md:gap-8 lg:gap-10 xl:gap-14
+  }
+  .hero-text{
+    @apply text-4xl font-bold lg:text-6xl
+  }
+  .title-section{
+    @apply text-2xl font-semibold lg:text-3xl
+  }
+  .emphasis{
+    @apply text-orange-primary font-medium
+  }
   .interaction{
     box-shadow: 0px 8px 4px rgba(0, 0, 0, 0.25), 0px -3px 0px #FC9A3F;
   }

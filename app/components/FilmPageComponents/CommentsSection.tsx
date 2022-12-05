@@ -48,57 +48,58 @@ const CommentsSection = React.forwardRef<HTMLTextAreaElement, CommentsSectionPro
   };
 
   return (
-    <section id='comments-section' className='w-full flex flex-col gap-4'>
+    <section id='comments-section' className='w-full flex flex-col gap-4 '>
       <h2 className='text-2xl font-semibold lg:text-3xl text-center'>{`Commentaires (${comments.length})`}</h2>
       { // Add Comment button
         (id && orderedComments.filter((c) => (c.author_id === id)).length === 0 && !isCommentFormOpened) && 
-          <div className='flex justify-center'>
-            <Button 
-              customStyle='empty' 
-              onClick={toggleCommentForm}>
-              Ajouter un commentaire
-            </Button>
-          </div>
+            <div className='flex justify-center'>
+              <Button 
+                customStyle='empty' 
+                onClick={toggleCommentForm}>
+                Ajouter un commentaire
+              </Button>
+            </div>
       }
       { // Comment form on top of any comment
         (isCommentFormOpened) &&
-        <PostCard type='form'
-          author_pseudo={pseudo!}
-          author_avatar={avatar_url!}
-          publishing_date={(new Date()).toISOString()}>
-          <form id="comment-form" action="submit" className='flex flex-col gap-4'
-            onSubmit={(e) => {
-              onSubmit(e); toggleCommentForm(); 
-            }}
-          >
-            <TextAreaRef id='comment-form' ref={ref}/>
-            <div id='comment-send-cancel' className='flex justify-end gap-4'>
-              <Button customStyle='rounded'>
-                <Image
-                  src={SendLogo}
-                  alt=""
-                  width={16}
-                  height={16}
-                />
-                Poster</Button>
-              <Button onClick={toggleCommentForm} customStyle='rounded'>Annuler</Button>
-            </div>
-          </form>
-        </PostCard>
+          <PostCard type='form'
+            author_pseudo={pseudo!}
+            author_avatar={avatar_url!}
+            publishing_date={(new Date()).toISOString()}>
+            <form id="comment-form" action="submit" className='flex flex-col gap-4'
+              onSubmit={(e) => {
+                onSubmit(e); toggleCommentForm(); 
+              }}
+            >
+              <TextAreaRef id='comment-form' ref={ref}/>
+              <div id='comment-send-cancel' className='flex justify-end gap-4'>
+                <Button customStyle='rounded'>
+                  <Image
+                    src={SendLogo}
+                    alt=""
+                    width={16}
+                    height={16}
+                  />
+                  Poster</Button>
+                <Button onClick={toggleCommentForm} customStyle='rounded'>Annuler</Button>
+              </div>
+            </form>
+          </PostCard>
       }
-      { // Displaying all published comments
-        orderedComments.length === 0 ? 
-          (<p className='text-center'>Aucun commentaire pour ce film.</p>)
-          : (
-            <>
-              {
-                orderedComments.map((c, i) => (
-                  <PostCard 
-                    key={c.author_pseudo} 
-                    type='comment' 
-                    {...c} >
-                    {
-                      (!isEditionFormOpened) &&
+      <div className='grid grid-cols-1 gap-4 auto-rows-auto md:gap-6 lg:gap-8 lg:grid-cols-2  '>
+        { // Displaying all published comments
+          orderedComments.length === 0 ? 
+            (<p className='text-center'>Aucun commentaire pour ce film.</p>)
+            : (
+              <>
+                {
+                  orderedComments.map((c, i) => (
+                    <PostCard 
+                      key={c.author_pseudo} 
+                      type='comment' 
+                      {...c} >
+                      {
+                        (!isEditionFormOpened) &&
                         ( <>
                           <p>
                             {
@@ -128,9 +129,9 @@ const CommentsSection = React.forwardRef<HTMLTextAreaElement, CommentsSectionPro
                             </div>
                           }
                         </>)
-                    }
-                    {
-                      (isEditionFormOpened && id === c.author_id) &&
+                      }
+                      {
+                        (isEditionFormOpened && id === c.author_id) &&
                         <form id="comment-form" action="submit" className='flex flex-col gap-4'
                           onSubmit={(e) => {
                             onSubmit(e); toggleEditionForm(); 
@@ -150,13 +151,15 @@ const CommentsSection = React.forwardRef<HTMLTextAreaElement, CommentsSectionPro
                             <Button onClick={toggleEditionForm}>Annuler</Button>
                           </div>
                         </form>
-                    }
-                  </PostCard>
-                ))
-              }
-            </>
-          )
-      }
+                      }
+                    </PostCard>
+                  ))
+                }
+              </>
+            )
+        }
+      </div>
+      
     </section>
   );
 });

@@ -178,20 +178,21 @@ const Film: NextPage<FilmProps> = (props: FilmProps) => {
           content={`Découvrez le film ${french_title}`}
         />
       </Head>
-      <main className="container mx-auto px-4 py-8 lg:py-16 flex flex-col items-center justify-between gap-8">
+      <main className="custom-container ">
         {Object.keys(movie).length === 0 && <p>Loading</p>}
         {movie && (
           <>
             <section
               id="movie-presentation"
-              className="flex flex-col gap-10">
+              // className="flex flex-col gap-6 sm:flex-row sm:justify-center ">
+              className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-8 xl:gap-16 ">
               <div
                 id="poster-interactions"
-                className="flex gap-10">
+                className="flex gap-6 mx-auto sm:flex-col sm:flex-0 self-top xl:col-span-2 xl:w-full">
                 <Poster {...movie} />
                 <div
                   id="interactions"
-                  className="flex flex-col gap-6 ">
+                  className="flex flex-col h-full justify-around self-center sm:justify-between sm:flex-row sm:gap-3 lg:w-full ">
                   {baseInteractionsArray.slice(0, 3).map((i) => (
                     <BaseInteraction
                       type={i.type}
@@ -209,13 +210,13 @@ const Film: NextPage<FilmProps> = (props: FilmProps) => {
                   />
                 </div>
               </div>
-              <div className="flex flex-col gap-3">
+              <div id='metadatas' className='flex flex-col gap-3 xl:col-span-3 xl:w-full'>
                 <Title {...movie} />
                 <OriginalTitle {...movie} />
                 <Rating rate={avg_rating} type='global' />
                 {
                   (user_review && typeof user_review.rating === 'number' && user_review.rating !== 0 ) &&
-                  <Rating rate={user_review.rating} type='user' />
+                    <Rating rate={user_review.rating} type='user' />
                 }
                 <Directors {...movie} />
                 <Genres {...movie} />
@@ -223,6 +224,8 @@ const Film: NextPage<FilmProps> = (props: FilmProps) => {
                 <Languages {...movie} />
                 <Runtime {...movie} />
                 <Casting {...movie} />
+              </div>
+              <div id='presentation' className='sm:col-span-2 lg:col-span-1 xl:col-span-3 '>
                 <PostCard
                   type="presentation"
                   {...movie.presentation}
@@ -246,6 +249,7 @@ const Film: NextPage<FilmProps> = (props: FilmProps) => {
                     </div>
                   }
                 </PostCard>
+
               </div>
             </section>
             <CommentsSection {...movie} ref={commentFormRef} onSubmit={(e) => handleCommentSubmit(e)} />

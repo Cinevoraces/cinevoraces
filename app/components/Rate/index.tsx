@@ -21,10 +21,13 @@ export default function Rate({ rate, type }: RateProps) {
   const emptyStarsStyle = genericStarsStyle +
   'right-0 bg-medium-gray ';
   return (
-    <div className='flex flex-grow-0 w-fit gap-3 px-3 py-1.5 items-start h-8 bg-dark-gray rounded-full'>
+    <div className={`flex w-fit gap-3 px-3 py-1.5 
+    items-start h-8
+    bg-dark-gray rounded-full 
+    sm:scale-75 origin-right lg:scale-100`}>
       {
         (type === 'global') &&
-        <p className='text-yellow -mt-[1px] w-6 text-right'>{floredRate}</p>
+        <p className='text-yellow -mt-[1px] w-4 text-right'>{floredRate}</p>
       }
       <div className={container}>
         <div
