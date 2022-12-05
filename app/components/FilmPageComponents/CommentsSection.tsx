@@ -1,13 +1,14 @@
-import type { FormEventHandler, ForwardedRef } from 'react';
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
 import { useAppSelector } from '@store/store';
 import { user } from '@store/slices/user';
 import PostCard from '@components/PostCard';
 import Button from '@components/Input/Button';
 import { TextAreaRef } from '@components/Input';
-import type { Comment } from '@custom_types/types';
 import SendLogo from '@public/icons/send-icon.svg';
+import cutText from '@utils/cutText';
+import type { Comment } from '@custom_types/types';
+import type { FormEventHandler } from 'react';
 
 interface CommentsSectionProps {
   comments: Comment[];
@@ -38,14 +39,18 @@ const CommentsSection = React.forwardRef<HTMLTextAreaElement, CommentsSectionPro
   };
 
   const orderedComments = reorderComments(id, comments);
-
-  console.log(id, typeof id);
-  console.log(orderedComments.filter((c) => (c.author_id == id)).length === 0);
+  const initialCommentsExpansionStates = orderedComments.map((c)=> false);
+  const cutComments = orderedComments.map((c) => cutText(c.comment, 700));
+  const [commentsExpansionStates, setCommentsExpansionStates] = useState(initialCommentsExpansionStates);
+  const toggleCommentExpansion = (index: number) => {
+    const newState = commentsExpansionStates.map((ces, i) => (index === i)? !ces : ces);
+    setCommentsExpansionStates(newState);
+  };
 
   return (
     <section id='comments-section' className='w-full flex flex-col gap-4'>
       <h2 className='text-2xl font-semibold lg:text-3xl text-center'>{`Commentaires (${comments.length})`}</h2>
-      {
+      { // Add Comment button
         (id && orderedComments.filter((c) => (c.author_id === id)).length === 0 && !isCommentFormOpened) && 
           <div className='flex justify-center'>
             <Button 
@@ -55,7 +60,7 @@ const CommentsSection = React.forwardRef<HTMLTextAreaElement, CommentsSectionPro
             </Button>
           </div>
       }
-      {
+      { // Comment form on top of any comment
         (isCommentFormOpened) &&
         <PostCard type='form'
           author_pseudo={pseudo!}
@@ -81,13 +86,13 @@ const CommentsSection = React.forwardRef<HTMLTextAreaElement, CommentsSectionPro
           </form>
         </PostCard>
       }
-      { 
+      { // Displaying all published comments
         orderedComments.length === 0 ? 
           (<p className='text-center'>Aucun commentaire pour ce film.</p>)
           : (
             <>
               {
-                orderedComments.map((c) => (
+                orderedComments.map((c, i) => (
                   <PostCard 
                     key={c.author_pseudo} 
                     type='comment' 
@@ -95,16 +100,32 @@ const CommentsSection = React.forwardRef<HTMLTextAreaElement, CommentsSectionPro
                     {
                       (!isEditionFormOpened) &&
                         ( <>
-                          <p>{c.comment}</p>
+                          <p>
+                            {
+                              (cutComments[i][1] && commentsExpansionStates[i]) ?
+                                c.comment
+                                : cutComments[i][0]
+                            }
+                          </p>
                           {
-                            (id === c.author_id) &&
-                          <div className='flex justify-end'>
-                            <Button 
-                              onClick={toggleEditionForm}
-                              customStyle='rounded'>
-                                  Éditer
-                            </Button>
-                          </div>
+                            (id === c.author_id || cutComments[i][1]) &&
+                            <div className='flex justify-end gap-4'>
+                              {
+                                (id === c.author_id) &&
+                                  <Button 
+                                    onClick={toggleEditionForm}
+                                    customStyle='rounded'>
+                                        Éditer
+                                  </Button>
+                              }
+                              {
+                                <Button onClick={() => toggleCommentExpansion(i)} customStyle='rounded'>
+                                  {
+                                    (!commentsExpansionStates[i]) ? 'Voir plus...' : 'Réduire'
+                                  }
+                                </Button>
+                              }
+                            </div>
                           }
                         </>)
                     }

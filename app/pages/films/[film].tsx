@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import type { FormEvent } from 'react';
 import Head from 'next/head';
 import useSWR from 'swr';
@@ -14,13 +14,14 @@ import {
   Runtime,
   Casting,
 } from '@components/FilmPageComponents';
-import { BaseInteraction, RatingInteraction } from '@components/Input/Interaction/Interaction';
+import { Button, BaseInteraction, RatingInteraction } from '@components/Input';
 import PostCard from '@components/PostCard';
 import { CommentsSection } from '@components/FilmPageComponents';
 import { getDataFromEndpointSSR, mutationRequestCSR } from '@utils/fetchApi';
 import { useAppSelector } from '@store/store';
 import { user } from '@store/slices/user';
 import { toast } from 'react-hot-toast';
+import cutText from '@utils/cutText';
 import type { NextPage, GetStaticPaths, GetStaticProps } from 'next';
 import type { ParsedUrlQuery } from 'querystring';
 import type { MinimalMovie, CompleteMovie } from '@custom_types/types';
@@ -162,6 +163,12 @@ const Film: NextPage<FilmProps> = (props: FilmProps) => {
     mutate(); 
   }, [mutate, userId]);
 
+  const [cutPresentationText, isPresentationCut] = cutText(movie.presentation.presentation, 700);
+  const [isPresentationExpanded, setIsPresentationExpanded] = useState(false);
+  const toggleExpandPresentation = () => {
+    setIsPresentationExpanded(!isPresentationExpanded);
+  };
+
   return (
     <>
       <Head>
@@ -221,7 +228,23 @@ const Film: NextPage<FilmProps> = (props: FilmProps) => {
                   {...movie.presentation}
                   created_at={movie.publishing_date}
                 >
-                  <p>{movie.presentation.presentation}</p>
+                  <p className='text-ellipsis'>
+                    {
+                      (!isPresentationCut || isPresentationExpanded) ?
+                        movie.presentation.presentation
+                        : cutPresentationText
+                    }
+                  </p>
+                  {
+                    (isPresentationCut) &&
+                    <div className='flex justify-end'>
+                      <Button onClick={toggleExpandPresentation} customStyle='rounded'>
+                        {
+                          (!isPresentationExpanded) ? 'Voir plus...' : 'Réduire'
+                        }
+                      </Button>
+                    </div>
+                  }
                 </PostCard>
               </div>
             </section>

@@ -69,12 +69,12 @@ export const RatingInteraction = ({ isClicked, counter, ratingHandler, value }: 
       <div
         ref={ratingMenuRef}
         className={ isClicked 
-          ? customExpandedStarContainerStyle + 'interaction--clicked translate-y-[2px]' 
+          ? customExpandedStarContainerStyle + 'interaction--clicked translate-y-[2px] ' 
           : customExpandedStarContainerStyle}>
         <button
           onClick={toggleRatingMenu}
           className={customStarButtonStyle}>
-          <StarSvg style={svgStyle + 'stroke-white'} />
+          <StarSvg style={(Number(value) !== 0) ? svgStyle + 'fill-white' : svgStyle} />
           <p className="text-sm mt-1">{counter}</p>
         </button>
         <div className={ratingMenuContainer}>

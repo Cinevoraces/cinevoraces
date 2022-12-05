@@ -33,9 +33,8 @@ export default function PostCardProps({
     <div
       id={type === 'presentation' ? 'presentation-card' : type === 'comment' ? 'comment-card' : 'comment-form'}
       className={type === 'presentation' ? presentationStyle : type === 'comment' ? commentStyle : formStyle}>
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-2" id="card-header">
         <div
-          id="card-header"
           className="flex gap-2">
           <Image
             src={author_avatar ? author_avatar : defaultUserPic}
@@ -64,7 +63,7 @@ export default function PostCardProps({
             </p>
           </div>
         </div>
-        {rating && <Rate rate={rating} type='user' />}
+        {(rating && rating !== 0) ? <Rate rate={rating} type='user' /> : false}
       </div>
       {children}
     </div>
