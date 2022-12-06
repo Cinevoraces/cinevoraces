@@ -18,9 +18,9 @@ interface ControlledTextProps<T> extends BaseTextProps<T> {
 }
 
 const basicStyles = `peer
-  rounded-full rounded-md bg-medium-gray border border-transparent
+  rounded-md bg-medium-gray border border-transparent
   px-3 py-2
-  placeholder:font-extralight placeholder:text-gray-400
+  placeholder:font-extralight placeholder:text-gray-400 
   focus:outline-none focus:border-orange-primary focus:ring-4 focus:ring-offset-0 focus:ring-white/5
   focus:placeholder:text-gray-600
   invalid:border-red-500`;

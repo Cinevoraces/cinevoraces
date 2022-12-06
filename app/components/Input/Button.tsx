@@ -3,7 +3,7 @@ import Link from 'next/link';
 
 interface ButtonProps {
   children?: React.ReactNode;
-  customStyle?: 'text' | 'empty' | 'rounded' | 'white';
+  customStyle?: 'text' | 'empty' | 'rounded' | 'white' | 'select';
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
   to?: string;
   href?: string;
@@ -24,16 +24,17 @@ export default function Button({
   to,
   href,
 }: ButtonProps) {
-  const [baseStyle, classic, empty, rounded, white] = [
+  const [baseStyle, classic, empty, rounded, white, select] = [
     `px-5 py-2 flex gap-2 justify-center
       shadow-inner font-semibold ring-none
       focus:outline-none focus:ring-4 focus:ring-offset-0 focus:ring-white/5 focus:scale-105 
       hover:outline-none hover:ring-4 hover:ring-offset-0 hover:ring-white/5 hover:scale-105
-      transition duration-150 hover:ease-out`,
+      transition duration-150 hover:ease-out `,
     'bg-orange-primary text-dark-gray rounded-2xl',
     'text-white border border-orange-primary rounded-2xl',
     'bg-orange-primary text-dark-gray py-1.5 rounded-full ',
     'bg-white text-dark-gray focus:ring-white/20 rounded-2xl',
+    'text-white border border-orange-primary rounded-2xl min-w-[220px] '
   ];
 
   let className = baseStyle;
@@ -46,6 +47,9 @@ export default function Button({
       break;
     case 'white':
       className += ' ' + white;
+      break;
+    case 'select':
+      className += ' ' + select;
       break;
     default:
       className += ' ' + classic;

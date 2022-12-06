@@ -9,7 +9,7 @@ import { useEffect } from 'react';
  */
 export default function useCloseMenuOnOutsideClick(
   ref: React.RefObject<HTMLElement>,
-  name: 'user' | 'modal' | 'burger' | 'rating',
+  name: 'user' | 'modal' | 'burger' | 'rating' | 'select',
   state: boolean,
   setter: (value: boolean)=>void
 ) {
@@ -27,3 +27,4 @@ export default function useCloseMenuOnOutsideClick(
     };
   });
 }
+
