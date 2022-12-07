@@ -10,6 +10,7 @@ import { TextRef as TextInputRef, Text as TextInput, TextAreaRef, TextArea } fro
 import { BaseInteraction, RatingInteraction } from './Interaction';
 import Select from './Select';
 import SearchBar from './SearchBar';
+import Filter from './Filter';
 
 export {
   Form,
@@ -27,4 +28,5 @@ export {
   RatingInteraction,
   Select,
   SearchBar,
+  Filter,
 };

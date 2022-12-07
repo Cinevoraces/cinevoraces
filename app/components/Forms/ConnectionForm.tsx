@@ -69,7 +69,8 @@ export default function ConnectionForm() {
         ref={passwordRef}
       />
       <Toggle
-        id="showPassword"
+        id="showPasswordConnection"
+        name="showPasswordConnection"
         label="Montrer le mot de passe ?"
         checked={isPWVisible}
         onChange={() => dispatch(toggleIsPWVisible())}

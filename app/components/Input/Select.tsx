@@ -1,8 +1,8 @@
-import React, { useState, useRef } from 'react';
+import React, { useRef } from 'react';
 import type { Dispatch, SetStateAction } from 'react';
 import { Button, RadioInput } from '@components/Input';
 import useCloseMenuOnOutsideClick from '@hooks/useCloseMenuOnOutsideClick';
-import useCloseOnEnterPress from '@hooks/useCloseOnEnterPress';
+import useCloseMenuOnEnterKeyPress from '@hooks/useCloseOnEnterPress';
 
 export interface SvgProps {
   style: string;
@@ -45,43 +45,46 @@ export default function Select(props: SelectProps) {
   const toggleSelectDisplay = () => displayOptionsSetter();
   const selectRef = useRef<HTMLDivElement>(null);
   useCloseMenuOnOutsideClick(selectRef, name, displayOptionsState, displayOptionsSetter);
-  useCloseOnEnterPress(selectRef, name, displayOptionsState, displayOptionsSetter);
+  useCloseMenuOnEnterKeyPress(displayOptionsState, displayOptionsSetter);
 
   return (
     <div
       id="select-input"
-      className={'relative flex flex-col gap-2 items-center ' + name}
+      className={name + ' relative flex flex-col gap-2 items-center'}
       ref={selectRef}>
-      {
-        !customStyle ?
-          (<Button
-            customStyle='select'
-            onClick={toggleSelectDisplay}
-            name={name}>
-            <div className="w-full flex justify-between items-center">
-              {stateValue.name}
-              <ArrowSvg style="stroke-orange-primary fill-orange-primary" />
-            </div>
-          </Button>)
-          : (
-            <button
-              className={name + ' min-w-[150px] h-full px-2 flex justify-between items-center rounded-xl bg-medium-gray shadow-inner'}
-              onClick={toggleSelectDisplay}
-              name={name}>
-              <div className="w-full flex justify-between items-center">
-                <p className='text-sm'>{stateValue.name}</p>
-                <ArrowSvg style="stroke-orange-primary fill-orange-primary" />
-              </div>
-            </button>
-          )
-      }
+      {!customStyle ? (
+        <Button
+          customStyle="select"
+          onClick={toggleSelectDisplay}
+          name={name}>
+          <div className="w-full flex justify-between items-center">
+            {stateValue.name}
+            <ArrowSvg style="stroke-orange-primary fill-orange-primary" />
+          </div>
+        </Button>
+      ) : (
+        <button
+          className={
+            name +
+            ' min-w-[150px] h-full px-2 flex justify-between items-center rounded-xl bg-medium-gray shadow-inner focus:outline-none focus:text-orange-primary'
+          }
+          onClick={toggleSelectDisplay}
+          name={name}>
+          <div className="w-full flex justify-between items-center">
+            <p className="text-sm">{stateValue.name}</p>
+            <ArrowSvg style="stroke-orange-primary fill-orange-primary" />
+          </div>
+        </button>
+      )}
       {displayOptionsState && (
         <fieldset
-          className={ name + ` absolute top-12 w-full 
-          text-sm sm:text-base
+          className={
+            name +
+            ` absolute top-12 w-full 
+          text-sm sm:text-base 
           py-2.5 flex flex-col gap-2 border rounded-xl 
-          bg-medium-gray border-orange-primary`}
-        >
+          bg-medium-gray border-orange-primary`
+          }>
           {options.map((o) => (
             <RadioInput
               style="select"
@@ -96,4 +99,4 @@ export default function Select(props: SelectProps) {
       )}
     </div>
   );
-};
+}

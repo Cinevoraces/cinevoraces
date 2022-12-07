@@ -34,10 +34,10 @@ export default function Button({
       hover:outline-none hover:ring-4 hover:ring-offset-0 hover:ring-white/5 hover:scale-105
       transition duration-150 hover:ease-out `,
     'bg-orange-primary text-dark-gray rounded-2xl',
-    'text-white border border-orange-primary rounded-2xl',
+    'text-white border border-orange-primary rounded-2xl filter',
     'bg-orange-primary text-dark-gray py-1.5 rounded-full ',
     'bg-white text-dark-gray focus:ring-white/20 rounded-2xl',
-    'text-white border border-orange-primary rounded-2xl min-w-[220px] ' + name,
+    'text-white border border-orange-primary rounded-xl min-w-[220px] ' + name,
   ];
 
   let className = baseStyle;

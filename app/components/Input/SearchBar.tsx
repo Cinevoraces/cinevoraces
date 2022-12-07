@@ -8,7 +8,7 @@ interface SearchBarProps extends SelectProps, ControlledTextProps<HTMLInputEleme
 export default function SearchBar(props: SearchBarProps) {
   const searchBarStyle = `flex w-full pr-1
   border border-orange-primary rounded-xl 
-  focus:outline-none focus:ring-4 focus:ring-offset-0 focus:ring-white/5 
+  focus-within:outline-none focus-within:ring-4 focus-within:ring-offset-0 focus-within:ring-white/5 
   hover:outline-none hover:ring-4 hover:ring-offset-0 hover:ring-white/5
   transition duration-150 hover:ease-out `;
   const textInputStyle = `w-full px-1.5
