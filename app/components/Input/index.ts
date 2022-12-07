@@ -8,6 +8,7 @@ import {
 } from './Range';
 import { TextRef as TextInputRef, Text as TextInput, TextAreaRef, TextArea } from './Text';
 import { BaseInteraction, RatingInteraction } from './Interaction';
+import Select from './Select';
 
 export {
   Form,
@@ -23,4 +24,5 @@ export {
   TextArea,
   BaseInteraction,
   RatingInteraction,
+  Select,
 };

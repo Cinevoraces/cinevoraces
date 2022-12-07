@@ -1,4 +1,4 @@
-import React, { forwardRef } from 'react';
+import React from 'react';
 
 interface BaseTextProps<T> {
   type?: 'email' | 'password' | 'search' | 'textarea';
