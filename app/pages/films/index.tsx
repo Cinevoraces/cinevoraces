@@ -67,7 +67,7 @@ export default function Films() {
         valueSetter={setSeason}
         customStyle='searchbar'
         id='search'
-        placeholder='Rechercher un titre...'
+        placeholder='Rechercher un film'
         value={searchValue}
         onChange={(e) => setSearchValue(e.currentTarget.value)}
       />

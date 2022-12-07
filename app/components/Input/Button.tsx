@@ -27,7 +27,7 @@ export default function Button({
   href,
   name,
 }: ButtonProps) {
-  const [baseStyle, classic, empty, rounded, white, select, selectSearchBar] = [
+  const [baseStyle, classic, empty, rounded, white, select] = [
     `px-5 py-2 flex gap-2 justify-center
       shadow-inner font-semibold ring-none
       focus:outline-none focus:ring-4 focus:ring-offset-0 focus:ring-white/5 focus:scale-105 
@@ -38,8 +38,6 @@ export default function Button({
     'bg-orange-primary text-dark-gray py-1.5 rounded-full ',
     'bg-white text-dark-gray focus:ring-white/20 rounded-2xl',
     'text-white border border-orange-primary rounded-2xl min-w-[220px] ' + name,
-    `px-5 py-2 flex gap-2 justify-center
-      shadow-inner font-semibold ring-none ` + name,
   ];
 
   let className = baseStyle;
@@ -55,9 +53,6 @@ export default function Button({
       break;
     case 'select':
       className += ' ' + select;
-      break;
-    case 'selectSearchBar':
-      className = selectSearchBar;
       break;
     default:
       className += ' ' + classic;

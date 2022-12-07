@@ -52,18 +52,33 @@ export default function Select(props: SelectProps) {
       id="select-input"
       className={'relative flex flex-col gap-2 items-center ' + name}
       ref={selectRef}>
-      <Button
-        customStyle={(customStyle === 'searchbar') ? 'selectSearchBar' : 'select'}
-        onClick={toggleSelectDisplay}
-        name={name}>
-        <div className="w-full flex justify-between">
-          {stateValue.name}
-          <ArrowSvg style="stroke-orange-primary fill-orange-primary mt-2" />
-        </div>
-      </Button>
+      {
+        !customStyle ?
+          (<Button
+            customStyle='select'
+            onClick={toggleSelectDisplay}
+            name={name}>
+            <div className="w-full flex justify-between items-center">
+              {stateValue.name}
+              <ArrowSvg style="stroke-orange-primary fill-orange-primary" />
+            </div>
+          </Button>)
+          : (
+            <button
+              className={name + ' min-w-[150px] h-full px-2 flex justify-between items-center rounded-xl bg-medium-gray shadow-inner'}
+              onClick={toggleSelectDisplay}
+              name={name}>
+              <div className="w-full flex justify-between items-center">
+                <p className='text-sm'>{stateValue.name}</p>
+                <ArrowSvg style="stroke-orange-primary fill-orange-primary" />
+              </div>
+            </button>
+          )
+      }
       {displayOptionsState && (
         <fieldset
-          className={ name + ` absolute top-14 w-full 
+          className={ name + ` absolute top-12 w-full 
+          text-sm sm:text-base
           py-2.5 flex flex-col gap-2 border rounded-xl 
           bg-medium-gray border-orange-primary`}
         >
