@@ -9,6 +9,7 @@ import {
 import { TextRef as TextInputRef, Text as TextInput, TextAreaRef, TextArea } from './Text';
 import { BaseInteraction, RatingInteraction } from './Interaction';
 import Select from './Select';
+import SearchBar from './SearchBar';
 
 export {
   Form,
@@ -25,4 +26,5 @@ export {
   BaseInteraction,
   RatingInteraction,
   Select,
+  SearchBar,
 };

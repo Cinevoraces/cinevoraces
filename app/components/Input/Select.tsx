@@ -26,57 +26,59 @@ const ArrowSvg = ({ style }: SvgProps) => {
   );
 };
 
-interface OptionProps {
+export interface OptionProps {
   name: string;
   value: string;
 }
-interface SelectProps {
+export interface SelectProps {
+  name: string;
   options: OptionProps[];
   displayOptionsState: boolean;
   displayOptionsSetter: ()=>void;
   stateValue: OptionProps;
   valueSetter: Dispatch<SetStateAction<OptionProps>>;
+  customStyle?: 'searchbar';
 }
 
 export default function Select(props: SelectProps) {
-  const { options, displayOptionsState, displayOptionsSetter, stateValue, valueSetter } = props;
+  const { name, options, displayOptionsState, displayOptionsSetter, stateValue, valueSetter, customStyle } = props;
   const toggleSelectDisplay = () => displayOptionsSetter();
-  const selectOptionsRef = useRef<HTMLFieldSetElement>(null);
-  useCloseMenuOnOutsideClick(selectOptionsRef, 'select', displayOptionsState, displayOptionsSetter);
-  useCloseOnEnterPress(selectOptionsRef, 'select', displayOptionsState, displayOptionsSetter);
+  const selectRef = useRef<HTMLDivElement>(null);
+  useCloseMenuOnOutsideClick(selectRef, name, displayOptionsState, displayOptionsSetter);
+  useCloseOnEnterPress(selectRef, name, displayOptionsState, displayOptionsSetter);
 
   return (
-    <main className="custom-container ">
-      <div
-        id="select-input"
-        className="relative flex flex-col gap-2 items-center ">
-        <Button
-          customStyle="select"
-          onClick={toggleSelectDisplay}>
-          <div className="w-full flex justify-between">
-            {stateValue.name}
-            <ArrowSvg style="stroke-orange-primary fill-orange-primary mt-2" />
-          </div>
-        </Button>
-        {displayOptionsState && (
-          <fieldset
-            className="select absolute top-14 w-full 
+    <div
+      id="select-input"
+      className={'relative flex flex-col gap-2 items-center ' + name}
+      ref={selectRef}>
+      <Button
+        customStyle={(customStyle === 'searchbar') ? 'selectSearchBar' : 'select'}
+        onClick={toggleSelectDisplay}
+        name={name}>
+        <div className="w-full flex justify-between">
+          {stateValue.name}
+          <ArrowSvg style="stroke-orange-primary fill-orange-primary mt-2" />
+        </div>
+      </Button>
+      {displayOptionsState && (
+        <fieldset
+          className={ name + ` absolute top-14 w-full 
           py-2.5 flex flex-col gap-2 border rounded-xl 
-          bg-medium-gray border-orange-primary"
-            ref={selectOptionsRef}>
-            {options.map((o) => (
-              <RadioInput
-                style="select"
-                key={o.name}
-                label={o.name}
-                name="season"
-                value={o.value}
-                onChange={() => valueSetter({ ...o })}
-              />
-            ))}
-          </fieldset>
-        )}
-      </div>
-    </main>
+          bg-medium-gray border-orange-primary`}
+        >
+          {options.map((o) => (
+            <RadioInput
+              style="select"
+              key={o.name}
+              label={o.name}
+              name="season"
+              value={o.value}
+              onChange={() => valueSetter({ ...o })}
+            />
+          ))}
+        </fieldset>
+      )}
+    </div>
   );
 };

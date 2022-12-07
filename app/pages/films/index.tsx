@@ -1,5 +1,5 @@
-import React, { useState, useRef } from 'react';
-import { Button, RadioInput, Select } from '@components/Input';
+import React, { useState, useRef, useEffect } from 'react';
+import { Button, RadioInput, Select, SearchBar } from '@components/Input';
 import useCloseMenuOnOutsideClick from '@hooks/useCloseMenuOnOutsideClick';
 import useCloseOnEnterPress from '@hooks/useCloseOnEnterPress';
 
@@ -54,15 +54,22 @@ export default function Films() {
   const [season, setSeason] = useState(seasons[0]);
   const [isSelectOpened, setIsSelectOpened] = useState(false);
   const toggleSelectDisplay = () => setIsSelectOpened(!isSelectOpened);
+  const [searchValue, setSearchValue] = useState('');
 
   return (
     <main className="custom-container ">
-      <Select
+      <SearchBar
+        name='searchbarSelect'
         options={seasons}
         displayOptionsState={isSelectOpened}
         displayOptionsSetter={toggleSelectDisplay}
         stateValue={season}
         valueSetter={setSeason}
+        customStyle='searchbar'
+        id='search'
+        placeholder='Rechercher un titre...'
+        value={searchValue}
+        onChange={(e) => setSearchValue(e.currentTarget.value)}
       />
     </main>
   );
