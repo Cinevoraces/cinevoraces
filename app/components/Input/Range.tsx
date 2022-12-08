@@ -1,5 +1,5 @@
 interface RangeCommonProps {
-  label: string;
+  label?: string;
   id: string;
   min: number;
   max: number;
@@ -7,7 +7,7 @@ interface RangeCommonProps {
 
 interface RangeProps extends RangeCommonProps {
   value: number;
-  setter(value: number): void;
+  setter: (value: string)=>void;
 }
 
 /**
@@ -21,22 +21,21 @@ interface RangeProps extends RangeCommonProps {
  */
 const Range = (props: RangeProps) => {
   const { label, setter, ...inputProps } = props;
-  const { id, max, value } = inputProps;
+  const { id, value } = inputProps;
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setter(Number(e.currentTarget.value));
+    setter((e.currentTarget.value));
   };
 
   return (
     <fieldset>
       <label htmlFor={id}>{label}</label>
       <div className="mt-1 flex justify-between items-center gap-3">
-        <p className="min-w-[2rem]">{value}</p>
+        <p className="min-w-[4rem]">{value + ' min'}</p>
         <input
           type="range"
           {...inputProps}
           onChange={handleOnChange}
         />
-        <p className="min-w-[2rem]">{max}</p>
       </div>
     </fieldset>
   );

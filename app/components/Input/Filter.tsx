@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import type { Dispatch, SetStateAction } from 'react';
 import Button from './Button';
-import { CheckBox } from './CheckBox';
+import { CheckBox, RangeInput, DoubleRangeInput } from './index';
 import useCloseMenuOnOutsideClick from '@hooks/useCloseMenuOnOutsideClick';
 import useCloseOnEnterPress from '@hooks/useCloseOnEnterPress';
 
@@ -31,7 +31,7 @@ export interface FilterOptionsProps {
   countries?: string[];
   runtime: string[];
   releaseYear: string[];
-  [key: string ]: string[] | undefined;
+  [key: string]: string[] | undefined;
 }
 
 export interface FilterProps {
@@ -68,26 +68,24 @@ const filters: FilterOptionsProps = {
     'Chine',
     'République Tchèque',
     'France',
-    'Canada',
-    'Chine',
   ],
-  runtime: ['192'],
+  runtime: ['54', '192'],
   releaseYear: ['1912', '2023'],
 };
 
 const initFiltersInput: FilterOptionsProps = {
-  genres:[''],
-  countries:[''],
-  runtime: filters.runtime, 
-  releaseYear: [...filters.releaseYear]
+  genres: [''],
+  countries: [''],
+  runtime: filters.runtime,
+  releaseYear: [...filters.releaseYear],
 };
 
 const categories = [
-  { title:'Genres', stateName: 'genres' },
-  { title:'Pays de production', stateName: 'countries' },
-  { title:'Durée', stateName: 'runtime' },
-  { title:'Année de sortie', stateName: 'releaseYear' }, 
-  { title:'Note moyenne', stateName: 'avgRate' },
+  { title: 'Genres', stateName: 'genres' },
+  { title: 'Pays de production', stateName: 'countries' },
+  { title: 'Durée', stateName: 'runtime' },
+  { title: 'Année de sortie', stateName: 'releaseYear' },
+  { title: 'Note moyenne', stateName: 'avgRate' },
 ];
 
 export default function Filter() {
@@ -95,7 +93,9 @@ export default function Filter() {
   const toggleDisplay = () => setIsFilterMenuOpened(!isFilterMenuOpened);
   const filterRef = useRef<HTMLDivElement>(null);
   useCloseMenuOnOutsideClick(filterRef, 'filter', isFilterMenuOpened, setIsFilterMenuOpened);
+  useCloseOnEnterPress(isFilterMenuOpened, setIsFilterMenuOpened);
   const [filtersInputs, setFiltersInput] = useState(initFiltersInput);
+  const [maxRuntime, setMaxRuntime] = useState(initFiltersInput.runtime[1]);
 
   useEffect(() => {
     console.log(filtersInputs);
@@ -123,40 +123,54 @@ export default function Filter() {
       </Button>
       {isFilterMenuOpened && (
         <div
-          id='filter-categories'
+          id="filter-categories"
           className="filter absolute z-10 top-14 w-full 
-            px-2 py-3
-            flex flex-col gap-2 
+            px-2 py-3 
+            flex flex-col gap-4  
           bg-medium-gray border border-orange-primary rounded-xl ">
-          {
-            categories.map((c) => (
-              <div id='filters-categories__category' key={c.stateName}>
-                <h2 className='mb-2'>{c.title}</h2>
+          {categories.map((c) => (
+            <div
+              id="filters-categories__category"
+              key={c.stateName}>
+              <h2 className="mb-2">{c.title}</h2>
+              {(c.stateName === 'genres' || (c.stateName === 'countries' && filters[c.stateName])) && (
                 <ul className="grid grid-cols-2 gap-2">
-                  { (c.stateName === 'genres' || c.stateName === 'countries' && filters[c.stateName]) &&
-                    filters[c.stateName]?.map((f) => (
-                      <li key={f} className={(f.length > 16) ? 'col-span-2' : 'col-span-1'}>
-                        <CheckBox
-                          name={f}
-                          id={f}
-                          value={f}
-                          customStyle="filter"
-                          onChange={(e) => {
-                            setFiltersInput(
-                              { ...filtersInputs, 
-                                [c.stateName]: (filtersInputs[c.stateName] && typeof filtersInputs[c.stateName] !== 'number' ) ? 
-                                  [...filtersInputs[c.stateName]!, e.currentTarget.value] 
-                                  : [e.currentTarget.value]});
-                          }}
-                        />
-                      </li>
-                    ))}
+                  {filters[c.stateName]?.map((f) => (
+                    <li
+                      key={f}
+                      className="col-span-1">
+                      <CheckBox
+                        name={f}
+                        id={f}
+                        value={f}
+                        customStyle="filter"
+                        onChange={(e) => {
+                          setFiltersInput({
+                            ...filtersInputs,
+                            [c.stateName]:
+                              filtersInputs[c.stateName] && typeof filtersInputs[c.stateName] !== 'number'
+                                ? [...filtersInputs[c.stateName]!, e.currentTarget.value]
+                                : [e.currentTarget.value],
+                          });
+                        }}
+                      />
+                    </li>
+                  ))}
                 </ul>
-              </div>
-            ))
-          }
-        </div>)
-      }
+              )}
+              {c.stateName === 'runtime' && (
+                <RangeInput
+                  id="runtime"
+                  min={Number(filters.runtime[0])}
+                  max={Number(filters.runtime[1])}
+                  value={Number(maxRuntime)}
+                  setter={setMaxRuntime}
+                />
+              )}
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

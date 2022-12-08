@@ -19,20 +19,22 @@ interface CheckBoxProps {
  * @param onChange          state setter
  */
 export const CheckBox = (props: CheckBoxProps) => {
-  const labelBasicStyle = 'flex gap-4 items-center ';
+  const labelBasicStyle = 'flex gap-4 items-top';
   const { customStyle, ...checkboxProps } = props;
   const name = checkboxProps.name;
   return (
     <div className={!customStyle ? labelBasicStyle : labelBasicStyle + ' w-full justify-between px-1'}>
       <label
         htmlFor={name}
-        className="text-sm font-thin">
+        className="text-sm font-thin cursor-pointer">
         {name}
       </label>
       <input
         type="checkbox"
         {...checkboxProps}
-        className="relative w-5 h-5 border border-transparent rounded 
+        className="relative w-5 h-5 
+        cursor-pointer 
+        border border-transparent rounded 
         bg-orange-primary/20 text-orange-secondary 
         focus:border-orange-primary focus:ring-4 focus:ring-offset-0 focus:ring-white/5 
         hover:border-orange-primary hover:ring-4 hover:ring-offset-0 hover:ring-white/5 "
