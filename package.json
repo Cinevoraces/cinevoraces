@@ -1,7 +1,7 @@
 {
   "name": "cinevoraces",
   "scripts": {
-    "install": "(cd api && npm install); (cd app && npm install)",
+    "install": "(cd api && npm i) && (cd ../app && npm i)",
     "dev-build": "docker compose up --build",
     "dev": "docker compose up",
     "test": "(cd api && npm run test)"

@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import { useRef } from 'react';
 import Link from 'next/link';
 import { useAppSelector, useAppDispatch } from '@store/store';
 import { toggleBurgerMenu, toggleUserMenu, toggleConnectionModal, globals } from '@store/slices/global';

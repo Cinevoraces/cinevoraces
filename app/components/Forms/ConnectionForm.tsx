@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import { useRef } from 'react';
 import { useAppSelector, useAppDispatch } from '@store/store';
 import Button from '@components/Input/Button';
 import { TextInputRef, Toggle } from '@components/Input';

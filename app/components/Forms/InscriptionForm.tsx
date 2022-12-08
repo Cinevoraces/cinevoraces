@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import { useRef } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useAppSelector, useAppDispatch } from '@store/store';

@@ -1,4 +1,3 @@
-import React from 'react';
 
 export interface MetricsProps {
   seasons_count: number;

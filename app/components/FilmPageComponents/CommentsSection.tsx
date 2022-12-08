@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import Image from 'next/image';
 import { useAppSelector } from '@store/store';
 import { user } from '@store/slices/user';
