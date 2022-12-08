@@ -1,5 +1,5 @@
 import type { FormEvent } from 'react';
-import React, { useRef } from 'react';
+import { useRef } from 'react';
 import { BookmarkSvg, LikeSvg, StarSvg, ViewSvg } from './SVG';
 import StarRadio from './StarRadio';
 import useCloseMenuOnOutsideClick from '@hooks/useCloseMenuOnOutsideClick';
