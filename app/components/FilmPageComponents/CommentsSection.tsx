@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { forwardRef, useState } from 'react';
 import Image from 'next/image';
 import { useAppSelector } from '@store/store';
 import { user } from '@store/slices/user';
@@ -15,7 +15,7 @@ interface CommentsSectionProps {
   onSubmit: FormEventHandler;
 }
 
-const CommentsSection = React.forwardRef<HTMLTextAreaElement, CommentsSectionProps>(({ comments, onSubmit }, ref) => {
+const CommentsSection = forwardRef<HTMLTextAreaElement, CommentsSectionProps>(({ comments, onSubmit }, ref) => {
   CommentsSection.displayName = 'CommentsSection';
   // Special state to handle form rendering
   const [isCommentFormOpened, setIsCommentFormOpened] = useState(false);

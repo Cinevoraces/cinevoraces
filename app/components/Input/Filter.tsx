@@ -1,7 +1,7 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, FormEvent } from 'react';
 import type { Dispatch, SetStateAction } from 'react';
 import Button from './Button';
-import { CheckBox, RangeInput, DoubleRangeInput } from './index';
+import { CheckBox, RangeInput, DoubleRangeInput, StarRadio } from './index';
 import useCloseMenuOnOutsideClick from '@hooks/useCloseMenuOnOutsideClick';
 import useCloseOnEnterPress from '@hooks/useCloseOnEnterPress';
 
@@ -31,6 +31,7 @@ export interface FilterOptionsProps {
   countries?: string[];
   runtime: string[];
   releaseYear: string[];
+  minAvgRate: string[];
   [key: string]: string[] | undefined;
 }
 
@@ -71,6 +72,7 @@ const filters: FilterOptionsProps = {
   ],
   runtime: ['54', '192'],
   releaseYear: ['1912', '2023'],
+  minAvgRate: ['0'],
 };
 
 const initFiltersInput: FilterOptionsProps = {
@@ -78,6 +80,7 @@ const initFiltersInput: FilterOptionsProps = {
   countries: [''],
   runtime: filters.runtime,
   releaseYear: [...filters.releaseYear],
+  minAvgRate:[...filters.minAvgRate]
 };
 
 const categories = [
@@ -85,7 +88,7 @@ const categories = [
   { title: 'Pays de production', stateName: 'countries' },
   { title: 'Durée', stateName: 'runtime' },
   { title: 'Année de sortie', stateName: 'releaseYear' },
-  { title: 'Note moyenne', stateName: 'avgRate' },
+  { title: 'Note moyenne', stateName: 'minAvgRate' },
 ];
 
 export default function Filter() {
@@ -98,6 +101,7 @@ export default function Filter() {
   const [maxRuntime, setMaxRuntime] = useState(initFiltersInput.runtime[1]);
   const [minReleaseYear, setMinReleaseYear] = useState(initFiltersInput.releaseYear[0]);
   const [maxReleaseYear, setMaxReleaseYear] = useState(initFiltersInput.releaseYear[1]);
+  const [minAvgRate, setMinAvgRate] = useState(filters.minAvgRate[0]);
 
   // useEffect(() => {
   //   console.log(filtersInputs);
@@ -179,6 +183,14 @@ export default function Filter() {
                   minSetter={setMinReleaseYear}
                   maxSetter={setMaxReleaseYear}
                 />
+              )}
+              {c.stateName === 'minAvgRate' && (
+                <div className='-ml-12'>
+                  <StarRadio value={Number(minAvgRate)} onChange={(e) =>{
+                    (e.currentTarget && e.currentTarget instanceof HTMLInputElement) &&
+                    setMinAvgRate(e.currentTarget.value);
+                  }}/>
+                </div>
               )}
             </div>
           ))}

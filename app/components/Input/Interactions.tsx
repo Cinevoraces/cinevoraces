@@ -1,6 +1,6 @@
 import type { FormEvent } from 'react';
 import { useRef } from 'react';
-import { BookmarkSvg, LikeSvg, StarSvg, ViewSvg } from './SVG';
+import { BookmarkSvg, LikeSvg, StarSvg, ViewSvg } from '@components/SvgComponents/InteractionsSVG';
 import StarRadio from './StarRadio';
 import useCloseMenuOnOutsideClick from '@hooks/useCloseMenuOnOutsideClick';
 
@@ -84,7 +84,7 @@ export const RatingInteraction = ({ isClicked, counter, ratingHandler, value }: 
         <button
           onClick={toggleRatingMenu}
           className={customStarButtonStyle}>
-          <StarSvg style={(Number(value) !== 0) ? svgStyle + 'fill-white' : svgStyle} />
+          <StarSvg style={value && (Number(value) !== 0) ? svgStyle + 'fill-white' : svgStyle + 'stroke-white'} />
           <p className="text-sm mt-1">{counter}</p>
         </button>
         <div className={ratingMenuContainer}>
