@@ -2,8 +2,6 @@ version: "3"
 
 services:
   postgres:
-    # container_name: postgres
-    # hostname: cinevoraces_postgres
     build:
       context: ./data
       dockerfile: Dockerfile.dev
@@ -12,8 +10,6 @@ services:
     ports:
       - 5432:5432
     restart: always
-    # networks:
-    #   - network-tier
 
   # pgadmin:
   #   image: dpage/pgadmin4
@@ -36,19 +32,14 @@ services:
       dockerfile: Dockerfile.dev
     ports:
       - 3005:3005 # API
-      - 5555:5555 # Prisma Studio
     restart: always
     volumes:
       - ./api:/api
-    # networks:
-    #   - network-tier
 
   app:
     hostname: cinevoraces_app
     env_file:
       - .env.app
-    environment:
-      - API_URL=http://localhost:3005
     depends_on:
       - api
     build:
@@ -59,9 +50,4 @@ services:
     restart: always
     volumes:
       - ./app:/app
-#     networks:
-#       - network-tier
 
-# networks:
-#   network-tier:
-#     external: true
