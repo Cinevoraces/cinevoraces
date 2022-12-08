@@ -51,7 +51,7 @@ const metadatas = [
 let selectQueryString: string = '';
 metadatas.forEach((dataName) => (selectQueryString += `&select[${dataName}]=true`));
 
-const Film: NextPage<FilmProps> = (props: FilmProps) => {
+const Film: NextPage<FilmProps> = (props) => {
   const movieId = props.movies[0].id;
   const userId = useAppSelector(user).id;
   // Defining cache management and inititializing it with initial props :
