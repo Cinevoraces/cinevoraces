@@ -1,4 +1,3 @@
-import React from 'react';
 import Image from 'next/image';
 import RawLogo from '@public/icons/logo_complete.svg';
 
