@@ -50,7 +50,7 @@ export const handleRegister = async (request: Request, reply: Reply) => {
     );
     reply
       .code(201) // Created
-      .send({ message: `Utilisateur "${pseudo}" créé avec succés.` });
+      .send({ message: `Compte utilisateur ${pseudo} créé avec succès.` });
   } catch (error) {
     reply.send(error);
   }
@@ -107,7 +107,7 @@ export const handleLogin = async (request: Request, reply: Reply) => {
       .send({
         user: userObject,
         token: accessToken,
-        response: `Utilisateur "${pseudo}" connecté avec succés.`,
+        response: `Bienvenue ${pseudo} !`,
       });
   } catch (error) {
     reply.send(error);

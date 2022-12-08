@@ -10,6 +10,7 @@ _Ask a project admin for sensitive informations._
 COOKIE_SECRET=
 JWT_SECRET=
 PASS_REGEXP='^(?=.*[A-Za-z])(?=.*\d)[!#$&%*+=?|\-A-Za-z\d]{8,}$'
+PORT=
 ```
 ### .env.db:
 
@@ -20,6 +21,14 @@ POSTGRES_DB=
 POSTGRES_URL=
 PGADMIN_DEFAULT_EMAIL=
 PGADMIN_DEFAULT_PASSWORD=
+```
+
+### .env.app:
+```
+NEXT_PUBLIC_TMDB_KEY=
+NEXT_PUBLIC_API_BASE_URL_CSR=
+NEXT_PUBLIC_API_BASE_URL_SSR=
+
 ```
 
 ## :satellite: API Documentation

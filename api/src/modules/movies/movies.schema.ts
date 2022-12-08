@@ -41,7 +41,7 @@ export const getMoviesSchema: FastifySchema = {
           bookmarked: { type: 'boolean' },
           viewed: { type: 'boolean' },
           liked: { type: 'boolean' },
-          rating: { type: 'boolean' },
+          rating: { type: 'number' || 'null' },
         },
       },
       select: {
