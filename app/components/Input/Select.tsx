@@ -80,7 +80,7 @@ export default function Select(props: SelectProps) {
         <fieldset
           className={
             name +
-            ` absolute top-12 w-full 
+            ` absolute z-10 top-12 w-full 
           text-sm sm:text-base 
           py-2.5 flex flex-col gap-2 border rounded-xl 
           bg-medium-gray border-orange-primary`

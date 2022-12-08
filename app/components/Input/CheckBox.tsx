@@ -3,7 +3,7 @@ interface CheckBoxProps {
   label?: string;
   name: string;
   id: string;
-  value: string;
+  value?: string;
   checked?: boolean;
   onChange?: React.ChangeEventHandler<HTMLInputElement>;
 }
