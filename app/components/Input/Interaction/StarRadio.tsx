@@ -1,5 +1,4 @@
 import type { FormEvent } from 'react';
-import React from 'react';
 import { StarSvg } from './SVG';
 
 interface StarRadioProps {
