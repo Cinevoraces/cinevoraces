@@ -1,5 +1,3 @@
-import React from 'react';
-
 interface CheckBoxProps {
   customStyle?: 'filter';
   label?: string;
@@ -23,7 +21,7 @@ export const CheckBox = (props: CheckBoxProps) => {
   const { customStyle, ...checkboxProps } = props;
   const name = checkboxProps.name;
   return (
-    <div className={!customStyle ? labelBasicStyle : labelBasicStyle + ' w-full justify-between px-1'}>
+    <div className={!customStyle ? labelBasicStyle : labelBasicStyle + ' w-full justify-between'}>
       <label
         htmlFor={name}
         className="text-sm font-thin cursor-pointer">

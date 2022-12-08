@@ -44,8 +44,8 @@ const Range = (props: RangeProps) => {
 interface DoubleRangeProps extends RangeCommonProps {
   minValue: number;
   maxValue: number;
-  minSetter(value: number): void;
-  maxSetter(value: number): void;
+  minSetter: (value: string)=>void;
+  maxSetter: (value: string)=>void;
 }
 
 /**
@@ -63,18 +63,18 @@ const DoubleRange = (props: DoubleRangeProps) => {
   const { label, minSetter, maxSetter, minValue, maxValue, ...inputProps } = props;
   const { id } = inputProps;
   const minHandleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    minSetter(Number(e.currentTarget.value));
+    minSetter(e.currentTarget.value);
   };
   const maxHandleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    maxSetter(Number(e.currentTarget.value));
+    maxSetter(e.currentTarget.value);
   };
 
   return (
-    <fieldset className="w-2/3 px-auto">
+    <fieldset className="w-full px-auto">
       <label htmlFor={id}>{label}</label>
       <div className="mt-1 flex justify-between items-center gap-4">
-        <p className="min-w-[2rem]">{minValue}</p>
-        <div className="relative w-full -mt-2">
+        <p className="block w-[16%]">{minValue}</p>
+        <div className="relative w-[68%] -mt-2">
           <input
             type="range"
             {...inputProps}
@@ -90,7 +90,7 @@ const DoubleRange = (props: DoubleRangeProps) => {
             className="absolute"
           />
         </div>
-        <p className="min-w-[2rem]">{maxValue}</p>
+        <p className="block w-[16%] text-right">{maxValue}</p>
       </div>
     </fieldset>
   );

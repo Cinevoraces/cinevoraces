@@ -96,10 +96,12 @@ export default function Filter() {
   useCloseOnEnterPress(isFilterMenuOpened, setIsFilterMenuOpened);
   const [filtersInputs, setFiltersInput] = useState(initFiltersInput);
   const [maxRuntime, setMaxRuntime] = useState(initFiltersInput.runtime[1]);
+  const [minReleaseYear, setMinReleaseYear] = useState(initFiltersInput.releaseYear[0]);
+  const [maxReleaseYear, setMaxReleaseYear] = useState(initFiltersInput.releaseYear[1]);
 
-  useEffect(() => {
-    console.log(filtersInputs);
-  });
+  // useEffect(() => {
+  //   console.log(filtersInputs);
+  // });
 
   return (
     <div
@@ -134,7 +136,7 @@ export default function Filter() {
               key={c.stateName}>
               <h2 className="mb-2">{c.title}</h2>
               {(c.stateName === 'genres' || (c.stateName === 'countries' && filters[c.stateName])) && (
-                <ul className="grid grid-cols-2 gap-2">
+                <ul className="grid grid-cols-2 gap-3">
                   {filters[c.stateName]?.map((f) => (
                     <li
                       key={f}
@@ -165,6 +167,17 @@ export default function Filter() {
                   max={Number(filters.runtime[1])}
                   value={Number(maxRuntime)}
                   setter={setMaxRuntime}
+                />
+              )}
+              {c.stateName === 'releaseYear' && (
+                <DoubleRangeInput
+                  id="runtime"
+                  min={Number(filters.releaseYear[0])}
+                  max={Number(filters.releaseYear[1])}
+                  minValue={Number(minReleaseYear)}
+                  maxValue={Number(maxReleaseYear)}
+                  minSetter={setMinReleaseYear}
+                  maxSetter={setMaxReleaseYear}
                 />
               )}
             </div>
