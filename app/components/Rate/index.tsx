@@ -1,5 +1,3 @@
-import React from 'react';
-
 interface RateProps {
   rate: number;
   type: 'global' | 'user';
