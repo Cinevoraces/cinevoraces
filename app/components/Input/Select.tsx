@@ -3,10 +3,8 @@ import type { Dispatch, SetStateAction } from 'react';
 import { Button, RadioInput } from '@components/Input';
 import useCloseMenuOnOutsideClick from '@hooks/useCloseMenuOnOutsideClick';
 import useCloseMenuOnEnterKeyPress from '@hooks/useCloseOnEnterPress';
+import type { Season, SvgProps } from '@custom_types/index';
 
-export interface SvgProps {
-  style: string;
-}
 const ArrowSvg = ({ style }: SvgProps) => {
   return (
     <svg
@@ -36,7 +34,7 @@ export interface SelectProps {
   displayOptionsState: boolean;
   displayOptionsSetter: ()=>void;
   stateValue: OptionProps;
-  valueSetter: Dispatch<SetStateAction<OptionProps>>;
+  valueSetter: Dispatch<SetStateAction<OptionProps>> | ((season: Season)=>{ payload: Season; type: string; });
   customStyle?: 'searchbar';
 }
 

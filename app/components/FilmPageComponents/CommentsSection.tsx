@@ -7,7 +7,7 @@ import Button from '@components/Input/Button';
 import { TextAreaRef } from '@components/Input';
 import SendLogo from '@public/icons/send-icon.svg';
 import cutText from '@utils/cutText';
-import type { Comment } from '@custom_types/types';
+import type { Comment } from '@custom_types/movies';
 import type { FormEventHandler } from 'react';
 
 interface CommentsSectionProps {

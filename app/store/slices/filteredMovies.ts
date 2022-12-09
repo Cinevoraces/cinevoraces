@@ -1,33 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { RootState } from '../store';
 import type { PayloadAction } from '@reduxjs/toolkit';
-
-import type { CompleteMovie } from '@custom_types/types';
-
-export interface Season{
-  name: string;
-  value: string;
-}
-
-export interface FilterOptionsProps {
-  genres?: string[];
-  countries?: string[];
-  runtime?: string[];
-  minReleaseYear?: string[];
-  maxReleaseYear?: string[];
-  minAvgRate?: string[];
-  [key: string]: string[] | undefined;
-}
-
-interface filteredMoviesStateInterface {
-  season?: Season;
-  isSeasonSelectOpened: boolean;
-  isFilterMenuOpen: boolean;
-  allMoviesFromSeason?: CompleteMovie[];
-  availableFilters?: FilterOptionsProps;
-  userFilters?: FilterOptionsProps;
-  filteredMovies?: CompleteMovie[];
-}
+import type { filteredMoviesStateInterface } from '@custom_types/index';
 
 const initialState: filteredMoviesStateInterface = {
   isSeasonSelectOpened: false,
@@ -46,6 +20,9 @@ const filteredMoviesSlice = createSlice({
     },
     changeSeason(state, action) {
       return { ...state, season: action.payload };
+    },
+    changeSearchQuery(state, action){
+      return { ...state, searchQuery: action.payload };
     },
     setAllMoviesAndAvailableFiltersFromSeason(state, action) {
       return {
@@ -105,5 +82,8 @@ export const {
   toggleSeasonSelect,
   toggleFilterMenu,
   changeSeason,
+  changeSearchQuery,
+  setAllMoviesAndAvailableFiltersFromSeason,
+  setFilter,
 } = filteredMoviesSlice.actions;
 export default filteredMoviesSlice.reducer;

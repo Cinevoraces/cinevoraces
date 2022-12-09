@@ -9,7 +9,7 @@ import discordInvite from '@public/discord_invite.png';
 import commentsSample from '@public/comments_sample.jpg';
 import Metrics from '@components/Metrics';
 import type { MetricsProps } from '@components/Metrics';
-import type { MinimalMovie } from '@custom_types/types';
+import type { MinimalMovie } from '@custom_types/movies';
 import { getDataFromEndpointSSR } from '@utils/fetchApi';
 import { useAppSelector } from '@store/store';
 import { user } from '@store/slices/user';
