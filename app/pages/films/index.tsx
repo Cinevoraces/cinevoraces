@@ -13,6 +13,7 @@ import {
   setFilter,
 } from '@store/slices/filteredMovies';
 import type { CompleteMovie, Season } from '@custom_types/index';
+import { getType } from '@reduxjs/toolkit';
 
 const seasons = [
   // { name: 'Saison 4 - 2023', value: '4' },
@@ -55,23 +56,37 @@ export default function Films() {
     console.log(movies);
   }, [season, movies, mutate]);
 
-  const filterCategories = ['genres', 'countries'];
   useEffect(() => {
+    const filterCategories = ['genres', 'countries', 'runtime', 'release_date'];
+    const filters: {[key: string]: string[] | undefined } = {};
     (movies) &&
       filterCategories.forEach((cat) => {
-        console.log(
-          movies.reduce(
+        const updatedFilters = {
+          ...movies.reduce(
             (filters: {[key: string]: string[] }, movie: CompleteMovie) => {
-              return {
-                ...filters, 
-                [cat]: [
-                  ...filters[cat],
-                  ...movie[cat]?.filter((f: string) => !filters[cat].includes(f)),
-                ],
-              };
+              if (Array.isArray(movie[cat])) {
+                return {
+                  ...filters, 
+                  [cat]: [
+                    ...filters[cat],
+                    ...movie[cat]?.filter((f: string) => !filters[cat].includes(f)),
+                  ],
+                };
+              } else if (typeof movie[cat] === 'number' || typeof movie[cat] === 'string'){
+                return {
+                  ...filters, 
+                  [cat]: [
+                    ...filters[cat],
+                    (!filters[cat].includes(movie[cat])) ? movie[cat] : null,
+                  ],
+                };
+              }
             }, { [cat]: []})
-        );
+        };
+        console.log('updatedFilters : ', updatedFilters);
+        filters[cat] = updatedFilters[cat];
       });
+    console.log('filters object : ', filters);
   }, [movies]);
 
   // const handleToggleFilterMenu = () => dispatch(toggleFilterMenu());
