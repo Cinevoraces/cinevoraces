@@ -21,6 +21,11 @@ declare namespace Payload {
     presentation: string;
   }
 
+  interface createSeason {
+    year: number;
+    season_number: number;
+  }
+
   type reviewMovie = Record<keyof Pick<Database.review, 'bookmarked' | 'viewed' | 'liked' | 'rating' | 'comment'>, boolean | number | string>;
 
   interface proposeMovie {
