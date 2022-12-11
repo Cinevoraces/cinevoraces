@@ -1,6 +1,12 @@
 import type { FastifyInstance } from 'fastify';
-import { handleGetAllSeasons } from '@modules/seasons/seasons.handler';
-import { getAllSeasonsSchema } from '@modules/seasons/seasons.schema';
+import {
+  handleGetAllSeasons,
+  handleCreateNewSeason,
+} from '@modules/seasons/seasons.handler';
+import {
+  getAllSeasonsSchema,
+  createSeasonSchema,
+} from '@modules/seasons/seasons.schema';
 
 export const seasons = async (fastify: FastifyInstance) => {
   fastify.route({
@@ -8,5 +14,13 @@ export const seasons = async (fastify: FastifyInstance) => {
     url: '/seasons',
     schema: getAllSeasonsSchema,
     handler: handleGetAllSeasons,
+  });
+
+  fastify.route({
+    method: 'POST',
+    url: '/admin/seasons',
+    schema: createSeasonSchema,
+    handler: handleCreateNewSeason,
+    onRequest: [fastify.isAdmin],
   });
 };

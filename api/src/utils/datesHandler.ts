@@ -5,7 +5,7 @@
  * @returns Date
  */
 export const getFirstMondayOfYear = (year: number) => {
-  if (year < 0 || !Number.isInteger(year) || year > 3000)
+  if (year <= 0 || !Number.isInteger(year) || year >= 3000)
     throw new Error('Invalid year format');
 
   const date = new Date(year, 0, 1);
