@@ -6,12 +6,8 @@ import plugin from 'fastify-plugin';
  * **Swagger**
  * @description
  * This plugin registers the swagger documentation.
-*/
-const swagger: FastifyPluginCallback = async (
-  fastify, 
-  opts, 
-  done
-) => {
+ */
+const swagger: FastifyPluginCallback = async (fastify, opts, done) => {
   fastify.register(fastifySwagger, {
     routePrefix: '/dev-docs',
     swagger: {
@@ -24,17 +20,21 @@ const swagger: FastifyPluginCallback = async (
       schemes: ['http'],
       tags: [
         { name: 'Admin', description: 'Admin-only end-points' },
-        { name: 'Authentication', description: 'Authentication related end-points' },
+        {
+          name: 'Authentication',
+          description: 'Authentication related end-points',
+        },
         { name: 'Metrics', description: 'Metrics data related end-points' },
         { name: 'Movies', description: 'Movies data related end-points' },
         { name: 'Reviews', description: 'Review objects related end-points' },
+        { name: 'Seasons', description: 'Seasons data related end-points' },
         { name: 'Slots', description: 'Movie propositions related end-points' },
         { name: 'Users', description: 'Users data related end-points' },
       ],
     },
     exposeRoute: true,
   });
-  
+
   done();
 };
 

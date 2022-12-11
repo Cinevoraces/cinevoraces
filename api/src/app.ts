@@ -11,6 +11,7 @@ import { metrics } from '@modules/metrics/metrics.routes';
 import { movies } from '@modules/movies/movies.routes';
 import { slots } from '@modules/slots/slots.routes';
 import { reviews } from '@modules/reviews/reviews.routes';
+import { seasons } from '@modules/seasons/seasons.routes';
 import { users } from '@modules/users/users.routes';
 import schemasRegister from './schemas';
 
@@ -33,6 +34,7 @@ const app = async (fastify: FastifyInstance) => {
   fastify.register(movies);
   fastify.register(slots);
   fastify.register(reviews);
+  fastify.register(seasons);
   fastify.register(users);
 };
 
