@@ -23,11 +23,13 @@
     "baseUrl": ".",
     "outDir": "dist",
     "paths": {
-      "@src/*": ["src/*"],
-      "@routes/*": ["src/routes/*"],
-      "@plugins/*": ["src/plugins/*"],
-      "@modules/*": ["src/modules/*"],
+      "@custom_types/*":["src/types/*"],
       "@hooks/*": ["src/hooks/*"],
+      "@modules/*": ["src/modules/*"],
+      "@plugins/*": ["src/plugins/*"],
+      "@routes/*": ["src/routes/*"],
+      "@schemas/*": ["src/schemas/*"],
+      "@src/*": ["src/*"],
       "@utils/*": ["src/utils/*"]
     }
   }

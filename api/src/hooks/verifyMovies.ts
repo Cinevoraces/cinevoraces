@@ -1,25 +1,10 @@
 import type {
-  FastifyRequest,
+  FastifyRequest as Request,
   FastifyReply as Reply,
   FastifyPluginCallback,
 } from 'fastify';
-import type { Payload } from '@src/types/Payload';
+import type { Payload } from '../types/Payload';
 import plugin from 'fastify-plugin';
-
-declare module 'fastify' {
-  interface FastifyInstance {
-    doesMovieExist: (request: Request, reply: Reply)=>void;
-    doesPropositionExist: (request: Request, reply: Reply)=>void;
-    hasProposition: (request: Request, reply: Reply)=>void;
-    isSlotBooked: (request: Request, reply: Reply)=>void;
-    isMoviePublished: (request: Request, reply: Reply)=>void;
-  }
-}
-
-type Request = FastifyRequest<{
-  Params?: { id: number };
-  Body?: Payload.updateProposedMovie | Payload.proposeMovie;
-}>;
 
 export const verifyMoviesHooks: FastifyPluginCallback = async (
   fastify, opts, done
@@ -32,7 +17,7 @@ export const verifyMoviesHooks: FastifyPluginCallback = async (
    * This hook verifies if a movie exist in database.
   */
   fastify.decorate('doesMovieExist', async (
-    request: Request,
+    request: Request<{ Params?: { id: number }; }>,
     reply: Reply
   ) => {
     const { pgClient, params } = request;
@@ -85,7 +70,7 @@ export const verifyMoviesHooks: FastifyPluginCallback = async (
    * This hook verifies if a movie has been published.
   */
   fastify.decorate('isMoviePublished', async (
-    request: Request,
+    request: Request<{ Params?: { id: number }; }>,
     reply: Reply
   ) => {
     const { pgClient, user, body, params } = request;
@@ -155,7 +140,7 @@ export const verifyMoviesHooks: FastifyPluginCallback = async (
    * It takes care of Admin and User cases.
   */
   fastify.decorate('isSlotBooked', async (
-    request: Request,
+    request: Request<{ Params?: { id: number }; }>,
     reply: Reply
   ) => {
     const { pgClient, params, url } = request;

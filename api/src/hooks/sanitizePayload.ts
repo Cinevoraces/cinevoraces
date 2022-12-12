@@ -3,7 +3,7 @@ import type {
   FastifyPluginCallback,
 } from 'fastify';
 import plugin from 'fastify-plugin';
-import { sanitizeObject } from '@src/utils/sanitizeHtmlHandler';
+import { sanitizeObject } from '../utils/sanitizeHtmlHandler';
 
 export const sanitizePayloadHooks: FastifyPluginCallback = async (
   fastify, opts, done

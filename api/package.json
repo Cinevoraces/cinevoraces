@@ -45,11 +45,13 @@
     "typescript": "^4.8.3"
   },
   "_moduleAliases": {
-    "@src": "dist/src",
-    "@routes": "dist/src/routes",
-    "@plugins": "dist/src/plugins",
-    "@modules": "dist/src/modules",
+    "@custom_types": "dist/src/types",
     "@hooks": "dist/src/hooks",
+    "@modules": "dist/src/modules",
+    "@plugins": "dist/src/plugins",
+    "@routes": "dist/src/routes",
+    "@schemas": "dist/src/schemas",
+    "@src": "dist/src",
     "@utils": "dist/src/utils"
   }
 }

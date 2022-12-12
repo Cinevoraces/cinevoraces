@@ -1,4 +1,4 @@
-const apiErrorSchema = {
+export const apiErrorSchema = {
   $id: 'apiError',
   type: 'object',
   required: ['message', 'statusCode'],
@@ -8,5 +8,3 @@ const apiErrorSchema = {
     message: { type: 'string' },
   },
 };
-
-export default apiErrorSchema;

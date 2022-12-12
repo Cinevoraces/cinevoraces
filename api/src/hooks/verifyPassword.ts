@@ -3,18 +3,8 @@ import type {
   FastifyReply as Reply,
   FastifyPluginCallback,
 } from 'fastify';
-import { comparePassword } from '@src/utils/bcryptHandler';
+import { comparePassword } from '../utils/bcryptHandler';
 import plugin from 'fastify-plugin';
-
-declare module 'fastify' {
-  interface FastifyInstance {
-    verifyPassword: (request: Request, reply: Reply)=>void;
-  }
-}
-
-interface Body {
-  password: string;
-}
 
 export const verifyPasswordHooks: FastifyPluginCallback = async (
   fastify, opts, done
@@ -32,7 +22,7 @@ export const verifyPasswordHooks: FastifyPluginCallback = async (
     const { pgClient, user, body } = request;
     const { id: userId } = user;
 
-    if (!body || !(body as Body).password) {
+    if (!body || !(body as { password: string }).password) {
       reply.code(401); // Unauthorized
       throw new Error('Mot de passe requis.');
     }
@@ -46,7 +36,7 @@ export const verifyPasswordHooks: FastifyPluginCallback = async (
       });
     
       const isPasswordCorrect = await comparePassword(
-        (body as Body).password, rows[0].password
+        (body as { password: string }).password, rows[0].password
       );
       if (!isPasswordCorrect) {
         reply.code(401); // Unauthorized

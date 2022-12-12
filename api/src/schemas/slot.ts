@@ -1,4 +1,4 @@
-const slotSchema = {
+export const slotSchema = {
   $id: 'slot',
   required: [
     'id',
@@ -16,5 +16,3 @@ const slotSchema = {
     is_booked: { type: 'boolean' },
   },
 };
-
-export default slotSchema;

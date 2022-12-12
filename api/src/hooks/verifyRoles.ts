@@ -5,12 +5,6 @@ import type {
 } from 'fastify';
 import plugin from 'fastify-plugin';
 
-declare module 'fastify' {
-  interface FastifyInstance {
-    isAdmin: (request: Request, reply: Reply)=>void;
-  }
-}
-
 export const verifyRolesHooks: FastifyPluginCallback = async (
   fastify, opts, done
 ) => {

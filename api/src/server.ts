@@ -1,7 +1,7 @@
 import 'module-alias/register';
 import Fastify from 'fastify';
 import qs from 'qs';
-import parseOptions from '@src/utils/parseOptions';
+import parseOptions from './utils/parseOptions';
 import app from '@src/app';
 
 const serverConfig = {

@@ -1,4 +1,4 @@
-const movieSchema = {
+export const movieSchema = {
   $id: 'movie',
   type: 'object',
   properties: {
@@ -91,5 +91,3 @@ const movieSchema = {
     'publishing_date',
   ],
 };
-
-export default movieSchema;

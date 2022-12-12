@@ -5,14 +5,6 @@ import type {
 } from 'fastify';
 import plugin from 'fastify-plugin';
 
-declare module 'fastify' {
-  interface FastifyInstance {
-    verifyAccessToken: (request: Request, reply: Reply)=>void;
-    verifyAccessTokenOptionnal: (request: Request, reply: Reply)=>void;
-    verifyRefreshToken: (request: Request, reply: Reply)=>void;
-  }
-}
-
 export const verifyTokensHooks: FastifyPluginCallback = async (
   fastify, opts, done
 ) => {
