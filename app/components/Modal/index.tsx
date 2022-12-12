@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { forwardRef } from 'react';
 import ReactDOM from 'react-dom';
 interface ModalProps {
   stateValue: boolean;
@@ -13,7 +13,7 @@ interface ModalProps {
  * @param children content of the modal
  * @param ref ref used for useCloseMenuOnOutsideClick
  */
-const Modal = React.forwardRef<HTMLElement, ModalProps>((props, ref) => {
+const Modal = forwardRef<HTMLElement, ModalProps>((props, ref) => {
   Modal.displayName = 'Modal';
   // Setting up a portal to show Modals outside root element
   const portal = document.getElementById('portal') as HTMLElement;

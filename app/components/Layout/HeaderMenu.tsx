@@ -5,6 +5,7 @@ import { logout, user } from '@store/slices/user';
 import defaultUserPic from '@public/icons/user_default.svg';
 import { toggleUserMenu } from '@store/slices/global';
 import { toast } from 'react-hot-toast';
+import { forwardRef } from 'react';
 interface HeaderMenuButtonProps {
   type: 'burger' | 'user';
   stateValue: boolean;
@@ -54,7 +55,7 @@ interface HeaderMenuProps extends HeaderMenuButtonProps {
   links: string[][];
 }
 
-const HeaderMenu = React.forwardRef<HTMLElement, HeaderMenuProps>((props, ref) => {
+const HeaderMenu = forwardRef<HTMLElement, HeaderMenuProps>((props, ref) => {
   HeaderMenu.displayName = 'HeaderMenu';
   const { type, setter, stateValue, links } = props;
   const pseudo = useAppSelector(user).pseudo;

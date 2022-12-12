@@ -95,7 +95,7 @@ export const TextArea = (props: ControlledTextProps<HTMLTextAreaElement>) => {
  * @param minLength          set \<input\> 'minlength' param
  * @param errorMessage       set the error feedback message
  */
-export const TextRef = React.forwardRef<HTMLInputElement, BaseTextProps<HTMLInputElement>>((props, ref) => {
+export const TextRef = forwardRef<HTMLInputElement, BaseTextProps<HTMLInputElement>>((props, ref) => {
   TextRef.displayName = 'TextRef';
   const { errorMessage, required, ...inputProps } = props;
   const { label, id } = inputProps;
@@ -127,7 +127,7 @@ export const TextRef = React.forwardRef<HTMLInputElement, BaseTextProps<HTMLInpu
  * @param errorMessage       set \<input\> 'pattern' param
  * @param defaultValue       set \<input\> 'defaultValue' param
  */
-export const TextAreaRef = React.forwardRef<HTMLTextAreaElement, BaseTextProps<HTMLTextAreaElement>>((props, ref) => {
+export const TextAreaRef = forwardRef<HTMLTextAreaElement, BaseTextProps<HTMLTextAreaElement>>((props, ref) => {
   TextAreaRef.displayName = 'TextAreaRef';
   const { errorMessage, ...inputProps } = props;
   const { label, id } = inputProps;

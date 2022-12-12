@@ -9,6 +9,7 @@ import SendLogo from '@public/icons/send-icon.svg';
 import { mutationRequestCSR } from '@utils/fetchApi';
 import { toast } from 'react-hot-toast';
 import tryCatchWrapper from '@utils/tryCatchWrapper';
+import type { FormEvent } from 'react';
 import type { BodyData } from '@utils/fetchApi';
 
 export default function InscriptionForm() {
@@ -34,7 +35,7 @@ export default function InscriptionForm() {
   };
 
   const handleSubmit = async (
-    e: React.FormEvent<HTMLFormElement>,
+    e: FormEvent<HTMLFormElement>,
     allInputsRef: React.RefObject<HTMLInputElement>[]
   ) => {
     e.preventDefault();

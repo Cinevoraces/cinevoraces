@@ -8,6 +8,7 @@ import { mutationRequestCSR } from '@utils/fetchApi';
 import { login } from '@store/slices/user';
 import { toast } from 'react-hot-toast';
 import tryCatchWrapper from '@utils/tryCatchWrapper';
+import type { FormEvent } from 'react';
 import type { BodyData } from '@utils/fetchApi';
 
 export default function ConnectionForm() {
@@ -30,7 +31,7 @@ export default function ConnectionForm() {
     dispatch(toggleConnectionModal());
   };
 
-  const handleSubmit = async(e: React.FormEvent<HTMLFormElement>, allInputsRef: React.RefObject<HTMLInputElement>[]) => {
+  const handleSubmit = async(e: FormEvent<HTMLFormElement>, allInputsRef: React.RefObject<HTMLInputElement>[]) => {
     e.preventDefault();
     // Passing all inputs as required
     allInputsRef.forEach((inputRef) => {
