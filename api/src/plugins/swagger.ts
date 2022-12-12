@@ -8,7 +8,8 @@ import plugin from 'fastify-plugin';
  * This plugin registers the swagger documentation.
  */
 const swagger: FastifyPluginCallback = async (fastify, opts, done) => {
-  if (fastify.swagger) return fastify.log.warn('Swagger already registered');
+  if (fastify.swagger) 
+    return fastify.log.warn('Swagger already registered');
 
   fastify.register(fastifySwagger, {
     routePrefix: '/dev-docs',

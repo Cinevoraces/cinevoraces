@@ -9,7 +9,8 @@ import plugin from 'fastify-plugin';
  * It adds a pgClient property to the request object.
  */
 const pgClient: FastifyPluginCallback = async (fastify, opts, done) => {
-  if (fastify.pgClient) return fastify.log.warn('pg client already registered');
+  if (fastify.pgClient) 
+    return fastify.log.warn('pg client already registered');
 
   const pgClient = new Pool({
     user: process.env.POSTGRES_USER,

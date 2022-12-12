@@ -10,7 +10,8 @@ import plugin from 'fastify-plugin';
  * It also adds a user property to the request object.
  */
 const fastifyJwt: FastifyPluginCallback = async (fastify, opts, done) => {
-  if (fastify.jwt) return fastify.log.warn('Fastify/jwt already registered');
+  if (fastify.jwt)  
+    return fastify.log.warn('Fastify/jwt already registered');
 
   fastify.register(FastifyJwt, {
     secret: process.env.JWT_SECRET,
