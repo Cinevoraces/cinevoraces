@@ -3,7 +3,6 @@ import type {
   FastifyReply as Reply,
   FastifyPluginCallback,
 } from 'fastify';
-import { comparePassword } from '../utils/bcryptHandler';
 import plugin from 'fastify-plugin';
 
 export const verifyPasswordHooks: FastifyPluginCallback = async (
@@ -35,7 +34,7 @@ export const verifyPasswordHooks: FastifyPluginCallback = async (
         values: [userId],
       });
     
-      const isPasswordCorrect = await comparePassword(
+      const isPasswordCorrect = await request.bcryptCompare(
         (body as { password: string }).password, rows[0].password
       );
       if (!isPasswordCorrect) {

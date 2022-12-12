@@ -6,7 +6,7 @@ import App from '../src/app';
 import pgClient from './utils/pgClient';
 import parseOptions from '../src/utils/parseOptions';
 import { faker } from '@faker-js/faker';
-import { comparePassword, hashPassword } from '../src/utils/bcryptHandler';
+import { comparePassword, hashPassword } from '../src/plugins/bcrypt';
 import { ressourcesCreator } from './utils/createRessource';
 import expectedObjects from './utils/expectedObjects';
 import { AUTHENTICATION } from './tests_routes/Authentication';

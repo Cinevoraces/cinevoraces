@@ -1,7 +1,6 @@
 import type { FastifyReply as Reply, FastifyRequest } from 'fastify';
 import type { Query } from '@src/types/Query';
 import type { Payload } from '@src/types/Payload';
-import { hashPassword } from '@src/utils/bcryptHandler';
 import { getUsers, updateUser, deleteUser } from '@modules/users/users.datamapper';
 
 type Request = FastifyRequest<{
@@ -49,7 +48,7 @@ export const handlePutUser = async (request: Request, reply: Reply) => {
         reply.code(422); // Unprocessable Entity
         throw new Error('Le format du mot de passe est invalide.');
       }
-      update_user.password = await hashPassword(update_user.password);
+      update_user.password = await request.bcryptHash(update_user.password);
     }
     
     // Update user

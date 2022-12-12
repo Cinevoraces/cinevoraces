@@ -1,6 +1,6 @@
 import type { Database } from '../../src/types/Database';
 import { faker } from '@faker-js/faker';
-import { hashPassword } from '../../src/utils/bcryptHandler';
+import { hashPassword } from '../../src/plugins/bcrypt';
 import pgClient from './pgClient';
 
 interface ressourcesCreator {

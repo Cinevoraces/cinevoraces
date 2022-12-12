@@ -7,9 +7,13 @@ import type { Pool } from 'pg';
 declare module 'fastify' {
   interface FastifyRequest {
     pgClient: Pool;
+    bcryptCompare: (pass_1: string, pass_2: string)=>Promise<boolean>;
+    bcryptHash: (password: string)=>Promise<string>;
   }
   interface FastifyInstance {
     pgClient: Pool;
+    bcryptCompare: (pass_1: string, pass_2: string)=>Promise<boolean>;
+    bcryptHash: (password: string)=>Promise<string>;
 
     // Hooks
     findOrCreateReview: (request: Request, reply: Reply)=>void;

@@ -1,6 +1,5 @@
 import type { FastifyReply as Reply, FastifyRequest } from 'fastify';
 import type { Payload } from '@src/types/Payload';
-import { comparePassword, hashPassword } from '@src/utils/bcryptHandler';
 import { 
   createUser, 
   findUserByPseudoOrMail, 
@@ -42,7 +41,7 @@ export const handleRegister = async (request: Request, reply: Reply) => {
       reply.code(422); // Unprocessable Entity
       throw new Error('Le format du mot de passe est invalide.');
     }
-    password = await hashPassword(password);
+    password = await request.bcryptHash(password);
 
     // Create user
     await pgClient.query(
@@ -77,7 +76,7 @@ export const handleLogin = async (request: Request, reply: Reply) => {
       throw new Error('Utilisateur introuvable.');
     }
 
-    const isPasswordCorrect = await comparePassword(password, user[0].password);
+    const isPasswordCorrect = await request.bcryptCompare(password, user[0].password);
     if (!isPasswordCorrect) {
       reply.code(401); // Unauthorized
       throw new Error('Mot de passe incorrect.');

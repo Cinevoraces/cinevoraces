@@ -1,4 +1,4 @@
-import type { comparePassword, hashPassword } from '../../src/utils/bcryptHandler';
+import type { comparePassword, hashPassword } from '../../src/plugins/bcrypt';
 import type { FastifyInstance } from 'fastify';
 import type { Database } from '../../src/types/Database';
 import type { Client } from 'pg';
