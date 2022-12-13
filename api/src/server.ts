@@ -17,6 +17,13 @@ export default async function createServer() {
     });
     fastify.register(app);
 
+    fastify.setErrorHandler(function (error, request, reply) {
+      this.log.error(error);
+      reply
+        .status(error.statusCode)
+        .send({ message: error.message, statusCode: error.statusCode });
+    });
+    
     fastify.listen({ ...serverConfig });
   } catch (err) {
     console.error(err);

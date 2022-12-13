@@ -26,7 +26,7 @@ export const reviewMovieSchema: FastifySchema = {
     },
   },
   response: {
-    '201': {
+    201: {
       type: 'object',
       properties: {
         message: { type: 'string' },
@@ -43,8 +43,6 @@ export const reviewMovieSchema: FastifySchema = {
       },
       required: ['message', 'review'],
     },
-    '401': { $ref: 'apiError#' },
-    '404': { $ref: 'apiError#' },
   },
 };
 
@@ -76,13 +74,10 @@ export const adminGetReviewsSchema: FastifySchema = {
     },
   },
   response: {
-    '200': {
+    200: {
       type: 'array',
       items: { $ref: 'review#' },
     },
-    '401': { $ref: 'apiError#' },
-    '403': { $ref: 'apiError#' },
-    '404': { $ref: 'apiError#' },
   },
 };
 
@@ -107,15 +102,12 @@ export const adminDeleteReviewSchema: FastifySchema = {
     },
   },
   response: {
-    '204': {
+    204: {
       type: 'object',
       properties: {
         message: { type: 'string' },
       },
       required: ['message'],
     },
-    '401': { $ref: 'apiError#' },
-    '403': { $ref: 'apiError#' },
-    '404': { $ref: 'apiError#' },
   },
 };

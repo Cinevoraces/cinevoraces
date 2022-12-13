@@ -1,14 +1,15 @@
 import type { FastifyReply as Reply, FastifyRequest } from 'fastify';
 import type { Query } from '@src/types/Query';
 import type { Payload } from '@src/types/Payload';
-import { getReviewsByUserId } from '@modules/reviews/reviews.datamapper';
+import { ApiError, ApiResponse } from '../../types/_index';
+import { getReviewsByUserId } from '../reviews/reviews.datamapper';
 import { 
   getMovies, 
   proposeMovie, 
   updateProposedMovie, 
   publishMovie, 
   deleteMovie 
-} from '@modules/movies/movies.dataMapper';
+} from './movies.datamapper';
 
 type Request = FastifyRequest<{
   Querystring: Query.querystring;
@@ -19,38 +20,32 @@ type Request = FastifyRequest<{
  * @description Get movies according to query.
 */
 export const handleGetMovies = async (request: Request, reply: Reply) => {
-  const { pgClient, query, user } = request;
+  const { error, pgClient, query, user } = request;
 
-  try {
-    const { rows: movies, rowCount } = await pgClient.query(
-      getMovies(query)
+  const { rows: movies, rowCount } = await pgClient.query(
+    getMovies(query)
+  );
+  if (!rowCount) 
+    error.send(ApiError.NOT_FOUND_MOVIE, 404);
+
+  // TODO: 2. This solution must be treated using SQL.
+  // Populate movies with user existing reviews if logged
+  if (user) {
+    const { rows: reviews, rowCount: reviewCount } = await pgClient.query(
+      getReviewsByUserId(user.id)
     );
-    if (!rowCount) {
-      reply.code(404);
-      throw new Error('Aucun film trouvé');
-    }
-
-    // TODO: 2. This solution must be treated using SQL.
-    // Populate movies with user existing reviews if logged
-    if (user) {
-      const { rows: reviews, rowCount: reviewCount } = await pgClient.query(
-        getReviewsByUserId(user.id)
-      );
-      reviewCount && movies.forEach(movie => {
-        const user_review = reviews.find(review => review.movie_id === movie.id);
-        if (user_review) {
-          const { bookmarked, viewed, liked, rating } = user_review;
-          movie.user_review = { bookmarked, viewed, liked, rating };
-        }
-      });
-    }
-
-    reply
-      .code(200) // OK
-      .send(movies);
-  } catch (error) {
-    reply.send(error);
+    reviewCount && movies.forEach(movie => {
+      const user_review = reviews.find(review => review.movie_id === movie.id);
+      if (user_review) {
+        const { bookmarked, viewed, liked, rating } = user_review;
+        movie.user_review = { bookmarked, viewed, liked, rating };
+      }
+    });
   }
+
+  reply
+    .code(200)
+    .send(movies);
 };
 
 /**
@@ -85,17 +80,13 @@ export const handleProposeMovie = async (
     movie_countries: body.movie_countries,
   };
   
-  try {
-    await pgClient.query(
-      proposeMovie(payload)
-    );
+  await pgClient.query(
+    proposeMovie(payload)
+  );
 
-    reply
-      .code(201) // Created
-      .send({ message: 'Votre proposition a bien été enregistrée.' });
-  } catch (error) {
-    reply.send(error);
-  }
+  reply
+    .code(201)
+    .send({ message: ApiResponse.PROPOSITION_SUCCESS });
 };
 
 /**
@@ -111,17 +102,13 @@ export const handleUpdateProposedMovie = async (
 ) => {
   const { pgClient, body } = request;
 
-  try {
-    await pgClient.query(
-      updateProposedMovie(body)
-    );
+  await pgClient.query(
+    updateProposedMovie(body)
+  );
 
-    reply
-      .code(201) // OK
-      .send({ message: 'Votre proposition a bien été mise à jour.' });
-  } catch (error) {
-    reply.send(error);
-  }
+  reply
+    .code(201)
+    .send({ message: ApiResponse.PROPOSITION_UPDATE_SUCCESS });
 };
 
 /**
@@ -134,17 +121,13 @@ export const handleAdminPublishMovie = async (
 ) => {
   const { pgClient, params } = request;
   const { id } = params;
-  try {
-    await pgClient.query(
-      publishMovie(id)
-    );
+  await pgClient.query(
+    publishMovie(id)
+  );
 
-    reply
-      .code(204) // No Content
-      .send({ message: 'Film publié.' });
-  } catch (error) {
-    reply.send(error);
-  }
+  reply
+    .code(204)
+    .send({ message: ApiResponse.PROPOSITION_PUBLICATION_SUCCESS });
 };
 
 /**
@@ -157,15 +140,11 @@ export const handleAdminDeleteMovie = async (
 ) => {
   const { pgClient, params } = request;
   const { id } = params;
-  try {
-    await pgClient.query(
-      deleteMovie(id)
-    );
+  await pgClient.query(
+    deleteMovie(id)
+  );
 
-    reply
-      .code(204) // No Content
-      .send({ message: 'Film supprimé.' });
-  } catch (error) {
-    reply.send(error);
-  }
+  reply
+    .code(204)
+    .send({ message: ApiResponse.DELETE_MOVIE_SUCCESS });
 };

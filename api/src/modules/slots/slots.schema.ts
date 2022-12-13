@@ -32,12 +32,10 @@ export const getSlotsSchema: FastifySchema = {
     },
   },
   response: {
-    '200': {
+    200: {
       type: 'array',
       items: { $ref: 'slot#' },
     },
-    '401': { $ref: 'apiError#' },
-    '404': { $ref: 'apiError#' },
   },
 };
 
@@ -53,16 +51,13 @@ export const bookSlotSchema: FastifySchema = {
     },
   },
   response: {
-    '204': { 
+    204: { 
       type: 'object',
       properties: {
         message: { type: 'string' },
       },
       required: ['message'],
     },
-    '401': { $ref: 'apiError#' },
-    '404': { $ref: 'apiError#' },
-    '406': { $ref: 'apiError#' },
   },
 };
 
@@ -87,15 +82,12 @@ export const adminUnbookSlotSchema: FastifySchema = {
     },
   },
   response: {
-    '204': { 
+    204: { 
       type: 'object',
       properties: {
         message: { type: 'string' },
       },
       required: ['message'],
     },
-    '401': { $ref: 'apiError#' },
-    '403': { $ref: 'apiError#' },
-    '404': { $ref: 'apiError#' },
   },
 };

@@ -4,6 +4,7 @@ import cors from './fastifyCors';
 import envCheck from './envCheck';
 import jwt from './fastifyJwt';
 import pgClient from './pgClient';
+import serverError from './serverError';
 import swagger from './swagger';
 
 /**
@@ -18,6 +19,7 @@ export const plugins = [
   cookie,
   cors,
   jwt,
+  serverError,
   swagger,
   bcryptPlugin,
 ];

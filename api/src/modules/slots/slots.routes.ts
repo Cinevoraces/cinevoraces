@@ -3,12 +3,12 @@ import {
   getSlotsSchema, 
   bookSlotSchema,
   adminUnbookSlotSchema,
-} from '@modules/slots/slots.schema';
+} from './slots.schema';
 import { 
   handleGetSlots, 
   handleBookSlot,
   handleAdminUnbookSlot,
-} from '@modules/slots/slots.handler';
+} from './slots.handler';
 
 export const slots = async (fastify: FastifyInstance) => {
   fastify.route({

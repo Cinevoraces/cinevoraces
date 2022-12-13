@@ -1,8 +1,9 @@
 import type { FastifyReply as Reply, FastifyRequest } from 'fastify';
 import type { Query } from '../../types/Query';
 import type { Payload } from '../../types/Payload';
-import { EReviewTypes } from '../../types/enums/review';
-import { EReviewTypesKeys } from '../../types/enums/review';
+import { ApiError, ApiResponse } from '../../types/_index';
+import { EReviewTypes } from '../../types/_index';
+import { EReviewTypesKeys } from '../../types/_index';
 import { 
   updateReview, 
   getOneReview, 
@@ -24,36 +25,32 @@ export const handleReviewMovie = async (request: Request, reply: Reply) => {
   const { pgClient, body, params, user } = request;
   const { movieId: movie_id } = params;
   const { id: user_id, previous_review } = user;
-  try {     
-    pgClient.query(
-      updateReview(body, { movie_id, user_id })
-    );
-    const { rows: review } = await pgClient.query(
-      getOneReview({ movie_id, user_id })
-    );
+  pgClient.query(
+    updateReview(body, { movie_id, user_id })
+  );
+  const { rows: review } = await pgClient.query(
+    getOneReview({ movie_id, user_id })
+  );
         
-    const response = { 
-      message: (() => {
-        const key = Object.keys(body)[0] as EReviewTypes;
-        if (key === EReviewTypes.COMMENT) {
-          const value = previous_review.comment ? 'update' : 'add';
-          return EReviewTypesKeys[key][value];
-        }
-        if (key === EReviewTypes.RATING) {
-          const value = previous_review.rating ? 'update' : 'add';
-          return EReviewTypesKeys[key][value];
-        } else 
-          return EReviewTypesKeys[key][body[key] ? 'add' : 'update'];
-      })(),
-      review: review[0] 
-    };
+  const response = { 
+    message: (() => {
+      const key = Object.keys(body)[0] as EReviewTypes;
+      if (key === EReviewTypes.COMMENT) {
+        const value = previous_review.comment ? 'update' : 'add';
+        return EReviewTypesKeys[key][value];
+      }
+      if (key === EReviewTypes.RATING) {
+        const value = previous_review.rating ? 'update' : 'add';
+        return EReviewTypesKeys[key][value];
+      } else 
+        return EReviewTypesKeys[key][body[key] ? 'add' : 'update'];
+    })(),
+    review: review[0] 
+  };
 
-    reply
-      .code(201) // Created
-      .send(response);
-  } catch (error) {
-    reply.send(error);
-  }
+  reply
+    .code(201)
+    .send(response);
 };
 
 /**
@@ -61,24 +58,18 @@ export const handleReviewMovie = async (request: Request, reply: Reply) => {
  * @description Get reviews according to query.
 */
 export const handleAdminGetReviews = async (request: Request, reply: Reply) => {
-  const { pgClient, query } = request;
+  const { error, pgClient, query } = request;
 
-  try {
-    const { rows: reviews, rowCount } = await pgClient.query(
-      adminGetReviews(query)
-    );
+  const { rows: reviews, rowCount } = await pgClient.query(
+    adminGetReviews(query)
+  );
 
-    if (!rowCount) {
-      reply.code(404);
-      throw new Error('Aucun résultat.');
-    }
+  if (!rowCount)
+    error.send(ApiError.NOT_FOUND, 404);
 
-    reply
-      .code(200) // OK
-      .send(reviews);
-  } catch (error) {
-    reply.send(error);
-  }
+  reply
+    .code(200)
+    .send(reviews);
 };
 
 /**
@@ -89,15 +80,11 @@ export const handleAdminDeleteReview = async (request: Request, reply: Reply) =>
   const { pgClient, params } = request;
   const { movieId: movie_id, userId: user_id } = params;
 
-  try {
-    await pgClient.query(
-      adminDeleteComment({ movie_id, user_id })
-    );
+  await pgClient.query(
+    adminDeleteComment({ movie_id, user_id })
+  );
 
-    reply
-      .code(204) // No Content
-      .send({ message: 'Commentaire supprimé avec succés.' });  
-  } catch (error) {
-    reply.send(error);
-  }
+  reply
+    .code(204)
+    .send({ message: ApiResponse.DELETE_COMMENT_SUCCESS });  
 };

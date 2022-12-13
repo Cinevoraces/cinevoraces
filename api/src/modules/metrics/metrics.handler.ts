@@ -13,15 +13,11 @@ type Request = FastifyRequest<{
 export const handleGetGlobalMetrics = async (request: Request, reply: Reply) => {
   const { pgClient } = request;
 
-  try {
-    const { rows: globalMetrics } = await pgClient.query(
-      getGlobalMetrics()
-    );
+  const { rows: globalMetrics } = await pgClient.query(
+    getGlobalMetrics()
+  );
     
-    reply
-      .code(200) // OK
-      .send(globalMetrics[0]);
-  } catch (error) {
-    reply.send(error);
-  }
+  reply
+    .code(200)
+    .send(globalMetrics[0]);
 };

@@ -3,3 +3,5 @@
 
 export { Env, EEnvValues, EEnvKeys } from './enums/env';
 export { EReviewTypes, EReviewTypesKeys } from './enums/review';
+export { ApiError } from './enums/apiError';
+export { ApiResponse } from './enums/apiResponse';

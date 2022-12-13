@@ -1,6 +1,6 @@
 import type { FastifyInstance } from 'fastify';
-import { handleGetGlobalMetrics } from '@modules/metrics/metrics.handler';
-import { getGlobalMetricsSchema } from '@modules/metrics/metrics.schema';
+import { handleGetGlobalMetrics } from './metrics.handler';
+import { getGlobalMetricsSchema } from './metrics.schema';
 
 export const metrics = async (fastify: FastifyInstance) => {
   fastify.route({

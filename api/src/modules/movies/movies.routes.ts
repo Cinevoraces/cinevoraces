@@ -5,14 +5,14 @@ import {
   handleUpdateProposedMovie,
   handleAdminPublishMovie,
   handleAdminDeleteMovie,
-} from '@modules/movies/movies.handler';
+} from './movies.handler';
 import { 
   getMoviesSchema, 
   proposeMovieSchema,
   updateProposedMovieSchema,
   adminPublishMovieSchema,
   adminDeleteMovieSchema,
-} from '@modules/movies/movies.schema';
+} from './movies.schema';
 
 export const movies = async (fastify: FastifyInstance) => {
   fastify.route({
