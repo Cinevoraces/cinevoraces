@@ -1,14 +1,14 @@
 import type { FastifyReply as Reply, FastifyRequest } from 'fastify';
-import type { Database } from '@src/types/Database';
-import type { Query } from '@src/types/Query';
-import type { Payload } from '@src/types/Payload';
+import type { Query } from '../../types/Query';
+import type { Payload } from '../../types/Payload';
+import { EReviewTypes } from '../../types/enums/review';
+import { EReviewTypesKeys } from '../../types/enums/review';
 import { 
   updateReview, 
   getOneReview, 
   adminDeleteComment, 
   adminGetReviews 
-} from '@modules/reviews/reviews.datamapper';
-import reviewResponseFactory from '@src/utils/reviewResponseFactory';
+} from './reviews.datamapper';
 
 type Request = FastifyRequest<{
   Querystring: Query.querystring;
@@ -24,25 +24,33 @@ export const handleReviewMovie = async (request: Request, reply: Reply) => {
   const { pgClient, body, params, user } = request;
   const { movieId: movie_id } = params;
   const { id: user_id, previous_review } = user;
-  try { 
+  try {     
     pgClient.query(
       updateReview(body, { movie_id, user_id })
     );
     const { rows: review } = await pgClient.query(
       getOneReview({ movie_id, user_id })
     );
-    
-    const message = reviewResponseFactory(
-      body as Partial<Database.review>, 
-      previous_review
-    );
-      
+        
+    const response = { 
+      message: (() => {
+        const key = Object.keys(body)[0] as EReviewTypes;
+        if (key === EReviewTypes.COMMENT) {
+          const value = previous_review.comment ? 'update' : 'add';
+          return EReviewTypesKeys[key][value];
+        }
+        if (key === EReviewTypes.RATING) {
+          const value = previous_review.rating ? 'update' : 'add';
+          return EReviewTypesKeys[key][value];
+        } else 
+          return EReviewTypesKeys[key][body[key] ? 'add' : 'update'];
+      })(),
+      review: review[0] 
+    };
+
     reply
       .code(201) // Created
-      .send({
-        message,
-        review: review[0],
-      });
+      .send(response);
   } catch (error) {
     reply.send(error);
   }
