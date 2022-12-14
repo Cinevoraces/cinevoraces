@@ -1,4 +1,4 @@
-import type { Query } from '@src/types/Query';
+import type { Query } from '../../types/_index';
 
 /**
  * **findUserByPseudoOrMail**

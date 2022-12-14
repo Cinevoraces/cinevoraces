@@ -18,6 +18,7 @@ export const findOrCreateReviewHooks: FastifyPluginCallback = async (
    */
   fastify.decorate(
     'findOrCreateReview',
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     async (request: Request<{ Params: { movieId: number } }>, reply: Reply) => {
       const { pgClient, params, user } = request;
       const { movieId } = params;
@@ -29,23 +30,19 @@ export const findOrCreateReviewHooks: FastifyPluginCallback = async (
         values: [userId, Number(movieId)],
       };
 
-      try {
-        let review = await pgClient.query(query);
-        if (!review.rowCount) {
-          await pgClient.query({
-            ...query,
-            text: ' INSERT INTO review (user_id, movie_id) VALUES ($1,$2);',
-          });
-          review = await pgClient.query(query);
-        }
-        const { comment, rating } = review.rows[0];
-        request.user = {
-          ...user,
-          previous_review: { comment, rating },
-        };
-      } catch (err) {
-        reply.send(err);
+      let review = await pgClient.query(query);
+      if (!review.rowCount) {
+        await pgClient.query({
+          ...query,
+          text: ' INSERT INTO review (user_id, movie_id) VALUES ($1,$2);',
+        });
+        review = await pgClient.query(query);
       }
+      const { comment, rating } = review.rows[0];
+      request.user = {
+        ...user,
+        previous_review: { comment, rating },
+      };
     }
   );
 

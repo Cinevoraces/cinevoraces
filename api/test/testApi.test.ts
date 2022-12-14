@@ -1,4 +1,4 @@
-import type { Database } from '../src/types/Database';
+import type { user, proposition_slot, movie } from '../src/types/_index';
 import Fastify from 'fastify';
 import plugin from 'fastify-plugin';
 import qs from 'qs';
@@ -15,16 +15,15 @@ import { ENDPOINTS_MOVIES } from './tests_routes/Movies';
 import { ENDPOINTS_REVIEWS } from './tests_routes/Reviews';
 import { ENDPOINTS_SLOTS } from './tests_routes/Slots';
 import { ENDPOINTS_USERS } from './tests_routes/Users';
-import { SECURITY_SANITIZER } from './security_tests/sanitizer';
 
 // Create App instance
 const app = Fastify({ querystringParser: (str) => qs.parse(str, parseOptions) });
 // Prepare ressources
 const password = { comparePassword, hashPassword, default: 'password1234' };
 const res = {
-  users: [] as Array<{ user: Database.user, delete: ()=>void }>,
-  slots: [] as Array<{ slot: Database.proposition_slot, delete: ()=>void }>,
-  movies: [] as Array<{ movie: Database.movie, delete: ()=>void }>,
+  users: [] as Array<{ user: user, delete: ()=>void }>,
+  slots: [] as Array<{ slot: proposition_slot, delete: ()=>void }>,
+  movies: [] as Array<{ movie: movie, delete: ()=>void }>,
 };
 
 // Before/after all tests
@@ -60,4 +59,3 @@ ENDPOINTS_SLOTS(server);
 ENDPOINTS_MOVIES(server);
 ENDPOINTS_REVIEWS(server);
 ENDPOINTS_USERS(server);
-SECURITY_SANITIZER(server);

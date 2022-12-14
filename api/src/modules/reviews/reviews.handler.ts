@@ -1,9 +1,12 @@
 import type { FastifyReply as Reply, FastifyRequest } from 'fastify';
-import type { Query } from '../../types/Query';
-import type { Payload } from '../../types/Payload';
-import { ApiError, ApiResponse } from '../../types/_index';
-import { EReviewTypes } from '../../types/_index';
-import { EReviewTypesKeys } from '../../types/_index';
+import type { review, Query } from '../../types/_index';
+import { 
+  ApiError,
+  ApiResponse,
+  ReviewTypes,
+  AddReview,
+  UpdateReview 
+} from '../../types/_index';
 import { 
   updateReview, 
   getOneReview, 
@@ -14,7 +17,7 @@ import {
 type Request = FastifyRequest<{
   Querystring: Query.querystring;
   Params: { movieId: number, userId: number };
-  Body: Payload.reviewMovie,
+  Body: Record<keyof Pick<review, 'bookmarked' | 'viewed' | 'liked' | 'rating' | 'comment'>, boolean | number | string>,
 }>;
 
 /**
@@ -25,6 +28,7 @@ export const handleReviewMovie = async (request: Request, reply: Reply) => {
   const { pgClient, body, params, user } = request;
   const { movieId: movie_id } = params;
   const { id: user_id, previous_review } = user;
+
   pgClient.query(
     updateReview(body, { movie_id, user_id })
   );
@@ -34,16 +38,24 @@ export const handleReviewMovie = async (request: Request, reply: Reply) => {
         
   const response = { 
     message: (() => {
-      const key = Object.keys(body)[0] as EReviewTypes;
-      if (key === EReviewTypes.COMMENT) {
-        const value = previous_review.comment ? 'update' : 'add';
-        return EReviewTypesKeys[key][value];
+      const key = Object.keys(body)[0] as ReviewTypes;
+      switch (key) {
+        case ReviewTypes.COMMENT:
+          if (previous_review.comment)
+            return UpdateReview.COMMENT;
+          else
+            return AddReview.COMMENT;
+        case ReviewTypes.RATING:
+          if (previous_review.rating)
+            return UpdateReview.RATING;
+          else
+            return AddReview.RATING;
+        default:
+          if (body[key])
+            return AddReview[key.toUpperCase() as keyof typeof AddReview];
+          else
+            return UpdateReview[key.toUpperCase() as keyof typeof UpdateReview];
       }
-      if (key === EReviewTypes.RATING) {
-        const value = previous_review.rating ? 'update' : 'add';
-        return EReviewTypesKeys[key][value];
-      } else 
-        return EReviewTypesKeys[key][body[key] ? 'add' : 'update'];
     })(),
     review: review[0] 
   };

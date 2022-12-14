@@ -1,6 +1,6 @@
 import type { FastifyReply as Reply, FastifyRequest } from 'fastify';
-import type { Query } from '@src/types/Query';
-import { getGlobalMetrics } from '@modules/metrics/metrics.datamapper';
+import type { Query } from '../../types/_index';
+import { getGlobalMetrics } from './metrics.datamapper';
 
 type Request = FastifyRequest<{
   Querystring: Query.querystring;

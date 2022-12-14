@@ -3,6 +3,7 @@ import type {
   FastifyReply as Reply,
   FastifyPluginCallback,
 } from 'fastify';
+import { ApiError } from '../types/_index';
 import plugin from 'fastify-plugin';
 
 export const verifyPasswordHooks: FastifyPluginCallback = async (
@@ -16,34 +17,28 @@ export const verifyPasswordHooks: FastifyPluginCallback = async (
    */
   fastify.decorate('verifyPassword', async (
     request: Request, 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     reply: Reply
   ) => {
-    const { pgClient, user, body } = request;
+    const { error, pgClient, user, body } = request;
     const { id: userId } = user;
 
-    if (!body || !(body as { password: string }).password) {
-      reply.code(401); // Unauthorized
-      throw new Error('Mot de passe requis.');
-    }
+    if (!body || !(body as { password: string }).password)
+      error.send(ApiError.MISSING_PASSWORD, 401);
 
-    try {
-      const { rows } = await pgClient.query({
-        text: ` SELECT password
+    const { rows } = await pgClient.query({
+      text: ` SELECT password
               FROM "user"
               WHERE id=$1;`,
-        values: [userId],
-      });
+      values: [userId],
+    });
     
-      const isPasswordCorrect = await request.bcryptCompare(
-        (body as { password: string }).password, rows[0].password
-      );
-      if (!isPasswordCorrect) {
-        reply.code(401); // Unauthorized
-        throw new Error('Mot de passe incorrect.');
-      }
-    } catch (err) {
-      reply.send(err);
-    }
+    const isPasswordCorrect = await request.bcryptCompare(
+      (body as { password: string }).password, rows[0].password
+    );
+
+    if (!isPasswordCorrect) 
+      error.send(ApiError.INVALID_PASSWORD, 401);
   });
   done();
 };

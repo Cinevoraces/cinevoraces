@@ -1,4 +1,4 @@
-import type { Database } from '../../src/types/Database';
+import type { user, proposition_slot, movie } from '../../src/types/_index';
 import { faker } from '@faker-js/faker';
 import { hashPassword } from '../../src/plugins/bcrypt';
 import pgClient from './pgClient';
@@ -11,7 +11,7 @@ interface ressourcesCreator {
       password?: string;
       role?: string;
     }
-  )=>Promise<{ user: Database.user, delete: ()=>void }>;
+  )=>Promise<{ user: user, delete: ()=>void }>;
   slot: (
     slot?: {
       is_booked?: boolean;
@@ -19,7 +19,7 @@ interface ressourcesCreator {
       episode?: number;
       publishing_date?: string;
     }
-  )=>Promise<{ slot: Database.proposition_slot, delete: ()=>void }>;
+  )=>Promise<{ slot: proposition_slot, delete: ()=>void }>;
   movie: (
     movie?: {
       french_title?: string,
@@ -27,7 +27,7 @@ interface ressourcesCreator {
       season_id?: number,
     }, 
     is_published?: boolean
-  )=>Promise<{ movie: Database.movie, delete: ()=>void }>;
+  )=>Promise<{ movie: movie, delete: ()=>void }>;
 }
 
 export const ressourcesCreator: ressourcesCreator = {

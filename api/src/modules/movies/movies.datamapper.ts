@@ -1,6 +1,9 @@
-import type { Query } from '@src/types/Query';
-import type { Payload } from '@src/types/Payload';
-import { queryBuilder } from '@src/utils/queryBuilder';
+import type {
+  Query,
+  proposeMovie as TProposeMovie,
+  updateProposedMovie as TUpdateProposedMovie
+} from '../../types/_index';
+import { queryBuilder } from '../../utils/queryBuilder';
 
 /**
  * **getMovies**
@@ -77,7 +80,7 @@ export const getMovies = (
  * @returns SQL query object
  */
 export const proposeMovie = (
-  payload: Payload.proposeMovie
+  payload: TProposeMovie
 ): Query.preparedQuery => {
   return {
     text: 'SELECT new_movie($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14)',
@@ -92,7 +95,7 @@ export const proposeMovie = (
  * @returns SQL query object
  */
 export const updateProposedMovie = (
-  payload: Payload.updateProposedMovie
+  payload: TUpdateProposedMovie
 ): Query.preparedQuery => {
   const { movie_id, presentation } = payload;
   return {

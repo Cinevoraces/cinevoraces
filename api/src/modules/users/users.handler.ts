@@ -1,13 +1,19 @@
 import type { FastifyReply as Reply, FastifyRequest } from 'fastify';
-import type { Query } from '@src/types/Query';
-import type { Payload } from '@src/types/Payload';
-import { getUsers, updateUser, deleteUser } from './users.datamapper';
+import type { Query } from '../../types/_index';
 import { ApiError, ApiResponse } from '../../types/_index';
+import { getUsers, updateUser, deleteUser } from './users.datamapper';
 
 type Request = FastifyRequest<{
   Querystring: Query.querystring;
   Params: { id: number };
-  Body: Payload.updateUser,
+  Body: {
+    password: string;
+    update_user?: {
+      pseudo?: string;
+      mail?: string;
+      password?: string;
+    },
+  },
 }>;
 
 /**

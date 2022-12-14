@@ -1,15 +1,10 @@
-import type { FastifyReply as Reply, FastifyRequest } from 'fastify';
-import type { Payload } from '@src/types/Payload';
+import type { FastifyReply as Reply, FastifyRequest as Request } from 'fastify';
+import { ApiError, ApiResponse } from '../../types/_index';
 import { 
   createUser, 
   findUserByPseudoOrMail, 
   getPrivateUser 
 } from './auth.datamapper';
-import { ApiError, ApiResponse } from '../../types/_index';
-
-type Request = FastifyRequest<{
-  Body: Payload.register;
-}>;
 
 /**
  * **Register a new user**
@@ -18,7 +13,16 @@ type Request = FastifyRequest<{
  * - Hash password and create user
  * - Send success message
  */
-export const handleRegister = async (request: Request, reply: Reply) => {
+export const handleRegister = async (
+  request: Request<{
+    Body: {
+      pseudo: string;
+      mail: string;
+      password: string;
+    }
+  }>,
+  reply: Reply
+) => {
   const { error, pgClient, body } = request;
   let { pseudo, mail, password } = body;
 
@@ -54,7 +58,15 @@ export const handleRegister = async (request: Request, reply: Reply) => {
  * - Prepare user data and access/refresh tokens
  * - Send user object, tokens and success message
  */
-export const handleLogin = async (request: Request, reply: Reply) => {
+export const handleLogin = async (
+  request: Request<{
+    Body: {
+      pseudo: string;
+      password: string;
+    }
+  }>,
+  reply: Reply
+) => {
   const { error, pgClient, body } = request;
   const { pseudo, password } = body;
 

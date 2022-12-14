@@ -1,6 +1,9 @@
 import type { FastifyReply as Reply, FastifyRequest } from 'fastify';
-import type { Query } from '@src/types/Query';
-import type { Payload } from '@src/types/Payload';
+import type {
+  Query,
+  proposeMovie as TProposeMovie,
+  updateProposedMovie as TUpdateProposedMovie,
+} from '../../types/_index';
 import { ApiError, ApiResponse } from '../../types/_index';
 import { getReviewsByUserId } from '../reviews/reviews.datamapper';
 import { 
@@ -55,7 +58,7 @@ export const handleGetMovies = async (request: Request, reply: Reply) => {
 export const handleProposeMovie = async (
   request: FastifyRequest<{
     Querystring: Query.querystring;
-    Body: Payload.proposeMovie;
+    Body: TProposeMovie;
   }>, 
   reply: Reply
 ) => {
@@ -96,7 +99,7 @@ export const handleProposeMovie = async (
 export const handleUpdateProposedMovie = async (
   request: FastifyRequest<{
     Querystring: Query.querystring;
-    Body: Payload.updateProposedMovie;
+    Body: TUpdateProposedMovie;
   }>,
   reply: Reply
 ) => {

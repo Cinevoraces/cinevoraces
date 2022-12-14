@@ -14,13 +14,9 @@ export const verifyTokensHooks: FastifyPluginCallback = async (
    * @onRequest
    * @description
    * This hook verifies the access token then populate request.user with decoded informations.
-   */
+   */ // eslint-disable-next-line @typescript-eslint/no-unused-vars
   fastify.decorate('verifyAccessToken', async (request: Request, reply: Reply) => {
-    try {
-      await request.jwtVerify();
-    } catch (err) {
-      reply.send(err);
-    }
+    await request.jwtVerify();
   });
 
   /**
@@ -30,13 +26,9 @@ export const verifyTokensHooks: FastifyPluginCallback = async (
    * This hook verifies the access token then populate request.user with decoded informations.
    * The verification doesn't throw any error if token isn't provided, 
    * use it with visitor routes that has special features if user is logged.
-  */
+  */ // eslint-disable-next-line @typescript-eslint/no-unused-vars
   fastify.decorate('verifyAccessTokenOptionnal', async (request: Request, reply: Reply) => {
-    try {
-      if (request.headers.authorization) await request.jwtVerify();
-    } catch (err) {
-      reply.send(err);
-    }
+    if (request.headers.authorization) await request.jwtVerify();
   });
 
   /**
@@ -44,13 +36,9 @@ export const verifyTokensHooks: FastifyPluginCallback = async (
    * @onRequest
    * @description
    * This hook verifies the refresh token then populate request.user with decoded informations.
-  */
+  */ // eslint-disable-next-line @typescript-eslint/no-unused-vars
   fastify.decorate('verifyRefreshToken', async (request: Request, reply: Reply) => {
-    try {
-      await request.jwtVerify({ onlyCookie: true });
-    } catch (err) {
-      reply.send(err);
-    }
+    await request.jwtVerify({ onlyCookie: true });
   });
 
   done();

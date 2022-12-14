@@ -17,7 +17,6 @@
     "bcryptjs": "^2.4.3",
     "fastify": "^4.5.3",
     "fastify-plugin": "^4.2.1",
-    "module-alias": "^2.2.2",
     "pg": "^8.8.0",
     "qs": "^6.11.0",
     "sanitize-html": "^2.7.3"
@@ -36,22 +35,11 @@
     "eslint": "^8.25.0",
     "eslint-config-prettier": "^8.5.0",
     "jest": "^29.0.3",
-    "module-alias-jest": "^0.0.3",
     "nanoid": "^4.0.0",
     "prettier": "^2.7.1",
     "ts-jest": "^29.0.1",
     "ts-node": "^10.9.1",
     "tsc-watch": "^5.0.3",
     "typescript": "^4.8.3"
-  },
-  "_moduleAliases": {
-    "@custom_types": "dist/src/types",
-    "@hooks": "dist/src/hooks",
-    "@modules": "dist/src/modules",
-    "@plugins": "dist/src/plugins",
-    "@routes": "dist/src/routes",
-    "@schemas": "dist/src/schemas",
-    "@src": "dist/src",
-    "@utils": "dist/src/utils"
   }
 }

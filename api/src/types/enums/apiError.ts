@@ -1,12 +1,20 @@
 export enum ApiError {
+  ADMIN_ONLY = 'Accès restreint aux administrateurs.',
   DUPLICATE_MAIL = 'Cette adresse mail est déjà associée à un compte',
   DUPLICATE_PSEUDO = 'Ce pseudo est déjà utilisé.',
   INVALID_PASSWORD = 'Mot de passe incorrect.',
   INVALID_PASSWORD_FORMAT = 'Le format du mot de passe est invalide.',
   INVALID_USER = 'Utilisateur introuvable.',
   INVALID_TOKEN = 'Utilisateur introuvable, token compromis.',
+  INVALID_PROPOSAL = 'Ce film à déjà été proposé.',
+  MISSING_PASSWORD = 'Mot de passe requis.',
   NOT_FOUND_MOVIE = 'Aucun film trouvé',
+  NOT_FOUND_MOVIE_ID = 'Le film demandé n\'a pas été trouvé dans la base de données.',
+  NOT_FOUND_PROPOSAL = 'Le film demandé n\'a pas été trouvé parmis les proposition en cours.',
   NOT_FOUND = 'Aucun résultat.',
   NO_SLOT_AVAILABLE = 'Aucun créneau disponible.',
+  UNAVAILABLE_SLOT = 'Ce créneau est déjà réservé.',
+  UNBOOKED_SLOT = 'Ce créneau n\'est pas réservé.',
+  USER_HAS_PROPOSAL = 'Vous avez déjà une proposition en attente. Vous pourrez réserver un nouveau créneau une fois votre proposition publiée.',
 
 }

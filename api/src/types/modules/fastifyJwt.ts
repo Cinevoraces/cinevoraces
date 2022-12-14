@@ -1,4 +1,4 @@
-import type { Database } from '../Database';
+import type { review } from '../_index';
 
 declare module '@fastify/jwt' {
   interface VerifyOptions {
@@ -11,7 +11,7 @@ declare module '@fastify/jwt' {
       mail?: string;
       role?: string;
       avatar_url?: string;
-      previous_review?: Partial<Database.review>;
+      previous_review?: Partial<review>;
     };
   }
 }

@@ -1,5 +1,5 @@
 import type { FastifyReply as Reply, FastifyRequest } from 'fastify';
-import type { Query } from '@src/types/Query';
+import type { Query } from '../../types/_index';
 import { ApiError, ApiResponse } from '../../types/_index';
 import { getSlots, updateSlot } from './slots.datamapper';
 

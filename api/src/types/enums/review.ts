@@ -1,4 +1,4 @@
-export enum EReviewTypes {
+export enum ReviewTypes {
   BOOKMARKED = 'bookmarked',
   VIEWED = 'viewed',
   LIKED = 'liked',
@@ -6,25 +6,18 @@ export enum EReviewTypes {
   COMMENT = 'comment'
 }
 
-export const EReviewTypesKeys = {
-  [EReviewTypes.BOOKMARKED]: {
-    add: 'Film ajouté à ma liste.',
-    update: 'Film retiré de ma liste.'
-  },
-  [EReviewTypes.VIEWED]: {
-    add: 'Film marqué comme vu.',
-    update: 'Film marqué comme non vu.'
-  },
-  [EReviewTypes.LIKED]: {
-    add: 'Film marqué comme aimé.',
-    update: 'Film marqué comme non aimé.'
-  },
-  [EReviewTypes.RATING]: {
-    add: 'Film noté.',
-    update: 'Note mise à jour.'
-  },
-  [EReviewTypes.COMMENT]: {
-    add: 'Commentaire ajouté.',
-    update: 'Commentaire mis à jour.'
-  }
+export enum AddReview {
+  BOOKMARKED = 'Film ajouté à ma liste.',
+  VIEWED = 'Film marqué comme vu.',
+  LIKED = 'Film marqué comme aimé.',
+  RATING = 'Film noté.',
+  COMMENT = 'Commentaire ajouté.',
+}
+
+export enum UpdateReview {
+  BOOKMARKED = 'Film retiré de ma liste.',
+  VIEWED = 'Film marqué comme non vu.',
+  LIKED = 'Film marqué comme non aimé.',
+  RATING = 'Note mise à jour.',
+  COMMENT = 'Commentaire mis à jour.',
 };
