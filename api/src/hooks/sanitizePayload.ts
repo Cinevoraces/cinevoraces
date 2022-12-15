@@ -32,7 +32,7 @@ export const sanitizePayloadHooks: FastifyPluginCallback = async (
  * @returns sanitized string
  * @docs https://github.com/apostrophecms/sanitize-html
  */
-export const sanitizeString = (
+const sanitizeString = (
   dirty: string,
 ): string => {
   return sanitizeHtml(dirty, {
@@ -59,7 +59,7 @@ export const sanitizeString = (
  * @param obj Object to sanitize
  * @returns sanitized object
  */
-export const sanitizeObject = (
+const sanitizeObject = (
   obj: Record<string, unknown>
 ): Record<string, unknown> => {
   for (const key in obj) {

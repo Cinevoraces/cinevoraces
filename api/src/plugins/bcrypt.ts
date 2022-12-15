@@ -27,7 +27,7 @@ const bcryptPlugin: FastifyPluginCallback = async (fastify, opts, done) => {
  * @param pass_2 Password to compare
  * @returns boolean
  */
-export const comparePassword = async (pass_1: string, pass_2: string) => {
+const comparePassword = async (pass_1: string, pass_2: string) => {
   return await bcrypt.compare(pass_1, pass_2);
 };
 
@@ -37,7 +37,7 @@ export const comparePassword = async (pass_1: string, pass_2: string) => {
  * @param password Password to hash
  * @returns Hashed password
  */
-export const hashPassword = async (password: string) => {
+const hashPassword = async (password: string) => {
   const salt = await bcrypt.genSalt(10);
   return await bcrypt.hash(password, salt);
 };

@@ -2,10 +2,9 @@
   "include": [
     "src/**/*",
     "src/*",
-    "test/**/*.test.ts",
     "test/**/*.ts",
     "test/*.ts"
-, ],
+  ],
   "exclude": ["dist"],
   "compilerOptions": {
     "types": ["@types/jest", "node"],

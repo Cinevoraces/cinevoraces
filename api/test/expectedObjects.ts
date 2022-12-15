@@ -3,11 +3,7 @@ export default {
     message: expect.any(String),
     statusCode: expect.any(Number),
   }),
-  metrics: expect.objectContaining({
-    seasons_count: expect.any(Number),
-    movies_count: expect.any(Number),
-    countries_count: expect.any(Number),
-  }),
+  
   movie: expect.objectContaining({
     id: expect.any(Number),
     author_id: expect.any(Number),
