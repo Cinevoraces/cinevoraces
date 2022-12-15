@@ -65,7 +65,12 @@ export default {
       poster_url: expect.any(String),
       publishing_date: expect.any(String),
       season_id: expect.any(Number),
-    })
+    }),
+  }),
+  season: expect.objectContaining({
+    season_number: expect.any(Number),
+    year: expect.any(Number),
+    movie_count: expect.any(Number),
   }),
   slot: expect.objectContaining({
     id: expect.any(Number),
@@ -111,10 +116,10 @@ export default {
       avatar_url: expect.any(String),
     }),
     token: expect.any(String),
-    response: expect.any(String)
+    response: expect.any(String),
   }),
-  refreshToken: expect.objectContaining({ 
+  refreshToken: expect.objectContaining({
     name: 'refresh_token',
-    value: expect.any(String)
-  })
+    value: expect.any(String),
+  }),
 };
