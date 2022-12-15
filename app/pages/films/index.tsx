@@ -9,12 +9,15 @@ import {
   toggleFilterMenu,
   changeSeason,
   changeSearchQuery,
-  setAllMoviesAndAvailableFiltersFromSeason,
+  setAvailableFilters,
+  initializeOrCorrectUserInputs,
   setFilter,
 } from '@store/slices/filteredMovies';
-import type { CompleteMovie, Season } from '@custom_types/index';
-import { getType } from '@reduxjs/toolkit';
+import type { CompleteMovie, Season, FilterOptions } from '@custom_types/index';
 
+import filtersSync from '@utils/filterSyncer';
+
+// To delete later
 const seasons = [
   // { name: 'Saison 4 - 2023', value: '4' },
   { name: 'Saison 3 - 2022', value: '3' },
@@ -39,70 +42,34 @@ metadatas.forEach((dataName) => (selectQueryString += `&select[${dataName}]=true
 
 export default function Films() {
   const dispatch = useAppDispatch();
+  //Searchbar state mechanics
+  const { season, searchQuery, isSeasonSelectOpened } = useAppSelector(filteredMovies);
   const handleToggleSeasonSelect = () => dispatch(toggleSeasonSelect());
   const handleSeasonChange = (season: Season) => dispatch(changeSeason(season));
   const handleChangeSearchValue = (e: ChangeEvent) => (e.currentTarget instanceof HTMLInputElement) && dispatch(changeSearchQuery(e.currentTarget.value));
+  //Filter state mechanics
+  const { isFilterMenuOpen, availableFilters, userFilterInputs } = useAppSelector(filteredMovies);
+  const handleToggleFilterMenu = () => dispatch(toggleFilterMenu());
+  const handleSetFilters = (category: string, filter: string) => dispatch(setFilter({ category, filter }));
+  //To replace with the appropriate season endpoint later
   const { data: metrics } = useSWR('/metrics');
 
   // Initialise the default value for select button and first movies fetching
   useEffect(() => {
-    console.log(metrics);
     metrics && dispatch(changeSeason(seasons.filter((s) => s.value == metrics.seasons_count)[0]));
   }, [metrics, dispatch]);
-  const { season, searchQuery, isSeasonSelectOpened, isFilterMenuOpen } = useAppSelector(filteredMovies);
   const { data: movies, error, mutate } = useSWR(() => (season) && '/movies?' + selectQueryString + '&where[season_number]=' + season.value);
   useEffect(() => {
     mutate();
-    console.log(movies);
+    // console.log(movies);
   }, [season, movies, mutate]);
 
   useEffect(() => {
-    const filterCategories = ['genres', 'countries', 'runtime', 'release_date'];
-    const filters: {[key: string]: string[] | undefined } = {};
-    (movies) &&
-      filterCategories.forEach((cat) => {
-        const updatedFilters = {
-          ...movies.reduce(
-            (filters: {[key: string]: string[] }, movie: CompleteMovie) => {
-              if (Array.isArray(movie[cat])) {
-                return {
-                  ...filters, 
-                  [cat]: [
-                    ...filters[cat],
-                    ...movie[cat]?.filter((f: string) => !filters[cat].includes(f)),
-                  ],
-                };
-              } else if (typeof movie[cat] === 'number' || typeof movie[cat] === 'string'){
-                return {
-                  ...filters, 
-                  [cat]: [
-                    ...filters[cat],
-                    (!filters[cat].includes(movie[cat])) ? movie[cat] : null,
-                  ],
-                };
-              }
-            }, { [cat]: []})
-        };
-        console.log('updatedFilters : ', updatedFilters);
-        filters[cat] = updatedFilters[cat];
-      });
-    console.log('filters object : ', filters);
-  }, [movies]);
-
-  // const handleToggleFilterMenu = () => dispatch(toggleFilterMenu());
-  // console.log(useAppSelector(filteredMovies));
-
-  // // State management to be replaced with Redux
-  // // const [season, setSeason] = useState(seasons[0]);
-  // const [isSelectOpened, setIsSelectOpened] = useState(false);
-  // const toggleSelectDisplay = () => setIsSelectOpened(!isSelectOpened);
-  // const [searchValue, setSearchValue] = useState('');
-  // //Recover last season Number, to change once the API can send a complete season array
-  // const {
-  //   data: movies,
-  //   error,
-  //   mutate,
-  // } = useSWR(`/movies?${(season.value !== '0') ? `where[season_number]=${season.value}` : ''}${selectQueryString}`);
+    if (movies){
+      dispatch(setAvailableFilters(filtersSync(movies)));
+      dispatch(initializeOrCorrectUserInputs());
+    }
+  }, [movies, dispatch]);
 
   return (
     <main className="custom-container ">
@@ -121,7 +88,15 @@ export default function Films() {
           onChange={handleChangeSearchValue}
         />
       )}
-      <Filter />
+      { (availableFilters) &&
+        <Filter 
+          isMenuOpened={isFilterMenuOpen}
+          displayMenuSetter={handleToggleFilterMenu}
+          filterOptions={availableFilters}
+          userFilterInputs={userFilterInputs}
+          userFilterInputsSetter={handleSetFilters}
+        />
+      }
       <section id="movie-grid">
         {error && <p>Une erreur est survenue.</p>}
         {!movies && !error && <p>Chargement des données.</p>}

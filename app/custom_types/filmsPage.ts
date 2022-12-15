@@ -5,13 +5,20 @@ export interface Season{
   value: string;
 }
 
-export interface FilterOptionsProps {
+export interface FilterOptions {
+  genres: string[];
+  countries: string[];
+  runtime: string[];
+  releaseYear: string[];
+  avgRate: string[];
+  [key: string]: string[];
+}
+export interface FilterUserInputs {
   genres?: string[];
   countries?: string[];
   runtime?: string[];
-  minReleaseYear?: string[];
-  maxReleaseYear?: string[];
-  minAvgRate?: string[];
+  releaseYear?: string[];
+  avgRate?: string[];
   [key: string]: string[] | undefined;
 }
 
@@ -20,9 +27,8 @@ export interface filteredMoviesStateInterface {
   searchQuery?: string;
   isSeasonSelectOpened: boolean;
   isFilterMenuOpen: boolean;
-  allMoviesFromSeason?: CompleteMovie[];
-  availableFilters?: FilterOptionsProps;
-  userFilters?: FilterOptionsProps;
+  availableFilters: FilterOptions;
+  userFilterInputs: FilterUserInputs;
   filteredMovies?: CompleteMovie[];
 }
 

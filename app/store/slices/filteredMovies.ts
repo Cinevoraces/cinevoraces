@@ -6,6 +6,14 @@ import type { filteredMoviesStateInterface } from '@custom_types/index';
 const initialState: filteredMoviesStateInterface = {
   isSeasonSelectOpened: false,
   isFilterMenuOpen: false,
+  availableFilters: {
+    genres:[],
+    countries:[],
+    runtime:[],
+    releaseYear: [],
+    avgRate: [],
+  },
+  userFilterInputs: {},
 };
 
 const filteredMoviesSlice = createSlice({
@@ -24,55 +32,75 @@ const filteredMoviesSlice = createSlice({
     changeSearchQuery(state, action){
       return { ...state, searchQuery: action.payload };
     },
-    setAllMoviesAndAvailableFiltersFromSeason(state, action) {
+    setAvailableFilters(state, action) {
       return {
         ...state,
-        allMoviesFromSeason: action.payload.movies,
-        filteredMovies: action.payload.movies,
-        availableFilters: action.payload.filters,
-        userFilters: {},
+        availableFilters: action.payload,
+      };
+    },
+    initializeOrCorrectUserInputs(state){
+      //initialize or corrects filters that gets modified or removed by season change
+      return {
+        ...state,
+        userFilterInputs: {
+          ...state.userFilterInputs,
+          runtime: [state.availableFilters.runtime[1]],
+          releaseYear: [...state.availableFilters.releaseYear],
+        }
       };
     },
     setFilter(state, action){
       const { category, filter } = action.payload;
-      // If userFilters are still undefined, create the property and fill it with the first category and filter
-      if (!state.userFilters){
-        return {
-          ...state,
-          userFilters: {
-            [category]: [filter]
-          }
-        };
+      if (category.includes('ReleaseYear')){
+        if (category === 'minReleaseYear' && state.userFilterInputs.releaseYear){
+          return {
+            ...state,
+            userFilterInputs: {
+              ...state.userFilterInputs,
+              releaseYear: [
+                Math.max(filter, Number(state.availableFilters.releaseYear[0])).toString(),
+                state.userFilterInputs.releaseYear[1],
+              ]
+            }
+          };
+        } else if (state.userFilterInputs.releaseYear){
+          return {
+            ...state,
+            userFilterInputs: {
+              ...state.userFilterInputs,
+              releaseYear: [
+                state.userFilterInputs.releaseYear[0],
+                Math.min(filter, Number(state.availableFilters.releaseYear[1])).toString(),
+              ]
+            }
+          };
+        }
       }
-      // If userFilters already exists, check if the category exists. If not, create it and fill it
-      if (!state.userFilters[category]){
+      if (!state.userFilterInputs[category] || category === 'runtime' || category === 'avgRate'){
         return {
           ...state,
-          userFilters: {
-            ...state.userFilters,
-            [category]: [action.payload.filter]
-          }
-        };
-      }
-      // Finally, userFilters and the concerned category exist
-      // If genres or countries are asked, it's a toggle
-      if (category === 'genres' || category === 'countries'){
-        return {
-          ...state,
-          userFilters: { ...state.userFilters,
-            [category]: (category.contains(filter)) ? category.filter( (f: string) => f !== filter)
-              : [...category, filter]
+          userFilterInputs: {
+            ...state.userFilterInputs,
+            [category]: [filter],
           },
         };
       }
-      // If not, just replace the stored value by the new one
-      return {
-        ...state,
-        userFilters: {
-          ...state.userFilters,
-          [category]: [filter],
-        }
-      };
+      if (category === 'genres' || category === 'countries'){
+        return {
+          ...state,
+          userFilterInputs: {
+            ...state.userFilterInputs,
+            [category]: 
+            // Use of ! as last resort as type asertion could not work
+                  (state.userFilterInputs[category]!.includes(filter)) ?
+                    [ ...state.userFilterInputs[category]!.filter((f) => f !== filter)]
+                    : [
+                      ...state.userFilterInputs[category]!,
+                      filter
+                    ]
+          }
+        };
+      }
     },
   }
 });
@@ -83,7 +111,8 @@ export const {
   toggleFilterMenu,
   changeSeason,
   changeSearchQuery,
-  setAllMoviesAndAvailableFiltersFromSeason,
+  setAvailableFilters,
+  initializeOrCorrectUserInputs,
   setFilter,
 } = filteredMoviesSlice.actions;
 export default filteredMoviesSlice.reducer;

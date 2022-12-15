@@ -1,5 +1,5 @@
 import type { MinimalMovie, Presentation, Metrics, Comment, UserReview, CompleteMovie } from './movies';
-import type { Season, FilterOptionsProps, filteredMoviesStateInterface } from './filmsPage';
+import type { Season, FilterOptions, FilterUserInputs, filteredMoviesStateInterface } from './filmsPage';
 import type { SvgProps } from './global';
 
 export type{
@@ -10,7 +10,8 @@ export type{
   UserReview,
   CompleteMovie,
   Season,
-  FilterOptionsProps,
+  FilterOptions,
+  FilterUserInputs,
   filteredMoviesStateInterface,
   SvgProps,
 };

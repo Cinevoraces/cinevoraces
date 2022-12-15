@@ -1,87 +1,46 @@
-import React, { useState, useRef, useEffect, FormEvent } from 'react';
-import type { Dispatch, SetStateAction } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
+import type { Dispatch, SetStateAction, FormEvent } from 'react';
 import Button from './Button';
 import { CheckBox, RangeInput, DoubleRangeInput, StarRadio } from './index';
 import useCloseMenuOnOutsideClick from '@hooks/useCloseMenuOnOutsideClick';
 import useCloseOnEnterPress from '@hooks/useCloseOnEnterPress';
 import FilterSvg from '@components/SvgComponents/Filter';
 
-export interface FilterOptionsProps {
-  genres?: string[];
-  countries?: string[];
-  runtime: string[];
-  releaseYear: string[];
-  minAvgRate: string[];
-  [key: string]: string[] | undefined;
-}
-
+import type { FilterOptions, FilterUserInputs } from '@custom_types/index';
 export interface FilterProps {
-  options: FilterOptionsProps[];
-  displayOptionsState: boolean;
-  displayOptionsSetter: ()=>void;
-  stateValue: FilterOptionsProps;
-  valueSetter: Dispatch<SetStateAction<FilterOptionsProps>>;
+  filterOptions: FilterOptions;
+  isMenuOpened: boolean;
+  displayMenuSetter: ()=>void;
+  userFilterInputs: FilterUserInputs;
+  userFilterInputsSetter: (category: string, filter: string)=>{ payload: FilterUserInputs; type: string };
 }
-
-const filters: FilterOptionsProps = {
-  genres: [
-    'Action',
-    'Animation',
-    'Aventure',
-    'Comédie',
-    'Crime',
-    'Documentaire',
-    'Drame',
-    'Familial',
-    'Fantastique',
-    'Science-Fiction',
-  ],
-  countries: [
-    'Algérie',
-    'Angola',
-    'Argentine',
-    'Australie',
-    'Autriche',
-    'Belgique',
-    'Brésil',
-    'Bulgarie',
-    'Canada',
-    'Chine',
-    'République Tchèque',
-    'France',
-  ],
-  runtime: ['54', '192'],
-  releaseYear: ['1912', '2023'],
-  minAvgRate: ['0'],
-};
-
-const initFiltersInput: FilterOptionsProps = {
-  genres: [''],
-  countries: [''],
-  runtime: filters.runtime,
-  releaseYear: [...filters.releaseYear],
-  minAvgRate:[...filters.minAvgRate]
-};
 
 const categories = [
   { title: 'Genres', stateName: 'genres' },
   { title: 'Pays de production', stateName: 'countries' },
   { title: 'Durée', stateName: 'runtime' },
   { title: 'Année de sortie', stateName: 'releaseYear' },
-  { title: 'Note moyenne', stateName: 'minAvgRate' },
+  { title: 'Note moyenne', stateName: 'avgRate' },
 ];
 
-export default function Filter() {
-  const [isFilterMenuOpened, setIsFilterMenuOpened] = useState(false);
-  const toggleDisplay = () => setIsFilterMenuOpened(!isFilterMenuOpened);
+export default function Filter({
+  filterOptions,
+  isMenuOpened,
+  displayMenuSetter,
+  userFilterInputs,
+  userFilterInputsSetter,
+}: FilterProps) {
+  // Opening / closing the filter menu
+  const toggleDisplay = () => displayMenuSetter();
   const filterRef = useRef<HTMLDivElement>(null);
-  useCloseMenuOnOutsideClick(filterRef, 'filter', isFilterMenuOpened, setIsFilterMenuOpened);
-  useCloseOnEnterPress(isFilterMenuOpened, setIsFilterMenuOpened);
-  const [filtersInputs, setFiltersInput] = useState(initFiltersInput);
-  const [maxRuntime, setMaxRuntime] = useState(initFiltersInput.runtime[1]);
-  const [minReleaseYear, setMinReleaseYear] = useState(initFiltersInput.releaseYear[0]);
-  const [maxReleaseYear, setMaxReleaseYear] = useState(initFiltersInput.releaseYear[1]);
-  const [minAvgRate, setMinAvgRate] = useState(filters.minAvgRate[0]);
+
+  useCloseMenuOnOutsideClick(filterRef, 'filter', isMenuOpened, toggleDisplay);
+  useCloseOnEnterPress(isMenuOpened, toggleDisplay);
+  // const [minAvgRate, setMinAvgRate] = useState(filters?.minAvgRate[0] || '0');
+
+  const handleSetRangeInput = (category: string) => (e: string) => {
+    userFilterInputsSetter(category, e);
+  };
 
   return (
     <div
@@ -96,14 +55,14 @@ export default function Filter() {
           <p>Filtrer</p>
           <FilterSvg
             style={
-              !isFilterMenuOpened
+              !isMenuOpened
                 ? 'w-4 stroke-orange-primary fill-dark-gray'
                 : 'w-4 stroke-orangeprimary fill-orange-primary'
             }
           />
         </div>
       </Button>
-      {isFilterMenuOpened && (
+      {isMenuOpened && (
         <div
           id="filter-categories"
           className="filter absolute z-10 top-14 w-full 
@@ -115,25 +74,19 @@ export default function Filter() {
               id="filters-categories__category"
               key={c.stateName}>
               <h2 className="mb-2">{c.title}</h2>
-              {(c.stateName === 'genres' || (c.stateName === 'countries' && filters[c.stateName])) && (
+              {(c.stateName === 'genres' || (c.stateName === 'countries' && filterOptions[c.stateName])) && (
                 <ul className="grid grid-cols-2 gap-3">
-                  {filters[c.stateName]?.map((f) => (
+                  {filterOptions[c.stateName]?.map((f: string) => (
                     <li
                       key={f}
                       className="col-span-1">
                       <CheckBox
                         name={f}
                         id={f}
-                        value={f}
                         customStyle="filter"
-                        onChange={(e) => {
-                          setFiltersInput({
-                            ...filtersInputs,
-                            [c.stateName]:
-                              filtersInputs[c.stateName] && typeof filtersInputs[c.stateName] !== 'number'
-                                ? [...filtersInputs[c.stateName]!, e.currentTarget.value]
-                                : [e.currentTarget.value],
-                          });
+                        checked={userFilterInputs[c.stateName]?.includes(f) || false}
+                        onChange={() => {
+                          userFilterInputsSetter(c.stateName, f);
                         }}
                       />
                     </li>
@@ -143,29 +96,39 @@ export default function Filter() {
               {c.stateName === 'runtime' && (
                 <RangeInput
                   id="runtime"
-                  min={Number(filters.runtime[0])}
-                  max={Number(filters.runtime[1])}
-                  value={Number(maxRuntime)}
-                  setter={setMaxRuntime}
+                  min={Number(filterOptions.runtime[0])}
+                  max={Number(filterOptions.runtime[1])}
+                  value={
+                    !userFilterInputs.runtime ? Number(filterOptions.runtime[1]) : Number(userFilterInputs.runtime[0])
+                  }
+                  setter={handleSetRangeInput(c.stateName)}
                 />
               )}
               {c.stateName === 'releaseYear' && (
                 <DoubleRangeInput
                   id="runtime"
-                  min={Number(filters.releaseYear[0])}
-                  max={Number(filters.releaseYear[1])}
-                  minValue={Number(minReleaseYear)}
-                  maxValue={Number(maxReleaseYear)}
-                  minSetter={setMinReleaseYear}
-                  maxSetter={setMaxReleaseYear}
+                  min={Number(filterOptions.releaseYear[0])}
+                  max={Number(filterOptions.releaseYear[1])}
+                  minValue={!userFilterInputs.releaseYear
+                    ? Number(filterOptions.releaseYear[0])
+                    : Number(userFilterInputs.releaseYear[0])}
+                  maxValue={!userFilterInputs.releaseYear
+                    ? Number(filterOptions.releaseYear[1])
+                    : Number(userFilterInputs.releaseYear[1])}
+                  minSetter={handleSetRangeInput('minReleaseYear')}
+                  maxSetter={handleSetRangeInput('maxReleaseYear')}
                 />
               )}
-              {c.stateName === 'minAvgRate' && (
-                <div className='-ml-12'>
-                  <StarRadio value={Number(minAvgRate)} onChange={(e) =>{
-                    (e.currentTarget && e.currentTarget instanceof HTMLInputElement) &&
-                    setMinAvgRate(e.currentTarget.value);
-                  }}/>
+              {c.stateName === 'avgRate' && (
+                <div className="-ml-12">
+                  <StarRadio
+                    value={(userFilterInputs.avgRate) ? Number(userFilterInputs.avgRate[0]) : 0}
+                    onChange={(e: FormEvent) => {
+                      if (e.target instanceof HTMLInputElement) {
+                        userFilterInputsSetter(c.stateName, e.target.value);
+                      } 
+                    }}
+                  />
                 </div>
               )}
             </div>
