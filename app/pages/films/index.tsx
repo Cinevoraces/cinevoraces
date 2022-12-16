@@ -1,5 +1,6 @@
-import type { ChangeEvent } from 'react';
 import React, { useState, useRef, useEffect } from 'react';
+import Image from 'next/image';
+import Link from 'next/link';
 import { Filter, SearchBar } from '@components/Input';
 import useSWR from 'swr';
 import { useAppSelector, useAppDispatch } from '@store/store';
@@ -12,12 +13,17 @@ import {
   setAvailableFilters,
   initializeOrCorrectUserInputs,
   setFilter,
+  setFilteredMovies,
 } from '@store/slices/filteredMovies';
 import type { CompleteMovie, Season, FilterOptions } from '@custom_types/index';
+import type { ChangeEvent } from 'react';
 
 import filtersSync from '@utils/filterSyncer';
 
-import { toast } from 'react-hot-toast';
+const posterStyles = `rounded-lg w-full h-full object-cover shadow-lg max-w-[250px] 
+    hover:scale-105 
+    transition duration-150 hover:ease-out `;
+const gridStyle = 'w-full grid gap-2 grid-cols-2 ';
 
 const metadatas = [
   'casting',
@@ -52,27 +58,37 @@ export default function Films() {
   // Initialise the default value for select button and first movies fetching
   useEffect(() => {
     if (seasonsArray){
-      seasons.current = seasonsArray.map( (s: { season_number: number; year: number; movie_count: number }) => (
+      seasons.current = [ ...seasonsArray.map( (s: { season_number: number; year: number; movie_count: number }) => (
         {
           name: `Saison ${s.season_number} - ${s.year}`,
           value: '' + s.season_number,
         }
-      ));
+      )),
+      { name: 'Tous les films', value: '0' }];
     }
     (seasonsArray) && dispatch(changeSeason(seasons.current[seasonsArray.length - 1]));
   }, [seasonsArray]);
-  const { data: movies, error, mutate } = useSWR(() => (season) && '/movies?' + selectQueryString + '&where[season_number]=' + season.value);
+  // Recovers movies from asked season, once season is defined
+  const { data: movies, error, mutate } = useSWR(() => (season) && `/movies?${selectQueryString}${(season.value !== '0') ? `&where[season_number]=${season.value}` : ''}`);
+  // Each Season change triggers an SWR call
+  // Changing movie set alters filters displayed and stored in state
+  // then reapply current filter rules to the new movie set
   useEffect(() => {
     mutate();
-    // console.log(movies);
-  }, [season, movies, mutate]);
-
-  useEffect(() => {
     if (movies){
       dispatch(setAvailableFilters(filtersSync(movies)));
       dispatch(initializeOrCorrectUserInputs());
+      movies && dispatch(setFilteredMovies(movies));      
     }
   }, [movies]);
+
+  // On user filter inputs, alter movies set for representation
+  useEffect(() => {
+    console.log('on modifie les films présentés.');
+    movies && dispatch(setFilteredMovies(movies));
+  }, [userFilterInputs]);
+
+  const movieResults = useAppSelector(filteredMovies).filteredMovies;
 
   return (
     <main className="custom-container ">
@@ -86,12 +102,12 @@ export default function Films() {
           valueSetter={handleSeasonChange}
           customStyle="searchbar"
           id="search"
-          placeholder="Rechercher un film"
+          placeholder="🔍 Rechercher un film"
           value={(searchQuery) ? searchQuery : ''}
           onChange={handleChangeSearchValue}
         />
       )}
-      { (availableFilters) &&
+      { availableFilters &&
         <Filter 
           isMenuOpened={isFilterMenuOpen}
           displayMenuSetter={handleToggleFilterMenu}
@@ -102,8 +118,25 @@ export default function Films() {
       }
       <section id="movie-grid">
         {error && <p>Une erreur est survenue.</p>}
-        {!movies && !error && <p>Chargement des données.</p>}
-        {movies && movies.map((m: CompleteMovie) => <p key={m.french_title}>{m.french_title}</p>)}
+        {!movieResults && !error && <p>Chargement des données.</p>}
+        {movieResults && 
+        <ul className={gridStyle}>
+          {
+            movieResults.map((movie: CompleteMovie) => (
+              <li key={movie.french_title}>
+                <Link href={`/films/${movie.id}`}>
+                  <Image
+                    src={movie.poster_url}
+                    alt={`${movie.french_title} movie poster`}
+                    width={200}
+                    height={(200 * 9) / 16}
+                    className={posterStyles}
+                  />
+                </Link>
+              </li>))
+          }
+        </ul>
+        }
       </section>
     </main>
   );

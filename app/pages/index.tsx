@@ -35,7 +35,8 @@ const Home: NextPage<HomeProps> = (props) => {
   const posterStyles = `rounded-lg w-full h-full object-cover shadow-lg max-w-[250px] 
     fourth-child:hidden fifth-child:hidden sixth-child:hidden
     md:fourth-child:block lg:fifth-child:block xl:sixth-child:block
-    hover:scale-105`;
+    hover:scale-105 
+    transition duration-150 hover:ease-out`;
   const h2Style = 'title-section ';
   const emStyle = 'emphasis ';
 
