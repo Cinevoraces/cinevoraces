@@ -57,6 +57,8 @@ enum EEndpoints {
   METRICS = '/metrics',
   MOVIES = '/movies',
   ADMIN = '/admin',
+  ADMIN_PUBLISH = '/admin/movies/publish/',
+  ADMIN_MOVIES = '/admin/movies/',
 }
 
 export default class TestServer {
@@ -95,6 +97,36 @@ export default class TestServer {
         seasons_count: expect.any(Number),
         movies_count: expect.any(Number),
         countries_count: expect.any(Number),
+      }),
+      movie: expect.objectContaining({
+        id: expect.any(Number),
+        author_id: expect.any(Number),
+        season_number: expect.any(Number),
+        is_published: expect.any(Boolean),
+        french_title: expect.any(String),
+        original_title: expect.any(String),
+        poster_url: expect.any(String),
+        publishing_date: expect.any(String),
+      }),
+      movieFullObject: expect.objectContaining({
+        id: expect.any(Number),
+        author_id: expect.any(Number),
+        season_number: expect.any(Number),
+        is_published: expect.any(Boolean),
+        french_title: expect.any(String),
+        original_title: expect.any(String),
+        poster_url: expect.any(String),
+        publishing_date: expect.any(String),
+        casting: expect.any(Array),
+        directors: expect.any(Array),
+        runtime: expect.any(Number),
+        release_date: expect.any(String),
+        genres: expect.any(Array),
+        countries: expect.any(Array),
+        languages: expect.any(Array),
+        presentation: expect.any(Object),
+        metrics: expect.any(Object),
+        comments: expect.any(Array),
       }),
     };
     this.ressources = {
@@ -190,6 +222,133 @@ export default class TestServer {
     token: string
   ) {
     // TODO
+  }
+  async RequestProposeMovie(
+    token: string,
+    payload?: {
+      french_title?: string;
+      original_title?: string;
+      poster_url?: string;
+      directors?: string[];
+      release_date?: string;
+      runtime?: number;
+      casting?: string[];
+      presentation?: string;
+      publishing_date?: string;
+      user_id?: number;
+      season_id?: number;
+      movie_genres?: string[];
+      movie_languages?: string[];
+      movie_countries?: string[]
+    }
+  ) {
+    const req = await this.fastify.inject({
+      method: ECrudMethods.POST,
+      url: EEndpoints.MOVIES,
+      headers: { Authorization: `Bearer ${token}` },
+      payload: {
+        french_title: faker.lorem.words(2),
+        original_title: faker.lorem.words(2),
+        poster_url: faker.image.imageUrl(),
+        directors: [faker.name.fullName()],
+        release_date: faker.date.past(),
+        runtime: 150,
+        casting: [faker.name.firstName()],
+        presentation: faker.lorem.paragraph(),
+        publishing_date: faker.date.past(),
+        season_id: 3,
+        movie_genres: ['TEST_GENRE'],
+        movie_languages: ['TEST_LANGUAGE'],
+        movie_countries: ['TEST_COUNTRY'],
+        ...payload
+      }
+    });
+
+    const res = await req.json();
+    const statusCode = req.statusCode;
+    return { res, statusCode };
+  }
+  async RequestUpdateMovieProposal(
+    token: string,
+    presentation: string,
+    SQLQuery: {
+      release_date: string;
+      french_title: string;
+      original_title: string;
+    }
+  ) {
+    const movieId = await this.fastify.pgClient.query({
+      text: ` SELECT id FROM movie WHERE 
+              release_date = $1 AND french_title = $2 AND original_title = $3`,
+      values: [SQLQuery.release_date, SQLQuery.french_title, SQLQuery.original_title]
+    });
+    const req = await this.fastify.inject({
+      method: ECrudMethods.PUT,
+      url: EEndpoints.MOVIES,
+      headers: { Authorization: `Bearer ${token}` },
+      payload: {
+        movie_id: movieId.rows[0].id,
+        presentation
+      }
+    });
+
+    const res = await req.json();
+    const statusCode = req.statusCode;
+    return { res, statusCode };
+  }
+  async RequestAdminPublishMovie(
+    token: string,
+    payload: {
+      password: string;
+    },
+    SQLQuery: {
+      release_date: string;
+      french_title: string;
+      original_title: string;
+    }
+  ) {
+    const movieId = await this.fastify.pgClient.query({
+      text: ` SELECT id FROM movie WHERE
+              release_date = $1 AND french_title = $2 AND original_title = $3`,
+      values: [SQLQuery.release_date, SQLQuery.french_title, SQLQuery.original_title]
+    });
+    const req = await this.fastify.inject({
+      method: ECrudMethods.PUT,
+      url: EEndpoints.ADMIN_PUBLISH + movieId.rows[0].id,
+      headers: { Authorization: `Bearer ${token}` },
+      payload
+    });
+  
+    const res = await req.json();
+    const statusCode = req.statusCode;
+    return { res, statusCode };
+  }
+  async RequestAdminDeleteMovie(
+    token: string,
+    payload: {
+      password: string;
+    },
+    SQLQuery: {
+      release_date: string;
+      french_title: string;
+      original_title: string;
+    }
+  ) {
+    const movieId = await this.fastify.pgClient.query({
+      text: ` SELECT id FROM movie WHERE
+              release_date = $1 AND french_title = $2 AND original_title = $3`,
+      values: [SQLQuery.release_date, SQLQuery.french_title, SQLQuery.original_title]
+    });
+    const req = await this.fastify.inject({
+      method: ECrudMethods.DELETE,
+      url: EEndpoints.ADMIN_MOVIES + movieId.rows[0].id,
+      headers: { Authorization: `Bearer ${token}` },
+      payload
+    });
+
+    const res = await req.json();
+    const statusCode = req.statusCode;
+    return { res, statusCode };
   }
 
   // RESSOURCES METHODS
