@@ -87,7 +87,7 @@ export default class TestServer {
         token: expect.any(String),
         response: expect.any(String)
       }),
-      refreshToken: expect.objectContaining({ 
+      refreshToken: expect.objectContaining({
         name: 'refresh_token',
         value: expect.any(String)
       }),
@@ -167,6 +167,29 @@ export default class TestServer {
     const statusCode = req.statusCode;
     
     return { res, statusCode };
+  }
+  async RequestMovies(query = '', token?: string) {
+    const headers = token
+      ? { Authorization: `Bearer ${token}` }
+      : {};
+    
+    const req = await this.fastify.inject({
+      headers,
+      method: ECrudMethods.GET,
+      url: EEndpoints.MOVIES,
+      query
+    });
+
+    const res = await req.json();
+    const statusCode = req.statusCode;
+    return { res, statusCode };
+  }
+  async RequestReviewMovie(
+    payload: { rating?: number; comment?: string, bookmarked?: boolean, viewed?: boolean, liked?: boolean },
+    movieId: number,
+    token: string
+  ) {
+    // TODO
   }
 
   // RESSOURCES METHODS

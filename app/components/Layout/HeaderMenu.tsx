@@ -1,3 +1,4 @@
+import { forwardRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useAppSelector, useAppDispatch } from '@store/store';
@@ -54,7 +55,7 @@ interface HeaderMenuProps extends HeaderMenuButtonProps {
   links: string[][];
 }
 
-const HeaderMenu = React.forwardRef<HTMLElement, HeaderMenuProps>((props, ref) => {
+const HeaderMenu = forwardRef<HTMLElement, HeaderMenuProps>((props, ref) => {
   HeaderMenu.displayName = 'HeaderMenu';
   const { type, setter, stateValue, links } = props;
   const pseudo = useAppSelector(user).pseudo;
