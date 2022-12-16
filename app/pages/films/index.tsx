@@ -19,14 +19,6 @@ import filtersSync from '@utils/filterSyncer';
 
 import { toast } from 'react-hot-toast';
 
-// To delete later
-const seasons = [
-  // { name: 'Saison 4 - 2023', value: '4' },
-  { name: 'Saison 3 - 2022', value: '3' },
-  { name: 'Saison 2 - 2021', value: '2' },
-  { name: 'Saison 1 - 2020', value: '1' },
-  { name: 'Tous les films', value: '0' },
-];
 const metadatas = [
   'casting',
   'directors',
@@ -53,13 +45,22 @@ export default function Films() {
   const { isFilterMenuOpen, availableFilters, userFilterInputs } = useAppSelector(filteredMovies);
   const handleToggleFilterMenu = () => dispatch(toggleFilterMenu());
   const handleSetFilters = (category: string, filter: string) => dispatch(setFilter({ category, filter }));
-  //To replace with the appropriate season endpoint later
-  const { data: metrics } = useSWR('/metrics');
+
+  const { data: seasonsArray } = useSWR('/seasons');
+  const seasons = useRef<{ name: string; value: string; }[]>([]);
 
   // Initialise the default value for select button and first movies fetching
   useEffect(() => {
-    metrics && dispatch(changeSeason(seasons.filter((s) => s.value == metrics.seasons_count)[0]));
-  }, [metrics, dispatch]);
+    if (seasonsArray){
+      seasons.current = seasonsArray.map( (s: { season_number: number; year: number; movie_count: number }) => (
+        {
+          name: `Saison ${s.season_number} - ${s.year}`,
+          value: '' + s.season_number,
+        }
+      ));
+    }
+    (seasonsArray) && dispatch(changeSeason(seasons.current[seasonsArray.length - 1]));
+  }, [seasonsArray]);
   const { data: movies, error, mutate } = useSWR(() => (season) && '/movies?' + selectQueryString + '&where[season_number]=' + season.value);
   useEffect(() => {
     mutate();
@@ -78,7 +79,7 @@ export default function Films() {
       {season && (
         <SearchBar
           name="searchbarSelect"
-          options={seasons}
+          options={seasons.current}
           displayOptionsState={isSeasonSelectOpened}
           displayOptionsSetter={handleToggleSeasonSelect}
           stateValue={season}
@@ -86,7 +87,7 @@ export default function Films() {
           customStyle="searchbar"
           id="search"
           placeholder="Rechercher un film"
-          value={searchQuery}
+          value={(searchQuery) ? searchQuery : ''}
           onChange={handleChangeSearchValue}
         />
       )}
