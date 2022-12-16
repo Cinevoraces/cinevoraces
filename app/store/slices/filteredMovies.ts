@@ -7,9 +7,9 @@ const initialState: filteredMoviesStateInterface = {
   isSeasonSelectOpened: false,
   isFilterMenuOpen: false,
   availableFilters: {
-    genres:[],
-    countries:[],
-    runtime:[],
+    genres: [],
+    countries: [],
+    runtime: [],
     releaseYear: [],
     avgRate: [],
   },
@@ -29,7 +29,7 @@ const filteredMoviesSlice = createSlice({
     changeSeason(state, action) {
       return { ...state, season: action.payload };
     },
-    changeSearchQuery(state, action){
+    changeSearchQuery(state, action) {
       return { ...state, searchQuery: action.payload };
     },
     setAvailableFilters(state, action) {
@@ -38,71 +38,75 @@ const filteredMoviesSlice = createSlice({
         availableFilters: action.payload,
       };
     },
-    initializeOrCorrectUserInputs(state){
-      //initialize or corrects filters that gets modified or removed by season change
-      return {
-        ...state,
-        userFilterInputs: {
-          ...state.userFilterInputs,
-          runtime: [state.availableFilters.runtime[1]],
-          releaseYear: [...state.availableFilters.releaseYear],
-        }
+    initializeOrCorrectUserInputs(state) {
+      //initializes or corrects filters that gets modified or removed by user season change
+      const newState = state;
+
+      if (newState.userFilterInputs.genres){
+        newState.userFilterInputs.genres = newState.userFilterInputs.genres.filter((g) => newState.availableFilters.genres.includes(g));
+      } 
+      if (newState.userFilterInputs.countries){
+        newState.userFilterInputs.countries = newState.userFilterInputs.countries.filter((g) => newState.availableFilters.countries.includes(g));
+      } 
+      if (newState.userFilterInputs.runtime){
+        newState.userFilterInputs.runtime = [
+          Math.max(
+            Math.min(Number(newState.userFilterInputs.runtime[0]), Number(newState.availableFilters.runtime[1])),
+            Number(Number(newState.availableFilters.runtime[0]))
+          ).toString()
+        ];
+      }
+      // if (newState.userFilterInputs.releaseYear){
+      //   newState.userFilterInputs.releaseYear = [
+      //     Math.max(
+      //       Math.min(Number(newState.userFilterInputs.releaseYear[0]), Number(newState.availableFilters.releaseYear[1])),
+      //       Number(Number(newState.availableFilters.releaseYear[0])),
+      //     ).toString(),
+      //     Math.min(
+      //       Math.max(Number(newState.userFilterInputs.releaseYear[1]), Number(newState.availableFilters.releaseYear[0])),
+      //       Number(Number(newState.availableFilters.releaseYear[1]))
+      //     ).toString()];
+      // }
+      newState.userFilterInputs.releaseYear = state.availableFilters.releaseYear;
+      return newState;
+    },
+    setFilter(state, action) {
+      const { category, filter } = action.payload;
+      // This code block is relying on releaseYear being initialized
+      if (category.includes('ReleaseYear') && state.userFilterInputs.releaseYear) {
+        const newReleaseYears = (category === 'minReleaseYear')
+          ? state.userFilterInputs.releaseYear = [
+            Math.min(
+              Math.max(filter, Number(state.availableFilters.releaseYear[0])),
+              Number(state.userFilterInputs.releaseYear![1]),
+            ).toString(),
+            state.userFilterInputs.releaseYear[1],
+          ]
+          : state.userFilterInputs.releaseYear = [
+            state.userFilterInputs.releaseYear[0],
+            Math.max(
+              Math.min(filter, Number(state.availableFilters.releaseYear[1])),
+              Number(state.userFilterInputs.releaseYear[0]),
+            ).toString(),
+          ];
+        state.userFilterInputs.releaseYear = newReleaseYears;
+        return state;
+      };
+      // Category initializer or single value arrays
+      if (!state.userFilterInputs[category] || category === 'runtime' || category === 'avgRate') {
+        state.userFilterInputs[category] = [filter];
+        return state;
+      };
+      if ((category === 'genres' || category === 'countries') && state.userFilterInputs[category]) {
+        state.userFilterInputs[category] = 
+              // Use of ! as last resort as type asertion could not work -------- To fix later ------------
+              state.userFilterInputs[category]?.includes(filter)
+                ? [...state.userFilterInputs[category]!.filter((f) => f !== filter)]
+                : [...state.userFilterInputs[category]!, filter];
+        return state;
       };
     },
-    setFilter(state, action){
-      const { category, filter } = action.payload;
-      if (category.includes('ReleaseYear')){
-        if (category === 'minReleaseYear' && state.userFilterInputs.releaseYear){
-          return {
-            ...state,
-            userFilterInputs: {
-              ...state.userFilterInputs,
-              releaseYear: [
-                Math.max(filter, Number(state.availableFilters.releaseYear[0])).toString(),
-                state.userFilterInputs.releaseYear[1],
-              ]
-            }
-          };
-        } else if (state.userFilterInputs.releaseYear){
-          return {
-            ...state,
-            userFilterInputs: {
-              ...state.userFilterInputs,
-              releaseYear: [
-                state.userFilterInputs.releaseYear[0],
-                Math.min(filter, Number(state.availableFilters.releaseYear[1])).toString(),
-              ]
-            }
-          };
-        }
-      }
-      if (!state.userFilterInputs[category] || category === 'runtime' || category === 'avgRate'){
-        return {
-          ...state,
-          userFilterInputs: {
-            ...state.userFilterInputs,
-            [category]: [filter],
-          },
-        };
-      }
-      if (category === 'genres' || category === 'countries'){
-        return {
-          ...state,
-          userFilterInputs: {
-            ...state.userFilterInputs,
-            [category]: 
-            // Use of ! as last resort as type asertion could not work
-                  (state.userFilterInputs[category]!.includes(filter)) ?
-                    [ ...state.userFilterInputs[category]!.filter((f) => f !== filter)]
-                    : [
-                      ...state.userFilterInputs[category]!,
-                      filter
-                    ]
-          }
-        };
-      }
-    },
-  }
+  },
 });
 
 export const filteredMovies = (state: RootState) => state.filteredMovies;

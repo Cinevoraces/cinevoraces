@@ -17,6 +17,8 @@ import type { CompleteMovie, Season, FilterOptions } from '@custom_types/index';
 
 import filtersSync from '@utils/filterSyncer';
 
+import { toast } from 'react-hot-toast';
+
 // To delete later
 const seasons = [
   // { name: 'Saison 4 - 2023', value: '4' },
@@ -69,7 +71,7 @@ export default function Films() {
       dispatch(setAvailableFilters(filtersSync(movies)));
       dispatch(initializeOrCorrectUserInputs());
     }
-  }, [movies, dispatch]);
+  }, [movies]);
 
   return (
     <main className="custom-container ">

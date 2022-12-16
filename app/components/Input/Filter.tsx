@@ -109,10 +109,10 @@ export default function Filter({
                   id="runtime"
                   min={Number(filterOptions.releaseYear[0])}
                   max={Number(filterOptions.releaseYear[1])}
-                  minValue={!userFilterInputs.releaseYear
+                  minValue={!(userFilterInputs.releaseYear && userFilterInputs.releaseYear[0])
                     ? Number(filterOptions.releaseYear[0])
                     : Number(userFilterInputs.releaseYear[0])}
-                  maxValue={!userFilterInputs.releaseYear
+                  maxValue={!(userFilterInputs.releaseYear && userFilterInputs.releaseYear[1])
                     ? Number(filterOptions.releaseYear[1])
                     : Number(userFilterInputs.releaseYear[1])}
                   minSetter={handleSetRangeInput('minReleaseYear')}

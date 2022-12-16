@@ -1,13 +1,14 @@
 import type { CompleteMovie } from '@custom_types/index';
 
 const arrayCategoryAggregate = (movies: CompleteMovie [], category: 'genres' | 'countries') => {
-  return movies.reduce(
+  const filtersArray = movies.reduce(
     (acc: string[], movie: CompleteMovie) => {
       return [
         ...acc, 
         ...movie[category].filter((f: string) => !acc.includes(f)),
       ];
     }, []);
+  return filtersArray.sort((f1, f2) => (f1 > f2) ? 1 : (f2 > f1) ? -1 : 0);
 };
 
 const releaseDateAggregate = (movies: CompleteMovie []) => {
