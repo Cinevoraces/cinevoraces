@@ -1,10 +1,10 @@
-import React, { useState, useRef, useEffect } from 'react';
-import type { Dispatch, SetStateAction, FormEvent } from 'react';
+import { useRef } from 'react';
+import type { FormEvent } from 'react';
 import Button from './Button';
 import { CheckBox, RangeInput, DoubleRangeInput, StarRadio } from './index';
 import useCloseMenuOnOutsideClick from '@hooks/useCloseMenuOnOutsideClick';
 import useCloseOnEnterPress from '@hooks/useCloseOnEnterPress';
-import FilterSvg from '@components/SvgComponents/Filter';
+import { FilterSvg, ResetSvg } from '@components/SvgComponents/Filter';
 
 import type { FilterOptions, FilterUserInputs } from '@custom_types/index';
 export interface FilterProps {
@@ -13,6 +13,7 @@ export interface FilterProps {
   displayMenuSetter: ()=>void;
   userFilterInputs: FilterUserInputs;
   userFilterInputsSetter: (category: string, filter: string)=>{ payload: FilterUserInputs; type: string };
+  userFilterReset: ()=>void;
 }
 
 const categories = [
@@ -29,39 +30,59 @@ export default function Filter({
   displayMenuSetter,
   userFilterInputs,
   userFilterInputsSetter,
+  userFilterReset,
 }: FilterProps) {
-  // Opening / closing the filter menu
   const toggleDisplay = () => displayMenuSetter();
   const filterRef = useRef<HTMLDivElement>(null);
-
   useCloseMenuOnOutsideClick(filterRef, 'filter', isMenuOpened, toggleDisplay);
   useCloseOnEnterPress(isMenuOpened, toggleDisplay);
-  // const [minAvgRate, setMinAvgRate] = useState(filters?.minAvgRate[0] || '0');
 
   const handleSetRangeInput = (category: string) => (e: string) => {
     userFilterInputsSetter(category, e);
   };
 
+  const handleUserFilterReset = () => {
+    userFilterReset();
+    const filterNodeList = (filterRef.current?.firstChild?.childNodes) ? [...(filterRef.current?.firstChild?.childNodes)] as HTMLElement[] : [];
+    const resetButtonSVGNode = filterNodeList.filter((node) => node.innerText === '')[0].firstChild as HTMLElement;
+    const toggleRotateClass = () => {
+      resetButtonSVGNode?.classList.toggle('animate-reverse-spin');
+    };
+    toggleRotateClass();
+    setTimeout(toggleRotateClass, 1000);
+  };
+
   return (
     <div
       id="filter-input"
-      className="relative w-full filter"
+      className="relative w-full flex justify-between ml-1"
       ref={filterRef}>
-      <Button
-        name="filter"
-        customStyle="empty"
-        onClick={toggleDisplay}>
-        <div className="filter flex gap-2 flex-between items-center">
-          <p>Filtrer</p>
-          <FilterSvg
-            style={
-              !isMenuOpened
-                ? 'w-4 stroke-orange-primary fill-dark-gray'
-                : 'w-4 stroke-orangeprimary fill-orange-primary'
-            }
+      <div className='flex flex-between gap-4'>
+        <Button
+          name="filter"
+          customStyle="empty"
+          onClick={toggleDisplay}>
+          <div className="filter flex gap-2 flex-between items-center">
+            <p>Filtrer</p>
+            <FilterSvg
+              style={
+                !isMenuOpened
+                  ? 'w-4 stroke-orange-primary fill-dark-gray'
+                  : 'w-4 stroke-orangeprimary fill-orange-primary'
+              }
+            />
+          </div>
+        </Button>
+        <Button
+          name="reset"
+          customStyle="empty"
+          onClick={handleUserFilterReset}>
+          <ResetSvg
+            style="w-6 h-6 fill-white "
           />
-        </div>
-      </Button>
+        </Button>
+
+      </div>
       {isMenuOpened && (
         <div
           id="filter-categories"

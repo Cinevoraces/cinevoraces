@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import { useRef, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Filter, SearchBar } from '@components/Input';
@@ -14,6 +14,7 @@ import {
   initializeOrCorrectUserInputs,
   setFilter,
   setFilteredMovies,
+  cleanUserInputs,
 } from '@store/slices/filteredMovies';
 import type { CompleteMovie, Season, FilterOptions } from '@custom_types/index';
 import type { ChangeEvent } from 'react';
@@ -51,6 +52,7 @@ export default function Films() {
   const { isFilterMenuOpen, availableFilters, userFilterInputs } = useAppSelector(filteredMovies);
   const handleToggleFilterMenu = () => dispatch(toggleFilterMenu());
   const handleSetFilters = (category: string, filter: string) => dispatch(setFilter({ category, filter }));
+  const handleFilterReset = () => dispatch(cleanUserInputs());
 
   const { data: seasonsArray } = useSWR('/seasons');
   const seasons = useRef<{ name: string; value: string; }[]>([]);
@@ -58,15 +60,18 @@ export default function Films() {
   // Initialise the default value for select button and first movies fetching
   useEffect(() => {
     if (seasonsArray){
-      seasons.current = [ ...seasonsArray.map( (s: { season_number: number; year: number; movie_count: number }) => (
-        {
-          name: `Saison ${s.season_number} - ${s.year}`,
-          value: '' + s.season_number,
-        }
-      )),
-      { name: 'Tous les films', value: '0' }];
+      seasons.current = [ 
+        ...seasonsArray
+          .map( (s: { season_number: number; year: number; movie_count: number }) => (
+            {
+              name: `Saison ${s.season_number} - ${s.year}`,
+              value: '' + s.season_number,
+            }
+          )),
+        { name: 'Tous les films', value: '0' }]
+        .sort((a, b) => a.value > b.value ? -1 : 1);
     }
-    (seasonsArray) && dispatch(changeSeason(seasons.current[seasonsArray.length - 1]));
+    (seasonsArray && !season) && dispatch(changeSeason(seasons.current[seasonsArray.length - 1]));
   }, [seasonsArray]);
   // Recovers movies from asked season, once season is defined
   const { data: movies, error, mutate } = useSWR(() => (season) && `/movies?${selectQueryString}${(season.value !== '0') ? `&where[season_number]=${season.value}` : ''}`);
@@ -84,9 +89,8 @@ export default function Films() {
 
   // On user filter inputs, alter movies set for representation
   useEffect(() => {
-    console.log('on modifie les films présentés.');
     movies && dispatch(setFilteredMovies(movies));
-  }, [userFilterInputs]);
+  }, [searchQuery, userFilterInputs]);
 
   const movieResults = useAppSelector(filteredMovies).filteredMovies;
 
@@ -114,6 +118,7 @@ export default function Films() {
           filterOptions={availableFilters}
           userFilterInputs={userFilterInputs}
           userFilterInputsSetter={handleSetFilters}
+          userFilterReset={handleFilterReset}
         />
       }
       <section id="movie-grid">
