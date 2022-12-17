@@ -14,6 +14,7 @@ export interface FilterOptions {
   [key: string]: string[];
 }
 export interface FilterUserInputs {
+  filtersCounter: string[];
   genres?: string[];
   countries?: string[];
   runtime?: string[];

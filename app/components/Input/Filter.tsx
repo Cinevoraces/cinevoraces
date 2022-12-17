@@ -14,6 +14,7 @@ export interface FilterProps {
   userFilterInputs: FilterUserInputs;
   userFilterInputsSetter: (category: string, filter: string)=>{ payload: FilterUserInputs; type: string };
   userFilterReset: ()=>void;
+  filtersCounter: number;
 }
 
 const categories = [
@@ -24,6 +25,12 @@ const categories = [
   { title: 'Note moyenne', stateName: 'avgRate' },
 ];
 
+const counterFilterStyle = `absolute z-10 -top-4 -right-5 w-[20px] h-[20px] 
+  flex items-center justify-center 
+  text-dark-gray text-xs 
+  rounded-full bg-orange-primary 
+  after:absolute after:-z-10 after:w-4 after:h-4 after:bg-orange-primary after:rounded-full after:animate-ping`;
+
 export default function Filter({
   filterOptions,
   isMenuOpened,
@@ -31,6 +38,7 @@ export default function Filter({
   userFilterInputs,
   userFilterInputsSetter,
   userFilterReset,
+  filtersCounter,
 }: FilterProps) {
   const toggleDisplay = () => displayMenuSetter();
   const filterRef = useRef<HTMLDivElement>(null);
@@ -43,7 +51,9 @@ export default function Filter({
 
   const handleUserFilterReset = () => {
     userFilterReset();
-    const filterNodeList = (filterRef.current?.firstChild?.childNodes) ? [...(filterRef.current?.firstChild?.childNodes)] as HTMLElement[] : [];
+    const filterNodeList = filterRef.current?.firstChild?.childNodes
+      ? ([...filterRef.current?.firstChild?.childNodes] as HTMLElement[])
+      : [];
     const resetButtonSVGNode = filterNodeList.filter((node) => node.innerText === '')[0].firstChild as HTMLElement;
     const toggleRotateClass = () => {
       resetButtonSVGNode?.classList.toggle('animate-reverse-spin');
@@ -55,14 +65,14 @@ export default function Filter({
   return (
     <div
       id="filter-input"
-      className="relative w-full flex justify-between ml-1"
+      className="relative w-full flex justify-between"
       ref={filterRef}>
-      <div className='flex flex-between gap-4'>
+      <div className="flex flex-between gap-4">
         <Button
           name="filter"
           customStyle="empty"
           onClick={toggleDisplay}>
-          <div className="filter flex gap-2 flex-between items-center">
+          <div className="relative filter flex gap-2 flex-between items-center">
             <p>Filtrer</p>
             <FilterSvg
               style={
@@ -71,17 +81,21 @@ export default function Filter({
                   : 'w-4 stroke-orangeprimary fill-orange-primary'
               }
             />
+            {
+              (filtersCounter !==0) &&
+              <p
+                className={counterFilterStyle}>
+                {filtersCounter}
+              </p>
+            }
           </div>
         </Button>
         <Button
           name="reset"
           customStyle="empty"
           onClick={handleUserFilterReset}>
-          <ResetSvg
-            style="w-6 h-6 fill-white "
-          />
+          <ResetSvg style="w-6 h-6 fill-white " />
         </Button>
-
       </div>
       {isMenuOpened && (
         <div
@@ -130,12 +144,16 @@ export default function Filter({
                   id="runtime"
                   min={Number(filterOptions.releaseYear[0])}
                   max={Number(filterOptions.releaseYear[1])}
-                  minValue={!(userFilterInputs.releaseYear && userFilterInputs.releaseYear[0])
-                    ? Number(filterOptions.releaseYear[0])
-                    : Number(userFilterInputs.releaseYear[0])}
-                  maxValue={!(userFilterInputs.releaseYear && userFilterInputs.releaseYear[1])
-                    ? Number(filterOptions.releaseYear[1])
-                    : Number(userFilterInputs.releaseYear[1])}
+                  minValue={
+                    !(userFilterInputs.releaseYear && userFilterInputs.releaseYear[0])
+                      ? Number(filterOptions.releaseYear[0])
+                      : Number(userFilterInputs.releaseYear[0])
+                  }
+                  maxValue={
+                    !(userFilterInputs.releaseYear && userFilterInputs.releaseYear[1])
+                      ? Number(filterOptions.releaseYear[1])
+                      : Number(userFilterInputs.releaseYear[1])
+                  }
                   minSetter={handleSetRangeInput('minReleaseYear')}
                   maxSetter={handleSetRangeInput('maxReleaseYear')}
                 />
@@ -143,11 +161,11 @@ export default function Filter({
               {c.stateName === 'avgRate' && (
                 <div className="-ml-12">
                   <StarRadio
-                    value={(userFilterInputs.avgRate) ? Number(userFilterInputs.avgRate[0]) : 0}
+                    value={userFilterInputs.avgRate ? Number(userFilterInputs.avgRate[0]) : 0}
                     onChange={(e: FormEvent) => {
                       if (e.target instanceof HTMLInputElement) {
                         userFilterInputsSetter(c.stateName, e.target.value);
-                      } 
+                      }
                     }}
                   />
                 </div>
