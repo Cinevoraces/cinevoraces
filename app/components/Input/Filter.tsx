@@ -29,7 +29,7 @@ const counterFilterStyle = `absolute z-10 -top-4 -right-5 w-[20px] h-[20px]
   flex items-center justify-center 
   text-dark-gray text-xs 
   rounded-full bg-orange-primary 
-  after:absolute after:-z-10 after:w-4 after:h-4 after:bg-orange-primary after:rounded-full after:animate-ping`;
+  after:absolute after:-z-10 after:w-4 after:h-4 after:bg-orange-primary/50 after:rounded-full after:animate-ping`;
 
 export default function Filter({
   filterOptions,
@@ -65,9 +65,9 @@ export default function Filter({
   return (
     <div
       id="filter-input"
-      className="relative w-full flex justify-between"
+      className="relative w-full flex justify-between md:justify-end"
       ref={filterRef}>
-      <div className="flex flex-between gap-4">
+      <div className="flex gap-6">
         <Button
           name="filter"
           customStyle="empty"
@@ -102,19 +102,20 @@ export default function Filter({
           id="filter-categories"
           className="filter absolute z-10 top-14 w-full 
             px-2 py-3 
-            flex flex-col gap-4  
+            grid grid-cols-1 gap-6 lg:grid-cols-2 lg:gap-8 xl:grid-cols-3 xl:gap-10 
           bg-medium-gray border border-orange-primary rounded-xl ">
           {categories.map((c) => (
             <div
               id="filters-categories__category"
-              key={c.stateName}>
+              key={c.stateName}
+              className={(c.stateName === 'genres' || c.stateName === 'countries') ? 'lg:col-span-2 xl:col-span-3' : ''}>
               <h2 className="mb-2">{c.title}</h2>
               {(c.stateName === 'genres' || (c.stateName === 'countries' && filterOptions[c.stateName])) && (
-                <ul className="grid grid-cols-2 gap-3">
+                <ul className="grid grid-cols-2 gap-3 lg:grid-cols-3 xl:grid-cols-5">
                   {filterOptions[c.stateName]?.map((f: string) => (
                     <li
                       key={f}
-                      className="col-span-1">
+                      className="col-span-1 px-2 ">
                       <CheckBox
                         name={f}
                         id={f}
@@ -159,7 +160,7 @@ export default function Filter({
                 />
               )}
               {c.stateName === 'avgRate' && (
-                <div className="-ml-12">
+                <div className="-ml-12 w-full">
                   <StarRadio
                     value={userFilterInputs.avgRate ? Number(userFilterInputs.avgRate[0]) : 0}
                     onChange={(e: FormEvent) => {

@@ -24,7 +24,7 @@ import filtersSync from '@utils/filterSyncer';
 const posterStyles = `rounded-lg w-full h-full object-cover shadow-lg max-w-[250px] 
     hover:scale-105 
     transition duration-150 hover:ease-out `;
-const gridStyle = 'w-full grid gap-2 grid-cols-2 ';
+const gridStyle = 'w-full grid gap-2 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6';
 
 const metadatas = [
   'casting',
@@ -95,23 +95,24 @@ export default function Films() {
   const movieResults = useAppSelector(filteredMovies).filteredMovies;
 
   return (
-    <main className="custom-container ">
-      {season && (
-        <SearchBar
-          name="searchbarSelect"
-          options={seasons.current}
-          displayOptionsState={isSeasonSelectOpened}
-          displayOptionsSetter={handleToggleSeasonSelect}
-          stateValue={season}
-          valueSetter={handleSeasonChange}
-          customStyle="searchbar"
-          id="search"
-          placeholder="🔍 Rechercher un film"
-          value={(searchQuery) ? searchQuery : ''}
-          onChange={handleChangeSearchValue}
-        />
-      )}
-      { availableFilters &&
+    <main className="custom-container">
+      <section className='w-full flex flex-col gap-3 align-start md:flex-row'>
+        {season && (
+          <SearchBar
+            name="searchbarSelect"
+            options={seasons.current}
+            displayOptionsState={isSeasonSelectOpened}
+            displayOptionsSetter={handleToggleSeasonSelect}
+            stateValue={season}
+            valueSetter={handleSeasonChange}
+            customStyle="searchbar"
+            id="search"
+            placeholder="🔍 Rechercher un film"
+            value={(searchQuery) ? searchQuery : ''}
+            onChange={handleChangeSearchValue}
+          />
+        )}
+        { availableFilters &&
         <Filter 
           isMenuOpened={isFilterMenuOpen}
           displayMenuSetter={handleToggleFilterMenu}
@@ -121,7 +122,8 @@ export default function Films() {
           userFilterReset={handleFilterReset}
           filtersCounter={Number(userFilterInputs.filtersCounter[0])}
         />
-      }
+        }
+      </section>
       <section id="movie-grid">
         {error && <p>Une erreur est survenue.</p>}
         {!movieResults && !error && <p>Chargement des données.</p>}

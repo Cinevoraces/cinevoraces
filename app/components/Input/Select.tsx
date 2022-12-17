@@ -79,7 +79,7 @@ export default function Select(props: SelectProps) {
           className={
             name +
             ` absolute z-10 top-12 w-full -ml-1 
-              text-sm sm:text-base 
+              text-sm 
               py-2.5 flex flex-col gap-2 border rounded-xl 
               bg-medium-gray border-orange-primary`
           }>

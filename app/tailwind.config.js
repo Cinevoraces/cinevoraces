@@ -29,7 +29,7 @@ module.exports = {
       animation: {
         'slidein': 'slidein 400ms ease-in',
         'slideout': 'slidein 400ms ease-out reverse',
-        'reverse-spin': 'reverse-spin 1s linear ',
+        'reverse-spin': 'reverse-spin 0.5s linear ',
       },
       transitionProperty: {
         'width': 'width',
