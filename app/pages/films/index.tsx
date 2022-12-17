@@ -78,7 +78,7 @@ export default function Films() {
     if (movies){
       dispatch(setAvailableFilters(filtersSync(movies)));
       dispatch(initializeOrCorrectUserInputs());
-      movies && dispatch(setFilteredMovies(movies));      
+      movies && dispatch(setFilteredMovies(movies));  
     }
   }, [movies]);
 

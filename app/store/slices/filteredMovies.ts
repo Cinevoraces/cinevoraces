@@ -108,11 +108,13 @@ const filteredMoviesSlice = createSlice({
     },
     setFilteredMovies(state, action){
       const moviesToFilter = action.payload;
-      const { genres, countries, runtime } = state.userFilterInputs;
+      const { genres, countries, runtime, releaseYear, avgRate } = state.userFilterInputs;
       const filterFunctions = [
         (m: CompleteMovie) => (genres && genres.length > 0) ? m.genres.filter((g) => genres?.includes(g)).length > 0 : true,
         (m: CompleteMovie) => (countries && countries.length > 0) ? m.countries.filter((g) => countries?.includes(g)).length > 0 : true,
         (m: CompleteMovie) => (runtime) ? m.runtime < Number(runtime[0]) : true,
+        (m: CompleteMovie) => (releaseYear) ? (Number(releaseYear[0]) < Number(m.release_date.slice(0, 4)) && Number(m.release_date.slice(0, 4)) > Number(releaseYear[0])) : true,
+        (m: CompleteMovie) => (avgRate) ? m.metrics.avg_rating > Number(avgRate) : true,
       ];
       const newState = state;
       newState.filteredMovies = filterFunctions.reduce(
