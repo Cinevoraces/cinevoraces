@@ -11,14 +11,14 @@ services:
       - 5432:5432
     restart: always
 
-  # pgadmin:
-  #   image: dpage/pgadmin4
-  #   ports:
-  #     - 5431:5431
-  #   env_file:
-  #     - .env.db
-  #   depends_on:
-  #     - postgres
+  pgadmin:
+    image: dpage/pgadmin4
+    ports:
+      - 5431:80
+    env_file:
+      - .env.db
+    depends_on:
+      - postgres
 
   api:
     hostname: cinevoraces_api

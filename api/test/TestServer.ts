@@ -21,6 +21,7 @@ interface User extends RessourcesEtity {
   };
 }
 interface Slot extends RessourcesEtity {
+  id: number;
   is_booked: boolean;
   season_number: number;
   episode: number;
@@ -56,9 +57,15 @@ enum EEndpoints {
   REVIEWS = '/reviews',
   METRICS = '/metrics',
   MOVIES = '/movies',
+  SLOTS = '/slots',
+  USERS = '/users',
+  BOOK_SLOT = '/slots/book',
   ADMIN = '/admin',
-  ADMIN_PUBLISH = '/admin/movies/publish/',
-  ADMIN_MOVIES = '/admin/movies/',
+  ADMIN_USERS = '/admin/users',
+  ADMIN_PUBLISH = '/admin/movies/publish',
+  ADMIN_MOVIES = '/admin/movies',
+  ADMIN_REVIEWS = '/admin/reviews',
+  ADMIN_UNBOOK_SLOT = '/admin/slots/unbook'
 }
 
 export default class TestServer {
@@ -127,6 +134,17 @@ export default class TestServer {
         presentation: expect.any(Object),
         metrics: expect.any(Object),
         comments: expect.any(Array),
+      }),
+      userWithMoviesReviewsAndMetrics: expect.objectContaining({
+        id: expect.any(Number),
+        pseudo: expect.any(String),
+        mail: expect.any(String),
+        avatar_url: expect.any(String),
+        role: expect.any(String),
+        created_at: expect.anything(),
+        propositions: expect.anything(),
+        reviews: expect.anything(),
+        metrics: expect.anything(),
       }),
     };
     this.ressources = {
@@ -221,7 +239,16 @@ export default class TestServer {
     movieId: number,
     token: string
   ) {
-    // TODO
+    const req = await this.fastify.inject({
+      headers: { Authorization: `Bearer ${token}` },
+      method: ECrudMethods.PUT,
+      url: EEndpoints.REVIEWS + `/${movieId}`,
+      payload
+    });
+
+    const res = await req.json();
+    const statusCode = req.statusCode;
+    return { res, statusCode };
   }
   async RequestProposeMovie(
     token: string,
@@ -296,6 +323,105 @@ export default class TestServer {
     const statusCode = req.statusCode;
     return { res, statusCode };
   }
+  async RequestSlots(
+    token: string,
+    query: string
+  ) {
+    const req = await this.fastify.inject({
+      headers: { Authorization: `Bearer ${token}` },
+      method: ECrudMethods.GET,
+      url: EEndpoints.SLOTS,
+      query
+    });
+
+    const res = await req.json();
+    const statusCode = req.statusCode;
+    return { res, statusCode };
+  }
+  async RequestBookSlot(
+    token: string,
+    slotId: number
+  ) {
+    const req = await this.fastify.inject({
+      headers: { Authorization: `Bearer ${token}` },
+      method: ECrudMethods.PUT,
+      url: EEndpoints.BOOK_SLOT + `/${slotId}`
+    });
+
+    const res = await req.json();
+    const statusCode = req.statusCode;
+    return { res, statusCode };
+  }
+  async RequestUnbookSlot(
+    token: string,
+    slotId: number,
+    payload: { password: string }
+  ) {
+    const req = await this.fastify.inject({
+      headers: { Authorization: `Bearer ${token}` },
+      method: ECrudMethods.PUT,
+      url: EEndpoints.ADMIN_UNBOOK_SLOT + `/${slotId}`,
+      payload
+    });
+    
+    const res = await req.json();
+    const statusCode = req.statusCode;
+    return { res, statusCode };
+  }
+  async RequestGetUsers(query = '') {
+    const req = await this.fastify.inject({
+      method: ECrudMethods.GET,
+      url: EEndpoints.USERS,
+      query
+    });
+
+    const res = await req.json();
+    const statusCode = req.statusCode;
+    return { res, statusCode };
+  }
+  async RequestUpdateUser(
+    token: string,
+    payload: {
+      update_user: {
+        pseudo?: string,
+        mail?: string,
+        password?: string,
+      },
+      password: string
+    },
+  ) {
+    const req = await this.fastify.inject({
+      method: ECrudMethods.PUT,
+      url: EEndpoints.USERS,
+      headers: { Authorization: `Bearer ${token}` },
+      payload
+    });
+
+    const res = await req.json();
+    const statusCode = req.statusCode;
+    return { res, statusCode };
+  }
+  async RequestAdminDeleteUser(
+    token: string,
+    payload: { password: string },
+    userPseudo: string,
+  ) {
+    const { rows: user } = await this.fastify.pgClient.query({
+      text: ' SELECT id FROM "user" WHERE pseudo = $1',
+      values: [userPseudo]
+    });
+
+    const req = await this.fastify.inject({
+      method: ECrudMethods.DELETE,
+      url: EEndpoints.ADMIN_USERS + `/${user[0].id}`,
+      headers: { Authorization: `Bearer ${token}` },
+      payload
+    });
+
+    const res = await req.json();
+    const statusCode = req.statusCode;
+    return { res, statusCode };
+  }
   async RequestAdminPublishMovie(
     token: string,
     payload: {
@@ -314,7 +440,7 @@ export default class TestServer {
     });
     const req = await this.fastify.inject({
       method: ECrudMethods.PUT,
-      url: EEndpoints.ADMIN_PUBLISH + movieId.rows[0].id,
+      url: EEndpoints.ADMIN_PUBLISH + `/${movieId.rows[0].id}`,
       headers: { Authorization: `Bearer ${token}` },
       payload
     });
@@ -341,9 +467,42 @@ export default class TestServer {
     });
     const req = await this.fastify.inject({
       method: ECrudMethods.DELETE,
-      url: EEndpoints.ADMIN_MOVIES + movieId.rows[0].id,
+      url: EEndpoints.ADMIN_MOVIES + `/${movieId.rows[0].id}`,
       headers: { Authorization: `Bearer ${token}` },
       payload
+    });
+
+    const res = await req.json();
+    const statusCode = req.statusCode;
+    return { res, statusCode };
+  }
+  async RequestAdminDeleteReview(
+    token: string,
+    payload: {
+      password: string;
+    },
+    urlParams: string
+  ) {
+    const req = await this.fastify.inject({
+      method: ECrudMethods.DELETE,
+      url: EEndpoints.ADMIN_REVIEWS + urlParams,
+      headers: { Authorization: `Bearer ${token}` },
+      payload
+    });
+
+    const res = await req.json();
+    const statusCode = req.statusCode;
+    return { res, statusCode };
+  }
+  async RequestAdminGetReviews(
+    token: string,
+    query: string
+  ) {
+    const req = await this.fastify.inject({
+      method: ECrudMethods.GET,
+      url: EEndpoints.ADMIN_REVIEWS,
+      headers: { Authorization: `Bearer ${token}` },
+      query
     });
 
     const res = await req.json();
@@ -379,8 +538,9 @@ export default class TestServer {
       }
     };
   }
-  async createSlot(slot: DBSlot) {
+  async createSlot(slot?: DBSlot) {
     const s = {
+      id: -1,
       is_booked: false,
       season_number: 3,
       episode: 1,
@@ -398,8 +558,13 @@ export default class TestServer {
         s.publishing_date
       ]
     });
+    await this.fastify.pgClient.query({
+      text: ` SELECT id FROM proposition_slot WHERE
+              season_number = $1 AND episode = $2 AND publishing_date = $3`,
+      values: [s.season_number, s.episode, s.publishing_date]
+    }).then(r => s.id = r.rows[0].id);
     return {
-      ...slot,
+      ...s,
       delete: async () => {
         await this.fastify.pgClient.query({
           text: ` DELETE FROM proposition_slot 

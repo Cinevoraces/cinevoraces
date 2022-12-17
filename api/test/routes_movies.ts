@@ -9,13 +9,8 @@ export async function ROUTES_MOVIES(server: TestServer) {
     };
     
     test('GET MOVIES', async () => {
-      const logUser = await server.RequestLogin({
-        pseudo: server.ressources.users[0].pseudo,
-        password: server.ressources.users[0].password.clear,
-      });
-
       const SUCCESSFULL_GET_ALL_MOVIES = await server.RequestMovies();
-      expect(SUCCESSFULL_GET_ALL_MOVIES.statusCode).toEqual(expect.arrayContaining([server.expected.movie]));
+      expect(SUCCESSFULL_GET_ALL_MOVIES.res).toEqual(expect.arrayContaining([server.expected.movie]));
 
       const SUCCESSFULL_GET_MOVIES_ORDERED_AND_LIMITED = await server.RequestMovies('limit=3&sort=desc');
       const { res: ORD_LMT } = SUCCESSFULL_GET_MOVIES_ORDERED_AND_LIMITED;
@@ -38,9 +33,6 @@ export async function ROUTES_MOVIES(server: TestServer) {
         'limit=1&select[casting]=true&select[directors]=true&select[runtime]=true&select[release_date]=true&select[genres]=true&select[countries]=true&select[languages]=true&select[presentation]=true&select[metrics]=true&select[comments]=true'
       );
       expect(SUCCESSFULL_GET_MOVIES_POPULATED_WITH_MANY.res).toEqual(expect.arrayContaining([server.expected.movieFullObject]));
-
-      // Logged user queries
-      // TODO
     });
 
     test('MOVIE PROPOSALS', async () => {
@@ -50,16 +42,21 @@ export async function ROUTES_MOVIES(server: TestServer) {
       });
 
       // Test post/update movie proposal as user
-      const SUCCESSFULL_POST_MOVIE = await server.RequestProposeMovie(logUser.tokens.refreshToken, postMoviePayload);
-      const FAILURE_POST_MOVIE = await server.RequestProposeMovie(logUser.tokens.refreshToken, {
-        french_title: 'Les Chaussons rouges',
-        original_title: 'The Red Shoes'
-      });
+      const SUCCESSFULL_POST_MOVIE = await server.RequestProposeMovie(
+        logUser.tokens.accessToken,
+        postMoviePayload
+      );
+      const FAILURE_POST_MOVIE = await server.RequestProposeMovie(
+        logUser.tokens.accessToken,
+        {
+          french_title: 'Les Chaussons rouges',
+          original_title: 'The Red Shoes'
+        });
       expect(SUCCESSFULL_POST_MOVIE.statusCode).toEqual(201);
       expect(FAILURE_POST_MOVIE.statusCode).toEqual(422);
 
       const SUCCESSFULL_UPDATE_MOVIE_PROPOSAL = await server.RequestUpdateMovieProposal(
-        logUser.tokens.refreshToken,
+        logUser.tokens.accessToken,
         'Tester, c\'est douter.',
         postMoviePayload
       );
@@ -73,7 +70,7 @@ export async function ROUTES_MOVIES(server: TestServer) {
       });
 
       const SUCCESSFULL_PUBLISH_MOVIE_PROPOSAL = await server.RequestAdminPublishMovie(
-        logAdmin.tokens.refreshToken,
+        logAdmin.tokens.accessToken,
         { password: server.ressources.admins[0].password.clear },
         postMoviePayload
       );
@@ -82,7 +79,7 @@ export async function ROUTES_MOVIES(server: TestServer) {
 
       // Test delete movie proposal as admin
       const SUCCESSFULL_DELETE_MOVIE_PROPOSAL = await server.RequestAdminDeleteMovie(
-        logAdmin.tokens.refreshToken,
+        logAdmin.tokens.accessToken,
         { password: server.ressources.admins[0].password.clear },
         postMoviePayload
       );
