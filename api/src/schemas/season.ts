@@ -1,4 +1,4 @@
-const seasonSchema = {
+export const seasonSchema = {
   $id: 'season',
   type: 'object',
   required: ['season_number', 'year', 'movie_count'],
@@ -8,5 +8,3 @@ const seasonSchema = {
     movie_count: { type: 'number' },
   },
 };
-
-export default seasonSchema;

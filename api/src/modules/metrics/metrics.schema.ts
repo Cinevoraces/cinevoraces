@@ -6,7 +6,6 @@ export const getGlobalMetricsSchema: FastifySchema = {
   `,
   tags: ['Metrics'],
   response: {
-    '200': { $ref: 'globalMetrics#' },
-    '404': { $ref: 'apiError#' },
+    200: { $ref: 'globalMetrics#' },
   },
 };

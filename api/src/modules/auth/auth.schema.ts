@@ -26,15 +26,13 @@ export const registerSchema: FastifySchema = {
     },
   },
   response: {
-    '201': {
+    201: {
       type: 'object',
       required: ['message'],
       properties: {
         message: { type: 'string' },
       },
     },
-    '409': { $ref: 'apiError#' },
-    '422': { $ref: 'apiError#' },
   },
 };
 
@@ -59,7 +57,7 @@ export const loginSchema: FastifySchema = {
     },
   },
   response: {
-    '200': {
+    200: {
       type: 'object',
       required: ['user', 'token', 'response'],
       properties: {
@@ -78,8 +76,6 @@ export const loginSchema: FastifySchema = {
         response: { type: 'string' },
       },
     },
-    '401': { $ref: 'apiError#' },
-    '404': { $ref: 'apiError#' },
   },
 };
 
@@ -99,7 +95,7 @@ export const refreshSchema: FastifySchema = {
     },
   },
   response: {
-    '200': {
+    200: {
       type: 'object',
       required: ['user', 'token', 'response'],
       properties: {
@@ -118,7 +114,5 @@ export const refreshSchema: FastifySchema = {
         response: { type: 'string' },
       },
     },
-    '401': { $ref: 'apiError#' },
-    '404': { $ref: 'apiError#' },
   },
 };

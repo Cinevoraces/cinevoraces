@@ -1,8 +1,7 @@
-import 'module-alias/register';
 import Fastify from 'fastify';
 import qs from 'qs';
-import parseOptions from '@src/utils/parseOptions';
-import app from '@src/app';
+import parseOptions from './utils/parseOptions';
+import app from './app';
 
 const serverConfig = {
   port: Number(process.env.port) || 3005,
@@ -17,6 +16,13 @@ export default async function createServer() {
     });
     fastify.register(app);
 
+    fastify.setErrorHandler(function (error, request, reply) {
+      this.log.error(error);
+      reply
+        .status(error.statusCode)
+        .send({ message: error.message, statusCode: error.statusCode });
+    });
+    
     fastify.listen({ ...serverConfig });
   } catch (err) {
     console.error(err);

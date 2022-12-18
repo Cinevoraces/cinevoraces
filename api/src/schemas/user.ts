@@ -1,4 +1,4 @@
-const userSchema = {
+export const userSchema = {
   $id: 'user',
   type: 'object',
   properties: {
@@ -53,5 +53,3 @@ const userSchema = {
     'updated_at',
   ],
 };
-
-export default userSchema;

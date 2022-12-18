@@ -64,11 +64,10 @@ export const getMoviesSchema: FastifySchema = {
     },
   },
   response: {
-    '200': {
+    200: {
       type: 'array',
       items: { $ref: 'movie#' },
     },
-    '404': { $ref: 'apiError#' },
   },
 };
 
@@ -112,15 +111,13 @@ export const proposeMovieSchema: FastifySchema = {
     ],
   },
   response: {
-    '201': { 
+    201: { 
       type: 'object',
       properties: {
         message: { type: 'string' },
       },
       required: ['message'],
     },
-    '401': { $ref: 'apiError#' },
-    '422': { $ref: 'apiError#' },
   },
 };
 
@@ -139,14 +136,13 @@ export const updateProposedMovieSchema: FastifySchema = {
     required: ['movie_id', 'presentation'],
   },
   response: {
-    '201': { 
+    201: { 
       type: 'object',
       properties: {
         message: { type: 'string' },
       },
       required: ['message'],
     },
-    '401': { $ref: 'apiError#' },
   },
 };
 
@@ -170,15 +166,13 @@ export const adminPublishMovieSchema: FastifySchema = {
     required: ['password'],
   },
   response: {
-    '204': {
+    204: {
       type: 'object',
       properties: {
         message: { type: 'string' },
       },
       required: ['message'],
     },
-    '401': { $ref: 'apiError#' },
-    '404': { $ref: 'apiError#' },
   },
 };
 
@@ -202,14 +196,12 @@ export const adminDeleteMovieSchema: FastifySchema = {
     required: ['password'],
   },
   response: {
-    '204': {
+    204: {
       type: 'object',
       properties: {
         message: { type: 'string' },
       },
       required: ['message'],
     },
-    '401': { $ref: 'apiError#' },
-    '404': { $ref: 'apiError#' },
   },
 };

@@ -3,12 +3,12 @@ import {
   handleReviewMovie,
   handleAdminGetReviews,
   handleAdminDeleteReview
-} from '@modules/reviews/reviews.handler';
+} from './reviews.handler';
 import { 
   reviewMovieSchema,
   adminGetReviewsSchema,
   adminDeleteReviewSchema
-} from '@modules/reviews/reviews.schema';
+} from './reviews.schema';
 
 export const reviews = async (fastify: FastifyInstance) => {
   fastify.route({

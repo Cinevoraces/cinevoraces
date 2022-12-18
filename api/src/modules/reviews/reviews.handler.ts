@@ -1,19 +1,23 @@
 import type { FastifyReply as Reply, FastifyRequest } from 'fastify';
-import type { Database } from '@src/types/Database';
-import type { Query } from '@src/types/Query';
-import type { Payload } from '@src/types/Payload';
+import type { review, Query } from '../../types/_index';
+import { 
+  ApiError,
+  ApiResponse,
+  ReviewTypes,
+  AddReview,
+  UpdateReview 
+} from '../../types/_index';
 import { 
   updateReview, 
   getOneReview, 
   adminDeleteComment, 
   adminGetReviews 
-} from '@modules/reviews/reviews.datamapper';
-import reviewResponseFactory from '@src/utils/reviewResponseFactory';
+} from './reviews.datamapper';
 
 type Request = FastifyRequest<{
   Querystring: Query.querystring;
   Params: { movieId: number, userId: number };
-  Body: Payload.reviewMovie,
+  Body: Record<keyof Pick<review, 'bookmarked' | 'viewed' | 'liked' | 'rating' | 'comment'>, boolean | number | string>,
 }>;
 
 /**
@@ -24,28 +28,41 @@ export const handleReviewMovie = async (request: Request, reply: Reply) => {
   const { pgClient, body, params, user } = request;
   const { movieId: movie_id } = params;
   const { id: user_id, previous_review } = user;
-  try { 
-    pgClient.query(
-      updateReview(body, { movie_id, user_id })
-    );
-    const { rows: review } = await pgClient.query(
-      getOneReview({ movie_id, user_id })
-    );
-    
-    const message = reviewResponseFactory(
-      body as Partial<Database.review>, 
-      previous_review
-    );
-      
-    reply
-      .code(201) // Created
-      .send({
-        message,
-        review: review[0],
-      });
-  } catch (error) {
-    reply.send(error);
-  }
+
+  pgClient.query(
+    updateReview(body, { movie_id, user_id })
+  );
+  const { rows: review } = await pgClient.query(
+    getOneReview({ movie_id, user_id })
+  );
+        
+  const response = { 
+    message: (() => {
+      const key = Object.keys(body)[0] as ReviewTypes;
+      switch (key) {
+        case ReviewTypes.COMMENT:
+          if (previous_review.comment)
+            return UpdateReview.COMMENT;
+          else
+            return AddReview.COMMENT;
+        case ReviewTypes.RATING:
+          if (previous_review.rating)
+            return UpdateReview.RATING;
+          else
+            return AddReview.RATING;
+        default:
+          if (body[key])
+            return AddReview[key.toUpperCase() as keyof typeof AddReview];
+          else
+            return UpdateReview[key.toUpperCase() as keyof typeof UpdateReview];
+      }
+    })(),
+    review: review[0] 
+  };
+
+  reply
+    .code(201)
+    .send(response);
 };
 
 /**
@@ -53,24 +70,18 @@ export const handleReviewMovie = async (request: Request, reply: Reply) => {
  * @description Get reviews according to query.
 */
 export const handleAdminGetReviews = async (request: Request, reply: Reply) => {
-  const { pgClient, query } = request;
+  const { error, pgClient, query } = request;
 
-  try {
-    const { rows: reviews, rowCount } = await pgClient.query(
-      adminGetReviews(query)
-    );
+  const { rows: reviews, rowCount } = await pgClient.query(
+    adminGetReviews(query)
+  );
 
-    if (!rowCount) {
-      reply.code(404);
-      throw new Error('Aucun résultat.');
-    }
+  if (!rowCount)
+    error.send(ApiError.NOT_FOUND, 404);
 
-    reply
-      .code(200) // OK
-      .send(reviews);
-  } catch (error) {
-    reply.send(error);
-  }
+  reply
+    .code(200)
+    .send(reviews);
 };
 
 /**
@@ -81,15 +92,11 @@ export const handleAdminDeleteReview = async (request: Request, reply: Reply) =>
   const { pgClient, params } = request;
   const { movieId: movie_id, userId: user_id } = params;
 
-  try {
-    await pgClient.query(
-      adminDeleteComment({ movie_id, user_id })
-    );
+  await pgClient.query(
+    adminDeleteComment({ movie_id, user_id })
+  );
 
-    reply
-      .code(204) // No Content
-      .send({ message: 'Commentaire supprimé avec succés.' });  
-  } catch (error) {
-    reply.send(error);
-  }
+  reply
+    .code(204)
+    .send({ message: ApiResponse.DELETE_COMMENT_SUCCESS });  
 };

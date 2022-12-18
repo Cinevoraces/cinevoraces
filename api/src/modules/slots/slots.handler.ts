@@ -1,6 +1,7 @@
 import type { FastifyReply as Reply, FastifyRequest } from 'fastify';
-import type { Query } from '@src/types/Query';
-import { getSlots, updateSlot } from '@modules/slots/slots.datamapper';
+import type { Query } from '../../types/_index';
+import { ApiError, ApiResponse } from '../../types/_index';
+import { getSlots, updateSlot } from './slots.datamapper';
 
 type Request = FastifyRequest<{
   Querystring: Query.querystring;
@@ -12,24 +13,18 @@ type Request = FastifyRequest<{
  * @description Get slots according to query.
 */
 export const handleGetSlots = async (request: Request, reply: Reply) => {
-  const { pgClient, query } = request;
+  const { error, pgClient, query } = request;
 
-  try {
-    const { rows: slots, rowCount } = await pgClient.query(
-      getSlots(query)
-    );
+  const { rows: slots, rowCount } = await pgClient.query(
+    getSlots(query)
+  );
 
-    if (!rowCount) {
-      reply.code(404);
-      throw new Error('Aucun créneau disponible.');
-    }
+  if (!rowCount)
+    error.send(ApiError.NO_SLOT_AVAILABLE, 404);
 
-    reply
-      .code(200) // OK
-      .send(slots);
-  } catch (error) {
-    reply.send(error);
-  }
+  reply
+    .code(200)
+    .send(slots);
 };
 
 /**
@@ -40,17 +35,13 @@ export const handleBookSlot = async (request: Request, reply: Reply) => {
   const { pgClient, params } = request;
   const { id: slotId } = params;
 
-  try {
-    await pgClient.query(
-      updateSlot(slotId, true)
-    );
+  await pgClient.query(
+    updateSlot(slotId, true)
+  );
 
-    reply
-      .code(204) // No Content
-      .send({ message: 'Ce créneau a bien été réservé.' });
-  } catch (error) {
-    reply.send(error);
-  }
+  reply
+    .code(204)
+    .send({ message: ApiResponse.SLOT_BOOKING_SUCCESS });
 };
 
 /**
@@ -61,15 +52,11 @@ export const handleAdminUnbookSlot = async (request: Request, reply: Reply) => {
   const { pgClient, params } = request;
   const { id: slotId } = params;
 
-  try {
-    await pgClient.query(
-      updateSlot(slotId, false)
-    );
+  await pgClient.query(
+    updateSlot(slotId, false)
+  );
 
-    reply
-      .code(204) // No Content
-      .send({ message: 'Ce créneau a bien été libéré.' });
-  } catch (error) {
-    reply.send(error);
-  }
+  reply
+    .code(204)
+    .send({ message: ApiResponse.SLOT_RELEASE_SUCCESS });
 };

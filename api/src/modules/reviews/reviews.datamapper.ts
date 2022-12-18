@@ -1,6 +1,5 @@
-import type { Database } from '@src/types/Database';
-import type { Query } from '@src/types/Query';
-import { queryBuilder } from '@src/utils/queryBuilder';
+import type { review, Query } from '../../types/_index';
+import { queryBuilder } from '../../utils/queryBuilder';
 
 // TODO: 2. This function can be deleted once getMovies has been modified.
 /**
@@ -30,7 +29,7 @@ export const getReviewsByUserId = (
  * @returns SQL query object
  */
 export const getOneReview = (
-  ids: Record<keyof Pick<Database.review, 'user_id' | 'movie_id'>, number>
+  ids: Record<keyof Pick<review, 'user_id' | 'movie_id'>, number>
 ): Query.preparedQuery => {
   const { user_id, movie_id } = ids;
   return {
@@ -53,8 +52,8 @@ export const getOneReview = (
  * **column** can't be anything else than *'bookmarked' | 'viewed' | 'liked' | 'rating' | 'comment'*. 
  */
 export const updateReview = (
-  updateValue: Record<keyof Pick<Database.review, 'bookmarked' | 'viewed' | 'liked' | 'rating' | 'comment'>, boolean | number | string>,
-  ids: Record<keyof Pick<Database.review, 'user_id' | 'movie_id'>, number>
+  updateValue: Record<keyof Pick<review, 'bookmarked' | 'viewed' | 'liked' | 'rating' | 'comment'>, boolean | number | string>,
+  ids: Record<keyof Pick<review, 'user_id' | 'movie_id'>, number>
 ): Query.preparedQuery => {
   const { user_id, movie_id } = ids;
   const column = Object.keys(updateValue)[0];
@@ -114,7 +113,7 @@ export const adminGetReviews = (
  * @returns SQL query object
  */
 export const adminDeleteComment = (
-  ids: Record<keyof Pick<Database.review, 'user_id' | 'movie_id'>, number>
+  ids: Record<keyof Pick<review, 'user_id' | 'movie_id'>, number>
 ): Query.preparedQuery => {
   const { user_id, movie_id } = ids;
   return {

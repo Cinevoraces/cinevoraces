@@ -1,5 +1,5 @@
-import type { Query } from '@src/types/Query';
-import { queryBuilder } from '@src/utils/queryBuilder';
+import type { Query } from '../../types/_index';
+import { queryBuilder } from '../../utils/queryBuilder';
 
 /**
  * **getUsers**
