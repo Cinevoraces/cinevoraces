@@ -13,7 +13,7 @@ interface BaseInteractionProps {
 
 const buttonStyle = `w-14 h-14 lg:w-16 lg:h-16 
 bg-medium-gray pt-1 rounded-xl interaction outline-none 
-origin-right sm:origin-left
+origin-right sm:origin-left 
 focus:scale-105 hover:scale-105 
 transition ease-out duration-200 `;
 // CSS trick : the opening direction depends of the margin-right/left
@@ -28,7 +28,7 @@ rating `;
 const customStarButtonStyle = `rating relative z-10 w-14 h-18 lg:w-16 
 bg-medium-gray outline-none `;
 const ratingMenuContainer = 'rating relative z-0 h-full w-52 -top-1 lg:top-0';
-const svgStyle = 'h-6 w-14 fill-none lg:h-8 lg:w-16 ';
+const svgStyle = 'h-6 w-14 stroke-white fill-none lg:h-8 lg:w-16 ';
 
 export const BaseInteraction = ({ type, counter, isClicked, onClick }: BaseInteractionProps) => {
   const SvgComponent = (type === 'bookmarked') ? BookmarkSvg : (type === 'liked') ? LikeSvg : ViewSvg;
@@ -36,7 +36,7 @@ export const BaseInteraction = ({ type, counter, isClicked, onClick }: BaseInter
     <button
       onClick={onClick}
       className={isClicked ? buttonStyle + 'interaction--clicked translate-y-[2px]' : buttonStyle}>
-      <SvgComponent style={isClicked ? svgStyle + 'fill-white' : svgStyle} />
+      <SvgComponent style={isClicked ? svgStyle.replace('fill-none', 'fill-white') : svgStyle} />
       <p className="text-sm mt-1">{counter}</p>
     </button>
   );
@@ -84,7 +84,7 @@ export const RatingInteraction = ({ isClicked, counter, ratingHandler, value }: 
         <button
           onClick={toggleRatingMenu}
           className={customStarButtonStyle}>
-          <StarSvg style={value && (Number(value) !== 0) ? svgStyle + 'fill-white' : svgStyle + 'stroke-white'} />
+          <StarSvg style={value && (Number(value) !== 0) ? svgStyle.replace('fill-none', 'fill-white') : svgStyle } />
           <p className="text-sm mt-1">{counter}</p>
         </button>
         <div className={ratingMenuContainer}>

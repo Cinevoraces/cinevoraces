@@ -6,7 +6,6 @@ import { logout, user } from '@store/slices/user';
 import defaultUserPic from '@public/icons/user_default.svg';
 import { toggleUserMenu } from '@store/slices/global';
 import { toast } from 'react-hot-toast';
-import { forwardRef } from 'react';
 interface HeaderMenuButtonProps {
   type: 'burger' | 'user';
   stateValue: boolean;

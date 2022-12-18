@@ -71,7 +71,7 @@ export default function Films() {
         { name: 'Tous les films', value: '0' }]
         .sort((a, b) => a.value > b.value ? -1 : 1);
     }
-    (seasonsArray && !season) && dispatch(changeSeason(seasons.current[seasonsArray.length - 1]));
+    (seasonsArray && !season) && dispatch(changeSeason(seasons.current[0]));
   }, [seasonsArray]);
   // Recovers movies from asked season, once season is defined
   const { data: movies, error, mutate } = useSWR(() => (season) && `/movies?${selectQueryString}${(season.value !== '0') ? `&where[season_number]=${season.value}` : ''}`);

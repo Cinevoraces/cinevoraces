@@ -1,4 +1,4 @@
-import { forwardRef, useState } from 'react';
+import { forwardRef, useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import { useAppSelector } from '@store/store';
 import { user } from '@store/slices/user';
@@ -38,20 +38,30 @@ const CommentsSection = forwardRef<HTMLTextAreaElement, CommentsSectionProps>(({
     return [connectedUserComment[0], ...otherComments];
   };
 
-  const orderedComments = reorderComments(id, comments);
-  const initialCommentsExpansionStates = orderedComments.map((c)=> false);
-  const cutComments = orderedComments.map((c) => cutText(c.comment, 700));
-  const [commentsExpansionStates, setCommentsExpansionStates] = useState(initialCommentsExpansionStates);
+  const orderedComments = useRef<Comment[]>([]);
+  const cutComments = useRef<(string|boolean)[][]>([]);
+  useEffect(()=> {
+    orderedComments.current = reorderComments(id, comments);
+    cutComments.current = orderedComments.current.map((c: Comment) => cutText(c.comment, 700));
+    setCommentsExpansionStates(orderedComments.current.map((c: Comment)=> false));
+  }, [id, comments]);
+  const [commentsExpansionStates, setCommentsExpansionStates] = useState(orderedComments.current.map((c: Comment)=> false));
+  
+  // const orderedComments = reorderComments(id, comments);
+  // const initialCommentsExpansionStates = orderedComments.map((c)=> false); //-------------------------
+  // const cutComments = orderedComments.map((c) => cutText(c.comment, 700));
+
   const toggleCommentExpansion = (index: number) => {
-    const newState = commentsExpansionStates.map((ces, i) => (index === i)? !ces : ces);
+    const newState = commentsExpansionStates.map((ces: boolean, i: number) => (index === i)? !ces : ces);
     setCommentsExpansionStates(newState);
   };
+  console.log(orderedComments.current, commentsExpansionStates, cutComments.current);
 
   return (
     <section id='comments-section' className='w-full flex flex-col gap-4 '>
       <h2 className='text-2xl font-semibold lg:text-3xl text-center'>{`Commentaires (${comments.length})`}</h2>
       { // Add Comment button
-        (id && orderedComments.filter((c) => (c.author_id === id)).length === 0 && !isCommentFormOpened) && 
+        (id && orderedComments.current.filter((c) => (c.author_id === id)).length === 0 && !isCommentFormOpened) && 
             <div className='flex justify-center'>
               <Button 
                 customStyle='empty' 
@@ -88,12 +98,12 @@ const CommentsSection = forwardRef<HTMLTextAreaElement, CommentsSectionProps>(({
       }
       <div className='grid grid-cols-1 gap-4 auto-rows-auto md:gap-6 lg:gap-8 lg:grid-cols-2  '>
         { // Displaying all published comments
-          orderedComments.length === 0 ? 
+          orderedComments.current.length === 0 ? 
             (<p className='text-center'>Aucun commentaire pour ce film.</p>)
             : (
               <>
                 {
-                  orderedComments.map((c, i) => (
+                  orderedComments.current.map((c, i) => (
                     <PostCard 
                       key={c.author_pseudo} 
                       type='comment' 
@@ -103,13 +113,13 @@ const CommentsSection = forwardRef<HTMLTextAreaElement, CommentsSectionProps>(({
                         ( <>
                           <p>
                             {
-                              (cutComments[i][1] && commentsExpansionStates[i]) ?
+                              (cutComments.current[i][1] && commentsExpansionStates[i]) ?
                                 c.comment
-                                : cutComments[i][0]
+                                : cutComments.current[i][0]
                             }
                           </p>
                           {
-                            (id === c.author_id || cutComments[i][1]) &&
+                            (id === c.author_id || cutComments.current[i][1]) &&
                             <div className='flex justify-end gap-4'>
                               {
                                 (id === c.author_id) &&
@@ -119,7 +129,7 @@ const CommentsSection = forwardRef<HTMLTextAreaElement, CommentsSectionProps>(({
                                         Éditer
                                   </Button>
                               }
-                              {
+                              { (c.comment.length > 700) &&
                                 <Button onClick={() => toggleCommentExpansion(i)} customStyle='rounded'>
                                   {
                                     (!commentsExpansionStates[i]) ? 'Voir plus...' : 'Réduire'
@@ -139,7 +149,7 @@ const CommentsSection = forwardRef<HTMLTextAreaElement, CommentsSectionProps>(({
                         >
                           <TextAreaRef id='comment-form' ref={ref} defaultValue={c.comment}/>
                           <div id='comment-send-cancel' className='flex justify-end gap-4'>
-                            <Button>
+                            <Button customStyle='rounded'>
                               <Image
                                 src={SendLogo}
                                 alt=""
@@ -148,7 +158,7 @@ const CommentsSection = forwardRef<HTMLTextAreaElement, CommentsSectionProps>(({
                               />
                               Confirmer
                             </Button>
-                            <Button onClick={toggleEditionForm}>Annuler</Button>
+                            <Button onClick={toggleEditionForm} customStyle='rounded'>Annuler</Button>
                           </div>
                         </form>
                       }
