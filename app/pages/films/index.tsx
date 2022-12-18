@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { Filter, SearchBar } from '@components/Input';
 import useSWR from 'swr';
 import { useAppSelector, useAppDispatch } from '@store/store';
+import { user } from 'store/slices/user';
 import {
   filteredMovies,
   toggleSeasonSelect,
@@ -24,7 +25,9 @@ import filtersSync from '@utils/filterSyncer';
 const posterStyles = `rounded-lg w-full h-full object-cover shadow-lg max-w-[250px] 
     hover:scale-105 
     transition duration-150 hover:ease-out `;
-const gridStyle = 'w-full grid gap-2 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6';
+const gridStyle = `w-full grid gap-2 grid-cols-2 
+  sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6
+  `;
 
 const metadatas = [
   'casting',
@@ -57,6 +60,12 @@ export default function Films() {
   const { data: seasonsArray } = useSWR('/seasons');
   const seasons = useRef<{ name: string; value: string; }[]>([]);
 
+  const isUserConnected = useRef<boolean>(false);
+  const id = useAppSelector(user).id;
+  useEffect(() => {
+    if (id) isUserConnected.current = true;
+  }, [id]);
+
   // Initialise the default value for select button and first movies fetching
   useEffect(() => {
     if (seasonsArray){
@@ -83,20 +92,25 @@ export default function Films() {
     if (movies){
       dispatch(setAvailableFilters(filtersSync(movies)));
       dispatch(initializeOrCorrectUserInputs());
-      movies && dispatch(setFilteredMovies(movies));  
+      // movies && dispatch(setFilteredMovies({ filteredMovies: movies, isUserConnected }));  
     }
   }, [movies]);
 
-  // On user filter inputs, alter movies set for representation
   useEffect(() => {
-    movies && dispatch(setFilteredMovies(movies));
-  }, [searchQuery, userFilterInputs]);
+    movies && dispatch(setFilteredMovies({ moviesToFilter: movies, isUserConnected: isUserConnected.current }));
+  }, [movies, searchQuery, userFilterInputs, isUserConnected.current]);
 
   const movieResults = useAppSelector(filteredMovies).filteredMovies;
 
   return (
     <main className="custom-container">
-      <section className='w-full flex flex-col gap-3 align-start md:flex-row'>
+      <section className='w-full'>
+        <h1 className='hero-text text-start mb-4'>Les films de la communauté</h1>
+        <p>Retrouvez saison par saison les films sélectionnés par les <span className='emphasis'>membres de CinéVoraces</span>.
+        Chaque saison correspond à une année calendaire.<br/>
+        Bonnes découvertes !</p>
+      </section>
+      <section className='w-full flex flex-col gap-4 align-start md:flex-row'>
         {season && (
           <SearchBar
             name="searchbarSelect"
@@ -112,7 +126,7 @@ export default function Films() {
             onChange={handleChangeSearchValue}
           />
         )}
-        { availableFilters &&
+        { (availableFilters && movieResults) &&
         <Filter 
           isMenuOpened={isFilterMenuOpen}
           displayMenuSetter={handleToggleFilterMenu}
@@ -121,6 +135,8 @@ export default function Films() {
           userFilterInputsSetter={handleSetFilters}
           userFilterReset={handleFilterReset}
           filtersCounter={Number(userFilterInputs.filtersCounter[0])}
+          resultsCount={movieResults.length}
+          isUserConnected={isUserConnected.current}
         />
         }
       </section>
@@ -129,7 +145,7 @@ export default function Films() {
         {!movieResults && !error && <p>Chargement des données.</p>}
         {movieResults && 
         <div className='flex flex-col gap-3 font-medium'>
-          <p>{movieResults.length + ' films'}</p>
+          <p className=''>{movieResults.length + ' films'}</p>
           <ul className={gridStyle}>
             {
               movieResults.map((movie: CompleteMovie) => (

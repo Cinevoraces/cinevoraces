@@ -28,7 +28,7 @@ rating `;
 const customStarButtonStyle = `rating relative z-10 w-14 h-18 lg:w-16 
 bg-medium-gray outline-none `;
 const ratingMenuContainer = 'rating relative z-0 h-full w-52 -top-1 lg:top-0';
-const svgStyle = 'h-6 w-14 stroke-white fill-none lg:h-8 lg:w-16 ';
+const svgStyle = 'h-6 w-14 fill-none lg:h-8 lg:w-16 ';
 
 export const BaseInteraction = ({ type, counter, isClicked, onClick }: BaseInteractionProps) => {
   const SvgComponent = (type === 'bookmarked') ? BookmarkSvg : (type === 'liked') ? LikeSvg : ViewSvg;
@@ -84,7 +84,7 @@ export const RatingInteraction = ({ isClicked, counter, ratingHandler, value }: 
         <button
           onClick={toggleRatingMenu}
           className={customStarButtonStyle}>
-          <StarSvg style={value && (Number(value) !== 0) ? svgStyle.replace('fill-none', 'fill-white') : svgStyle } />
+          <StarSvg style={value && (Number(value) !== 0) ? (svgStyle + 'stroke-white').replace('fill-none', 'fill-white') : svgStyle + 'stroke-white' } />
           <p className="text-sm mt-1">{counter}</p>
         </button>
         <div className={ratingMenuContainer}>

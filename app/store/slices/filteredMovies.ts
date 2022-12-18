@@ -115,7 +115,7 @@ const filteredMoviesSlice = createSlice({
         state.userFilterInputs.filtersCounter = [countFilters(state.userFilterInputs, state.availableFilters).toString()];
         return state;
       }
-      if ((category === 'genres' || category === 'countries') && state.userFilterInputs[category]) {
+      if ((category === 'genres' || category === 'countries' || category === 'review') && state.userFilterInputs[category]) {
         state.userFilterInputs[category] =
           // Use of ! as last resort as type asertion could not work -------- To fix later ------------
           state.userFilterInputs[category]?.includes(filter)
@@ -126,8 +126,8 @@ const filteredMoviesSlice = createSlice({
       }
     },
     setFilteredMovies(state: filteredMoviesStateInterface, action) {
-      const moviesToFilter = action.payload;
-      const { genres, countries, runtime, releaseYear, avgRate } = state.userFilterInputs;
+      const { moviesToFilter, isUserConnected } = action.payload;
+      const { genres, countries, runtime, releaseYear, avgRate, review } = state.userFilterInputs;
       const searchQuery = state.searchQuery;
       const filterFunctions = [
         (m: CompleteMovie) =>
@@ -142,6 +142,12 @@ const filteredMoviesSlice = createSlice({
             : true,
         (m: CompleteMovie) => (avgRate ? m.metrics.avg_rating >= Number(avgRate) : true),
         (m: CompleteMovie) => (searchQuery ? m.french_title.toLowerCase().includes(searchQuery.toLowerCase()) : true),
+        (m: CompleteMovie) =>
+          (isUserConnected && review && review.includes('bookmarked')) ? (m.user_review?.bookmarked) : true,
+        (m: CompleteMovie) =>
+          (isUserConnected && review && review.includes('unwatched')) ? (!m.user_review || !m.user_review?.viewed) : true,
+        (m: CompleteMovie) =>
+          (isUserConnected && review && review.includes('liked')) ? (m.user_review?.liked) : true,
       ];
       const newState = state;
       newState.filteredMovies = filterFunctions.reduce(
@@ -172,7 +178,7 @@ const countFilters = (userFilters: FilterUserInputs, availableFilters: FilterOpt
   for (const category in userFilters) {
     if (userFilters[category]) {
       if (category === 'runtime' || category === 'avgRate') counter++;
-      if (category === 'genres' || category === 'countries') counter += userFilters[category]!.length;
+      if (category === 'genres' || category === 'countries' || category === 'review') counter += userFilters[category]!.length;
       if (
         category === 'releaseYear' &&
         (userFilters[category]![0] !== availableFilters[category][0] ||

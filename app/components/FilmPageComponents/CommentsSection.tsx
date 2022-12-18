@@ -38,6 +38,7 @@ const CommentsSection = forwardRef<HTMLTextAreaElement, CommentsSectionProps>(({
     return [connectedUserComment[0], ...otherComments];
   };
 
+  // Using Ref to renew expansionState and allow freshly posted comment (just in cache) to be expanded as well as the others from API
   const orderedComments = useRef<Comment[]>([]);
   const cutComments = useRef<(string|boolean)[][]>([]);
   useEffect(()=> {
@@ -46,10 +47,6 @@ const CommentsSection = forwardRef<HTMLTextAreaElement, CommentsSectionProps>(({
     setCommentsExpansionStates(orderedComments.current.map((c: Comment)=> false));
   }, [id, comments]);
   const [commentsExpansionStates, setCommentsExpansionStates] = useState(orderedComments.current.map((c: Comment)=> false));
-  
-  // const orderedComments = reorderComments(id, comments);
-  // const initialCommentsExpansionStates = orderedComments.map((c)=> false); //-------------------------
-  // const cutComments = orderedComments.map((c) => cutText(c.comment, 700));
 
   const toggleCommentExpansion = (index: number) => {
     const newState = commentsExpansionStates.map((ces: boolean, i: number) => (index === i)? !ces : ces);
