@@ -1,4 +1,4 @@
-const globalMetricsSchema = {
+export const globalMetricsSchema = {
   $id: 'globalMetrics',
   type: 'object',
   required: [
@@ -13,7 +13,7 @@ const globalMetricsSchema = {
   },
 };
 
-const userMetricsSchema = {
+export const userMetricsSchema = {
   $id: 'userMetrics',
   type: 'object',
   required: [
@@ -31,5 +31,3 @@ const userMetricsSchema = {
     ratings_count: { type: 'number' },
   },
 };
-
-export { globalMetricsSchema, userMetricsSchema };

@@ -2,11 +2,11 @@ import type { FastifyInstance } from 'fastify';
 import {
   handleGetAllSeasons,
   handleCreateNewSeason,
-} from '@modules/seasons/seasons.handler';
+} from './seasons.handler';
 import {
   getAllSeasonsSchema,
   createSeasonSchema,
-} from '@modules/seasons/seasons.schema';
+} from './seasons.schema';
 
 export const seasons = async (fastify: FastifyInstance) => {
   fastify.route({

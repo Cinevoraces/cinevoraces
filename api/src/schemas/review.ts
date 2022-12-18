@@ -1,4 +1,4 @@
-const reviewSchema = {
+export const reviewSchema = {
   $id: 'review',
   type: 'object',
   properties: {
@@ -32,5 +32,3 @@ const reviewSchema = {
     'movie',
   ],
 };
-
-export default reviewSchema;

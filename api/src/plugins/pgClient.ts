@@ -2,29 +2,15 @@ import type { FastifyPluginCallback } from 'fastify';
 import { Pool } from 'pg';
 import plugin from 'fastify-plugin';
 
-declare module 'fastify' {
-  interface FastifyRequest {
-    pgClient: Pool;
-  }
-  interface FastifyInstance {
-    pgClient: Pool;
-  }
-}
-
 /**
  * **PostgreSQL client**
  * @description
  * This plugin registers a PostgreSQL client.
  * It adds a pgClient property to the request object.
  */
-const pgClient: FastifyPluginCallback = async (
-  fastify,
-  opts,
-  done
-) => {
-  if (fastify.pgClient) {
+const pgClient: FastifyPluginCallback = async (fastify, opts, done) => {
+  if (fastify.pgClient) 
     return fastify.log.warn('pg client already registered');
-  }
 
   const pgClient = new Pool({
     user: process.env.POSTGRES_USER,

@@ -1,6 +1,5 @@
-import type { Query } from '@src/types/Query';
-import type { Payload } from '@src/types/Payload';
-import { getFirstMondayOfYear } from '@src/utils/datesHandler';
+import type { Query } from '../../types/_index';
+import { getFirstMondayOfYear } from '../../utils/datesHandler';
 
 /**
  * **getSeasons**
@@ -31,7 +30,10 @@ export const getOneSeasonBySeasonNumber = (
  * @description Create new season and all associated episodes.
  */
 export const createNewSeason = (
-  payload: Payload.createSeason
+  payload: {
+    year: number;
+    season_number: number;
+  }
 ): Query.preparedQuery => {
   const { year, season_number } = payload;
   const firstMondayOfTheYear = getFirstMondayOfYear(year);

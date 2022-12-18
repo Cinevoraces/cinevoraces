@@ -1,13 +1,19 @@
 import type { FastifyReply as Reply, FastifyRequest } from 'fastify';
-import type { Query } from '@src/types/Query';
-import type { Payload } from '@src/types/Payload';
-import { hashPassword } from '@src/utils/bcryptHandler';
-import { getUsers, updateUser, deleteUser } from '@modules/users/users.datamapper';
+import type { Query } from '../../types/_index';
+import { ApiError, ApiResponse } from '../../types/_index';
+import { getUsers, updateUser, deleteUser } from './users.datamapper';
 
 type Request = FastifyRequest<{
   Querystring: Query.querystring;
   Params: { id: number };
-  Body: Payload.updateUser,
+  Body: {
+    password: string;
+    update_user?: {
+      pseudo?: string;
+      mail?: string;
+      password?: string;
+    },
+  },
 }>;
 
 /**
@@ -15,22 +21,17 @@ type Request = FastifyRequest<{
  * @description Get users according to query.
 */
 export const handleGetUsers = async (request: Request, reply: Reply) => {
-  const { pgClient, query } = request;
-  try {
-    const { rows: users, rowCount } = await pgClient.query(
-      getUsers(query)
-    );
-    if (!rowCount) {
-      reply.code(404); // Not found
-      throw new Error('Aucun utilisateur trouvé.');
-    }
+  const { error, pgClient, query } = request;
 
-    reply
-      .code(200) // OK
-      .send(users);
-  } catch (error) {
-    reply.send(error);
-  }
+  const { rows: users, rowCount } = await pgClient.query(
+    getUsers(query)
+  );
+  if (!rowCount)
+    error.send(ApiError.NOT_FOUND, 404);
+
+  reply
+    .code(200)
+    .send(users);
 };
 
 /**
@@ -38,31 +39,26 @@ export const handleGetUsers = async (request: Request, reply: Reply) => {
  * @description Put user by token
 */
 export const handlePutUser = async (request: Request, reply: Reply) => {
-  const { pgClient, user, body } = request;
+  const { error, pgClient, user, body } = request;
   const { update_user } = body;
   const { id } = user;
 
-  try {
-    if (update_user.password) {
-      // Test and Hash new password
-      if (!update_user.password.match(process.env.PASS_REGEXP)) {
-        reply.code(422); // Unprocessable Entity
-        throw new Error('Le format du mot de passe est invalide.');
-      }
-      update_user.password = await hashPassword(update_user.password);
-    }
+  if (update_user.password) {
+    // Test and Hash new password
+    if (!update_user.password.match(process.env.PASS_REGEXP))
+      error.send(ApiError.INVALID_PASSWORD_FORMAT, 422);
     
-    // Update user
-    await pgClient.query(
-      updateUser(id, update_user)
-    );
-
-    reply
-      .code(204) // No Content
-      .send({ message: 'Données utilisateur modifiées avec succés.' });
-  } catch (error) {
-    reply.send(error);
+    update_user.password = await request.bcryptHash(update_user.password);
   }
+    
+  // Update user
+  await pgClient.query(
+    updateUser(id, update_user)
+  );
+
+  reply
+    .code(204)
+    .send({ message: ApiResponse.UPDATE_USER_SUCCESS });
 };
 
 /**
@@ -70,28 +66,22 @@ export const handlePutUser = async (request: Request, reply: Reply) => {
  * @description Delete one user by id
 */
 export const handleAdminDeleteUserById = async (request: Request, reply: Reply) => {
-  const { pgClient, params } = request;
+  const { error, pgClient, params } = request;
   const { id } = params;
 
-  try {
-    // Check if user exists
-    const { rowCount } = await pgClient.query(
-      getUsers({ where: { id } })
-    );
-    if (!rowCount) {
-      reply.code(404); // Not found
-      throw new Error('Aucun utilisateur trouvé.');
-    }
+  // Check if user exists
+  const { rowCount } = await pgClient.query(
+    getUsers({ where: { id } })
+  );
+  if (!rowCount)
+    error.send(ApiError.NOT_FOUND, 404);
 
-    // Delete user
-    await pgClient.query(
-      deleteUser(id)
-    );
+  // Delete user
+  await pgClient.query(
+    deleteUser(id)
+  );
     
-    reply
-      .code(204) // No Content
-      .send({ message: 'Utilisateur supprimé avec succés.' });
-  } catch (error) {
-    reply.send(error);
-  }
+  reply
+    .code(204)
+    .send({ message: ApiResponse.DELETE_USER_SUCCESS });
 };

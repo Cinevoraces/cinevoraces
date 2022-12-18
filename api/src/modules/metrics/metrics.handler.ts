@@ -1,6 +1,6 @@
 import type { FastifyReply as Reply, FastifyRequest } from 'fastify';
-import type { Query } from '@src/types/Query';
-import { getGlobalMetrics } from '@modules/metrics/metrics.datamapper';
+import type { Query } from '../../types/_index';
+import { getGlobalMetrics } from './metrics.datamapper';
 
 type Request = FastifyRequest<{
   Querystring: Query.querystring;
@@ -13,15 +13,11 @@ type Request = FastifyRequest<{
 export const handleGetGlobalMetrics = async (request: Request, reply: Reply) => {
   const { pgClient } = request;
 
-  try {
-    const { rows: globalMetrics } = await pgClient.query(
-      getGlobalMetrics()
-    );
+  const { rows: globalMetrics } = await pgClient.query(
+    getGlobalMetrics()
+  );
     
-    reply
-      .code(200) // OK
-      .send(globalMetrics[0]);
-  } catch (error) {
-    reply.send(error);
-  }
+  reply
+    .code(200)
+    .send(globalMetrics[0]);
 };

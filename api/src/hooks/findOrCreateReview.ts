@@ -1,45 +1,35 @@
 import type {
-  FastifyRequest,
+  FastifyRequest as Request,
   FastifyReply as Reply,
   FastifyPluginCallback,
 } from 'fastify';
 import plugin from 'fastify-plugin';
 
-declare module 'fastify' {
-  interface FastifyInstance {
-    findOrCreateReview: (request: Request, reply: Reply)=>void;
-  }
-}
-
-type Request = FastifyRequest<{
-  Params: { movieId: number };
-}>;
-
 export const findOrCreateReviewHooks: FastifyPluginCallback = async (
-  fastify, opts, done
+  fastify,
+  opts,
+  done
 ) => {
-
   /**
    * **Review object creation**
    * @preHandler
    * @description
    * This hook creates an empty review object if it doesn't exist.
-  */
-  fastify.decorate('findOrCreateReview', async (
-    request: Request, 
-    reply: Reply
-  ) => {
-    const { pgClient, params, user } = request;
-    const { movieId } = params;
-    const { id: userId } = user;
-    const query = { 
-      text: ` SELECT comment, rating
+   */
+  fastify.decorate(
+    'findOrCreateReview',
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    async (request: Request<{ Params: { movieId: number } }>, reply: Reply) => {
+      const { pgClient, params, user } = request;
+      const { movieId } = params;
+      const { id: userId } = user;
+      const query = {
+        text: ` SELECT comment, rating
                   FROM review
                   WHERE user_id=$1 AND movie_id=$2;`,
-      values: [userId, Number(movieId)],
-    };
-  
-    try {
+        values: [userId, Number(movieId)],
+      };
+
       let review = await pgClient.query(query);
       if (!review.rowCount) {
         await pgClient.query({
@@ -49,15 +39,13 @@ export const findOrCreateReviewHooks: FastifyPluginCallback = async (
         review = await pgClient.query(query);
       }
       const { comment, rating } = review.rows[0];
-      request.user = { 
-        ...user, 
+      request.user = {
+        ...user,
         previous_review: { comment, rating },
       };
-    } catch (err) {
-      reply.send(err);
     }
-  });
-    
+  );
+
   done();
 };
 

@@ -3,13 +3,8 @@ import type {
   FastifyReply as Reply,
   FastifyPluginCallback,
 } from 'fastify';
+import { ApiError } from '../types/_index';
 import plugin from 'fastify-plugin';
-
-declare module 'fastify' {
-  interface FastifyInstance {
-    isAdmin: (request: Request, reply: Reply)=>void;
-  }
-}
 
 export const verifyRolesHooks: FastifyPluginCallback = async (
   fastify, opts, done
@@ -20,17 +15,12 @@ export const verifyRolesHooks: FastifyPluginCallback = async (
    * @onRequest
    * @description
    * This hook verifies if user role is 'admin'.
-  */
+  */ // eslint-disable-next-line @typescript-eslint/no-unused-vars
   fastify.decorate('isAdmin', async (request: Request, reply: Reply) => {
-    try {
-      await request.jwtVerify();
-      if (request.user.role !== 'admin') {
-        reply.status(403);
-        throw new Error('accès restreint aux administrateurs.');
-      }
-    } catch (err) {
-      reply.send(err);
-    }
+    const { error } = request;
+    await request.jwtVerify();
+    if (request.user.role !== 'admin') 
+      error.send(ApiError.ADMIN_ONLY, 403);
   });
 
   done();

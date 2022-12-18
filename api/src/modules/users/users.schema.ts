@@ -45,7 +45,7 @@ export const getUsersSchema: FastifySchema = {
     },
   },
   response: {
-    '200': {
+    200: {
       type: 'array',
       items: { $ref: 'user#' },
     },
@@ -88,14 +88,12 @@ export const putUserSchema: FastifySchema = {
     },
   },
   response: {
-    '204': {
+    204: {
       properties: {
         message: { type: 'string' },
       },
       required: ['message'],
     },
-    '401': { $ref: 'apiError#' },
-    '422': { $ref: 'apiError#' },
   },
 };
 
@@ -121,15 +119,12 @@ export const adminDeleteUserByIdSchema: FastifySchema = {
     required: ['id'],
   },
   response: {
-    '204': {
+    204: {
       type: 'object',
       properties: {
         message: { type: 'string' },
       },
       required: ['message'],
     },
-    '401': { $ref: 'apiError#' },
-    '403': { $ref: 'apiError#' },
-    '404': { $ref: 'apiError#' },
   },
 };

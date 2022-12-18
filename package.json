@@ -4,8 +4,7 @@
     "unix-install": "(cd api && npm install); (cd app && npm install)",
     "win-install": "(cd api && npm i) && (cd ../app && npm i)",
     "dev-build": "docker compose up --build",
-    "dev": "docker compose up",
-    "test": "(cd api && npm run test)"
+    "dev": "docker compose up"
   },
   "dependencies": {
     "app": "file:app",

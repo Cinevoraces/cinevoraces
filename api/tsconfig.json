@@ -2,10 +2,9 @@
   "include": [
     "src/**/*",
     "src/*",
-    "test/**/*.test.ts",
     "test/**/*.ts",
     "test/*.ts"
-, "test/utils/ressourceCreator/createMovie.ts", "test/routes/auth.routes.test.old", "test/routes/auth.routes.test.old", "test/routes/metrics.routes.test.old", "test/routes/metrics.routes.test.old", "test/routes/movies.routes.test.old", "test/routes/movies.routes.test.old", "test/routes/users.routes.test.old", "test/routes/users.routes.test.old", "test/routes/propositions.routes.test.old", "test/routes/propositions.routes.test.old", "test/routes/reviews.routes.test.ts_old", "test/routes/reviews.routes.test.ts_old"  ],
+  ],
   "exclude": ["dist"],
   "compilerOptions": {
     "types": ["@types/jest", "node"],
@@ -22,13 +21,5 @@
     "sourceMap": true,
     "baseUrl": ".",
     "outDir": "dist",
-    "paths": {
-      "@src/*": ["src/*"],
-      "@routes/*": ["src/routes/*"],
-      "@plugins/*": ["src/plugins/*"],
-      "@modules/*": ["src/modules/*"],
-      "@hooks/*": ["src/hooks/*"],
-      "@utils/*": ["src/utils/*"]
-    }
   }
 }

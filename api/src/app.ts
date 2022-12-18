@@ -1,41 +1,14 @@
 import type { FastifyInstance } from 'fastify';
-import envCheck from '@plugins/envCheck';
-import pgClient from '@plugins/pgClient';
-import jwt from '@src/plugins/fastifyJwt';
-import hooks from '@plugins/hooks';
-import swagger from '@plugins/swagger';
-import cookie from '@src/plugins/fastifyCookie';
-import cors from '@src/plugins/fastifyCors';
-import { auth } from '@modules/auth/auth.routes';
-import { metrics } from '@modules/metrics/metrics.routes';
-import { movies } from '@modules/movies/movies.routes';
-import { slots } from '@modules/slots/slots.routes';
-import { reviews } from '@modules/reviews/reviews.routes';
-import { seasons } from '@modules/seasons/seasons.routes';
-import { users } from '@modules/users/users.routes';
-import schemasRegister from './schemas';
+import { plugins } from './plugins/_index';
+import { schemas } from './schemas/_index';
+import { routes } from './modules/_index';
+import { hooks } from './hooks/_index';
 
 const app = async (fastify: FastifyInstance) => {
-  // Register Schemas
-  fastify.register(schemasRegister);
-
-  // Register plugins
-  fastify.register(envCheck);
-  fastify.register(pgClient);
-  fastify.register(cookie);
-  fastify.register(cors);
-  fastify.register(jwt);
-  fastify.register(hooks);
-  fastify.register(swagger);
-
-  // Register routes
-  fastify.register(auth);
-  fastify.register(metrics);
-  fastify.register(movies);
-  fastify.register(slots);
-  fastify.register(reviews);
-  fastify.register(seasons);
-  fastify.register(users);
+  plugins.forEach((plugin) => fastify.register(plugin));
+  hooks.forEach((hook) => fastify.register(hook));
+  schemas.forEach((schema) => fastify.addSchema(schema));
+  routes.forEach((route) => fastify.register(route));
 };
 
 export default app;

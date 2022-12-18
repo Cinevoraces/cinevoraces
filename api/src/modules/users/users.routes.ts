@@ -8,7 +8,7 @@ import {
   handleGetUsers,
   handlePutUser,
   handleAdminDeleteUserById,
-} from '@modules/users/users.handler';
+} from './users.handler';
 
 export const users = async (fastify: FastifyInstance) => {
   fastify.route({

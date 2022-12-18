@@ -33,7 +33,5 @@ export const createSeasonSchema: FastifySchema = {
         message: { type: 'string' },
       },
     },
-    '404': { $ref: 'apiError#' },
-    '500': { $ref: 'apiError#' },
   },
 };
