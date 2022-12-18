@@ -2,6 +2,7 @@ import { apiErrorSchema } from './apiError';
 import { globalMetricsSchema, userMetricsSchema } from './metrics';
 import { movieSchema } from './movie';
 import { reviewSchema } from './review';
+import { seasonSchema } from './season';
 import { slotSchema } from './slot';
 import { userSchema } from './user';
 
@@ -16,6 +17,7 @@ export const schemas = [
   globalMetricsSchema,
   movieSchema,
   reviewSchema,
+  seasonSchema,
   slotSchema,
   userMetricsSchema,
   userSchema,

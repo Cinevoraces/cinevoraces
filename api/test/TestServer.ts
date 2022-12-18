@@ -57,6 +57,7 @@ enum EEndpoints {
   REVIEWS = '/reviews',
   METRICS = '/metrics',
   MOVIES = '/movies',
+  SEASONS = '/seasons',
   SLOTS = '/slots',
   USERS = '/users',
   BOOK_SLOT = '/slots/book',
@@ -65,7 +66,8 @@ enum EEndpoints {
   ADMIN_PUBLISH = '/admin/movies/publish',
   ADMIN_MOVIES = '/admin/movies',
   ADMIN_REVIEWS = '/admin/reviews',
-  ADMIN_UNBOOK_SLOT = '/admin/slots/unbook'
+  ADMIN_UNBOOK_SLOT = '/admin/slots/unbook',
+  ADMIN_SEASONS = '/admin/seasons',
 }
 
 export default class TestServer {
@@ -134,6 +136,11 @@ export default class TestServer {
         presentation: expect.any(Object),
         metrics: expect.any(Object),
         comments: expect.any(Array),
+      }),
+      season: expect.objectContaining({
+        season_number: expect.any(Number),
+        year: expect.any(Number),
+        movie_count: expect.any(Number),
       }),
       userWithMoviesReviewsAndMetrics: expect.objectContaining({
         id: expect.any(Number),
@@ -317,6 +324,16 @@ export default class TestServer {
         movie_id: movieId.rows[0].id,
         presentation
       }
+    });
+
+    const res = await req.json();
+    const statusCode = req.statusCode;
+    return { res, statusCode };
+  }
+  async RequestSeasons() {
+    const req = await this.fastify.inject({
+      method: ECrudMethods.GET,
+      url: EEndpoints.SEASONS,
     });
 
     const res = await req.json();
@@ -509,7 +526,24 @@ export default class TestServer {
     const statusCode = req.statusCode;
     return { res, statusCode };
   }
+  async RequestAdminCreateSeason( 
+    token: string,
+    payload: {
+      year: number,
+      season_number: number
+    }
+  ) {
+    const req = await this.fastify.inject({
+      method: ECrudMethods.POST,
+      url: EEndpoints.ADMIN_SEASONS,
+      headers: { Authorization: `Bearer ${token}` },
+      payload
+    });
 
+    const res = await req.json();
+    const statusCode = req.statusCode;
+    return { res, statusCode };
+  }
   // RESSOURCES METHODS
   async createUser(role = 'user') {
     const user = {

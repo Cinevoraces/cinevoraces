@@ -11,4 +11,5 @@ export enum ApiResponse {
   SLOT_BOOKING_SUCCESS = 'Ce créneau a bien été réservé.',
   SLOT_RELEASE_SUCCESS = 'Ce créneau a bien été libéré.',
   UPDATE_USER_SUCCESS = 'Votre profil a bien été mis à jour.',
+  SEASON_CREATED_SUCCESS = 'Nouvelle saison créée.',
 }

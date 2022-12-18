@@ -8,6 +8,7 @@ export enum ApiError {
   INVALID_TOKEN = 'Utilisateur introuvable, token compromis.',
   INVALID_PROPOSAL = 'Ce film à déjà été proposé.',
   MISSING_PASSWORD = 'Mot de passe requis.',
+  ERROR_CREATE_SEASON = 'Erreur, aucune saison créée.',
   NOT_FOUND_MOVIE = 'Aucun film trouvé',
   NOT_FOUND_MOVIE_ID = 'Le film demandé n\'a pas été trouvé dans la base de données.',
   NOT_FOUND_PROPOSAL = 'Le film demandé n\'a pas été trouvé parmis les proposition en cours.',
@@ -16,5 +17,4 @@ export enum ApiError {
   UNAVAILABLE_SLOT = 'Ce créneau est déjà réservé.',
   UNBOOKED_SLOT = 'Ce créneau n\'est pas réservé.',
   USER_HAS_PROPOSAL = 'Vous avez déjà une proposition en attente. Vous pourrez réserver un nouveau créneau une fois votre proposition publiée.',
-
 }
