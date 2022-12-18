@@ -61,17 +61,18 @@ export const handleRegister = async (
 export const handleLogin = async (
   request: Request<{
     Body: {
-      pseudo: string;
+      pseudo?: string;
+      mail?: string;
       password: string;
     }
   }>,
   reply: Reply
 ) => {
   const { error, pgClient, body } = request;
-  const { pseudo, password } = body;
+  const { mail, pseudo, password } = body;
 
   const { rows: user, rowCount: isUser } = await pgClient.query(
-    getPrivateUser({ pseudo })
+    getPrivateUser(pseudo ? { pseudo } : { mail })
   );
 
   // Check if user exists
@@ -85,7 +86,6 @@ export const handleLogin = async (
   const userObject = { 
     id: user[0].id,
     pseudo: user[0].pseudo,
-    mail: user[0].mail,
     role: user[0].role,
     avatar_url: user[0].avatar_url,
   };
