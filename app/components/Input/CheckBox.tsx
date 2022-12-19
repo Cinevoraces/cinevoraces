@@ -17,14 +17,14 @@ interface CheckBoxProps {
  * @param onChange          state setter
  */
 export const CheckBox = (props: CheckBoxProps) => {
-  const labelBasicStyle = 'flex gap-4 items-top';
+  const labelBasicStyle = 'flex flex-row-reverse justify-end gap-4 items-top';
   const { customStyle, ...checkboxProps } = props;
   const name = checkboxProps.name;
   return (
-    <div className={!customStyle ? labelBasicStyle : labelBasicStyle + ' w-full justify-between'}>
+    <div className={!customStyle ? labelBasicStyle : labelBasicStyle + ' w-full'}>
       <label
         htmlFor={name}
-        className="text-sm font-thin cursor-pointer">
+        className="text-sm font-light cursor-pointer">
         {name}
       </label>
       <input

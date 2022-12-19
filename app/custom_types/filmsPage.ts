@@ -23,7 +23,7 @@ export interface FilterUserInputs {
   [key: string]: string[] | undefined;
 }
 
-export interface filteredMoviesStateInterface {
+export interface FilteredMoviesStateInterface {
   season?: Season;
   searchQuery?: string;
   isSeasonSelectOpened: boolean;

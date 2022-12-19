@@ -64,12 +64,12 @@ export default function Select(props: SelectProps) {
         <button
           className={
             name +
-            ' min-w-[150px] h-full px-2 flex justify-between items-center rounded-xl bg-medium-gray shadow-inner focus:outline-none focus:text-orange-primary'
+            ' min-w-[150px] h-full px-3 rounded-xl bg-medium-gray shadow-inner focus:outline-none focus:text-orange-primary'
           }
           onClick={toggleSelectDisplay}
           name={name}>
           <div className="w-full flex justify-between items-center">
-            <p className="text-sm">{stateValue.name}</p>
+            <p className="text-sm mx-auto">{stateValue.name}</p>
             <ArrowSvg style="stroke-orange-primary fill-orange-primary" />
           </div>
         </button>

@@ -1,9 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { RootState } from '../store';
 import type { PayloadAction } from '@reduxjs/toolkit';
-import type { CompleteMovie, filteredMoviesStateInterface, FilterOptions, FilterUserInputs } from '@custom_types/index';
+import type { CompleteMovie, FilteredMoviesStateInterface, FilterOptions, FilterUserInputs } from '@custom_types/index';
 
-const initialState: filteredMoviesStateInterface = {
+const initialState: FilteredMoviesStateInterface = {
   isSeasonSelectOpened: false,
   isFilterMenuOpen: false,
   availableFilters: {
@@ -22,25 +22,25 @@ const filteredMoviesSlice = createSlice({
   name: 'filteredMovies',
   initialState,
   reducers: {
-    toggleSeasonSelect(state) {
+    toggleSeasonSelect(state: FilteredMoviesStateInterface) {
       return { ...state, isSeasonSelectOpened: !state.isSeasonSelectOpened };
     },
-    toggleFilterMenu(state) {
+    toggleFilterMenu(state: FilteredMoviesStateInterface) {
       return { ...state, isFilterMenuOpen: !state.isFilterMenuOpen };
     },
-    changeSeason(state, action) {
+    changeSeason(state: FilteredMoviesStateInterface, action) {
       return { ...state, season: action.payload };
     },
-    changeSearchQuery(state, action) {
+    changeSearchQuery(state: FilteredMoviesStateInterface, action) {
       return { ...state, searchQuery: action.payload };
     },
-    setAvailableFilters(state, action) {
+    setAvailableFilters(state: FilteredMoviesStateInterface, action) {
       return {
         ...state,
         availableFilters: action.payload,
       };
     },
-    cleanUserInputs(state) {
+    cleanUserInputs(state: FilteredMoviesStateInterface) {
       return {
         ...state,
         userFilterInputs: {
@@ -49,7 +49,7 @@ const filteredMoviesSlice = createSlice({
         },
       };
     },
-    initializeOrCorrectUserInputs(state) {
+    initializeOrCorrectUserInputs(state: FilteredMoviesStateInterface) {
       //initializes or corrects filters that gets modified or removed by user season change
       const newState = state;
 
@@ -85,7 +85,7 @@ const filteredMoviesSlice = createSlice({
       newState.userFilterInputs.releaseYear = state.availableFilters.releaseYear;
       return newState;
     },
-    setFilter(state, action) {
+    setFilter(state: FilteredMoviesStateInterface, action) {
       const { category, filter } = action.payload;
       // This code block is relying on releaseYear being initialized
       if (category.includes('ReleaseYear') && state.userFilterInputs.releaseYear) {
@@ -125,7 +125,7 @@ const filteredMoviesSlice = createSlice({
         return state;
       }
     },
-    setFilteredMovies(state: filteredMoviesStateInterface, action) {
+    setFilteredMovies(state: FilteredMoviesStateInterface, action) {
       const { moviesToFilter, isUserConnected } = action.payload;
       const { genres, countries, runtime, releaseYear, avgRate, review } = state.userFilterInputs;
       const searchQuery = state.searchQuery;
