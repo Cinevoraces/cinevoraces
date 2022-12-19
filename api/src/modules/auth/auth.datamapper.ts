@@ -42,7 +42,7 @@ export const createUser = (
  * @param value object containing *id or pseudo*
 */
 export const getPrivateUser = (
-  value: { id: number } | { pseudo: string },
+  value: { id: number } | { pseudo: string } | { mail: string },
 ): Query.preparedQuery => {
   const column: string = Object.keys(value)[0];
   return {

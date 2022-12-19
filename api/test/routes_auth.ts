@@ -1,3 +1,4 @@
+import { Console } from 'console';
 import type TestServer from './TestServer';
 
 export async function ROUTES_AUTH(Server: TestServer) {
@@ -30,7 +31,7 @@ export async function ROUTES_AUTH(Server: TestServer) {
       });
     });
 
-    test('ACCOUNT LOGIN', async () => {
+    test('ACCOUNT LOGIN USING PSEUDO', async () => {
       const LOGIN = await Server.RequestLogin({
         pseudo: Server.ressources.users[0].pseudo,
         password: Server.ressources.users[0].password.clear,
@@ -42,6 +43,21 @@ export async function ROUTES_AUTH(Server: TestServer) {
       expect(LOGIN.res).toEqual(Server.expected.loginResponse);
       expect(REFRESH.statusCode).toEqual(200);
       expect(REFRESH.res).toEqual(Server.expected.loginResponse);
+    });
+
+    test('ACCOUNT LOGIN USING MAIL', async () => {
+      const FAILURE_LOGIN = await Server.RequestLogin({
+        mail: Server.ressources.users[0].mail,
+        pseudo: Server.ressources.users[0].pseudo,
+        password: Server.ressources.users[0].password.clear,
+      });
+      expect(FAILURE_LOGIN.statusCode).toEqual(400);
+      const SUCCESSFULL_LOGIN = await Server.RequestLogin({
+        mail: Server.ressources.users[0].mail,
+        password: Server.ressources.users[0].password.clear,
+      });
+
+      expect(SUCCESSFULL_LOGIN.statusCode).toEqual(200);
     });
   });
 }

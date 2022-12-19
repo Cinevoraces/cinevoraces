@@ -40,15 +40,22 @@ export const loginSchema: FastifySchema = {
   description: `
   **Login endpoint**.
   Will respond with an access token in the *body* and a refresh token in a *cookie*.
+  Body must contain either a *pseudo* or a *mail* and a *password*.
   `,
   tags: ['Authentication'],
   body: {
     type: 'object',
-    required: ['pseudo', 'password'],
+    required: ['password'],
+    maxProperties: 2,
+    minProperties: 2,
     properties: {
       pseudo: { 
         type: 'string', 
         maxLength: 32,
+      },
+      mail: { 
+        type: 'string', 
+        maxLength: 64,
       },
       password: { 
         type: 'string', 
@@ -63,11 +70,10 @@ export const loginSchema: FastifySchema = {
       properties: {
         user: {
           type: 'object',
-          required: ['id', 'pseudo', 'mail', 'role', 'avatar_url'],
+          required: ['id', 'pseudo', 'role', 'avatar_url'],
           properties: {
             id: { type: 'string' },
             pseudo: { type: 'string' },
-            mail: { type: 'string' },
             role: { type: 'string' },
             avatar_url: { type: 'string' },
           },
