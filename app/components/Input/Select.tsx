@@ -69,7 +69,7 @@ export default function Select(props: SelectProps) {
           onClick={toggleSelectDisplay}
           name={name}>
           <div className="w-full flex justify-between items-center">
-            <p className="text-sm mx-auto">{stateValue.name}</p>
+            <p className="text-sm">{stateValue.name}</p>
             <ArrowSvg style="stroke-orange-primary fill-orange-primary" />
           </div>
         </button>
