@@ -71,10 +71,10 @@ enum EEndpoints {
 }
 
 export default class TestServer {
-  fastify;
-  faker;
-  expected;
-  ressources;
+  public fastify;
+  public faker;
+  public expected;
+  public ressources;
 
   constructor() {
     this.fastify = Fastify({
@@ -95,7 +95,7 @@ export default class TestServer {
           avatar_url: expect.any(String),
         }),
         token: expect.any(String),
-        response: expect.any(String)
+        message: expect.any(String)
       }),
       refreshToken: expect.objectContaining({
         name: 'refresh_token',
@@ -162,15 +162,15 @@ export default class TestServer {
   }
 
   // SERVER METHODS
-  async start() {
+  public async start() {
     await this.fastify.ready();
   }
-  async stop() {
+  public async stop() {
     this.fastify.close();
   }
 
   // API CALLS METHODS
-  async RequestRegister(
+  public async RequestRegister(
     payload: { pseudo: string; mail: string; password: string }
   ) {
     const req = await this.fastify.inject({
@@ -201,7 +201,7 @@ export default class TestServer {
     
     return { res, statusCode, tokens };
   }
-  async RequestRefresh(refreshToken: string) {
+  public async RequestRefresh(refreshToken: string) {
     const req = await this.fastify.inject({
       method: ECrudMethods.GET,
       url: EEndpoints.REFRESH,
@@ -214,7 +214,7 @@ export default class TestServer {
 
     return { res, statusCode };
   }
-  async RequestMetrics() {
+  public async RequestMetrics() {
     const req = await this.fastify.inject({
       method: ECrudMethods.GET,
       url: EEndpoints.METRICS,
@@ -224,7 +224,7 @@ export default class TestServer {
     
     return { res, statusCode };
   }
-  async RequestMovies(query = '', token?: string) {
+  public async RequestMovies(query = '', token?: string) {
     const headers = token
       ? { Authorization: `Bearer ${token}` }
       : {};
@@ -240,7 +240,7 @@ export default class TestServer {
     const statusCode = req.statusCode;
     return { res, statusCode };
   }
-  async RequestReviewMovie(
+  public async RequestReviewMovie(
     payload: { rating?: number; comment?: string, bookmarked?: boolean, viewed?: boolean, liked?: boolean },
     movieId: number,
     token: string
@@ -256,7 +256,7 @@ export default class TestServer {
     const statusCode = req.statusCode;
     return { res, statusCode };
   }
-  async RequestProposeMovie(
+  public async RequestProposeMovie(
     token: string,
     payload?: {
       french_title?: string;
@@ -301,7 +301,7 @@ export default class TestServer {
     const statusCode = req.statusCode;
     return { res, statusCode };
   }
-  async RequestUpdateMovieProposal(
+  public async RequestUpdateMovieProposal(
     token: string,
     presentation: string,
     SQLQuery: {
@@ -329,7 +329,7 @@ export default class TestServer {
     const statusCode = req.statusCode;
     return { res, statusCode };
   }
-  async RequestSeasons() {
+  public async RequestSeasons() {
     const req = await this.fastify.inject({
       method: ECrudMethods.GET,
       url: EEndpoints.SEASONS,
@@ -339,7 +339,7 @@ export default class TestServer {
     const statusCode = req.statusCode;
     return { res, statusCode };
   }
-  async RequestSlots(
+  public async RequestSlots(
     token: string,
     query: string
   ) {
@@ -354,7 +354,7 @@ export default class TestServer {
     const statusCode = req.statusCode;
     return { res, statusCode };
   }
-  async RequestBookSlot(
+  public async RequestBookSlot(
     token: string,
     slotId: number
   ) {
@@ -368,7 +368,7 @@ export default class TestServer {
     const statusCode = req.statusCode;
     return { res, statusCode };
   }
-  async RequestUnbookSlot(
+  public async RequestUnbookSlot(
     token: string,
     slotId: number,
     payload: { password: string }
@@ -384,7 +384,7 @@ export default class TestServer {
     const statusCode = req.statusCode;
     return { res, statusCode };
   }
-  async RequestGetUsers(query = '') {
+  public async RequestGetUsers(query = '') {
     const req = await this.fastify.inject({
       method: ECrudMethods.GET,
       url: EEndpoints.USERS,
@@ -395,7 +395,7 @@ export default class TestServer {
     const statusCode = req.statusCode;
     return { res, statusCode };
   }
-  async RequestUpdateUser(
+  public async RequestUpdateUser(
     token: string,
     payload: {
       update_user: {
@@ -417,7 +417,7 @@ export default class TestServer {
     const statusCode = req.statusCode;
     return { res, statusCode };
   }
-  async RequestAdminDeleteUser(
+  public async RequestAdminDeleteUser(
     token: string,
     payload: { password: string },
     userPseudo: string,
@@ -438,7 +438,7 @@ export default class TestServer {
     const statusCode = req.statusCode;
     return { res, statusCode };
   }
-  async RequestAdminPublishMovie(
+  public async RequestAdminPublishMovie(
     token: string,
     payload: {
       password: string;
@@ -465,7 +465,7 @@ export default class TestServer {
     const statusCode = req.statusCode;
     return { res, statusCode };
   }
-  async RequestAdminDeleteMovie(
+  public async RequestAdminDeleteMovie(
     token: string,
     payload: {
       password: string;
@@ -492,7 +492,7 @@ export default class TestServer {
     const statusCode = req.statusCode;
     return { res, statusCode };
   }
-  async RequestAdminDeleteReview(
+  public async RequestAdminDeleteReview(
     token: string,
     payload: {
       password: string;
@@ -510,7 +510,7 @@ export default class TestServer {
     const statusCode = req.statusCode;
     return { res, statusCode };
   }
-  async RequestAdminGetReviews(
+  public async RequestAdminGetReviews(
     token: string,
     query: string
   ) {
@@ -525,7 +525,7 @@ export default class TestServer {
     const statusCode = req.statusCode;
     return { res, statusCode };
   }
-  async RequestAdminCreateSeason( 
+  public async RequestAdminCreateSeason( 
     token: string,
     payload: {
       year: number,
@@ -544,7 +544,7 @@ export default class TestServer {
     return { res, statusCode };
   }
   // RESSOURCES METHODS
-  async createUser(role = 'user') {
+  public async createUser(role = 'user') {
     const user = {
       pseudo: this.faker.internet.userName(),
       mail: this.faker.internet.email(),
@@ -571,7 +571,7 @@ export default class TestServer {
       }
     };
   }
-  async createSlot(slot?: DBSlot) {
+  public async createSlot(slot?: DBSlot) {
     const s = {
       id: -1,
       is_booked: false,
@@ -609,7 +609,7 @@ export default class TestServer {
       }
     };
   }
-  async createMovie(movie: DBMovie) {
+  public async createMovie(movie: DBMovie) {
     const m = {
       french_title: this.faker.lorem.words(3),
       original_title: this.faker.lorem.words(3),

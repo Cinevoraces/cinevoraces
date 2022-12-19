@@ -104,7 +104,7 @@ export const handleLogin = async (
     .send({
       user: userObject,
       token: accessToken,
-      response: `${ApiResponse.LOGIN_SUCCESS} ${pseudo} !`,
+      message: `${ApiResponse.LOGIN_SUCCESS} ${pseudo} !`,
     });
 };
 
@@ -142,6 +142,6 @@ export const handleRefreshToken = async (request: Request, reply: Reply) => {
     .send({
       user: { ...rows[0] },
       token: accessToken,
-      response: ApiResponse.REFRESH_SUCCESS,
+      message: ApiResponse.REFRESH_SUCCESS,
     });
 };

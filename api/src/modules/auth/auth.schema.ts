@@ -66,7 +66,7 @@ export const loginSchema: FastifySchema = {
   response: {
     200: {
       type: 'object',
-      required: ['user', 'token', 'response'],
+      required: ['user', 'token', 'message'],
       properties: {
         user: {
           type: 'object',
@@ -79,7 +79,7 @@ export const loginSchema: FastifySchema = {
           },
         },
         token: { type: 'string' },
-        response: { type: 'string' },
+        message: { type: 'string' },
       },
     },
   },
@@ -103,7 +103,7 @@ export const refreshSchema: FastifySchema = {
   response: {
     200: {
       type: 'object',
-      required: ['user', 'token', 'response'],
+      required: ['user', 'token', 'message'],
       properties: {
         user: {
           type: 'object',
@@ -117,7 +117,7 @@ export const refreshSchema: FastifySchema = {
           },
         },
         token: { type: 'string' },
-        response: { type: 'string' },
+        message: { type: 'string' },
       },
     },
   },
