@@ -29,6 +29,7 @@ module.exports = {
       animation: {
         'slidein': 'slidein 400ms ease-in',
         'slideout': 'slidein 400ms ease-out reverse',
+        'ping-reverse': 'ping-reverse 1s ease-out infinite',
       },
       transitionProperty: {
         'width': 'width',
@@ -45,6 +46,23 @@ module.exports = {
           '0%': { transform: 'translate(0)'},
           '100%': { transform: 'translate(10rem)'},
         },
+        'ping-reverse': {
+          '0%': {
+            transform: 'scale(0); opacity: 1;',
+              },
+          '30%': {
+            transform: 'scale(0); opacity: 1;',
+              },
+          '70%': {
+            transform: 'scale(2); opacity: 0;',
+              },
+          '75%': {
+            transform: 'scale(0); opacity: 0;',
+              },
+          '100%': {
+            transform: 'scale(0); opacity: 1;',
+              },
+        }
       },
       backgroundImage:{}
     },
