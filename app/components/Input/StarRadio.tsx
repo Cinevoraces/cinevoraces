@@ -1,5 +1,5 @@
 import type { FormEvent } from 'react';
-import { StarSvg } from './SVG';
+import { StarSvg } from '../SvgComponents/InteractionsSVG';
 
 interface StarRadioProps {
   onChange: (e: FormEvent)=>void;
@@ -23,8 +23,8 @@ export default function StarRadio(props: StarRadioProps) {
   ease-out duration-300`;
 
   return (
-    <fieldset className='w-52 h-10 flex flex-row-reverse gap-10' {...props}>
-      <legend className="sr-only">Notez le film sur 5</legend>
+    <fieldset className='w-52 h-10 flex flex-row-reverse gap-10 ' {...props}>
+      <legend className="sr-only">Note sur 5</legend>
       {
         [...Array(5)].map((_, i) => (
           <label htmlFor="rating" className='relative ' key={`rating-${5 - i}`}>

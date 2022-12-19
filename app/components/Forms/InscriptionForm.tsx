@@ -102,7 +102,8 @@ export default function InscriptionForm() {
           ref={confirmPWRef}
         />
         <Toggle
-          id="showPassword"
+          id="showPasswordInscription"
+          name="showPasswordInscription"
           label="Montrer le mot de passe ?"
           checked={isPWVisible || false}
           onChange={() => dispatch(toggleIsPWVisible())}

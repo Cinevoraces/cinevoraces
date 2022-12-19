@@ -58,4 +58,5 @@ export interface CompleteMovie extends MinimalMovie {
   user_review?: UserReview;
   created_at: string;
   updated_at: string | null;
+  [key: string]: string[] | number | string | boolean | Presentation | Metrics | Comment[] | UserReview | null | undefined
 }

@@ -7,7 +7,11 @@ import {
   DoubleRange as DoubleRangeInput,
 } from './Range';
 import { TextRef as TextInputRef, Text as TextInput, TextAreaRef, TextArea } from './Text';
-import { BaseInteraction, RatingInteraction } from './Interaction';
+import { BaseInteraction, RatingInteraction } from './Interactions';
+import Select from './Select';
+import SearchBar from './SearchBar';
+import Filter from './Filter';
+import StarRadio from './StarRadio';
 
 export {
   Form,
@@ -23,4 +27,8 @@ export {
   TextArea,
   BaseInteraction,
   RatingInteraction,
+  Select,
+  SearchBar,
+  Filter,
+  StarRadio,
 };

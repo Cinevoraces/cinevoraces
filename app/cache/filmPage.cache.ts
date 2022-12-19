@@ -1,4 +1,4 @@
-import type { CompleteMovie, Interaction } from '@custom_types/types';
+import type { CompleteMovie, Interaction } from '@custom_types/movies';
 
 export default async function reviewMutation (
   type: 'bookmarked' | 'viewed' | 'liked' | 'rating' | 'comment',
