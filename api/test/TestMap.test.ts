@@ -27,9 +27,9 @@ afterAll(async () => {
 });
 
 ROUTES_AUTH(Server);
-ROUTES_METRICS(Server);
-ROUTES_MOVIES(Server);
-ROUTES_REVIEWS(Server);
-ROUTES_SEASONS(Server);
-ROUTES_SLOTS(Server);
-ROUTES_USERS(Server);
+// ROUTES_METRICS(Server);
+// ROUTES_MOVIES(Server);
+// ROUTES_REVIEWS(Server);
+// ROUTES_SEASONS(Server);
+// ROUTES_SLOTS(Server);
+// ROUTES_USERS(Server);

@@ -24,7 +24,7 @@ import { toast } from 'react-hot-toast';
 import cutText from '@utils/cutText';
 import type { NextPage, GetStaticPaths, GetStaticProps } from 'next';
 import type { ParsedUrlQuery } from 'querystring';
-import type { MinimalMovie, CompleteMovie } from '@custom_types/types';
+import type { MinimalMovie, CompleteMovie } from '@custom_types/movies';
 import type { BodyData } from '@utils/fetchApi';
 interface FilmProps {
   movies: CompleteMovie[];

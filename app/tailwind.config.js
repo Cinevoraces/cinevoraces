@@ -30,6 +30,7 @@ module.exports = {
         'slidein': 'slidein 400ms ease-in',
         'slideout': 'slidein 400ms ease-out reverse',
         'ping-reverse': 'ping-reverse 1s ease-out infinite',
+        'reverse-spin': 'reverse-spin 0.5s linear ',
       },
       transitionProperty: {
         'width': 'width',
@@ -42,9 +43,9 @@ module.exports = {
           '0%': { transform: 'translate(-10rem)'},
           '100%': { transform: 'translate(0)'},
         },
-        'slideout': {
-          '0%': { transform: 'translate(0)'},
-          '100%': { transform: 'translate(10rem)'},
+        'reverse-spin': {
+          '0%': { transform: 'rotate(0deg)'},
+          '100%': { transform: 'rotate(-360deg)'},
         },
         'ping-reverse': {
           '0%': {

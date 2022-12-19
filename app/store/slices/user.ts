@@ -7,13 +7,8 @@ interface UserProps {
   role?: string;
   avatar_url?: string;
 }
-export interface UserState extends UserProps{
-  isConnected: boolean;
-}
 
-const initialState: UserState = {
-  isConnected: false,
-};
+const initialState: UserProps = {};
 
 const userSlice = createSlice({
   name: 'user',

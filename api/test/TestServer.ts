@@ -91,7 +91,6 @@ export default class TestServer {
         user: expect.objectContaining({
           id: expect.any(String),
           pseudo: expect.any(String),
-          mail: expect.any(String),
           role: expect.any(String),
           avatar_url: expect.any(String),
         }),
@@ -183,8 +182,8 @@ export default class TestServer {
     const res = await req.json();
     return { res, statusCode };
   }
-  public async RequestLogin(
-    payload: { pseudo: string; password: string }
+  async RequestLogin(
+    payload: { pseudo?: string; mail?: string; password: string }
   ) {
     const req = await this.fastify.inject({
       method: ECrudMethods.POST,
@@ -193,12 +192,12 @@ export default class TestServer {
     });
     const statusCode = req.statusCode;
     const res = await req.json();
-    const tokens = {
-      refreshToken:
-        (req.cookies[0] as Record<string, string>).name + '='
-        + (req.cookies[0] as Record<string, string>).value,
-      accessToken: await res.token
-    };
+    const tokens = { refreshToken: '', accessToken: '' };
+
+    if (statusCode === 200) {
+      tokens.refreshToken = (req.cookies[0] as Record<string, string>).name + '=' + (req.cookies[0] as Record<string, string>).value;
+      tokens.accessToken = await res.token;
+    }
     
     return { res, statusCode, tokens };
   }

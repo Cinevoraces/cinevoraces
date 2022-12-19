@@ -2,13 +2,13 @@ import { useEffect } from 'react';
 
 /**
  * @param ref Menu component to close
- * @param name additionnal class name to identify a triggering button user | modal | burger
+ * @param name additionnal class name to identify a triggering button
  * @param state boolean - containing opened status
  * @param setter status mutator
  */
 export default function useCloseMenuOnOutsideClick(
   ref: React.RefObject<HTMLElement>,
-  name: 'user' | 'modal' | 'burger' | 'rating',
+  name: string,
   state: boolean,
   setter: (value: boolean)=>void
 ) {
@@ -26,3 +26,4 @@ export default function useCloseMenuOnOutsideClick(
     };
   });
 }
+
