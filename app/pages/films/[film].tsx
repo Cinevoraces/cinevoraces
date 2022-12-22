@@ -249,7 +249,6 @@ const Film: NextPage<FilmProps> = (props) => {
                     </div>
                   }
                 </PostCard>
-
               </div>
             </section>
             <CommentsSection {...movie} ref={commentFormRef} onSubmit={(e) => handleCommentSubmit(e)} />

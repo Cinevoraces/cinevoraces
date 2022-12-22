@@ -96,7 +96,7 @@ const CommentsSection = forwardRef<HTMLTextAreaElement, CommentsSectionProps>(({
       <div className='grid grid-cols-1 gap-4 auto-rows-auto md:gap-6 lg:gap-8 lg:grid-cols-2  '>
         { // Displaying all published comments
           orderedComments.current.length === 0 ? 
-            (<p className='text-center'>Aucun commentaire pour ce film.</p>)
+            (<p className='text-center lg:col-span-2'>Aucun commentaire pour ce film.</p>)
             : (
               <>
                 {
