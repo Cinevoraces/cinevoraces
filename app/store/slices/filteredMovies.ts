@@ -137,8 +137,8 @@ const filteredMoviesSlice = createSlice({
         (m: CompleteMovie) => (runtime ? m.runtime < Number(runtime[0]) : true),
         (m: CompleteMovie) =>
           releaseYear
-            ? Number(releaseYear[0]) < Number(m.release_date.slice(0, 4)) &&
-              Number(m.release_date.slice(0, 4)) > Number(releaseYear[0])
+            ? Number(releaseYear[0]) <= Number(m.release_date.slice(0, 4)) &&
+              Number(m.release_date.slice(0, 4)) <= Number(releaseYear[1])
             : true,
         (m: CompleteMovie) => (avgRate ? m.metrics.avg_rating >= Number(avgRate) : true),
         (m: CompleteMovie) => (searchQuery ? m.french_title.toLowerCase().includes(searchQuery.toLowerCase()) : true),
