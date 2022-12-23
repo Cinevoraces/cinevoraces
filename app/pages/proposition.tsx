@@ -8,12 +8,31 @@ import crewFormater from '@utils/crewFormater';
 import { toast } from 'react-hot-toast';
 import { useAppSelector } from '@store/store';
 import { user } from 'store/slices/user';
-import { PickEpisode, SearchMovie } from 'pages_components/proposition';
+import { PickEpisode, SearchMovie, PickMovie } from 'pages_components/proposition';
 
 import type { NextPage } from 'next';
 import type { FormEvent } from 'react';
 import type { Slot, TMDBMovie, TMDBDetailedMovie } from '@custom_types/index';
 import type { Episode, MovieBody } from '@custom_types/propositionPage';
+
+// Rendering bug forces to keep these declarations here for no reason and pass it as prop.
+const pickMovieStyles = {
+  titleStyle : 'custom-container items-start py-4 title-section',
+  gridStyle : 'custom-container py-4 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4',
+  resultCardStyle : `w-full flex flex-between peer 
+    border border-transparent rounded-xl overflow-hidden 
+    bg-dark-gray cursor-pointer 
+    peer-hover:scale-105 peer-focus:scale-105 peer-checked:border-orange-primary 
+    ease-out duration-300`,
+  posterStyle : 'rounded-lg object-cover h-full shadow-lg max-w-[125px]',
+  radioStyle : `radio-input absolute z-20 cursor-pointer 
+    peer w-[356px] h-[180px] border-none 
+    bg-transparent text-transparent 
+    checked:bg-none 
+    focus:border-transparent focus:ring-none focus:ring-offset-0 focus:ring-transparent 
+    hover:border-orange-primary hover:ring-none 
+    `,
+};
 
 const Proposition: NextPage = () => {
   // User logic and verifications
@@ -29,7 +48,7 @@ const Proposition: NextPage = () => {
   }, [userId]);
   // Slot Selection logic
   const [areOptionsDisplayed, setAreOptionsDisplayed] = useState(false);
-  const [episode, setEpisode] = useState({ name: 'Selectionnez un épisode', value: { id: 0, season_id: 0, publishing_date: '' } });
+  const [episode, setEpisode] = useState({ name: 'Date - Épisode...', value: { id: 0, season_id: 0, publishing_date: '' } });
   const { data: availableSlots } = useSWR('/slots?where[is_booked]=false&limit=10');
   const availableSlotsArray = useRef<Episode[]>([]);
   useEffect(() => {
@@ -127,6 +146,10 @@ const Proposition: NextPage = () => {
               <SearchMovie 
                 handleMovieSearch={handleMovieSearch}
                 ref={searchRef}/>
+              <PickMovie 
+                searchResults={searchResults}
+                handleSelectMovie={handleSelectMovie}
+                styles={pickMovieStyles}/>
             </>
           )
       }
