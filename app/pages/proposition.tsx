@@ -8,7 +8,7 @@ import crewFormater from '@utils/crewFormater';
 import { toast } from 'react-hot-toast';
 import { useAppSelector } from '@store/store';
 import { user } from 'store/slices/user';
-import { PickEpisode } from 'pages_components/proposition';
+import { PickEpisode, SearchMovie } from 'pages_components/proposition';
 
 import type { NextPage } from 'next';
 import type { FormEvent } from 'react';
@@ -108,6 +108,7 @@ const Proposition: NextPage = () => {
   };
   return (
     <main className='justify-start min-h-[81vh]'>
+      <h1 className="custom-container pb-4 hero-text items-start">Proposer un film</h1>
       {
         (!userId || (userHasPendingProposition && userHasPendingProposition.current)) 
           ? <p className='custom-container'>{
@@ -117,13 +118,15 @@ const Proposition: NextPage = () => {
           }</p>
           : (
             <>
-              <h1 className="custom-container pb-4 hero-text items-start">Proposer un film</h1>
               <PickEpisode
                 availableSlotsArray={availableSlotsArray.current}
                 areOptionsDisplayed={areOptionsDisplayed}
                 handleOptionsDisplay={handleOptionsDisplay}
                 episode={episode}
                 setEpisode={setEpisode}/>
+              <SearchMovie 
+                handleMovieSearch={handleMovieSearch}
+                ref={searchRef}/>
             </>
           )
       }
