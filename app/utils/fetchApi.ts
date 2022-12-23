@@ -14,7 +14,8 @@ const getDataFromEndpointSSR = async (endpoint: string) => {
 };
 
 interface BodyData {
-  [key: string]: string | number | boolean | null;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  [key: string]: any;
 }
 
 interface FetchOptions extends RequestInit {
