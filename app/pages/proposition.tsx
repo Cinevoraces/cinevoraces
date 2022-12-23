@@ -6,13 +6,14 @@ import objectFilter from '@utils/objectFilter';
 import tmdbMovieFormater from '@utils/tmdbMovieFormater';
 import crewFormater from '@utils/crewFormater';
 import { toast } from 'react-hot-toast';
+import { useAppSelector } from '@store/store';
+import { user } from 'store/slices/user';
+import { PickEpisode } from 'pages_components/proposition';
+
 import type { NextPage } from 'next';
 import type { FormEvent } from 'react';
 import type { Slot, TMDBMovie, TMDBDetailedMovie } from '@custom_types/index';
 import type { Episode, MovieBody } from '@custom_types/propositionPage';
-
-import { useAppSelector, useAppDispatch } from '@store/store';
-import { user } from 'store/slices/user';
 
 const Proposition: NextPage = () => {
   // User logic and verifications
@@ -106,8 +107,26 @@ const Proposition: NextPage = () => {
     }
   };
   return (
-    <main>
-      <p>Proposition wesh</p>
+    <main className='justify-start min-h-[81vh]'>
+      {
+        (!userId || (userHasPendingProposition && userHasPendingProposition.current)) 
+          ? <p className='custom-container'>{
+            (!userId) 
+              ? 'Vous devez être connecté pour proposer un film.' 
+              : 'Vous avez déjà une proposition en attente. Vous pourrez réserver un nouveau créneau une fois votre proposition publiée.'
+          }</p>
+          : (
+            <>
+              <h1 className="custom-container pb-4 hero-text items-start">Proposer un film</h1>
+              <PickEpisode
+                availableSlotsArray={availableSlotsArray.current}
+                areOptionsDisplayed={areOptionsDisplayed}
+                handleOptionsDisplay={handleOptionsDisplay}
+                episode={episode}
+                setEpisode={setEpisode}/>
+            </>
+          )
+      }
     </main>
   );
 };
