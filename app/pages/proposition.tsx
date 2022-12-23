@@ -8,7 +8,7 @@ import crewFormater from '@utils/crewFormater';
 import { toast } from 'react-hot-toast';
 import { useAppSelector } from '@store/store';
 import { user } from 'store/slices/user';
-import { PickEpisode, SearchMovie, PickMovie } from 'pages_components/proposition';
+import { PickEpisode, SearchMovie, PickMovie, WritePresentationAndSend } from 'pages_components/proposition';
 
 import type { NextPage } from 'next';
 import type { FormEvent } from 'react';
@@ -150,6 +150,12 @@ const Proposition: NextPage = () => {
                 searchResults={searchResults}
                 handleSelectMovie={handleSelectMovie}
                 styles={pickMovieStyles}/>
+              <WritePresentationAndSend 
+                searchResults={searchResults}
+                selectedMovieId={selectedMovieId}
+                handlePropositionSubmit={handlePropositionSubmit}
+                episode={episode}
+                ref={presentation}/>
             </>
           )
       }
