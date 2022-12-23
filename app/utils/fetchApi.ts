@@ -69,6 +69,23 @@ const mutationRequestCSR = async (method: 'POST' | 'PUT' | 'DELETE', endpoint: s
   return handleResponse(res);
 };
 
+/**
+ * Generic function for get methods, specific to client side requests toward external APis
+ * @param baseUrl string
+ * @param apiKey string
+ * @param endpoint string
+ * @returns data from API
+ */
+const externalGetRequest = async (baseUrl: string, endpoint: string, apiKey: string, options: string) => {
+  const res = await fetch(baseUrl + endpoint + `?api_key=${apiKey}` + '&' + options, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+  return handleResponse(res);
+};
+
 const handleResponse = async (res: Response) => {
   const responseBody = await res.json();
   if (responseBody.error) {
@@ -79,5 +96,5 @@ const handleResponse = async (res: Response) => {
   return responseBody;
 };
 
-export { getDataFromEndpointSSR, getRequestCSR, mutationRequestCSR };
+export { getDataFromEndpointSSR, getRequestCSR, mutationRequestCSR, externalGetRequest };
 export type { BodyData };

@@ -3,6 +3,7 @@ import type { Season, FilterOptions, FilterUserInputs, FilteredMoviesStateInterf
 import type { SvgProps } from './global';
 import type { Episode, MovieBody } from './propositionPage';
 import type { TMDBMovie, TMDBDetailedMovie, TMDBMovieCredits } from './tmdbMovie';
+import type { Slot } from './slot';
 
 export type{
   MinimalMovie, Presentation, Metrics, Comment, UserReview, CompleteMovie,
@@ -10,4 +11,5 @@ export type{
   SvgProps,
   Episode, MovieBody,
   TMDBMovie, TMDBDetailedMovie, TMDBMovieCredits,
+  Slot,
 };
