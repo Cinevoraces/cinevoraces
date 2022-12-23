@@ -10,7 +10,7 @@ import { toast } from 'react-hot-toast';
 import tryCatchWrapper from '@utils/tryCatchWrapper';
 import type { BodyData } from '@utils/fetchApi';
 
-export default function ConnectionForm() {
+const ConnectionForm = () => {
   const isPWVisible = useAppSelector(connection).isPWVisible;
   const dispatch = useAppDispatch();
 
@@ -41,9 +41,13 @@ export default function ConnectionForm() {
     // Checking all inputs validation status
     const inputValidationStatus = allInputsRef.map((inputRef) => inputRef.current?.reportValidity());
     if (!inputValidationStatus.includes(false)) {
+      // Check the identifier nature
+      const identifierType = (new RegExp(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/).test(identifierRef.current!.value)) 
+        ? 'mail' 
+        : 'pseudo';
       const data = {
         password: passwordRef.current!.value,
-        pseudo: identifierRef.current!.value,
+        [identifierType]: identifierRef.current!.value,
       };
       tryCatchWrapper(submitSuccess)('POST', '/login', data);
     }
@@ -89,3 +93,5 @@ export default function ConnectionForm() {
     </form>
   );
 };
+
+export default ConnectionForm;
