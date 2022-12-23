@@ -1,12 +1,14 @@
 import Link from 'next/link';
+import type { MouseEventHandler, ReactNode } from 'react';
 
 interface ButtonProps {
-  children?: React.ReactNode;
+  children?: ReactNode;
   customStyle?: 'text' | 'empty' | 'rounded' | 'white' | 'select' | 'selectSearchBar';
-  onClick?: React.MouseEventHandler<HTMLButtonElement>;
+  onClick?: MouseEventHandler<HTMLButtonElement>;
   to?: string;
   href?: string;
   name?: string;
+  disabled?: boolean;
 }
 
 /**
@@ -17,6 +19,7 @@ interface ButtonProps {
  * @param to to specify for internal Link redirection
  * @param href for external links only
  * @param name for special closing mechanics as in select and searchbar
+ * @param disabled whether the button is disabled or not
  */
 export default function Button({
   children,
@@ -25,6 +28,7 @@ export default function Button({
   to,
   href,
   name,
+  disabled,
 }: ButtonProps) {
   const [baseStyle, classic, empty, rounded, white, select] = [
     `group px-5 py-2 flex gap-2 justify-center
@@ -62,8 +66,7 @@ export default function Button({
       {to && (
         <Link
           className={className}
-          href={to}
-          onClick={onClick}>
+          href={to}>
           {children}
         </Link>
       )}
@@ -78,7 +81,8 @@ export default function Button({
       {!href && !to && (
         <button
           className={className}
-          onClick={onClick}>
+          onClick={onClick}
+          disabled={disabled}>
           {children}
         </button>
       )}
