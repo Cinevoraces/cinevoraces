@@ -12,7 +12,7 @@ interface PostCardProps {
   children: React.ReactNode;
 }
 
-const basicStyle = 'w-full p-3 rounded-xl drop-shadow-sm flex flex-col gap-4 ';
+const basicStyle = 'w-full p-3 rounded-xl drop-shadow-sm flex flex-col gap-4 h-fit ';
 const presentationStyle = basicStyle + 'bg-medium-gray ';
 const commentStyle =
   basicStyle +

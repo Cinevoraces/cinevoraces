@@ -81,9 +81,10 @@ export default function Films() {
         .sort((a, b) => a.value > b.value ? -1 : 1);
     }
     (seasonsArray && !season) && dispatch(changeSeason(seasons.current[0]));
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [seasonsArray]);
   // Recovers movies from asked season, once season is defined
-  const { data: movies, error, mutate } = useSWR(() => (season) && `/movies?${selectQueryString}${(season.value !== '0') ? `&where[season_number]=${season.value}` : ''}`);
+  const { data: movies, error, mutate } = useSWR(() => (season) && `/movies?where[is_published]=true&${selectQueryString}${(season.value !== '0') ? `&where[season_number]=${season.value}` : ''}`);
   // Each Season change triggers an SWR call
   // Changing movie set alters filters displayed and stored in state
   // then reapply current filter rules to the new movie set
@@ -94,23 +95,25 @@ export default function Films() {
       dispatch(initializeOrCorrectUserInputs());
       // movies && dispatch(setFilteredMovies({ filteredMovies: movies, isUserConnected }));  
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [movies]);
 
   useEffect(() => {
     movies && dispatch(setFilteredMovies({ moviesToFilter: movies, isUserConnected: isUserConnected.current }));
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [movies, searchQuery, userFilterInputs, isUserConnected.current]);
 
   const movieResults = useAppSelector(filteredMovies).filteredMovies;
 
   return (
-    <main className="custom-container">
+    <main className="custom-container justify-start min-h-[80vh]">
       <section className='w-full'>
         <h1 className='hero-text text-start mb-4'>Les films de la communauté</h1>
         <p>Retrouvez saison par saison les films sélectionnés par les <span className='emphasis'>membres de CinéVoraces</span>.
         Chaque saison correspond à une année calendaire.<br/>
         Bonnes découvertes !</p>
       </section>
-      <section className='w-full flex flex-col gap-4 align-start md:flex-row'>
+      <section className='w-full flex flex-col gap-6 align-start md:flex-row'>
         {season && (
           <SearchBar
             name="searchbarSelect"

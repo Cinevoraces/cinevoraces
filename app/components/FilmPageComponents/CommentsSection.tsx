@@ -32,141 +32,176 @@ const CommentsSection = forwardRef<HTMLTextAreaElement, CommentsSectionProps>(({
 
   const reorderComments = (id: number | undefined = undefined, comments: Comment[]) => {
     if (!id) return comments;
-    const connectedUserComment = comments.filter((c) => (c.author_id === id));
+    const connectedUserComment = comments.filter((c) => c.author_id === id);
     if (connectedUserComment.length === 0) return comments;
-    const otherComments = comments.filter((c) => (c.author_id !== id));
+    const otherComments = comments.filter((c) => c.author_id !== id);
     return [connectedUserComment[0], ...otherComments];
   };
 
   // Using Ref to renew expansionState and allow freshly posted comment (just in cache) to be expanded as well as the others from API
   const orderedComments = useRef<Comment[]>([]);
-  const cutComments = useRef<(string|boolean)[][]>([]);
-  useEffect(()=> {
+  const cutComments = useRef<(string | boolean)[][]>([]);
+  useEffect(() => {
     orderedComments.current = reorderComments(id, comments);
     cutComments.current = orderedComments.current.map((c: Comment) => cutText(c.comment, 700));
-    setCommentsExpansionStates(orderedComments.current.map((c: Comment)=> false));
+    setCommentsExpansionStates(orderedComments.current.map((c: Comment) => false));
   }, [id, comments]);
-  const [commentsExpansionStates, setCommentsExpansionStates] = useState(orderedComments.current.map((c: Comment)=> false));
+  const [commentsExpansionStates, setCommentsExpansionStates] = useState(
+    orderedComments.current.map((c: Comment) => false)
+  );
 
   const toggleCommentExpansion = (index: number) => {
-    const newState = commentsExpansionStates.map((ces: boolean, i: number) => (index === i)? !ces : ces);
+    const newState = commentsExpansionStates.map((ces: boolean, i: number) => (index === i ? !ces : ces));
     setCommentsExpansionStates(newState);
   };
-  console.log(orderedComments.current, commentsExpansionStates, cutComments.current);
 
   return (
-    <section id='comments-section' className='w-full flex flex-col gap-4 '>
-      <h2 className='text-2xl font-semibold lg:text-3xl text-center'>{`Commentaires (${comments.length})`}</h2>
-      { // Add Comment button
-        (id && orderedComments.current.filter((c) => (c.author_id === id)).length === 0 && !isCommentFormOpened) && 
-            <div className='flex justify-center'>
-              <Button 
-                customStyle='empty' 
-                onClick={toggleCommentForm}>
-                Ajouter un commentaire
-              </Button>
-            </div>
+    <section
+      id="comments-section"
+      className="w-full flex flex-col gap-4 ">
+      <h2 className="text-2xl font-semibold lg:text-3xl text-center">{`Commentaires (${comments.length})`}</h2>
+      {
+        // Add Comment button
+        id && orderedComments.current.filter((c) => c.author_id === id).length === 0 && !isCommentFormOpened && (
+          <div className="flex justify-center">
+            <Button
+              customStyle="empty"
+              onClick={toggleCommentForm}>
+              Ajouter un commentaire
+            </Button>
+          </div>
+        )
       }
-      { // Comment form on top of any comment
-        (isCommentFormOpened) &&
-          <PostCard type='form'
+      {
+        // Comment form on top of any comment
+        isCommentFormOpened && (
+          <PostCard
+            type="form"
             author_pseudo={pseudo!}
             author_avatar={avatar_url!}
-            publishing_date={(new Date()).toISOString()}>
-            <form id="comment-form" action="submit" className='flex flex-col gap-4'
+            publishing_date={new Date().toISOString()}>
+            <form
+              id="comment-form"
+              action="submit"
+              className="flex flex-col gap-4"
               onSubmit={(e) => {
-                onSubmit(e); toggleCommentForm(); 
-              }}
-            >
-              <TextAreaRef id='comment-form' ref={ref}/>
-              <div id='comment-send-cancel' className='flex justify-end gap-4'>
-                <Button customStyle='rounded'>
+                onSubmit(e);
+                toggleCommentForm();
+              }}>
+              <TextAreaRef
+                id="comment-form"
+                ref={ref}
+              />
+              <div
+                id="comment-send-cancel"
+                className="flex justify-end gap-4">
+                <Button customStyle="rounded">
                   <Image
                     src={SendLogo}
                     alt=""
                     width={16}
                     height={16}
                   />
-                  Poster</Button>
-                <Button onClick={toggleCommentForm} customStyle='rounded'>Annuler</Button>
+                  Poster
+                </Button>
+                <Button
+                  onClick={toggleCommentForm}
+                  customStyle="rounded">
+                  Annuler
+                </Button>
               </div>
             </form>
           </PostCard>
+        )
       }
-      <div className='grid grid-cols-1 gap-4 auto-rows-auto md:gap-6 lg:gap-8 lg:grid-cols-2  '>
-        { // Displaying all published comments
-          orderedComments.current.length === 0 ? 
-            (<p className='text-center'>Aucun commentaire pour ce film.</p>)
-            : (
-              <>
-                {
-                  orderedComments.current.map((c, i) => (
-                    <PostCard 
-                      key={c.author_pseudo} 
-                      type='comment' 
-                      {...c} >
-                      {
-                        (!isEditionFormOpened) &&
-                        ( <>
-                          <p>
-                            {
-                              (cutComments.current[i][1] && commentsExpansionStates[i]) ?
-                                c.comment
-                                : cutComments.current[i][0]
-                            }
-                          </p>
+      <div className="grid grid-cols-1 gap-4 md:gap-6 lg:gap-8 lg:grid-cols-2 justify-start  ">
+        {
+          // Displaying all published comments
+          orderedComments.current.length === 0 ? (
+            <p className="text-center lg:col-span-2">Aucun commentaire pour ce film.</p>
+          ) : (
+            <>
+              {orderedComments.current.map((c, i) => (
+                <PostCard
+                  key={c.author_pseudo}
+                  type="comment"
+                  {...c}>
+                  {
+                    // Go into edition mode
+                    isEditionFormOpened && id === c.author_id ? (
+                      <form
+                        id="comment-form"
+                        action="submit"
+                        className="flex flex-col gap-4"
+                        onSubmit={(e) => {
+                          onSubmit(e);
+                          toggleEditionForm();
+                        }}>
+                        <TextAreaRef
+                          id="comment-form"
+                          ref={ref}
+                          defaultValue={c.comment}
+                        />
+                        <div
+                          id="comment-send-cancel"
+                          className="flex justify-end gap-4">
+                          <Button customStyle="rounded">
+                            <Image
+                              src={SendLogo}
+                              alt=""
+                              width={16}
+                              height={16}
+                            />
+                            Confirmer
+                          </Button>
+                          <Button
+                            onClick={toggleEditionForm}
+                            customStyle="rounded">
+                            Annuler
+                          </Button>
+                        </div>
+                      </form>
+                    ) : (
+                      // If not, just display the comment, expanded or not
+                      <>
+                        <p>
                           {
-                            (id === c.author_id || cutComments.current[i][1]) &&
-                            <div className='flex justify-end gap-4'>
-                              {
-                                (id === c.author_id) &&
-                                  <Button 
-                                    onClick={toggleEditionForm}
-                                    customStyle='rounded'>
-                                        Éditer
-                                  </Button>
-                              }
-                              { (c.comment.length > 700) &&
-                                <Button onClick={() => toggleCommentExpansion(i)} customStyle='rounded'>
-                                  {
-                                    (!commentsExpansionStates[i]) ? 'Voir plus...' : 'Réduire'
-                                  }
-                                </Button>
-                              }
-                            </div>
+                            // If the comment has a cut version & expanding state is true
+                            cutComments.current[i][1] && commentsExpansionStates[i]
+                              ? c.comment
+                              : cutComments.current[i][0]
                           }
-                        </>)
-                      }
-                      {
-                        (isEditionFormOpened && id === c.author_id) &&
-                        <form id="comment-form" action="submit" className='flex flex-col gap-4'
-                          onSubmit={(e) => {
-                            onSubmit(e); toggleEditionForm(); 
-                          }}
-                        >
-                          <TextAreaRef id='comment-form' ref={ref} defaultValue={c.comment}/>
-                          <div id='comment-send-cancel' className='flex justify-end gap-4'>
-                            <Button customStyle='rounded'>
-                              <Image
-                                src={SendLogo}
-                                alt=""
-                                width={16}
-                                height={16}
-                              />
-                              Confirmer
-                            </Button>
-                            <Button onClick={toggleEditionForm} customStyle='rounded'>Annuler</Button>
-                          </div>
-                        </form>
-                      }
-                    </PostCard>
-                  ))
-                }
-              </>
-            )
+                        </p>
+                        {
+                          // Adding button PostCard buttons
+                          (
+                            <div className="flex justify-end gap-4">
+                              {id === c.author_id && (
+                                <Button
+                                  onClick={toggleEditionForm}
+                                  customStyle="rounded">
+                                  Éditer
+                                </Button>
+                              )}
+                              {c.comment.length > 700 && (
+                                <Button
+                                  onClick={() => toggleCommentExpansion(i)}
+                                  customStyle="rounded">
+                                  {!commentsExpansionStates[i] ? 'Voir plus...' : 'Réduire'}
+                                </Button>
+                              )}
+                            </div>
+                          )
+                        }
+                      </>
+                    )
+                  }
+                </PostCard>
+              ))}
+            </>
+          )
         }
       </div>
-      
     </section>
   );
 });

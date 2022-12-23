@@ -20,8 +20,10 @@ export default function ConnectionForm() {
 
   const submitSuccess = async (method: 'POST' | 'PUT' | 'DELETE', endpoint: string, data?: BodyData) => {
     const responseData = await mutationRequestCSR(method, endpoint, data);
-    // Send a confirmation toast -> To do later
-    toast.success(responseData.response);
+    if (responseData.statusCode){ // To be enhanced later with a proper error validation base on statusCodes
+      throw new Error(responseData.message);
+    };
+    toast.success(responseData.message);
     // State Mutation
     dispatch(login(responseData.user));
     // Save the accessToken in the localStorage
