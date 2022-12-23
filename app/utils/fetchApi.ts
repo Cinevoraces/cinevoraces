@@ -8,8 +8,8 @@ const baseUrlSSR = process.env.NEXT_PUBLIC_API_BASE_URL_SSR,
  */
 const getDataFromEndpointSSR = async (endpoint: string) => {
   if (baseUrlSSR) {
-    return fetch(baseUrlSSR + endpoint)
-      .then(res => res.json());
+    const res = await fetch(baseUrlSSR + endpoint);
+    return handleResponse(res);
   }
 };
 
@@ -42,12 +42,7 @@ const getRequestCSR = async (endpoint: string) => {
   }
 
   const res = await fetch(baseUrlCSR + endpoint, options);
-  const responsePayload = await res.json();
-  if (responsePayload.error){
-    const { message } = responsePayload;
-    throw new Error(message);
-  }
-  return responsePayload;
+  return handleResponse(res);
 };
 
 /**
@@ -71,12 +66,17 @@ const mutationRequestCSR = async (method: 'POST' | 'PUT' | 'DELETE', endpoint: s
     options.headers['Authorization'] = 'Bearer ' + localStorage.accessToken;
   }
   const res = await fetch(baseUrlCSR + endpoint, options);
-  const responsePayload = await res.json();
-  if (responsePayload.error){
-    const { message } = responsePayload;
+  return handleResponse(res);
+};
+
+const handleResponse = async (res: Response) => {
+  const responseBody = await res.json();
+  if (responseBody.error) {
+    const { message } = responseBody;
     throw new Error(message);
   }
-  return responsePayload;
+  //return { body: responseBody, status: res.status }; // --------- enhanced version with status codes for better response testings --------
+  return responseBody;
 };
 
 export { getDataFromEndpointSSR, getRequestCSR, mutationRequestCSR };
