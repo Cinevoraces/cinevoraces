@@ -53,7 +53,7 @@ export const getMovies = (
   }
   // Build ORDERBY query
   if (sort === 'asc' || sort === 'desc') {
-    ORDERBY = `ORDER BY id ${sort}`;
+    ORDERBY = `ORDER BY publishing_date ${sort}`;
   }
   // Build LIMIT query
   if (typeof limit === 'number' && limit > 0) {
