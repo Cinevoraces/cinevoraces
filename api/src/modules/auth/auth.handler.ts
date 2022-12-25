@@ -104,7 +104,7 @@ export const handleLogin = async (
     .send({
       user: userObject,
       token: accessToken,
-      message: `${ApiResponse.LOGIN_SUCCESS} ${pseudo} !`,
+      message: `${ApiResponse.LOGIN_SUCCESS} ${user[0].pseudo} !`,
     });
 };
 
