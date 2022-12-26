@@ -28,7 +28,7 @@ const swagger: FastifyPluginCallback = async (fastify, opts, done) => {
         { name: 'Movies', description: 'Movies data related end-points' },
         { name: 'Reviews', description: 'Review objects related end-points' },
         { name: 'Seasons', description: 'Seasons data related end-points' },
-        { name: 'Slots', description: 'Movie propositions related end-points' },
+        { name: 'Episodes', description: 'Episodes data related end-points' },
         { name: 'Users', description: 'Users data related end-points' },
       ],
     },

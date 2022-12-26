@@ -4,7 +4,7 @@ import { ROUTES_METRICS } from './routes_metrics';
 import { ROUTES_MOVIES } from './routes_movies';
 import { ROUTES_REVIEWS } from './routes_reviews';
 import { ROUTES_SEASONS } from './routes_seasons';
-import { ROUTES_SLOTS } from './routes_slots';
+import { ROUTES_EPISODES } from './routes_episodes';
 import { ROUTES_USERS } from './routes_users';
 
 const Server = new TestServer();
@@ -16,13 +16,13 @@ beforeAll(async () => {
   Server.ressources.admins.push(await Server.createUser('admin'));
   Server.ressources.users.push(await Server.createUser('user'));
   Server.ressources.users.push(await Server.createUser('user'));
-  Server.ressources.slots.push(await Server.createSlot());
+  Server.ressources.episodes.push(await Server.createEpisode());
 });
 
 afterAll(async () => {
   Server.ressources.admins.forEach(async a => await a.delete());
   Server.ressources.users.forEach(async u => await u.delete());
-  Server.ressources.slots.forEach(async s => await s.delete());
+  Server.ressources.episodes.forEach(async e => await e.delete());
   await Server.stop();
 });
 
@@ -31,5 +31,5 @@ ROUTES_AUTH(Server);
 // ROUTES_MOVIES(Server);
 // ROUTES_REVIEWS(Server);
 // ROUTES_SEASONS(Server);
-// ROUTES_SLOTS(Server);
+// ROUTES_EPISODES(Server);
 // ROUTES_USERS(Server);

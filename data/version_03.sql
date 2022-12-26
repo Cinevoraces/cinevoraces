@@ -162,8 +162,8 @@ CREATE VIEW movie_comments AS
 
 CREATE VIEW next_propositions AS
 	SELECT * FROM
-			(SELECT * FROM public.slot
-			WHERE public.slot.publishing_date > now()
+			(SELECT * FROM public.episode
+			WHERE public.episode.publishing_date > now()
 			ORDER BY id ASC
 			LIMIT 10)p10
 	WHERE is_booked = false;

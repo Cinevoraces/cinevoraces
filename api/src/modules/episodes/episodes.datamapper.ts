@@ -2,15 +2,15 @@ import type { Query } from '../../types/_index';
 import { queryBuilder } from '../../utils/queryBuilder';
 
 /**
- * **getSlots**
- * @description Get slots according to query.
+ * **getEpisodes**
+ * @description Get episodes according to query.
  * @param querystring URL querystring.
  * @returns SQL query object
 */
-export const getSlots = (
+export const getEpisodes = (
   querystring: Query.querystring
 ): Query.preparedQuery => {
-  const enumerator = [ 'id', 'is_booked', 'season_number', 'episode'];
+  const enumerator = [ 'id', 'is_booked', 'season_number', 'episode_number'];
   const { where, limit, sort } = querystring;
   let values = [] as Array<unknown>,
     WHERE = { query: '', count: 0, values: [] as Array<unknown> },
@@ -32,7 +32,7 @@ export const getSlots = (
   }
 
   return {
-    text: ` SELECT * FROM "slot"
+    text: ` SELECT * FROM "episode"
             ${WHERE?.count ? `WHERE ${WHERE.query}` : ''}
             ${ORDERBY}
             ${LIMIT};`,
@@ -41,18 +41,18 @@ export const getSlots = (
 };
 
 /**
- * **updateSlot**
- * @param id Slot id.
+ * **updateEpisode**
+ * @param id Episode id.
  * @param is_booked *is_booked* new value.
- * @description Update booking status of one slot.
+ * @description Update booking status of one episode.
  * @returns SQL query object
  */
-export const updateSlot = (
+export const updateEpisode = (
   id: number,
   is_booked: boolean
 ): Query.preparedQuery => {
   return {
-    text: ` UPDATE "slot"
+    text: ` UPDATE "episode"
             SET is_booked=$2
             WHERE id=$1;`,
     values: [id, is_booked],

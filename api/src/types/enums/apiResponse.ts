@@ -8,8 +8,8 @@ export enum ApiResponse {
   DELETE_MOVIE_SUCCESS = 'Le film a bien été supprimée.',
   DELETE_COMMENT_SUCCESS = 'Commentaire supprimé avec succés.',
   DELETE_USER_SUCCESS = 'Utilisateur supprimé avec succés.',
-  SLOT_BOOKING_SUCCESS = 'Ce créneau a bien été réservé.',
-  SLOT_RELEASE_SUCCESS = 'Ce créneau a bien été libéré.',
+  EPISODE_BOOKING_SUCCESS = 'Ce créneau a bien été réservé.',
+  EPISODE_RELEASE_SUCCESS = 'Ce créneau a bien été libéré.',
   UPDATE_USER_SUCCESS = 'Votre profil a bien été mis à jour.',
   SEASON_CREATED_SUCCESS = 'Nouvelle saison créée.',
 }

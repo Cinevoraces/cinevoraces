@@ -64,9 +64,9 @@ export const handleProposeMovie = async (
 ) => {
   const { pgClient, body, user } = request;
   // TODO: 
-  // from slot => season_number
-  // from slot => episode
-  // from slot => publishing_date
+  // from episode => season_number
+  // from episode => episode_number
+  // from episode => publishing_date
   const payload = { 
     french_title: body.french_title,
     original_title: body.original_title,

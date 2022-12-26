@@ -22,7 +22,7 @@ declare module 'fastify' {
     doesMovieExist: (request: Request, reply: Reply)=>void;
     doesPropositionExist: (request: Request, reply: Reply)=>void;
     hasProposition: (request: Request, reply: Reply)=>void;
-    isSlotBooked: (request: Request, reply: Reply)=>void;
+    isEpisodeBooked: (request: Request, reply: Reply)=>void;
     isMoviePublished: (request: Request, reply: Reply)=>void;
     verifyPassword: (request: Request, reply: Reply)=>void;
     isAdmin: (request: Request, reply: Reply)=>void;

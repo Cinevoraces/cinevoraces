@@ -120,33 +120,33 @@ export const verifyMoviesHooks: FastifyPluginCallback = async (
   });
 
   /**
-   * **Slot state verification**
+   * **Episode state verification**
    * @preValidation
    * @description
-   * This hook verifies slots state.
+   * This hook verifies episode state.
    * It takes care of Admin and User cases.
   */
-  fastify.decorate('isSlotBooked', async (
+  fastify.decorate('isEpisodeBooked', async (
     request: Request<{ Params?: { id: number }; }>,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     reply: Reply
   ) => {
     const { error, pgClient, params, url } = request;
-    const { id: slotId } = params;
+    const { id: episodeId } = params;
 
-    const { rowCount: bookedSlot } = await pgClient.query({
+    const { rowCount: bookedEpisode } = await pgClient.query({
       text: ` SELECT is_booked
-                FROM slot
+                FROM episode
                 WHERE id = $1 AND is_booked = true;`,
-      values: [slotId],
+      values: [episodeId],
     });
 
-    // If slot booking route is called
-    if (url.includes('/slots/book') && bookedSlot) 
-      error.send(ApiError.UNAVAILABLE_SLOT, 401);
-    // If slot unbooking route is called
-    if (url.includes('/admin/slots/unbook') && !bookedSlot)
-      error.send(ApiError.UNBOOKED_SLOT, 406);
+    // If episode booking route is called
+    if (url.includes('/episodes/book') && bookedEpisode) 
+      error.send(ApiError.UNAVAILABLE_EPISODE, 401);
+    // If episode unbooking route is called
+    if (url.includes('/admin/episodes/unbook') && !bookedEpisode)
+      error.send(ApiError.UNBOOKED_EPISODE, 406);
   });
 
   done();

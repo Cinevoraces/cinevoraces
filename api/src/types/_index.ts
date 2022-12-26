@@ -16,7 +16,7 @@ export type { movie } from './database/movie';
 export type { movie_has_genre } from './database/movie_has_genre';
 export type { movie_has_language } from './database/movie_has_language';
 export type { movie_has_country } from './database/movie_has_country';
-export type { slot } from './database/slot';
+export type { episode } from './database/episode';
 export type { review } from './database/review';
 export type { season } from './database/season';
 export type { user } from './database/user';

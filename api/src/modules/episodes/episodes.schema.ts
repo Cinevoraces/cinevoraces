@@ -1,20 +1,20 @@
 import type { FastifySchema } from 'fastify';
 
-export const getSlotsSchema: FastifySchema = {
+export const getEpisodesSchema: FastifySchema = {
   summary: '(TOKEN REQUIRED)',
-  description: `**Get slots**.
-  Use query parameters to filter the results using the following format: */slots?where[is_booked]=true*  
+  description: `**Get episodes**.
+  Use query parameters to filter the results using the following format: */episodes?where[is_booked]=true*  
   **Available filters:**
   - where[id] -> number
   - where[is_booked] -> boolean
   - where[season_number] -> number
-  - where[episode] -> number
+  - where[episode_number] -> number
 
   **Misc:**
   - limit -> number: *limit the number of results*.
   - sort -> 'asc' | 'desc' as string *(Will sort by id)*
   `,
-  tags: ['Slots'],
+  tags: ['Episodes'],
   querystring: {
     type: 'object',
     properties: {
@@ -24,7 +24,7 @@ export const getSlotsSchema: FastifySchema = {
           id: { type: 'number' },
           is_booked: { type: 'boolean' },
           season_number: { type: 'number' },
-          episode: { type: 'number' },
+          episode_number: { type: 'number' },
         },
       },
       limit: { type: 'number' },
@@ -34,16 +34,16 @@ export const getSlotsSchema: FastifySchema = {
   response: {
     200: {
       type: 'array',
-      items: { $ref: 'slot#' },
+      items: { $ref: 'episode#' },
     },
   },
 };
 
-export const bookSlotSchema: FastifySchema = {
+export const bookEpisodeSchema: FastifySchema = {
   summary: '(TOKEN REQUIRED)',
-  description: `**Book a slot by token**.
-  Slot's *id* must be set in *params* and access token in bearer to pass user id.`,
-  tags: ['Slots'],
+  description: `**Book an episode by token**.
+  Episode's *id* must be set in *params* and access token in bearer to pass user id.`,
+  tags: ['Episodes'],
   params: {
     type: 'object',
     properties: {
@@ -61,8 +61,8 @@ export const bookSlotSchema: FastifySchema = {
   },
 };
 
-export const adminUnbookSlotSchema: FastifySchema = {
-  description: `**Unbook a slot by id**.
+export const adminUnbookEpisodeSchema: FastifySchema = {
+  description: `**Unbook an episode by id**.
   Route protected by *admin* role.
   You must provide the password as well.
   `,

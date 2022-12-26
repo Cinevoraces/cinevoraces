@@ -14,7 +14,7 @@ CREATE OR REPLACE FUNCTION new_movie(
   movie_genres TEXT[],
 	movie_languages TEXT[],
 	movie_countries TEXT[]
-	slot_id INT,
+	episode_id INT,
 	user_id INT,
 ) RETURNS void AS $$
 
@@ -30,8 +30,8 @@ DECLARE
 
 BEGIN
 	IF NOT EXISTS (SELECT * FROM movie WHERE title=movie.french_title) THEN
-		INSERT INTO movie("french_title", "original_title", "poster_url", "directors", "release_date", "runtime", "casting", "presentation", "user_id", "slot_id")
-		VALUES (title, original_title, poster_url, directors, release_date, runtime, casting, presentation, user_id, slot_id)
+		INSERT INTO movie("french_title", "original_title", "poster_url", "directors", "release_date", "runtime", "casting", "presentation", "user_id", "episode_id")
+		VALUES (title, original_title, poster_url, directors, release_date, runtime, casting, presentation, user_id, episode_id)
 		RETURNING id INTO movie_id;
 		-- Create genre if not exists
 		FOREACH g IN ARRAY movie_genres
@@ -96,7 +96,7 @@ BEGIN
         episode_date := first_episode;
         WHILE EXTRACT(YEAR FROM episode_date) < (year_to_add + 1)
         LOOP
-            INSERT INTO "slot" ("season_number","episode","publishing_date") VALUES
+            INSERT INTO "episode" ("season_number","episode_number","publishing_date") VALUES
             (season_to_add,episode,episode_date);
             episode_date := episode_date + 7;
             episode := episode + 1;

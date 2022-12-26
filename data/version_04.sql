@@ -4,9 +4,52 @@ BEGIN;
 
 -- Create all seasons
 INSERT INTO "season" ("number","year") VALUES
-(1,2020),(2,2021),(3,2022);
+(1,2020),(2,2021),(3,2022),(4, 2023);
 -- Create all episodes
-INSERT INTO slot ("season_number","episode","publishing_date","is_booked") VALUES
+INSERT INTO episode ("season_number","episode_number","publishing_date","is_booked") VALUES
+(1,1,'2020-03-20', true),
+(1,2,'2020-03-27', true),
+(1,3,'2020-04-03', true),
+(1,4,'2020-04-10', true),
+(1,5,'2020-04-17', true),
+(1,6,'2020-04-24', true),
+(1,7,'2020-05-16', true),
+(1,8,'2020-05-23', true),
+(1,9,'2020-05-29', true),
+(1,10,'2020-06-05', true),
+(1,11,'2020-06-12', true),
+(1,12,'2020-06-19', true),
+(1,13,'2020-06-26', true),
+(1,14,'2020-07-03', true),
+(1,15,'2020-07-10', true),
+(1,16,'2020-07-17', true),
+(1,17,'2020-07-24', true),
+(1,18,'2020-08-06', true),
+(1,19,'2020-08-07', true),
+(1,20,'2020-08-14', true),
+(1,21,'2020-08-21', true),
+(1,22,'2020-08-28', true),
+(1,23,'2020-09-09', true),
+(1,24,'2020-09-19', true),
+(1,25,'2020-09-25', true),
+(1,26,'2020-10-02', true),
+(1,27,'2020-10-09', true),
+(1,28,'2020-10-16', true),
+(1,29,'2020-10-24', true),
+(1,30,'2020-10-30', true),
+(1,31,'2020-11-08', true),
+(1,32,'2020-11-16', true),
+(1,33,'2020-11-30', true),
+(1,34,'2020-12-07', true),
+(1,35,'2020-12-15', true),
+(1,36,'2021-01-04', true),
+(1,37,'2021-01-19', true),
+(1,38,'2021-01-21', true),
+(1,39,'2021-01-28', true),
+(1,40,'2021-02-01', true),
+(1,41,'2021-02-09', true),
+(1,42,'2021-02-15', true),
+-- TODO - SEASON 2
 (3,1,'2022-01-02',true),
 (3,2,'2022-01-10',true),
 (3,3,'2022-01-17', true),
@@ -59,7 +102,59 @@ INSERT INTO slot ("season_number","episode","publishing_date","is_booked") VALUE
 (3,50,'2022-12-05',false),
 (3,51,'2022-12-12',false),
 (3,52,'2022-12-19',false),
-(3,53,'2022-12-26',false);
+(3,53,'2022-12-26',false),
+(4,1,'2023-01-02',false),
+(4,2,'2023-01-09',false),
+(4,3,'2023-01-16',false),
+(4,4,'2023-01-23',false),
+(4,5,'2023-01-30',false),
+(4,6,'2023-02-06',false),
+(4,7,'2023-02-13',false),
+(4,8,'2023-02-20',false),
+(4,9,'2023-02-27',false),
+(4,10,'2023-03-06',false),
+(4,11,'2023-03-13',false),
+(4,12,'2023-03-20',false),
+(4,13,'2023-03-27',false),
+(4,14,'2023-04-03',false),
+(4,15,'2023-04-10',false),
+(4,16,'2023-04-17',false),
+(4,17,'2023-04-24',false),
+(4,18,'2023-05-01',false),
+(4,19,'2023-05-08',false),
+(4,20,'2023-05-15',false),
+(4,21,'2023-05-22',false),
+(4,22,'2023-05-29',false),
+(4,23,'2023-06-05',false),
+(4,24,'2023-06-12',false),
+(4,25,'2023-06-19',false),
+(4,26,'2023-06-26',false),
+(4,27,'2023-07-03',false),
+(4,28,'2023-07-10',false),
+(4,29,'2023-07-17',false),
+(4,30,'2023-07-24',false),
+(4,31,'2023-07-31',false),
+(4,32,'2023-08-07',false),
+(4,33,'2023-08-14',false),
+(4,34,'2023-08-21',false),
+(4,35,'2023-08-28',false),
+(4,36,'2023-09-04',false),
+(4,37,'2023-09-11',false),
+(4,38,'2023-09-18',false),
+(4,39,'2023-09-25',false),
+(4,40,'2023-10-02',false),
+(4,41,'2023-10-09',false),
+(4,42,'2023-10-16',false),
+(4,43,'2023-10-23',false),
+(4,44,'2023-10-30',false),
+(4,45,'2023-11-06',false),
+(4,46,'2023-11-13',false),
+(4,47,'2023-11-20',false),
+(4,48,'2023-11-27',false),
+(4,49,'2023-12-04',false),
+(4,50,'2023-12-11',false),
+(4,51,'2023-12-18',false),
+(4,52,'2023-12-25',false);
 
 -- Ajouts des users
 INSERT INTO "user" ("pseudo","mail","password") VALUES
@@ -112,7 +207,8 @@ UPDATE "user"
 SET role = 'admin'
 WHERE pseudo = 'admin';
 
--- Seeding des films archivés
+-- MOVIES SEEDING
+-- SEASON 1
 SELECT new_movie(
   'Les Chaussons rouges',
   'The Red Shoes',
@@ -413,87 +509,338 @@ SELECT new_movie(
   20,
   11
 );
-SELECT new_movie('Chungking Express','重慶森林','https://image.tmdb.org/t/p/original/7ejz2cc6tMpuTb7hz4oUi9uW7O9.jpg',array['Wong Kar-wai'],'1994-07-14','102',array['Brigitte Lin','Tony Leung Chiu-wai','Faye Wong','Takeshi Kaneshiro','Valerie Chow'],'Décidément, peut-être est-ce une question d''actualité mais j''ai décidé de nous faire rester une semaine de plus à Hong Kong, cette mégalopole hors norme que le temps n''aura pas épargné.
-Une culture chinoise très particulière, forcément remodelée par le colonialisme et meurtrie par ce retour à la république populaire de Chine avec la rétrocession, grande déchirure pour ses habitants. Ce qui nous conduit tout naturellement, près de 20 ans plus tard, aux tragiques événements qui s''y produisent en ce moment.
-Le cinéma Hong Kongais a toujours été précieux à mes yeux : forcément, certains des plus estimés réalisateurs y ont fait leurs armes et leurs noms ne vous sont je le sais, pas tout à fait étrangers : John Woo, Ringo Lam, Tsui Hark, Jonnhie To... et Wong Kar Wai.
-Ils incarnaient la nouvelle vague hong-kongaise entre les années 80 et 90, une ère pleine de remise en question, d''exploration stylistique et de liberté créative et qui mieux que Wong Kar Wai pour représenter ce mouvement si particulier.
-Choisir un film parmi la filmographie de ce réalisateur c''est pour moi comme choisir entre des enfants que je n''ai pas. Sa filmo est remplie de pépites et c''est un véritable déchirement de ne vous en proposer qu''un seul. Qui plus est quand ce film fait partie d''un duo de films sur la jeunesse hong kongaise.
-Cette semaine, je vous propose de mater Chungking Express, et j''espère que vous redécouvrirez avec plaisir un des plus beaux films d''amour jamais réalisés, où que vous découvrirez et tomberez amoureux vous aussi de Tony Leung, Brigitte Lin, Faye Wong ou Takeshi Kaneshiro.','2020-08-21',2,1,array['Drame','Comédie','Romance'],array['广州话 / 廣州話','普通话','English','हिन्दी','日本語','ਪੰਜਾਬੀ'],array['Hong Kong']);
-SELECT new_movie('La Source','Jungfrukällan','https://image.tmdb.org/t/p/original/wKpVJvPqdfVIIvLRnerUCtrh6YP.jpg',array['Ingmar Bergman'],'1960-02-08','90',array['Max von Sydow','Birgitta Valberg','Gunnel Lindblom','Birgitta Pettersson','Axel Düberg'],'Le film de la semaine ! Je ne peux pas en dire grand chose... a part que jai adore le septieme sceau, que la source est sorti à la même époque et que l’intrigue se déroule également au moyen âge ! Bon visionnage !','2020-08-28',1,1,array['Crime','Drame','Thriller'],array['Deutsch','svenska'],array['Sweden']);
-SELECT new_movie('Message from the King','Message from the King','https://image.tmdb.org/t/p/original/9LDt4BSmNFOWvIMJkhUcfzjgdjK.jpg',array['Fabrice Du Welz'],'2016-05-10','102',array['Chadwick Boseman','Luke Evans','Alfred Molina','Teresa Palmer','Natalie Martinez'],'Message from the King de Fabrice du Welz avec Chadwick Boseman dans le rôle principal.
-Un revenge movie sympa sans être exceptionnel, à mi-chemin entre Taken et le film noir. Le film vaut surtout pour la prestation de l''acteur et le gimmick du fish outta water puisque son personnage est sud africain et débarque à Los Angeles pour retrouver sa sœur récemment disparue.
-J''ai conscience que passer après Bergman c''est un peu chaud, mais je pense que le film peut s''apprécier comme récréation malgré tout.','2020-09-09',2,1,array['Thriller'],array['English'],array['France']);
-SELECT new_movie('Moon','Moon','https://image.tmdb.org/t/p/original/32Bz9CBTDFLQZCLIcj6Ew6iOxhj.jpg',array['Duncan Jones'],'2009-06-12','97',array['Sam Rockwell','Kevin Spacey','Dominique McElligott','Rosie Shaw','Adrienne Shaw'],'Et le film de la semaine est Moon, premier long métrage de Duncan Jones, fils de David Bowie, que vous avez peut-être entendu nommer en tant que réalisateur du film Warcraft. Si vous l’avez déjà vu, alors je vous invite à voir plutôt son dernier film cyberpunk : Mute.','2020-09-19',9,1,array['Science-Fiction','Drame'],array['Español','English'],array['United Kingdom','United States of America']);
-SELECT new_movie('Lisztomania','Lisztomania','https://image.tmdb.org/t/p/original/slkgkRL8hu0Sj4sOkcb8NSkwdGd.jpg',array['Ken Russell'],'1975-10-10','105',array['Roger Daltrey','Sara Kestelman','Paul Nicholas','Ringo Starr','Rick Wakeman'],'Et le film de la semaine sera Lisztomania.
-Un film que je n''ai jamais vu, un film sur lequel je n''ai lu aucune review, un film qui m''a l''air d''un autre monde.','2020-09-25',7,1,array['Comédie','Fantastique','Musique'],array['English'],array['United Kingdom']);
-SELECT new_movie('Lost Highway','Lost Highway','https://image.tmdb.org/t/p/original/wsMW0D5AxoEiwl1e2HUAmmreUYn.jpg',array['David Lynch'],'1997-01-15','134',array['Bill Pullman','Patricia Arquette','Balthazar Getty','Robert Blake','Natasha Gregson Wagner'],'Il sera question cette semaine de Lost Highway de David Lynch.
-À mes yeux le Lynch parfait, un film parfait, conjonction du noir et du monde onirique de son auteur. Les hommages à Bergman y sont légion (une de ses influences majeures), ceux qui ont vu Le Septième Sceau ou Persona comprendront.
-J’ai conscience que ce n’est pas le film le plus accessible du monde, mais on vous a bien endurcis depuis le début du ciné-club, ça va le faire !','2020-10-02',2,1,array['Drame','Thriller','Mystère'],array['English'],array['United States of America','France']);
-SELECT new_movie('Trois couleurs : Bleu','Trois couleurs : Bleu','https://image.tmdb.org/t/p/original/qqmPmoY0BejMnYfSz0aoNJwSBqp.jpg',array['Krzysztof Kieślowski'],'1993-09-08','100',array['Juliette Binoche','Benoît Régent','Florence Pernel','Charlotte Véry','Hélène Vincent'],'Je propose donc Trois couleurs : Bleu de  Krzysztof Kieslowski disponible sur Netflix.
-Parce que c''est le film que je préfère de la trilogie.
-Parce que le film est superbe d''un point de vue Esthétique.
-Parce que Juliette Binoche, à son apogée, y est exceptionnelle.
-Parce que ça ne dure qu''une heure trente huit !','2020-10-09',5,1,array['Drame'],array['Français','Polski'],array['France','Poland','Switzerland']);
-SELECT new_movie('The Voices','The Voices','https://image.tmdb.org/t/p/original/uRdhZZGKnImfjtm4gp6G097NaEU.jpg',array['Marjane Satrapi'],'2014-01-19','101',array['Ryan Reynolds','Gemma Arterton','Anna Kendrick','Jacki Weaver','Ella Smith'],'Cette semaine, je vous propose : The Voices, de la Réalisatrice Marjane Satrapi (oui, je me rends compte que je connais très peu de réalisatrices :/ )','2020-10-16',9,1,array['Comédie','Crime','Horreur','Fantastique'],array['English'],array['Germany','United States of America']);
-SELECT new_movie('Rome, ville ouverte','Roma città aperta','https://image.tmdb.org/t/p/original/dsazRHPV7pxrXZiriIcL2hlgSvD.jpg',array['Roberto Rossellini'],'1945-10-08','100',array['Aldo Fabrizi','Anna Magnani','Marcello Pagliero','Francesco Grandjacquet','Harry Feist'],'On est pas bien là, fin octobre, à se mater un des plus gros mastodontes de Rosselini. Régalez-vous !!','2020-10-24',1,1,array['Drame','Histoire'],array['Deutsch','Italiano'],array['Italy']);
-SELECT new_movie('Alabama Monroe','The Broken Circle Breakdown','https://image.tmdb.org/t/p/original/s77tX2QhI11mwRqKxrr5JLETqbM.jpg',array['Felix van Groeningen'],'2012-10-09','112',array['Veerle Baetens','Johan Heldenbergh','Nell Cattrysse','Geert Van Rampelberg','Nils De Caster'],'Hello tout le monde, chose promise, chose due, je vous propose un film à voir pour cette semaine qui m''a particulièrement plu, Alabama Monroe (ou The Broken Circle Breakdown en VO).
-Un excellent film d''après moi, par Van Groeningen et porté par un super duo d''acteur, une OST du tonnerre (comme pour Belgica du même réalisateur) à base de bluegrass :banjo: , une tonne d''émotion et une très belle réal. Très appréciable aussi d''entendre un peu de flammand :flag_be:  à l''écran, c''est assez dépaysant et assez rare donc profitez de la VO !
-À voir ce que va donner la carrière de Van G. , même si je préfère le voir tourner dans des endroits un peu cradingues et des productions de son pays plutôt que sa jeune carrière Hollywoodienne qui s''annonce.','2020-10-30',12,1,array['Drame'],array['Nederlands','English'],array['Belgium','Netherlands']);
-SELECT new_movie('Les Incorruptibles','The Untouchables','https://image.tmdb.org/t/p/original/xrdMy48NrJSJYRplKfuQT0sDfSI.jpg',array['Brian De Palma'],'1987-06-03','119',array['Kevin Costner','Sean Connery','Charles Martin Smith','Andy García','Robert De Niro'],'Et le film de la semaine est... Les Incorruptibles (The Untouchables) de Brian De Palma, 1987.
-Je m’excuse de couper l’herbe sous le pied à notre chère nouvelle recrue, mais je me devais de réparer une injuste première lecture : celle d’un De Palma mineur, a priori impersonnel dont la charge héroïque (bien présente) se détournait de la richesse thématique de son œuvre globale.
-Une quinzaine d’année plus tard et une relative érudition en ce qui concerne son cinéma me permettent de porter une conclusion radicalement différente, ce jour à 3h du mat’ passé : Les Incorruptibles est un chef d’œuvre. Rien de moins.
-Film noir mais néanmoins baroque et opératique, il convoque pelle-mêle nombre de références dont Orson Welles et les incontournables Hitchcock et Eisenstein pour rendre un hommage appuyé à cette richesse cinephilique qui l’anime.
-Sa réalisation si caractéristique s’exprime via un pognon monstrueux qui se ressent à chaque minute : montage effréné, mouvements à la grue et travelings surabondants et d’une fluidité folle, reconstitution historique de Chicago fidèle, recours à une multitude de focales, à la Demi-bonnette, au plan séquence subjectif et des effets visuels pratiques forcément très graphiques.
-Mais regarder The Untouchables aujourd’hui c’est aussi l’occasion de rendre hommage à beaucoup de choses.
-Un des réalisateurs les plus importants du cinéma américain, si ce n’est le plus important, le score du regretté Ennio Morricone, la prestation du non moins regretté Sean Connery, dans une de ses innombrables (et réussies) tentatives de briser son image.
-Petite pensée émue pour De Niro qui cabotine un peu (comme souvent) et les carrières naissantes de Costner et Andy Garcia, aujourd’hui bien derrière eux.
-Les Incorruptibles c’est tout ça, et bien d’autres choses encore. Mais c’est surtout le film de la semaine, disponible sur OCS.','2020-11-08',2,1,array['Crime','Drame','Histoire','Thriller'],array['English'],array['United States of America']);
-SELECT new_movie('Perfect Blue','パーフェクトブルー','https://image.tmdb.org/t/p/original/pTjuiITuZHIii9PSRZjWzTRNwoC.jpg',array['Satoshi Kon'],'1997-07-25','81',array['Junko Iwao','Rica Matsumoto','Shinpachi Tsuji','Masaaki Ôkura','Yousuke Akimoto'],'Hello !
-Pour cette semaine je vous propose de regarder un cultissime long-métrage de l''animation japonaise de la fin des années 90, réalisé par l''éminent Satoshi Kon : Perfect Blue.
-C''est souvent qualifié de thriller psychologique et je pense qu''il mérite bien ce nom, mais plus encore, car sa construction est complètement folle et va bien au-delà du thriller psycho qui ne te prendrait aux tripes que par son histoire. Là, la façon dont c''est construit participe au jeu, et c''est dingue.
-Un travail de dingue a été réalisé sur les transitions, ce qui semble être une marque de fabrique du réalisateur, c''est un régal, je vous laisse (re)découvrir ça pendant votre (re)visionnage !
-Et si ça vous intéresse, j''en ai parlé récemment dans le podcast Le Samurai et la Soubrette que je réalise avec un canard du forum canardpc.','2020-08-06',4,1,array['Animation','Thriller'],array['日本語'],array['Japan']);
-SELECT new_movie('La grande bellezza','La grande bellezza','https://image.tmdb.org/t/p/original/uuV2eEMrAp4Sc0m9juknxUAf9rA.jpg',array['Paolo Sorrentino'],'2013-05-21','142',array['Toni Servillo','Carlo Verdone','Sabrina Ferilli','Carlo Buccirosso','Iaia Forte'],'Cette semaine je vous propose un film de Paolo Sorrentino. Je n’ai vu que Youth et la série the young/the new pope, mais a chaque fois j’ai adoré. Je vous recommande d’ailleurs chaudement the new pope. Un objet étonnant, parfois agaçant mais toujours beau, et touchant au sublime dans son final. Sorrentino c’est aussi un napolitain amoureux de football et plus particulièrement de Diego Armando Maradona. Il le remercie  à longueur d’interview et son prochain film évoquera le génie argentin. Bref, pour un cinéphile amateur de foot comme moi, c’est le réalisateur parfait. Bon film.','2020-11-30',1,1,array['Drame'],array['Italiano','日本語','Español','普通话'],array['Italy']);
-SELECT new_movie('Mank','Mank','https://image.tmdb.org/t/p/original/4yzTcAtvzyZLLto4z04xobUK9el.jpg',array['David Fincher'],'2020-11-13','131',array['Gary Oldman','Amanda Seyfried','Lily Collins','Arliss Howard','Tom Pelphrey'],'Cette semaine je vous propose l''incontournable dernier film de David Fincher : Mank.
-Alors tout le monde en parle, forcément, mais qu''est-ce que Mank ?
-D''abord, c''est un projet commun entre Fincher fils et son défunt père : parler de la paternité d''un des plus gros monument du septième art, Citizen Kane.
-L''idée : réhabiliter Herman Mankiewicz, l''auteur du script du film, rapidement effacé par ce jeune loup d''Orson Welles, en un long montage parallèle détaillant comment la situation politique californienne aura définitivement convaincu Mank de s''investir dans un cinéma profondément militant et politique, quitte à sacrifier une carrière sécure mais non moins cynique à la MGM.
-La question qui se pose tout au long du film est plus ou moins celle que posait déjà Trent Reznor en 2005 : Why do you bite the hand that feeds you ?.
-Et on ne va pas y aller par quatre chemins : si vous avez quelques connaissances des années 30-40 à Hollywood et qui plus est une profonde admiration pour Citizen Kane, ce film est fait pour vous.
-Si par contre cette connaissance de cette période et du film vous fait défaut, il est possible que vous passiez à côté d''un certain nombre de clés de compréhension.
-Si ces prérequis sont remplis, j''espère que vous vous enjaillerez comme je me suis enjaillé, à vous balader dans les studios, côtoyer certaines têtes bien connues, notamment un frangin en pleine ascension, qui deviendra ni plus ni moins que l''un des meilleurs réalisateurs américains
-Je ne m''étendrai pas davantage sur le film en lui-même, on pourra échanger dans la section appropriée.
-Sinon oui-oui : la BO est toujours de Trent Reznor et Atticus Ross, le résultat est pour le moins étonnant.','2020-12-07',2,1,array['Drame','Histoire'],array['English'],array['United States of America']);
-SELECT new_movie('La vie est belle','It''s a Wonderful Life','https://image.tmdb.org/t/p/original/niniH26VfSTF7fefLWwipvNFGbL.jpg',array['Frank Capra'],'1946-12-20','136',array['James Stewart','Donna Reed','Lionel Barrymore','Thomas Mitchell','Henry Travers'],'Noël approchant, je vous propose le film ultime de la période. Celui que l''on voit à chaque fin d''année sur la plupart des chaines de télés américaines. Un morceau du patrimoine des Etats Unis : La vie est belle (It''s a Wonderful Life) sorti en 1946 réalisé par Frank Capra avec comme duo de stars Donna Reed et James Stewart.
-Un soir de Noël, un homme déprimé décide de se jeter dans la rivière après avoir perdu une grosse somme d''argent. Un ange va l''aider.
-Une histoire pleine de bons sentiments et simpliste de prime abord qui renferme son lot de scènes magnifiques, une interprétation incroyable et un final puissant. Un film passionné, enlevé, joyeux, triste et finalement une ode à la vie, ses travers et ses merveilles.','2020-12-15',8,1,array['Drame','Familial','Fantastique'],array['English'],array['United States of America']);
-SELECT new_movie('Je veux juste en finir','I''m Thinking of Ending Things','https://image.tmdb.org/t/p/original/5ynWWapdl45hJXUh0KIevxSG9JQ.jpg',array['Charlie Kaufman'],'2020-08-28','134',array['Jesse Plemons','Jessie Buckley','Toni Collette','David Thewlis','Guy Boyd'],'Le film de la semaine est Je Veux Juste en Finir / I''m Thinking of Ending Things de Charlie Kaufman, joli coup de poker de Netflix pour 2020.
-Pour les amateurs de Michel Gondry, ce nom peut peut être vous évoquer un brillant scénariste à qui l''on doit Eternal Sunshine of the Spotless Mind, ce qui ne manquera pas de vous interpeller tout au long de votre visionnage.
-Avec un titre aussi ambigu que tout à fait à propos, le film emprunte la voie du thriller psychologique mâtiné de petits morceaux d''horreur pour porter toute sa réflexion et toute son attention à la dissection du couple, de l''aliénation, le don de soi, l''érosion du temps et l''importance du souvenir, dans un joli plat de spaghetti tout à fait emmêlés.
-C''est un film qui a plutôt divisé sur notre canapé, Neofelis ayant tout simplement conchié le film, alors que de mon côté je l''ai vraiment apprécié.
-On est à peu près à l''opposé du film précédent, bienvenue dans la dépression post-fêtes et bonnes année à tout.es','2020-08-06',2,1,array['Drame','Mystère','Thriller','Fantastique'],array['English'],array['United States of America']);
-SELECT new_movie('Salut l''ami, adieu le trésor','Chi trova un amico trova un tesoro','https://image.tmdb.org/t/p/original/AslQALHBtPJpkftvZvWlgMNzw0.jpg',array['Sergio Corbucci'],'1981-12-09','99',array['Terence Hill','Bud Spencer','John Fujioka','Louise Bennett','Salvatore Borgese'],'Après hésitation sur le choix du film, et des débats interminables avec mon frère, le film de la mi-semaine sera Chi trova un amico trova un tesoro de Sergio Corbucci.
-La série des Bud Spencer et Terrence Hill a bercé mon enfance, des flics aux westerns en passant par de simple types, j''ai beaucoup apprécié leurs films et encore plus les musiques.
-De mon impression personnelle, ça n''a pas l''air très connu en France, mais Allemagne et en Italie, c''est des classiques.
-Le choix du film était dur, car il y a en plusieurs que j''ai adoré.
-Allez, je vous laisse détruire mon enfance (ou pas)!','2021-01-19',7,1,array['Action','Aventure','Comédie'],array['Italiano'],array['Italy','United States of America']);
-SELECT new_movie('Akira','アキラ','https://image.tmdb.org/t/p/original/8fCn7TwTe0Z4fTugIiLssX6UcHe.jpg',array['Katsuhiro Otomo'],'1988-07-16','124',array['Mitsuo Iwata','Nozomu Sasaki','Mami Koyama','Tesshou Genda','Hiroshi Ohtake'],'L’année dernière il est ressorti en 4k au cinéma, mais malheureusement pas en Suisse. Ce fût le premier manga que j’ai lu en étant gosse, et j’avais bien envie de le recouvrir au cinéma. Du coup, je le propose ici.','2021-01-21',9,1,array['Animation','Science-Fiction','Action'],array['日本語'],array['Japan']);
-SELECT new_movie('300','300','https://image.tmdb.org/t/p/original/q31SmDy9UvSPIuTz65XsHuPwhuS.jpg',array['Zack Snyder'],'2007-03-07','115',array['Gerard Butler','Lena Headey','Dominic West','David Wenham','Vincent Regan'],'Pourquoi lui ce soir ? Car ma fille (8ans) vient de me parler de Xerxès ce soir (franchement je ne pige plus rien au programme scolaire d’aujourd’hui), et du coup ça m’a donné une furieuse envie de revoir 300. J’ai souvenir d’une photographie incroyable et des plans magnifiques. (et si l’envie vous prend, surtout ne jamais regarder sa « suite »).','2021-01-28',9,1,array['Action','Aventure','Guerre'],array['English'],array['Bulgaria','Canada','United States of America']);
-SELECT new_movie('Kamen Rider Zo','仮面ライダーZO','https://image.tmdb.org/t/p/original/mnNG212ESE6fie722p4Bb3pnpMW.jpg',array['Keita Amemiya'],'1993-04-17','48',array['Hiroshi Tsuchikado','Isao Sasaki','Shohei Shibata','Hiroshi Inuzuka','Naomi Morinaga'],'Sortez les effets spéciaux à papa, la reco de la semaine est Kamen Rider ZO (仮面ライダーZO)!
-Quatorzième entrée dans la saga produite par la TOEI, sorti en 1993, qui narre le combat de son protagoniste contre les Neonoid.','2021-02-01',11,1,array['Action','Aventure','Science-Fiction'],array['日本語'],array['Japan']);
-SELECT new_movie('Black Dynamite','Black Dynamite','https://image.tmdb.org/t/p/original/9zskb3CrQs9la687TFMWAiGNHjl.jpg',array['Scott Sanders'],'2009-10-16','90',array['Michael Jai White','Arsenio Hall','Tommy Davidson','Kevin Chapman','Richard Edson'],'Comment après des semaines d''attentes, c''est enfin mon tour, je me permets de vous proposer le film Black Dynamite sorti en 2009.
-J''ai découvert ce film avec Quelqu''un lors d''une diffusion cinématographique dans mon école. Et je pense que pour des cinéphiles comme vous, vous allez éventuellement découvrir des références intéressantes.
-Dans tout les cas Quelqu''un garde toujours le film sur son natel pour revoir des séquences choisies qui lui ont plu ! D''ailleurs l''autre jour, il m''a sorti une référence au film et ça m''a donné envie de le revoir!
-D''où cette proposition; une pierre 2 coups !
-Je vous laisse ci-dessous l''introduction Wikipédia:
-Le film est une parodie des films de blaxploitation, un genre cinématographique très populaire aux États-Unis dans les années 1970 (Coffy, Les Nuits rouges de Harlem, Superfly…).','2021-02-09',7,1,array['Comédie','Action'],array['English','Italiano'],array['United States of America']);
-SELECT new_movie('The Blade','刀','https://image.tmdb.org/t/p/original/1bTSJj00esTzWTVUSRQbbZhB0sR.jpg',array['Tsui Hark'],'1995-12-21','101',array['Vincent Zhao','Moses Chan','Sonny Song','Xiong Xin-Xin','Song Lei'],'Et le film de la semaine est... The Blade de Tsui Hark (1995).
-Exubérant, incroyablement baroque, Tsui Hark se repose sur ses expériences formelles du haut de sa grosse quinzaine d''années d''exercice pour revitaliser le cinéma d''action HK en s''attaquant à l''adaptation d''une légende chinoise classique et archi-traitée.
-Certes j''aurais pu sélectionner l''incroyable Zu - Les Guerriers de la Montagne Magique, mais le côté profondément expérimental de The Blade en fait un des piliers de sa filmographie.
-Toujours plus extrême, il y rejette une bonne partie du carcan artistique de l''époque pour déconstruire ses compositions et réviser complètement les techniques de montage.
-En résulte un film d''une violence dingue, sans concession, particulièrement épuisant et exigeant pour le spectateur, qui culmine dans des combats absolument jouissifs et hallucinants.
-Le résultat est proprement phénoménal et à mes yeux non-encore égalé, même par Tsui Hark lui-même (oui même Time and Tide).
-En espérant que vous preniez la gifle que j''ai prise à la découverte.','2021-02-15',2,1,array['Drame','Action'],array['广州话 / 廣州話'],array['Hong Kong']);
+SELECT new_movie(
+  'Chungking Express',
+  '重慶森林',
+  'https://image.tmdb.org/t/p/original/7ejz2cc6tMpuTb7hz4oUi9uW7O9.jpg',
+  array['Wong Kar-wai'],
+  '1994-07-14',
+  '102',
+  array['Brigitte Lin','Tony Leung Chiu-wai','Faye Wong','Takeshi Kaneshiro','Valerie Chow'],
+  'Décidément, peut-être est-ce une question d''actualité mais j''ai décidé de nous faire rester une semaine de plus à Hong Kong, cette mégalopole hors norme que le temps n''aura pas épargné. Une culture chinoise très particulière, forcément remodelée par le colonialisme et meurtrie par ce retour à la république populaire de Chine avec la rétrocession, grande déchirure pour ses habitants. Ce qui nous conduit tout naturellement, près de 20 ans plus tard, aux tragiques événements qui s''y produisent en ce moment. Le cinéma Hong Kongais a toujours été précieux à mes yeux : forcément, certains des plus estimés réalisateurs y ont fait leurs armes et leurs noms ne vous sont je le sais, pas tout à fait étrangers : John Woo, Ringo Lam, Tsui Hark, Jonnhie To... et Wong Kar Wai. Ils incarnaient la nouvelle vague hong-kongaise entre les années 80 et 90, une ère pleine de remise en question, d''exploration stylistique et de liberté créative et qui mieux que Wong Kar Wai pour représenter ce mouvement si particulier. Choisir un film parmi la filmographie de ce réalisateur c''est pour moi comme choisir entre des enfants que je n''ai pas. Sa filmo est remplie de pépites et c''est un véritable déchirement de ne vous en proposer qu''un seul. Qui plus est quand ce film fait partie d''un duo de films sur la jeunesse hong kongaise. Cette semaine, je vous propose de mater Chungking Express, et j''espère que vous redécouvrirez avec plaisir un des plus beaux films d''amour jamais réalisés, où que vous découvrirez et tomberez amoureux vous aussi de Tony Leung, Brigitte Lin, Faye Wong ou Takeshi Kaneshiro.',
+  array['Drame','Comédie','Romance'],
+  array['广州话 / 廣州話','普通话','English','हिन्दी','日本語','ਪੰਜਾਬੀ'],
+  array['Hong Kong'],
+  21,
+  1
+);
+SELECT new_movie(
+  'La Source',
+  'Jungfrukällan',
+  'https://image.tmdb.org/t/p/original/wKpVJvPqdfVIIvLRnerUCtrh6YP.jpg',
+  array['Ingmar Bergman'],
+  '1960-02-08',
+  '90',
+  array['Max von Sydow','Birgitta Valberg','Gunnel Lindblom','Birgitta Pettersson','Axel Düberg'],
+  'Le film de la semaine ! Je ne peux pas en dire grand chose... a part que jai adore le septieme sceau, que la source est sorti à la même époque et que l’intrigue se déroule également au moyen âge ! Bon visionnage !',
+  array['Crime','Drame','Thriller'],
+  array['Deutsch','svenska'],
+  array['Sweden'],
+  22,
+  1
+);
+SELECT new_movie(
+  'Message from the King',
+  'Message from the King',
+  'https://image.tmdb.org/t/p/original/9LDt4BSmNFOWvIMJkhUcfzjgdjK.jpg',
+  array['Fabrice Du Welz'],
+  '2016-05-10',
+  '102',
+  array['Chadwick Boseman','Luke Evans','Alfred Molina','Teresa Palmer','Natalie Martinez'],
+  'Message from the King de Fabrice du Welz avec Chadwick Boseman dans le rôle principal. Un revenge movie sympa sans être exceptionnel, à mi-chemin entre Taken et le film noir. Le film vaut surtout pour la prestation de l''acteur et le gimmick du fish outta water puisque son personnage est sud africain et débarque à Los Angeles pour retrouver sa sœur récemment disparue. J''ai conscience que passer après Bergman c''est un peu chaud, mais je pense que le film peut s''apprécier comme récréation malgré tout.',
+  array['Thriller'],
+  array['English'],
+  array['France'],
+  23,
+  2
+);
+SELECT new_movie(
+  'Moon',
+  'Moon',
+  'https://image.tmdb.org/t/p/original/32Bz9CBTDFLQZCLIcj6Ew6iOxhj.jpg',
+  array['Duncan Jones'],
+  '2009-06-12',
+  '97',
+  array['Sam Rockwell','Kevin Spacey','Dominique McElligott','Rosie Shaw','Adrienne Shaw'],
+  'Et le film de la semaine est Moon, premier long métrage de Duncan Jones, fils de David Bowie, que vous avez peut-être entendu nommer en tant que réalisateur du film Warcraft. Si vous l’avez déjà vu, alors je vous invite à voir plutôt son dernier film cyberpunk : Mute.',
+  array['Science-Fiction','Drame'],
+  array['Español','English'],
+  array['United Kingdom','United States of America'],
+  24,
+  9
+);
+SELECT new_movie(
+  'Lisztomania',
+  'Lisztomania',
+  'https://image.tmdb.org/t/p/original/slkgkRL8hu0Sj4sOkcb8NSkwdGd.jpg',
+  array['Ken Russell'],
+  '1975-10-10',
+  '105',
+  array['Roger Daltrey','Sara Kestelman','Paul Nicholas','Ringo Starr','Rick Wakeman'],
+  'Et le film de la semaine sera Lisztomania. Un film que je n''ai jamais vu, un film sur lequel je n''ai lu aucune review, un film qui m''a l''air d''un autre monde.',
+  array['Comédie','Fantastique','Musique'],
+  array['English'],
+  array['United Kingdom'],
+  25,
+  7
+);
+SELECT new_movie(
+  'Lost Highway',
+  'Lost Highway',
+  'https://image.tmdb.org/t/p/original/wsMW0D5AxoEiwl1e2HUAmmreUYn.jpg',
+  array['David Lynch'],
+  '1997-01-15',
+  '134',
+  array['Bill Pullman','Patricia Arquette','Balthazar Getty','Robert Blake','Natasha Gregson Wagner'],
+  'Il sera question cette semaine de Lost Highway de David Lynch. À mes yeux le Lynch parfait, un film parfait, conjonction du noir et du monde onirique de son auteur. Les hommages à Bergman y sont légion (une de ses influences majeures), ceux qui ont vu Le Septième Sceau ou Persona comprendront. J’ai conscience que ce n’est pas le film le plus accessible du monde, mais on vous a bien endurcis depuis le début du ciné-club, ça va le faire !',
+  array['Drame','Thriller','Mystère'],
+  array['English'],
+  array['United States of America','France'],
+  26,
+  2
+);
+SELECT new_movie(
+  'Trois couleurs : Bleu',
+  'Trois couleurs : Bleu',
+  'https://image.tmdb.org/t/p/original/qqmPmoY0BejMnYfSz0aoNJwSBqp.jpg',
+  array['Krzysztof Kieślowski'],
+  '1993-09-08',
+  '100',
+  array['Juliette Binoche','Benoît Régent','Florence Pernel','Charlotte Véry','Hélène Vincent'],
+  'Je propose donc Trois couleurs : Bleu de  Krzysztof Kieslowski disponible sur Netflix. Parce que c''est le film que je préfère de la trilogie. Parce que le film est superbe d''un point de vue Esthétique. Parce que Juliette Binoche, à son apogée, y est exceptionnelle. Parce que ça ne dure qu''une heure trente huit !',
+  array['Drame'],
+  array['Français','Polski'],
+  array['France','Poland','Switzerland'],
+  27,
+  5
+);
+SELECT new_movie(
+  'The Voices',
+  'The Voices',
+  'https://image.tmdb.org/t/p/original/uRdhZZGKnImfjtm4gp6G097NaEU.jpg',
+  array['Marjane Satrapi'],
+  '2014-01-19',
+  '101',
+  array['Ryan Reynolds','Gemma Arterton','Anna Kendrick','Jacki Weaver','Ella Smith'],
+  'Cette semaine, je vous propose : The Voices, de la Réalisatrice Marjane Satrapi (oui, je me rends compte que je connais très peu de réalisatrices :/ )',
+  array['Comédie','Crime','Horreur','Fantastique'],
+  array['English'],
+  array['Germany','United States of America'],
+  28,
+  9
+);
+SELECT new_movie(
+  'Rome, ville ouverte',
+  'Roma città aperta',
+  'https://image.tmdb.org/t/p/original/dsazRHPV7pxrXZiriIcL2hlgSvD.jpg',
+  array['Roberto Rossellini'],
+  '1945-10-08',
+  '100',
+  array['Aldo Fabrizi','Anna Magnani','Marcello Pagliero','Francesco Grandjacquet','Harry Feist'],
+  'On est pas bien là, fin octobre, à se mater un des plus gros mastodontes de Rosselini. Régalez-vous !!',
+  array['Drame','Histoire'],
+  array['Deutsch','Italiano'],
+  array['Italy'],
+  29,
+  1
+);
+SELECT new_movie(
+  'Alabama Monroe',
+  'The Broken Circle Breakdown',
+  'https://image.tmdb.org/t/p/original/s77tX2QhI11mwRqKxrr5JLETqbM.jpg',
+  array['Felix van Groeningen'],
+  '2012-10-09',
+  '112',
+  array['Veerle Baetens','Johan Heldenbergh','Nell Cattrysse','Geert Van Rampelberg','Nils De Caster'],
+  'Hello tout le monde, chose promise, chose due, je vous propose un film à voir pour cette semaine qui m''a particulièrement plu, Alabama Monroe (ou The Broken Circle Breakdown en VO). Un excellent film d''après moi, par Van Groeningen et porté par un super duo d''acteur, une OST du tonnerre (comme pour Belgica du même réalisateur) à base de bluegrass :banjo: , une tonne d''émotion et une très belle réal. Très appréciable aussi d''entendre un peu de flammand :flag_be:  à l''écran, c''est assez dépaysant et assez rare donc profitez de la VO ! À voir ce que va donner la carrière de Van G. , même si je préfère le voir tourner dans des endroits un peu cradingues et des productions de son pays plutôt que sa jeune carrière Hollywoodienne qui s''annonce.',
+  array['Drame'],
+  array['Nederlands','English'],
+  array['Belgium','Netherlands'],
+  30,
+  12
+);
+SELECT new_movie(
+  'Les Incorruptibles',
+  'The Untouchables',
+  'https://image.tmdb.org/t/p/original/xrdMy48NrJSJYRplKfuQT0sDfSI.jpg',
+  array['Brian De Palma'],
+  '1987-06-03',
+  '119',
+  array['Kevin Costner','Sean Connery','Charles Martin Smith','Andy García','Robert De Niro'],
+  'Et le film de la semaine est... Les Incorruptibles (The Untouchables) de Brian De Palma, 1987. Je m’excuse de couper l’herbe sous le pied à notre chère nouvelle recrue, mais je me devais de réparer une injuste première lecture : celle d’un De Palma mineur, a priori impersonnel dont la charge héroïque (bien présente) se détournait de la richesse thématique de son œuvre globale. Une quinzaine d’année plus tard et une relative érudition en ce qui concerne son cinéma me permettent de porter une conclusion radicalement différente, ce jour à 3h du mat’ passé : Les Incorruptibles est un chef d’œuvre. Rien de moins. Film noir mais néanmoins baroque et opératique, il convoque pelle-mêle nombre de références dont Orson Welles et les incontournables Hitchcock et Eisenstein pour rendre un hommage appuyé à cette richesse cinephilique qui l’anime. Sa réalisation si caractéristique s’exprime via un pognon monstrueux qui se ressent à chaque minute : montage effréné, mouvements à la grue et travelings surabondants et d’une fluidité folle, reconstitution historique de Chicago fidèle, recours à une multitude de focales, à la Demi-bonnette, au plan séquence subjectif et des effets visuels pratiques forcément très graphiques. Mais regarder The Untouchables aujourd’hui c’est aussi l’occasion de rendre hommage à beaucoup de choses. Un des réalisateurs les plus importants du cinéma américain, si ce n’est le plus important, le score du regretté Ennio Morricone, la prestation du non moins regretté Sean Connery, dans une de ses innombrables (et réussies) tentatives de briser son image. Petite pensée émue pour De Niro qui cabotine un peu (comme souvent) et les carrières naissantes de Costner et Andy Garcia, aujourd’hui bien derrière eux. Les Incorruptibles c’est tout ça, et bien d’autres choses encore. Mais c’est surtout le film de la semaine, disponible sur OCS.',
+  array['Crime','Drame','Histoire','Thriller'],
+  array['English'],
+  array['United States of America'],
+  31,
+  2
+);
+SELECT new_movie(
+  'Perfect Blue',
+  'パーフェクトブルー',
+  'https://image.tmdb.org/t/p/original/pTjuiITuZHIii9PSRZjWzTRNwoC.jpg',
+  array['Satoshi Kon'],
+  '1997-07-25',
+  '81',
+  array['Junko Iwao','Rica Matsumoto','Shinpachi Tsuji','Masaaki Ôkura','Yousuke Akimoto'],
+  'Hello ! Pour cette semaine je vous propose de regarder un cultissime long-métrage de l''animation japonaise de la fin des années 90, réalisé par l''éminent Satoshi Kon : Perfect Blue. C''est souvent qualifié de thriller psychologique et je pense qu''il mérite bien ce nom, mais plus encore, car sa construction est complètement folle et va bien au-delà du thriller psycho qui ne te prendrait aux tripes que par son histoire. Là, la façon dont c''est construit participe au jeu, et c''est dingue. Un travail de dingue a été réalisé sur les transitions, ce qui semble être une marque de fabrique du réalisateur, c''est un régal, je vous laisse (re)découvrir ça pendant votre (re)visionnage ! Et si ça vous intéresse, j''en ai parlé récemment dans le podcast Le Samurai et la Soubrette que je réalise avec un canard du forum canardpc.',
+  array['Animation','Thriller'],
+  array['日本語'],
+  array['Japan'],
+  32,
+  4
+);
+SELECT new_movie(
+  'La grande bellezza',
+  'La grande bellezza',
+  'https://image.tmdb.org/t/p/original/uuV2eEMrAp4Sc0m9juknxUAf9rA.jpg',
+  array['Paolo Sorrentino'],
+  '2013-05-21',
+  '142',
+  array['Toni Servillo','Carlo Verdone','Sabrina Ferilli','Carlo Buccirosso','Iaia Forte'],
+  'Cette semaine je vous propose un film de Paolo Sorrentino. Je n’ai vu que Youth et la série the young/the new pope, mais a chaque fois j’ai adoré. Je vous recommande d’ailleurs chaudement the new pope. Un objet étonnant, parfois agaçant mais toujours beau, et touchant au sublime dans son final. Sorrentino c’est aussi un napolitain amoureux de football et plus particulièrement de Diego Armando Maradona. Il le remercie  à longueur d’interview et son prochain film évoquera le génie argentin. Bref, pour un cinéphile amateur de foot comme moi, c’est le réalisateur parfait. Bon film.',
+  array['Drame'],
+  array['Italiano','日本語','Español','普通话'],
+  array['Italy'],
+  33,
+  1,
+);
+SELECT new_movie(
+  'Mank',
+  'Mank',
+  'https://image.tmdb.org/t/p/original/4yzTcAtvzyZLLto4z04xobUK9el.jpg',
+  array['David Fincher'],
+  '2020-11-13',
+  '131',
+  array['Gary Oldman','Amanda Seyfried','Lily Collins','Arliss Howard','Tom Pelphrey'],
+  'Cette semaine je vous propose l''incontournable dernier film de David Fincher : Mank. Alors tout le monde en parle, forcément, mais qu''est-ce que Mank ? D''abord, c''est un projet commun entre Fincher fils et son défunt père : parler de la paternité d''un des plus gros monument du septième art, Citizen Kane. L''idée : réhabiliter Herman Mankiewicz, l''auteur du script du film, rapidement effacé par ce jeune loup d''Orson Welles, en un long montage parallèle détaillant comment la situation politique californienne aura définitivement convaincu Mank de s''investir dans un cinéma profondément militant et politique, quitte à sacrifier une carrière sécure mais non moins cynique à la MGM. La question qui se pose tout au long du film est plus ou moins celle que posait déjà Trent Reznor en 2005 : Why do you bite the hand that feeds you ?. Et on ne va pas y aller par quatre chemins : si vous avez quelques connaissances des années 30-40 à Hollywood et qui plus est une profonde admiration pour Citizen Kane, ce film est fait pour vous. Si par contre cette connaissance de cette période et du film vous fait défaut, il est possible que vous passiez à côté d''un certain nombre de clés de compréhension. Si ces prérequis sont remplis, j''espère que vous vous enjaillerez comme je me suis enjaillé, à vous balader dans les studios, côtoyer certaines têtes bien connues, notamment un frangin en pleine ascension, qui deviendra ni plus ni moins que l''un des meilleurs réalisateurs américains Je ne m''étendrai pas davantage sur le film en lui-même, on pourra échanger dans la section appropriée. Sinon oui-oui : la BO est toujours de Trent Reznor et Atticus Ross, le résultat est pour le moins étonnant.',
+  array['Drame','Histoire'],
+  array['English'],
+  array['United States of America'],
+  34,
+  2
+);
+SELECT new_movie(
+  'La vie est belle',
+  'It''s a Wonderful Life',
+  'https://image.tmdb.org/t/p/original/niniH26VfSTF7fefLWwipvNFGbL.jpg',
+  array['Frank Capra'],
+  '1946-12-20',
+  '136',
+  array['James Stewart','Donna Reed','Lionel Barrymore','Thomas Mitchell','Henry Travers'],
+  'Noël approchant, je vous propose le film ultime de la période. Celui que l''on voit à chaque fin d''année sur la plupart des chaines de télés américaines. Un morceau du patrimoine des Etats Unis : La vie est belle (It''s a Wonderful Life) sorti en 1946 réalisé par Frank Capra avec comme duo de stars Donna Reed et James Stewart. Un soir de Noël, un homme déprimé décide de se jeter dans la rivière après avoir perdu une grosse somme d''argent. Un ange va l''aider. Une histoire pleine de bons sentiments et simpliste de prime abord qui renferme son lot de scènes magnifiques, une interprétation incroyable et un final puissant. Un film passionné, enlevé, joyeux, triste et finalement une ode à la vie, ses travers et ses merveilles.',
+  array['Drame','Familial','Fantastique'],
+  array['English'],
+  array['United States of America'],
+  35,
+  8
+);
+SELECT new_movie(
+  'Je veux juste en finir',
+  'I''m Thinking of Ending Things',
+  'https://image.tmdb.org/t/p/original/5ynWWapdl45hJXUh0KIevxSG9JQ.jpg',
+  array['Charlie Kaufman'],
+  '2020-08-28',
+  '134',
+  array['Jesse Plemons','Jessie Buckley','Toni Collette','David Thewlis','Guy Boyd'],
+  'Le film de la semaine est Je Veux Juste en Finir / I''m Thinking of Ending Things de Charlie Kaufman, joli coup de poker de Netflix pour 2020. Pour les amateurs de Michel Gondry, ce nom peut peut être vous évoquer un brillant scénariste à qui l''on doit Eternal Sunshine of the Spotless Mind, ce qui ne manquera pas de vous interpeller tout au long de votre visionnage. Avec un titre aussi ambigu que tout à fait à propos, le film emprunte la voie du thriller psychologique mâtiné de petits morceaux d''horreur pour porter toute sa réflexion et toute son attention à la dissection du couple, de l''aliénation, le don de soi, l''érosion du temps et l''importance du souvenir, dans un joli plat de spaghetti tout à fait emmêlés. C''est un film qui a plutôt divisé sur notre canapé, Neofelis ayant tout simplement conchié le film, alors que de mon côté je l''ai vraiment apprécié. On est à peu près à l''opposé du film précédent, bienvenue dans la dépression post-fêtes et bonnes année à tout.es',
+  array['Drame','Mystère','Thriller','Fantastique'],
+  array['English'],
+  array['United States of America'],
+  36,
+  2
+);
+SELECT new_movie(
+  'Salut l''ami, adieu le trésor',
+  'Chi trova un amico trova un tesoro',
+  'https://image.tmdb.org/t/p/original/AslQALHBtPJpkftvZvWlgMNzw0.jpg',
+  array['Sergio Corbucci'],
+  '1981-12-09',
+  '99',
+  array['Terence Hill','Bud Spencer','John Fujioka','Louise Bennett','Salvatore Borgese'],
+  'Après hésitation sur le choix du film, et des débats interminables avec mon frère, le film de la mi-semaine sera Chi trova un amico trova un tesoro de Sergio Corbucci. La série des Bud Spencer et Terrence Hill a bercé mon enfance, des flics aux westerns en passant par de simple types, j''ai beaucoup apprécié leurs films et encore plus les musiques. De mon impression personnelle, ça n''a pas l''air très connu en France, mais Allemagne et en Italie, c''est des classiques. Le choix du film était dur, car il y a en plusieurs que j''ai adoré. Allez, je vous laisse détruire mon enfance (ou pas)!',
+  '2021-01-19',
+  array['Action','Aventure','Comédie'],
+  array['Italiano'],
+  array['Italy','United States of America'],
+  37,
+  7
+);
+SELECT new_movie(
+  'Akira',
+  'アキラ',
+  'https://image.tmdb.org/t/p/original/8fCn7TwTe0Z4fTugIiLssX6UcHe.jpg',
+  array['Katsuhiro Otomo'],
+  '1988-07-16',
+  '124',
+  array['Mitsuo Iwata','Nozomu Sasaki','Mami Koyama','Tesshou Genda','Hiroshi Ohtake'],
+  'L’année dernière il est ressorti en 4k au cinéma, mais malheureusement pas en Suisse. Ce fût le premier manga que j’ai lu en étant gosse, et j’avais bien envie de le recouvrir au cinéma. Du coup, je le propose ici.',
+  array['Animation','Science-Fiction','Action'],
+  array['日本語'],
+  array['Japan'],
+  38,
+  9
+);
+SELECT new_movie(
+  '300',
+  '300',
+  'https://image.tmdb.org/t/p/original/q31SmDy9UvSPIuTz65XsHuPwhuS.jpg',
+  array['Zack Snyder'],
+  '2007-03-07',
+  '115',
+  array['Gerard Butler','Lena Headey','Dominic West','David Wenham','Vincent Regan'],
+  'Pourquoi lui ce soir ? Car ma fille (8ans) vient de me parler de Xerxès ce soir (franchement je ne pige plus rien au programme scolaire d’aujourd’hui), et du coup ça m’a donné une furieuse envie de revoir 300. J’ai souvenir d’une photographie incroyable et des plans magnifiques. (et si l’envie vous prend, surtout ne jamais regarder sa « suite »).',
+  array['Action','Aventure','Guerre'],
+  array['English'],
+  array['Bulgaria','Canada','United States of America'],
+  39,
+  9
+);
+SELECT new_movie(
+  'Kamen Rider Zo',
+  '仮面ライダーZO',
+  'https://image.tmdb.org/t/p/original/mnNG212ESE6fie722p4Bb3pnpMW.jpg',
+  array['Keita Amemiya'],
+  '1993-04-17',
+  '48',
+  array['Hiroshi Tsuchikado','Isao Sasaki','Shohei Shibata','Hiroshi Inuzuka','Naomi Morinaga'],
+  'Sortez les effets spéciaux à papa, la reco de la semaine est Kamen Rider ZO (仮面ライダーZO)! Quatorzième entrée dans la saga produite par la TOEI, sorti en 1993, qui narre le combat de son protagoniste contre les Neonoid.',
+  array['Action','Aventure','Science-Fiction'],
+  array['日本語'],
+  array['Japan'],
+  40,
+  11
+);
+SELECT new_movie(
+  'Black Dynamite',
+  'Black Dynamite',
+  'https://image.tmdb.org/t/p/original/9zskb3CrQs9la687TFMWAiGNHjl.jpg',
+  array['Scott Sanders'],
+  '2009-10-16',
+  '90',
+  array['Michael Jai White','Arsenio Hall','Tommy Davidson','Kevin Chapman','Richard Edson'],
+  'Comment après des semaines d''attentes, c''est enfin mon tour, je me permets de vous proposer le film Black Dynamite sorti en 2009. J''ai découvert ce film avec Quelqu''un lors d''une diffusion cinématographique dans mon école. Et je pense que pour des cinéphiles comme vous, vous allez éventuellement découvrir des références intéressantes. Dans tout les cas Quelqu''un garde toujours le film sur son natel pour revoir des séquences choisies qui lui ont plu ! D''ailleurs l''autre jour, il m''a sorti une référence au film et ça m''a donné envie de le revoir! D''où cette proposition; une pierre 2 coups ! Je vous laisse ci-dessous l''introduction Wikipédia: Le film est une parodie des films de blaxploitation, un genre cinématographique très populaire aux États-Unis dans les années 1970 (Coffy, Les Nuits rouges de Harlem, Superfly…).',
+  array['Comédie','Action'],
+  array['English','Italiano'],
+  array['United States of America'],
+  41,
+  7
+);
+SELECT new_movie(
+  'The Blade',
+  '刀',
+  'https://image.tmdb.org/t/p/original/1bTSJj00esTzWTVUSRQbbZhB0sR.jpg',
+  array['Tsui Hark'],
+  '1995-12-21',
+  '101',
+  array['Vincent Zhao','Moses Chan','Sonny Song','Xiong Xin-Xin','Song Lei'],
+  'Et le film de la semaine est... The Blade de Tsui Hark (1995). Exubérant, incroyablement baroque, Tsui Hark se repose sur ses expériences formelles du haut de sa grosse quinzaine d''années d''exercice pour revitaliser le cinéma d''action HK en s''attaquant à l''adaptation d''une légende chinoise classique et archi-traitée. Certes j''aurais pu sélectionner l''incroyable Zu - Les Guerriers de la Montagne Magique, mais le côté profondément expérimental de The Blade en fait un des piliers de sa filmographie. Toujours plus extrême, il y rejette une bonne partie du carcan artistique de l''époque pour déconstruire ses compositions et réviser complètement les techniques de montage. En résulte un film d''une violence dingue, sans concession, particulièrement épuisant et exigeant pour le spectateur, qui culmine dans des combats absolument jouissifs et hallucinants. Le résultat est proprement phénoménal et à mes yeux non-encore égalé, même par Tsui Hark lui-même (oui même Time and Tide). En espérant que vous preniez la gifle que j''ai prise à la découverte.',
+  array['Drame','Action'],
+  array['广州话 / 廣州話'],
+  array['Hong Kong'],
+  42,
+  2
+);
+-- SEASON 2
 SELECT new_movie('The Lighthouse','The Lighthouse','https://image.tmdb.org/t/p/original/5i7sW28vddZhUfotDL5zuzDprvT.jpg',array['Robert Eggers'],'2019-10-18','109',array['Robert Pattinson','Willem Dafoe','Valeriia Karaman','Logan Hawkes','Kyla Nicolle'],'Et le premier film de cette nouvelle saison est un film avec le beau Bob Pattinson, à mes yeux l''un des acteurs les plus talentueux de ma génération.
 Certes on peut rappeler ses débuts de carrière dans une adaptation de roman pour enfant puis un young adult aussi cringe que ridicule, mais c''est oublier que Pattinson se construit depuis une dizaine d''année une solide carrière pleine de rôles atypiques et surtout extrêmement varié.
 L''idée cette semaine c''est d''aller piocher deux de ses rôles le splus récents, loin du ronflant d''une carrière américaine à la papa chez James Gray (The Lost City of Z) ou l''an dernier chez Christopher Nolan (Tenet).

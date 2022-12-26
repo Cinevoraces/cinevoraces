@@ -5,7 +5,7 @@ import { faker } from '@faker-js/faker';
 import App from '../src/app';
 import parseOptions from '../src/utils/parseOptions';
 import type {
-  slot as DBSlot,
+  episode as DBEpisode,
   movie as DBMovie
 } from '../src/types/_index';
 
@@ -20,11 +20,11 @@ interface User extends RessourcesEtity {
     encrypted: string;
   };
 }
-interface Slot extends RessourcesEtity {
+interface Episode extends RessourcesEtity {
   id: number;
   is_booked: boolean;
   season_number: number;
-  episode: number;
+  episode_number: number;
   publishing_date: string;
 }
 interface Movie extends RessourcesEtity {
@@ -58,15 +58,15 @@ enum EEndpoints {
   METRICS = '/metrics',
   MOVIES = '/movies',
   SEASONS = '/seasons',
-  SLOTS = '/slots',
+  EPISODES = '/episodes',
   USERS = '/users',
-  BOOK_SLOT = '/slots/book',
+  BOOK_EPISODE = '/episodes/book',
   ADMIN = '/admin',
   ADMIN_USERS = '/admin/users',
   ADMIN_PUBLISH = '/admin/movies/publish',
   ADMIN_MOVIES = '/admin/movies',
   ADMIN_REVIEWS = '/admin/reviews',
-  ADMIN_UNBOOK_SLOT = '/admin/slots/unbook',
+  ADMIN_UNBOOK_EPISODE = '/admin/episodes/unbook',
   ADMIN_SEASONS = '/admin/seasons',
 }
 
@@ -156,7 +156,7 @@ export default class TestServer {
     this.ressources = {
       admins: [] as Array<User>,
       users: [] as Array<User>,
-      slots: [] as Array<Slot>,
+      episodes: [] as Array<Episode>,
       movies: [] as Array<Movie>,
     };
   }
@@ -339,14 +339,14 @@ export default class TestServer {
     const statusCode = req.statusCode;
     return { res, statusCode };
   }
-  public async RequestSlots(
+  public async RequestEpisodes(
     token: string,
     query: string
   ) {
     const req = await this.fastify.inject({
       headers: { Authorization: `Bearer ${token}` },
       method: ECrudMethods.GET,
-      url: EEndpoints.SLOTS,
+      url: EEndpoints.EPISODES,
       query
     });
 
@@ -354,29 +354,29 @@ export default class TestServer {
     const statusCode = req.statusCode;
     return { res, statusCode };
   }
-  public async RequestBookSlot(
+  public async RequestBookEpisode(
     token: string,
-    slotId: number
+    episodeId: number
   ) {
     const req = await this.fastify.inject({
       headers: { Authorization: `Bearer ${token}` },
       method: ECrudMethods.PUT,
-      url: EEndpoints.BOOK_SLOT + `/${slotId}`
+      url: EEndpoints.BOOK_EPISODE + `/${episodeId}`
     });
 
     const res = await req.json();
     const statusCode = req.statusCode;
     return { res, statusCode };
   }
-  public async RequestUnbookSlot(
+  public async RequestUnbookEpisode(
     token: string,
-    slotId: number,
+    episodeId: number,
     payload: { password: string }
   ) {
     const req = await this.fastify.inject({
       headers: { Authorization: `Bearer ${token}` },
       method: ECrudMethods.PUT,
-      url: EEndpoints.ADMIN_UNBOOK_SLOT + `/${slotId}`,
+      url: EEndpoints.ADMIN_UNBOOK_EPISODE + `/${episodeId}`,
       payload
     });
     
@@ -571,40 +571,40 @@ export default class TestServer {
       }
     };
   }
-  public async createSlot(slot?: DBSlot) {
-    const s = {
+  public async createEpisode(episode?: DBEpisode) {
+    const e = {
       id: -1,
       is_booked: false,
       season_number: 3,
-      episode: 1,
+      episode_number: 1,
       publishing_date: this.faker.date.past().toISOString()
     };
-    if (slot) Object.assign(s, slot);
+    if (episode) Object.assign(e, episode);
 
     await this.fastify.pgClient.query({
-      text: ` INSERT INTO slot (is_booked, season_number, episode, publishing_date)
+      text: ` INSERT INTO episode (is_booked, season_number, episode_number, publishing_date)
               VALUES ($1, $2, $3, $4)`,
       values: [
-        s.is_booked,
-        s.season_number,
-        s.episode,
-        s.publishing_date
+        e.is_booked,
+        e.season_number,
+        e.episode_number,
+        e.publishing_date
       ]
     });
     await this.fastify.pgClient.query({
-      text: ` SELECT id FROM slot WHERE
-              season_number = $1 AND episode = $2 AND publishing_date = $3`,
-      values: [s.season_number, s.episode, s.publishing_date]
-    }).then(r => s.id = r.rows[0].id);
+      text: ` SELECT id FROM episode WHERE
+              season_number = $1 AND episode_number = $2 AND publishing_date = $3`,
+      values: [e.season_number, e.episode_number, e.publishing_date]
+    }).then(r => e.id = r.rows[0].id);
     return {
-      ...s,
+      ...e,
       delete: async () => {
         await this.fastify.pgClient.query({
-          text: ` DELETE FROM slot 
+          text: ` DELETE FROM episode 
                   WHERE season_number = $1 
-                  AND episode = $2
+                  AND episode_number = $2
                   AND publishing_date = $3`,
-          values: [s.season_number, s.episode, s.publishing_date]
+          values: [e.season_number, e.episode_number, e.publishing_date]
         });
       }
     };
