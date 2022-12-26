@@ -13,13 +13,12 @@ CREATE OR REPLACE FUNCTION new_movie(
 	presentation TEXT,
   movie_genres TEXT[],
 	movie_languages TEXT[],
-	movie_countries TEXT[]
+	movie_countries TEXT[],
 	episode_id INT,
-	user_id INT,
+	user_id INT
 ) RETURNS void AS $$
 
 DECLARE
--- 	Variables annonymes
 	movie_id INT;
 	g TEXT;
 	genre_id INT;
@@ -30,8 +29,8 @@ DECLARE
 
 BEGIN
 	IF NOT EXISTS (SELECT * FROM movie WHERE title=movie.french_title) THEN
-		INSERT INTO movie("french_title", "original_title", "poster_url", "directors", "release_date", "runtime", "casting", "presentation", "user_id", "episode_id")
-		VALUES (title, original_title, poster_url, directors, release_date, runtime, casting, presentation, user_id, episode_id)
+		INSERT INTO movie("french_title", "original_title", "poster_url", "directors", "release_date", "runtime", "casting", "presentation", "episode_id", "user_id")
+		VALUES (title, original_title, poster_url, directors, release_date, runtime, casting, presentation, episode_id, user_id)
 		RETURNING id INTO movie_id;
 		-- Create genre if not exists
 		FOREACH g IN ARRAY movie_genres
