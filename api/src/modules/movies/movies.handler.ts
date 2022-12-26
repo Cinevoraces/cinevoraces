@@ -63,9 +63,10 @@ export const handleProposeMovie = async (
   reply: Reply
 ) => {
   const { pgClient, body, user } = request;
-  // TODO: 1. Change SQL Function to allow user_id to be declared at the last index
-  // Payload must be declared this way to add user_id with token
-  // and keep keys order.
+  // TODO: 
+  // from slot => season_number
+  // from slot => episode
+  // from slot => publishing_date
   const payload = { 
     french_title: body.french_title,
     original_title: body.original_title,

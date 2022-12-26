@@ -11,7 +11,10 @@ api/coverage
 */sqitch.conf
 
 # env
-.env*
+env*
+env.api
+env.app
+env.db
 
 # dependencies
 */node_modules

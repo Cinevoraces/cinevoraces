@@ -2,9 +2,64 @@
 
 BEGIN;
 
--- Seeding seasons
+-- Create all seasons
 INSERT INTO "season" ("number","year") VALUES
 (1,2020),(2,2021),(3,2022);
+-- Create all episodes
+INSERT INTO slot ("season_number","episode","publishing_date","is_booked") VALUES
+(3,1,'2022-01-02',true),
+(3,2,'2022-01-10',true),
+(3,3,'2022-01-17', true),
+(3,4,'2022-01-24',true),
+(3,5,'2022-01-30',true),
+(3,6,'2022-02-07',true),
+(3,7,'2022-02-14',true),
+(3,8,'2022-02-21',true),
+(3,9,'2022-02-28',true),
+(3,10,'2022-03-09',true),
+(3,11,'2022-03-15',true),
+(3,12,'2022-03-21',true),
+(3,13,'2022-03-29',true),
+(3,14,'2022-04-06',true),
+(3,15,'2022-04-11',true),
+(3,16,'2022-04-18',true),
+(3,17,'2022-04-25',true),
+(3,18,'2022-05-02',true),
+(3,19,'2022-05-10',true),
+(3,20,'2022-05-16',true),
+(3,21,'2022-05-23',true),
+(3,22,'2022-05-30',true),
+(3,23,'2022-06-01',true),
+(3,24,'2022-06-06',false),
+(3,25,'2022-06-13',false),
+(3,26,'2022-06-20',false),
+(3,27,'2022-06-27',false),
+(3,28,'2022-07-04',false),
+(3,29,'2022-07-11',false),
+(3,30,'2022-07-18',false),
+(3,31,'2022-07-25',false),
+(3,32,'2022-08-01',false),
+(3,33,'2022-08-08',false),
+(3,34,'2022-08-15',false),
+(3,35,'2022-08-22',false),
+(3,36,'2022-08-29',false),
+(3,37,'2022-09-05',false),
+(3,38,'2022-09-12',false),
+(3,39,'2022-09-19',false),
+(3,40,'2022-09-26',false),
+(3,41,'2022-10-03',false),
+(3,42,'2022-10-10',false),
+(3,43,'2022-10-17',false),
+(3,44,'2022-10-24',false),
+(3,45,'2022-10-31',false),
+(3,46,'2022-11-07',false),
+(3,47,'2022-11-14',false),
+(3,48,'2022-11-21',false),
+(3,49,'2022-11-28',false),
+(3,50,'2022-12-05',false),
+(3,51,'2022-12-12',false),
+(3,52,'2022-12-19',false),
+(3,53,'2022-12-26',false);
 
 -- Ajouts des users
 INSERT INTO "user" ("pseudo","mail","password") VALUES
@@ -58,52 +113,306 @@ SET role = 'admin'
 WHERE pseudo = 'admin';
 
 -- Seeding des films archivés
-SELECT new_movie('Les Chaussons rouges','The Red Shoes','https://image.tmdb.org/t/p/original/eByAzqYc1ncYkaoxsYupkvMOL8H.jpg',array['Emeric Pressburger','Michael Powell'],'1948-09-06','133',array['Moira Shearer','Adolf Wohlbrück','Marius Goring','Léonide Massine','Robert Helpmann'],'Je propose de regarder les chaussons rouges. Film de Powell et Pressburger (D''ailleurs vous pouvez vous jeter sur leurs autres films, Narcisse Noir, Le voyeur, ... Y''a rien à jeter). Pourquoi ? Parce qu''il est superbe. Que la scène du ballet, je ne m''en suis jamais vraiment remis. Voilà... J''espère que ça vous plaira autant qu''à moi !','2020-03-20',1,1,array['Drame','Romance'],array['Pусский','English','Français'],array['United Kingdom']);
-SELECT new_movie('Stalker','Сталкер','https://image.tmdb.org/t/p/original/91pnITUEwt1GfYy55zA2AZSTSVb.jpg',array['Andrei Tarkovsky'],'1979-05-25','163',array['Aleksandr Kaydanovskiy','Anatoliy Solonitsyn','Nikolay Grinko','Alisa Freyndlikh','Natasha Abramova'],'Comment embrayer derrière Powell et Pressburger ? Peut-être en invitant un autre réalisateur prestigieux, russe de surcroît. Venez déambuler avec nous dans la zone, cette semaine je vous propose de (re)voir le futur post-apocalyptique façon Andreï Tarkovski.','2020-03-27',2,1,array['Science-Fiction','Drame'],array['Pусский'],array['Soviet Union']);
-SELECT new_movie('The King''s Choice','Kongens nei','https://image.tmdb.org/t/p/original/daKZmVgLlDwuO9sSRwevvh8alaS.jpg',array['Erik Poppe'],'2016-09-29','135',array['Jesper Christensen','Anders Baasmo Christiansen','Karl Markovics','Tuva Novotny','Arthur Hakalahti'],'J''ai décidé de vous proposer un film qui me paraît intéressant et un minimum original (et d''une qualité honorable dans sa réalisation / acteurs) tout en explorant un fait essentiel de l''Histoire norvégienne (et indirectement de la WWII) avec le film : Kongens nei (Erik Poppe - 2016). Ultimatum en français.
-Je conseille fortement de le visionner en VO sous-titrée en français (ou autre), car le film est centré notamment sur le personnage du Roi Haakon VII d''origine danoise (élément essentiel pour comprendre certains aspects du propos historique) et l''acteur Jesper Christensen fait un très bon boulot pour parler justement le norvégien avec un certain accent danois.
-Je ne veux pas détailler davantage pour laisser la découverte, en sachant que je proposerais à l''issus de la semaine de visionnage une petite analyse historique pour aller plus loin et mieux appréhender les faits explorés par le film.','2020-04-03',3,1,array['Guerre','Action','Drame'],array['Dansk','Norsk','svenska','Deutsch'],array['Norway']);
-SELECT new_movie('New World','신세계','https://image.tmdb.org/t/p/original/1nLHvksC2VWQZJfXtoCb2ei16FT.jpg',array['Park Hoon-jung'],'2013-02-21','134',array['Lee Jung-jae','Choi Min-sik','Hwang Jung-min','Park Sung-woong','Song Ji-hyo'],'Je vous propose de nous intéresser au cinéma asiatique, et plus spécifiquement Coréen.
-Afin de ne pas proposer un film ultra-culte que tout le monde a vu, et en même temps de vous faire découvrir un film qui est selon moi injustement trop peu connu, probablement dissimulé par ses camarades un peu trop voyants, je vous propose : New World de Park Hoon-Jung.
-C''est un film dont le fil conducteur a déjà été vu maintes fois, citons par exemple Les Infiltrés ; mais n''a-t-il pas été vu dans un tas de bons films ? Citons, par exemple... Les Infiltrés ?
-Ce qui m''a poussé à vous proposer ce film, c''est qu''il est assez méconnu et pourtant d''excellente facture : ce long-métrage est incroyable sur le plan technique. Il y a des scènes vraiment imposantes, qui ont probablement été extrêmement complexes à tourner, et une en particulier est absolument incroyable, vous la reconnaîtrez certainement durant votre visionnage. La musique est incroyable, les acteurs sont convaincants, la réalisation est au top, bref, j''espère que vous passerez un bon moment !','2020-04-10',4,1,array['Thriller','Crime','Drame'],array['한국어/조선말'],array['South Korea']);
-SELECT new_movie('Buffalo ''66','Buffalo ''66','https://image.tmdb.org/t/p/original/eAgrKrAr8lMqc1Ujcagm7h881ZP.jpg',array['Vincent Gallo'],'1998-01-20','110',array['Vincent Gallo','Christina Ricci','Ben Gazzara','Anjelica Huston','Rosanna Arquette'],'Alors je propose donc pour cette semaine, le film d''un grand modeste, Vincent Gallo, avec une Christina Ricci délicieuse : Buffalo 66. J''ai vu ça à sa sortie, j''avais pas mal aimé, passe-t-il l''épreuve du temps ? A voir !','2020-04-17',5,1,array['Drame','Romance','Comédie'],array['English'],array['United States of America','Canada']);
-SELECT new_movie('La Peau douce','La Peau douce','https://image.tmdb.org/t/p/original/9bHHaK5ehIcEWvQc24WgHQYtMeR.jpg',array['François Truffaut'],'1964-04-20','119',array['Françoise Dorléac','Jean Desailly','Nelly Benedetti','Daniel Ceccaldi','Laurence Badie'],'Pour fêter l''arrivée du grand François Truffaut sur Netflix, je vous propose de découvrir un de ses films, pas forcément le plus connu, mais en tout cas un film très apprécié par de nombreux amateurs, un film sur l''amour, le couple : un film qui s''appelle La peau douce.  Comme précisé, le film est disponible sur Netflix pour les français. Si des belges sont dans la salle, le film est disponible sur UniversCine.be. Bon visionnage et cocorico !','2020-04-24',6,1,array['Drame','Romance'],array['Français','English','Português'],array['France']);
-SELECT new_movie('Souvenirs de Marnie','思い出のマーニー','https://image.tmdb.org/t/p/original/cc1UKEQCw7BJA7uWnZbd2tfqM4.jpg',array['Hiromasa Yonebayashi'],'2014-07-19','104',array['Sara Takatsuki','Kasumi Arimura','Nanako Matsushima','Susumu Terajima','Toshie Negishi'],'Bonsoir chers canarades ! Aujourd’hui, pour fêter l’arrivée des films du studio Ghibli sur Netflix, je vous propose un des films, pas forcément des plus connus mais néanmoins de grande qualité du studio : j’ai nommé Souvenirs de Marnie, sorti en 2015 dans notre contrée, qui n’a malheureusement pas eu un grand succès en France à sa sortie, la faute probablement à l’absence de grand nom tel que Miyazaki ou Takahata sur l’affiche. Mais sous-estimer le film pour cette raison serait une grande erreur, et j’espère que vous passerez un bon moment devant !','2020-05-16',4,1,array['Animation','Drame'],array['日本語'],array['Japan']);
-SELECT new_movie('Suspiria','Suspiria','https://image.tmdb.org/t/p/original/olexm07jHC62YdPXh83i6duYa17.jpg',array['Dario Argento'],'1977-02-01','101',array['Jessica Harper','Stefania Casini','Flavio Bucci','Miguel Bosé','Barbara Magnolfi'],'Suspiria de Dario Argento, un film d''horreur fantastique qui marque la tentative du bon Dario de s''extraire du giallo, ou du moins de l''emmener sur un terrain très original.
-C''est sorti en 1977 et j''ai eu l''immense plaisir de le découvrir en salle dans sa version restaurée il y a 2 ans.','2020-05-23',2,1,array['Horreur'],array['English','Italiano','Latin','Deutsch'],array['Italy']);
-SELECT new_movie('Ne coupez pas !','カメラを止めるな！','https://image.tmdb.org/t/p/original/F4Q51FOzRygYCw9fKRVyzvqatn.jpg',array['Shinichiro Ueda'],'2017-11-04','96',array['Takayuki Hamatsu','Yuzuki Akiyama','Kazuaki Nagaya','Harumi Shuhama','Mao'],'Pour rester dans le thème de l''horreur, je vous propose cette petite production japonaise appelée: One Cut of the Dead (Ne Coupez Pas en français).
-Je vous conseille grandement de ne pas lire de résumé quel qu''y soit, ça gâcherait le plaisir de mon point de vue (par conséquent je ne donne pas plus détail sur le plot du film ici).','2020-05-29',7,1,array['Comédie','Horreur'],array['日本語'],array['Japan']);
-SELECT new_movie('La Ruée vers l''or','The Gold Rush','https://image.tmdb.org/t/p/original/fT3OU1AjdTxiJmKvfCnzBBAQivp.jpg',array['Charlie Chaplin'],'1925-07-12','96',array['Charlie Chaplin','Georgia Hale','Mack Swain','Tom Murray','Henry Bergman'],'Le film de la semaine est............. La ruée vers l''or de Charlie Chaplin !
-Un film assez court à caler dans vos planning et surtout le dernier film majeur de sa filmo que je n''ai jamais vu (anomalie assez folle étant donné qu''il fait partie de mes réalisateur phares). Un choix assez classique donc mais pour une première proposition je joue la sécurité !
-Hâte d''avoir vos retours, sachant qu''il est fort possible que beaucoup ait déjà eu l''occasion de le voir.','2020-06-05',8,1,array['Aventure','Comédie','Drame'],array['No Language'],array['United States of America']);
-SELECT new_movie('Dark City','Dark City','https://image.tmdb.org/t/p/original/ep2lq8hSsf1nCpwPAAd5Ujb76kK.jpg',array['Alex Proyas'],'1998-02-27','95',array['Rufus Sewell','William Hurt','Kiefer Sutherland','Jennifer Connelly','Richard O''Brien'],'Saurez-vous retrouver les décors qui ont été utilisé pour Matrix par la suite ?
-Saurez-vous retrouvez des scènes qui ont été tournés de la même manière dans Requiem for a Dream ?
-Saurez-vous écrire Sauriez-vous juste ?','2020-06-12',9,1,array['Mystère','Science-Fiction'],array['English'],array['Australia','United States of America']);
-SELECT new_movie('Incendies','Incendies','https://image.tmdb.org/t/p/original/sOuRauhB0f7bcHlBU0OJwi4JoC2.jpg',array['Denis Villeneuve'],'2010-09-04','123',array['Lubna Azabal','Mélissa Désormeaux-Poulin','Maxim Gaudette','Rémy Girard','Allen Altman'],'Le film de la semaine sera donc Incendies de Denis Villeneuve. Il nous plonge dans un drame profond qui mènera deux jumeaux sur les traces de leur propre histoire.','2020-06-19',10,1,array['Drame','Guerre','Mystère'],array['Français','العربية','English'],array['Canada','France']);
-SELECT new_movie('Godzilla: Resurgence','シン・ゴジラ','https://image.tmdb.org/t/p/original/qrjxAKzxsnO9qGleVx3EqSWGmRe.jpg',array['Hideaki Anno'],'2016-07-29','120',array['Hiroki Hasegawa','Yutaka Takenouchi','Satomi Ishihara','Kengo Kora','Satoru Matsuo'],'Et le film de la semaine est...シン・ゴジラ ou Shin Godzilla pour nous occidentaux.
-Sorti en 2016 et 29ème entrée de la série de Kaijū Eiga, reboot donc visonnable sans avoir vu les films précédents ,dirigé par Hideaki Anno et Shinji Higuchi(Evangelion et Shin Evangelion c''était eux).
-Shirō Sagisu à la musique(Evangelion et Shin Evangelion c''était lui aussi).
-Je n''en dit pas plus et vous laisse découvrir l''oeuvre, bon visionnage!','2020-06-26',11,1,array['Action','Science-Fiction','Horreur'],array['Italiano','Deutsch','English','日本語'],array['Japan']);
-SELECT new_movie('Chat noir, chat blanc','Crna mačka, beli mačor','https://image.tmdb.org/t/p/original/bbeSx7usxfCl0ey8MklidtRnvxr.jpg',array['Emir Kusturica'],'1998-06-01','130',array['Bajram Severdzhan','Srđan Todorović','Zabit Memedov','Florijan Ajdini','Branka Katić'],'Et le film de la semaine est ... Chat noir chat blanc d''Emir Kusturica. C''est un cinéaste qui m''est cher en mettant de côté ses prises (ou non) de position politiques qui ne regardent que lui.... J''ai vu pas mal de ses films et à chaque fois avec grand plaisir  ! Je placerais Underground au-dessus mais Chat noir chat blanc est vraiment représentatif de son œuvre : des séquences folles, du rire, ... Bref je vous laisse vous faire votre idée (en espérant que ce soit une découverte pour beaucoup...). Bon visionnage !','2020-07-03',1,1,array['Comédie','Romance','Crime'],array['български език','Srpski'],array['Austria','France','Germany','Greece','Yugoslavia']);
-SELECT new_movie('The Old Guard','The Old Guard','https://image.tmdb.org/t/p/original/pSGO3h6Cyqgv1bDbkjzxUlU8jsW.jpg',array['Gina Prince-Bythewood'],'2020-07-10','118',array['Charlize Theron','KiKi Layne','Matthias Schoenaerts','Marwan Kenzari','Luca Marinelli'],'Bon ben puisque personne n''y va, je propose une récréation !
-The Old Guard sur Netflix, adapté d''un bon comicbook avec la belle Charlize Theron, qui reprend la coupe de cheveux d''Aeon Flux.
-Ça vient de sortir sur Netflix.
-Bon courage !','2020-07-10',2,1,array['Action','Fantastique'],array['English','العربية','Français','Italiano','Pусский'],array['United States of America']);
-SELECT new_movie('A Scanner Darkly','A Scanner Darkly','https://image.tmdb.org/t/p/original/72kQ9tlP0fweBmbTqzkfUCTUUS.jpg',array['Richard Linklater'],'2006-07-07','100',array['Keanu Reeves','Winona Ryder','Woody Harrelson','Robert Downey Jr.','Rory Cochrane'],'Et le film de la semaine est : A Scanner Darkly !
-Avec : Keanu Reeves, Winona Ryder, Robert Downey Jr. et Woody Harrelson ! Tout cela en cell-shading.','2020-07-17',9,1,array['Animation','Science-Fiction','Thriller'],array['English'],array['United States of America']);
-SELECT new_movie('Whiplash','Whiplash','https://image.tmdb.org/t/p/original/3XriEpTdnplQRzyphAC0cu3emns.jpg',array['Damien Chazelle'],'2014-10-10','106',array['Miles Teller','J.K. Simmons','Paul Reiser','Melissa Benoist','Austin Stowell'],'Et le film de la semaine est: Whiplash (disponible sur netflix france, mais pas suisse bien évidemment)
-Pour être honnête avec vous, je ne l''ai pas encore regardé, mais j''ai eu 2 très bon retours dessus (dont un venant de celui qui m''avait fait découvrir One cut of the Dead qui est lui même batteur dont en lien avec le thème du film), donc ça peut être que bien.','2020-07-24',7,1,array['Drame','Musique'],array['English'],array['United States of America']);
-SELECT new_movie('Your Name.','君の名は。','https://image.tmdb.org/t/p/original/zyHjvVRgKOt9wgVx4ikp2kGArGF.jpg',array['Makoto Shinkai'],'2016-08-26','107',array['Ryûnosuke Kamiki','Mone Kamishiraishi','Ryo Narita','Aoi Yuki','Nobunaga Shimazaki'],'Le dernier Shinkai approchant des salles obscures, je trouvais le moment judicieux pour proposer Your Name, Kimi No Nawa. Bon film à toutes et tous !','2020-08-06',4,1,array['Romance','Animation','Drame'],array['日本語'],array['Japan']);
-SELECT new_movie('La Mort de Dante Lazarescu','Moartea domnului Lăzărescu','https://image.tmdb.org/t/p/original/hNy1U9Q9XWsw3FLxCjl66TM01yd.jpg',array['Cristi Puiu'],'2005-05-17','150',array['Ioan Fiscuteanu','Luminița Gheorghiu','Doru Ana','Monica Bârlădeanu','Alina Berzunțeanu'],'Nous avons fait la France, le Japon, la Russie, l''Italie, les Etats Unis, la Corée et enfin la Yougoslavie...
-Je vous invite donc à continuer notre tour du monde avec......... La ROUMANIE.
-La Mort de Dante Lazarescu (2006) de Cristi Puiu (Prix Un certain regard lors du Festival de Cannes 2005.)
-Aucune idée du scénario parce que... je l''ai jamais vu. Mais un tel film présent sur Netflix, ça mérite d''être salué alors je vous propose de lui laisser sa chance.','2020-08-07',8,1,array['Comédie','Drame'],array['Română'],array['Romania']);
-SELECT new_movie('Crazy Kung‐Fu','功夫','https://image.tmdb.org/t/p/original/tTcIIg9qsYkKZguR4EsWBUtywef.jpg',array['Stephen Chow'],'2004-02-10','99',array['Stephen Chow','Yuen Wah','Yuen Qiu','Lam Tze-chung','Bruce Leung Siu-Lung'],'Retour en Asie cette semaine avec Crazy Kung-Fu(ou Kung-Fu Hustle), réalisé par Stephen Chow(Bons baisers de Pékin,Crazy Soccer,et plus récemment Journey to the West).
-Comédie d''arts martiaux plus que sympathique, dotée d''une fort belle musique traditionnelle interprétée par l''orchestre chinois de Hong Kong.
-Je recommande (comme toujours) la VO pour profiter du jeu en cantonais(très différent au son du mandarin).
-Le film utilise régulièrement quelques effets en 3d qui ont hélas vieilli,mais le film en lui même reste très propre techniquement.
-Une œuvre qui m''a m''avais fait excellente impression à l''époque et que je recommande chaudement.','2020-08-14',11,1,array['Action','Comédie','Crime','Fantastique'],array['广州话 / 廣州話'],array['Hong Kong']);
+SELECT new_movie(
+  'Les Chaussons rouges',
+  'The Red Shoes',
+  'https://image.tmdb.org/t/p/original/eByAzqYc1ncYkaoxsYupkvMOL8H.jpg',
+  array['Emeric Pressburger','Michael Powell'],
+  '1948-09-06',
+  '133',
+  array['Moira Shearer','Adolf Wohlbrück','Marius Goring','Léonide Massine','Robert Helpmann'],
+  'Je propose de regarder les chaussons rouges. Film de Powell et Pressburger (D''ailleurs vous pouvez vous jeter sur leurs autres films, Narcisse Noir, Le voyeur, ... Y''a rien à jeter). Pourquoi ? Parce qu''il est superbe. Que la scène du ballet, je ne m''en suis jamais vraiment remis. Voilà... J''espère que ça vous plaira autant qu''à moi !',
+  array['Drame','Romance'],
+  array['Pусский','English','Français'],
+  array['United Kingdom'],
+  1,
+  1
+);
+SELECT new_movie(
+  'Stalker',
+  'Сталкер',
+  'https://image.tmdb.org/t/p/original/91pnITUEwt1GfYy55zA2AZSTSVb.jpg',
+  array['Andrei Tarkovsky'],
+  '1979-05-25',
+  '163',
+  array['Aleksandr Kaydanovskiy','Anatoliy Solonitsyn','Nikolay Grinko','Alisa Freyndlikh','Natasha Abramova'],
+  'Comment embrayer derrière Powell et Pressburger ? Peut-être en invitant un autre réalisateur prestigieux, russe de surcroît. Venez déambuler avec nous dans la zone, cette semaine je vous propose de (re)voir le futur post-apocalyptique façon Andreï Tarkovski.',
+  array['Science-Fiction','Drame'],
+  array['Pусский'],
+  array['Soviet Union'],
+  2,
+  2
+);
+SELECT new_movie(
+  'The King''s Choice',
+  'Kongens nei',
+  'https://image.tmdb.org/t/p/original/daKZmVgLlDwuO9sSRwevvh8alaS.jpg',
+  array['Erik Poppe'],
+  '2016-09-29',
+  '135',
+  array['Jesper Christensen','Anders Baasmo Christiansen','Karl Markovics','Tuva Novotny','Arthur Hakalahti'],
+  'J''ai décidé de vous proposer un film qui me paraît intéressant et un minimum original (et d''une qualité honorable dans sa réalisation / acteurs) tout en explorant un fait essentiel de l''Histoire norvégienne (et indirectement de la WWII) avec le film : Kongens nei (Erik Poppe - 2016). Ultimatum en français. Je conseille fortement de le visionner en VO sous-titrée en français (ou autre), car le film est centré notamment sur le personnage du Roi Haakon VII d''origine danoise (élément essentiel pour comprendre certains aspects du propos historique) et l''acteur Jesper Christensen fait un très bon boulot pour parler justement le norvégien avec un certain accent danois. Je ne veux pas détailler davantage pour laisser la découverte, en sachant que je proposerais à l''issus de la semaine de visionnage une petite analyse historique pour aller plus loin et mieux appréhender les faits explorés par le film.',
+  array['Guerre','Action','Drame'],
+  array['Dansk','Norsk','svenska','Deutsch'],
+  array['Norway'],
+  3,
+  3
+);
+SELECT new_movie(
+  'New World',
+  '신세계',
+  'https://image.tmdb.org/t/p/original/1nLHvksC2VWQZJfXtoCb2ei16FT.jpg',
+  array['Park Hoon-jung'],
+  '2013-02-21',
+  '134',
+  array['Lee Jung-jae','Choi Min-sik','Hwang Jung-min','Park Sung-woong','Song Ji-hyo'],
+  'Je vous propose de nous intéresser au cinéma asiatique, et plus spécifiquement Coréen. Afin de ne pas proposer un film ultra-culte que tout le monde a vu, et en même temps de vous faire découvrir un film qui est selon moi injustement trop peu connu, probablement dissimulé par ses camarades un peu trop voyants, je vous propose : New World de Park Hoon-Jung. C''est un film dont le fil conducteur a déjà été vu maintes fois, citons par exemple Les Infiltrés ; mais n''a-t-il pas été vu dans un tas de bons films ? Citons, par exemple... Les Infiltrés ? Ce qui m''a poussé à vous proposer ce film, c''est qu''il est assez méconnu et pourtant d''excellente facture : ce long-métrage est incroyable sur le plan technique. Il y a des scènes vraiment imposantes, qui ont probablement été extrêmement complexes à tourner, et une en particulier est absolument incroyable, vous la reconnaîtrez certainement durant votre visionnage. La musique est incroyable, les acteurs sont convaincants, la réalisation est au top, bref, j''espère que vous passerez un bon moment !',
+  array['Thriller','Crime','Drame'],
+  array['한국어/조선말'],
+  array['South Korea'],
+  4,
+  4
+);
+SELECT new_movie(
+  'Buffalo ''66',
+  'Buffalo ''66',
+  'https://image.tmdb.org/t/p/original/eAgrKrAr8lMqc1Ujcagm7h881ZP.jpg',
+  array['Vincent Gallo'],
+  '1998-01-20',
+  '110',
+  array['Vincent Gallo','Christina Ricci','Ben Gazzara','Anjelica Huston','Rosanna Arquette'],
+  'Alors je propose donc pour cette semaine, le film d''un grand modeste, Vincent Gallo, avec une Christina Ricci délicieuse : Buffalo 66. J''ai vu ça à sa sortie, j''avais pas mal aimé, passe-t-il l''épreuve du temps ? A voir !',
+  array['Drame','Romance','Comédie'],
+  array['English'],
+  array['United States of America','Canada'],
+  5,
+  5
+);
+SELECT new_movie(
+  'La Peau douce',
+  'La Peau douce',
+  'https://image.tmdb.org/t/p/original/9bHHaK5ehIcEWvQc24WgHQYtMeR.jpg',
+  array['François Truffaut'],
+  '1964-04-20',
+  '119',
+  array['Françoise Dorléac','Jean Desailly','Nelly Benedetti','Daniel Ceccaldi','Laurence Badie'],
+  'Pour fêter l''arrivée du grand François Truffaut sur Netflix, je vous propose de découvrir un de ses films, pas forcément le plus connu, mais en tout cas un film très apprécié par de nombreux amateurs, un film sur l''amour, le couple : un film qui s''appelle La peau douce.  Comme précisé, le film est disponible sur Netflix pour les français. Si des belges sont dans la salle, le film est disponible sur UniversCine.be. Bon visionnage et cocorico !',
+  array['Drame','Romance'],
+  array['Français','English','Português'],
+  array['France'],
+  6,
+  6
+);
+SELECT new_movie(
+  'Souvenirs de Marnie',
+  '思い出のマーニー',
+  'https://image.tmdb.org/t/p/original/cc1UKEQCw7BJA7uWnZbd2tfqM4.jpg',
+  array['Hiromasa Yonebayashi'],
+  '2014-07-19',
+  '104',
+  array['Sara Takatsuki','Kasumi Arimura','Nanako Matsushima','Susumu Terajima','Toshie Negishi'],
+  'Bonsoir chers canarades ! Aujourd’hui, pour fêter l’arrivée des films du studio Ghibli sur Netflix, je vous propose un des films, pas forcément des plus connus mais néanmoins de grande qualité du studio : j’ai nommé Souvenirs de Marnie, sorti en 2015 dans notre contrée, qui n’a malheureusement pas eu un grand succès en France à sa sortie, la faute probablement à l’absence de grand nom tel que Miyazaki ou Takahata sur l’affiche. Mais sous-estimer le film pour cette raison serait une grande erreur, et j’espère que vous passerez un bon moment devant !',
+  array['Animation','Drame'],
+  array['日本語'],
+  array['Japan'],
+  7,
+  4
+);
+SELECT new_movie(
+  'Suspiria',
+  'Suspiria',
+  'https://image.tmdb.org/t/p/original/olexm07jHC62YdPXh83i6duYa17.jpg',
+  array['Dario Argento'],
+  '1977-02-01',
+  '101',
+  array['Jessica Harper','Stefania Casini','Flavio Bucci','Miguel Bosé','Barbara Magnolfi'],
+  'Suspiria de Dario Argento, un film d''horreur fantastique qui marque la tentative du bon Dario de s''extraire du giallo, ou du moins de l''emmener sur un terrain très original. C''est sorti en 1977 et j''ai eu l''immense plaisir de le découvrir en salle dans sa version restaurée il y a 2 ans.',
+  array['Horreur'],
+  array['English','Italiano','Latin','Deutsch'],
+  array['Italy'],
+  8,
+  2
+);
+SELECT new_movie(
+  'Ne coupez pas !',
+  'カメラを止めるな！',
+  'https://image.tmdb.org/t/p/original/F4Q51FOzRygYCw9fKRVyzvqatn.jpg',
+  array['Shinichiro Ueda'],
+  '2017-11-04',
+  '96',
+  array['Takayuki Hamatsu','Yuzuki Akiyama','Kazuaki Nagaya','Harumi Shuhama','Mao'],
+  'Pour rester dans le thème de l''horreur, je vous propose cette petite production japonaise appelée: One Cut of the Dead (Ne Coupez Pas en français). Je vous conseille grandement de ne pas lire de résumé quel qu''y soit, ça gâcherait le plaisir de mon point de vue (par conséquent je ne donne pas plus détail sur le plot du film ici).',
+  array['Comédie','Horreur'],
+  array['日本語'],
+  array['Japan'],
+  9,
+  7
+);
+SELECT new_movie(
+  'La Ruée vers l''or',
+  'The Gold Rush',
+  'https://image.tmdb.org/t/p/original/fT3OU1AjdTxiJmKvfCnzBBAQivp.jpg',
+  array['Charlie Chaplin'],
+  '1925-07-12',
+  '96',
+  array['Charlie Chaplin','Georgia Hale','Mack Swain','Tom Murray','Henry Bergman'],
+  'Le film de la semaine est............. La ruée vers l''or de Charlie Chaplin ! Un film assez court à caler dans vos planning et surtout le dernier film majeur de sa filmo que je n''ai jamais vu (anomalie assez folle étant donné qu''il fait partie de mes réalisateur phares). Un choix assez classique donc mais pour une première proposition je joue la sécurité ! Hâte d''avoir vos retours, sachant qu''il est fort possible que beaucoup ait déjà eu l''occasion de le voir.',
+  array['Aventure','Comédie','Drame'],
+  array['No Language'],
+  array['United States of America'],
+  10,
+  8
+);
+SELECT new_movie(
+  'Dark City',
+  'Dark City',
+  'https://image.tmdb.org/t/p/original/ep2lq8hSsf1nCpwPAAd5Ujb76kK.jpg',
+  array['Alex Proyas'],
+  '1998-02-27',
+  '95',
+  array['Rufus Sewell','William Hurt','Kiefer Sutherland','Jennifer Connelly','Richard O''Brien'],
+  'Saurez-vous retrouver les décors qui ont été utilisé pour Matrix par la suite ? Saurez-vous retrouvez des scènes qui ont été tournés de la même manière dans Requiem for a Dream ? Saurez-vous écrire Sauriez-vous juste ?',
+  array['Mystère','Science-Fiction'],
+  array['English'],
+  array['Australia','United States of America'],
+  11,
+  9
+);
+SELECT new_movie(
+  'Incendies',
+  'Incendies',
+  'https://image.tmdb.org/t/p/original/sOuRauhB0f7bcHlBU0OJwi4JoC2.jpg',
+  array['Denis Villeneuve'],
+  '2010-09-04',
+  '123',
+  array['Lubna Azabal','Mélissa Désormeaux-Poulin','Maxim Gaudette','Rémy Girard','Allen Altman'],
+  'Le film de la semaine sera donc Incendies de Denis Villeneuve. Il nous plonge dans un drame profond qui mènera deux jumeaux sur les traces de leur propre histoire.',
+  array['Drame','Guerre','Mystère'],
+  array['Français','العربية','English'],
+  array['Canada','France'],
+  12,
+  10
+);
+SELECT new_movie(
+  'Godzilla: Resurgence',
+  'シン・ゴジラ',
+  'https://image.tmdb.org/t/p/original/qrjxAKzxsnO9qGleVx3EqSWGmRe.jpg',
+  array['Hideaki Anno'],
+  '2016-07-29',
+  '120',
+  array['Hiroki Hasegawa','Yutaka Takenouchi','Satomi Ishihara','Kengo Kora','Satoru Matsuo'],
+  'Et le film de la semaine est...シン・ゴジラ ou Shin Godzilla pour nous occidentaux. Sorti en 2016 et 29ème entrée de la série de Kaijū Eiga, reboot donc visonnable sans avoir vu les films précédents ,dirigé par Hideaki Anno et Shinji Higuchi(Evangelion et Shin Evangelion c''était eux). Shirō Sagisu à la musique(Evangelion et Shin Evangelion c''était lui aussi). Je n''en dit pas plus et vous laisse découvrir l''oeuvre, bon visionnage!',
+  array['Action','Science-Fiction','Horreur'],
+  array['Italiano','Deutsch','English','日本語'],
+  array['Japan'],
+  13,
+  11
+);
+SELECT new_movie(
+  'Chat noir, chat blanc',
+  'Crna mačka, beli mačor',
+  'https://image.tmdb.org/t/p/original/bbeSx7usxfCl0ey8MklidtRnvxr.jpg',
+  array['Emir Kusturica'],
+  '1998-06-01',
+  '130',
+  array['Bajram Severdzhan','Srđan Todorović','Zabit Memedov','Florijan Ajdini','Branka Katić'],
+  'Et le film de la semaine est ... Chat noir chat blanc d''Emir Kusturica. C''est un cinéaste qui m''est cher en mettant de côté ses prises (ou non) de position politiques qui ne regardent que lui.... J''ai vu pas mal de ses films et à chaque fois avec grand plaisir  ! Je placerais Underground au-dessus mais Chat noir chat blanc est vraiment représentatif de son œuvre : des séquences folles, du rire, ... Bref je vous laisse vous faire votre idée (en espérant que ce soit une découverte pour beaucoup...). Bon visionnage !',
+  array['Comédie','Romance','Crime'],
+  array['български език','Srpski'],
+  array['Austria','France','Germany','Greece','Yugoslavia'],
+  14,
+  1
+);
+SELECT new_movie(
+  'The Old Guard',
+  'The Old Guard',
+  'https://image.tmdb.org/t/p/original/pSGO3h6Cyqgv1bDbkjzxUlU8jsW.jpg',
+  array['Gina Prince-Bythewood'],
+  '2020-07-10',
+  '118',
+  array['Charlize Theron','KiKi Layne','Matthias Schoenaerts','Marwan Kenzari','Luca Marinelli'],
+  'Bon ben puisque personne n''y va, je propose une récréation ! The Old Guard sur Netflix, adapté d''un bon comicbook avec la belle Charlize Theron, qui reprend la coupe de cheveux d''Aeon Flux. Ça vient de sortir sur Netflix. Bon courage !',
+  array['Action','Fantastique'],
+  array['English','العربية','Français','Italiano','Pусский'],
+  array['United States of America'],
+  15,
+  2
+);
+SELECT new_movie(
+  'A Scanner Darkly',
+  'A Scanner Darkly',
+  'https://image.tmdb.org/t/p/original/72kQ9tlP0fweBmbTqzkfUCTUUS.jpg',
+  array['Richard Linklater'],
+  '2006-07-07',
+  '100',
+  array['Keanu Reeves','Winona Ryder','Woody Harrelson','Robert Downey Jr.','Rory Cochrane'],
+  'Et le film de la semaine est : A Scanner Darkly ! Avec : Keanu Reeves, Winona Ryder, Robert Downey Jr. et Woody Harrelson ! Tout cela en cell-shading.',
+  array['Animation','Science-Fiction','Thriller'],
+  array['English'],
+  array['United States of America'],
+  16,
+  9
+);
+SELECT new_movie(
+  'Whiplash',
+  'Whiplash',
+  'https://image.tmdb.org/t/p/original/3XriEpTdnplQRzyphAC0cu3emns.jpg',
+  array['Damien Chazelle'],
+  '2014-10-10',
+  '106',
+  array['Miles Teller','J.K. Simmons','Paul Reiser','Melissa Benoist','Austin Stowell'],
+  'Et le film de la semaine est: Whiplash (disponible sur netflix france, mais pas suisse bien évidemment) Pour être honnête avec vous, je ne l''ai pas encore regardé, mais j''ai eu 2 très bon retours dessus (dont un venant de celui qui m''avait fait découvrir One cut of the Dead qui est lui même batteur dont en lien avec le thème du film), donc ça peut être que bien.',
+  array['Drame','Musique'],
+  array['English'],
+  array['United States of America'],
+  17,
+  7
+);
+SELECT new_movie(
+  'Your Name.',
+  '君の名は。',
+  'https://image.tmdb.org/t/p/original/zyHjvVRgKOt9wgVx4ikp2kGArGF.jpg',
+  array['Makoto Shinkai'],
+  '2016-08-26',
+  '107',
+  array['Ryûnosuke Kamiki','Mone Kamishiraishi','Ryo Narita','Aoi Yuki','Nobunaga Shimazaki'],
+  'Le dernier Shinkai approchant des salles obscures, je trouvais le moment judicieux pour proposer Your Name, Kimi No Nawa. Bon film à toutes et tous !',
+  array['Romance','Animation','Drame'],
+  array['日本語'],
+  array['Japan'],
+  18,
+  4
+);
+SELECT new_movie(
+  'La Mort de Dante Lazarescu',
+  'Moartea domnului Lăzărescu',
+  'https://image.tmdb.org/t/p/original/hNy1U9Q9XWsw3FLxCjl66TM01yd.jpg',
+  array['Cristi Puiu'],
+  '2005-05-17',
+  '150',
+  array['Ioan Fiscuteanu','Luminița Gheorghiu','Doru Ana','Monica Bârlădeanu','Alina Berzunțeanu'],
+  'Nous avons fait la France, le Japon, la Russie, l''Italie, les Etats Unis, la Corée et enfin la Yougoslavie... Je vous invite donc à continuer notre tour du monde avec......... La ROUMANIE. La Mort de Dante Lazarescu (2006) de Cristi Puiu (Prix Un certain regard lors du Festival de Cannes 2005.) Aucune idée du scénario parce que... je l''ai jamais vu. Mais un tel film présent sur Netflix, ça mérite d''être salué alors je vous propose de lui laisser sa chance.',
+  array['Comédie','Drame'],
+  array['Română'],
+  array['Romania'],
+  19,
+  8
+);
+SELECT new_movie(
+  'Crazy Kung‐Fu',
+  '功夫',
+  'https://image.tmdb.org/t/p/original/tTcIIg9qsYkKZguR4EsWBUtywef.jpg',
+  array['Stephen Chow'],
+  '2004-02-10',
+  '99',
+  array['Stephen Chow','Yuen Wah','Yuen Qiu','Lam Tze-chung','Bruce Leung Siu-Lung'],
+  'Retour en Asie cette semaine avec Crazy Kung-Fu(ou Kung-Fu Hustle), réalisé par Stephen Chow(Bons baisers de Pékin,Crazy Soccer,et plus récemment Journey to the West). Comédie d''arts martiaux plus que sympathique, dotée d''une fort belle musique traditionnelle interprétée par l''orchestre chinois de Hong Kong. Je recommande (comme toujours) la VO pour profiter du jeu en cantonais(très différent au son du mandarin). Le film utilise régulièrement quelques effets en 3d qui ont hélas vieilli,mais le film en lui même reste très propre techniquement. Une œuvre qui m''a m''avais fait excellente impression à l''époque et que je recommande chaudement.',
+  array['Action','Comédie','Crime','Fantastique'],
+  array['广州话 / 廣州話'],
+  array['Hong Kong'],
+  20,
+  11
+);
 SELECT new_movie('Chungking Express','重慶森林','https://image.tmdb.org/t/p/original/7ejz2cc6tMpuTb7hz4oUi9uW7O9.jpg',array['Wong Kar-wai'],'1994-07-14','102',array['Brigitte Lin','Tony Leung Chiu-wai','Faye Wong','Takeshi Kaneshiro','Valerie Chow'],'Décidément, peut-être est-ce une question d''actualité mais j''ai décidé de nous faire rester une semaine de plus à Hong Kong, cette mégalopole hors norme que le temps n''aura pas épargné.
 Une culture chinoise très particulière, forcément remodelée par le colonialisme et meurtrie par ce retour à la république populaire de Chine avec la rétrocession, grande déchirure pour ses habitants. Ce qui nous conduit tout naturellement, près de 20 ans plus tard, aux tragiques événements qui s''y produisent en ce moment.
 Le cinéma Hong Kongais a toujours été précieux à mes yeux : forcément, certains des plus estimés réalisateurs y ont fait leurs armes et leurs noms ne vous sont je le sais, pas tout à fait étrangers : John Woo, Ringo Lam, Tsui Hark, Jonnhie To... et Wong Kar Wai.
@@ -353,110 +662,390 @@ SELECT new_movie('Mutafukaz','Mutafukaz','https://image.tmdb.org/t/p/original/lw
 Synopsis : Angelino est un jeune loser parmi tant d’autres à Dark Meat City, une mégalopole sans pitié sous le soleil de Californie. La journée, il livre des pizzas dans tous les recoins de la ville et la nuit, il squatte une chambre d’hôtel minable avec son coloc Vinz et une armada de cafards qui font désormais un peu partie de sa famille. À la suite d’un accident de scooter lorsque son chemin a croisé par inadvertance la divine Luna, une fille aux cheveux noir de jais, notre jeune lascar commence à souffrir de maux de tête et d’étranges hallucinations. Des hallucinations, vous avez dit ? Hmm, peut-être pas... Pourchassé par des hommes en noir, Angelino n’a plus aucun doute : il est pris pour cible. Mais pourquoi lui ?','2021-11-29',20,2,array['Science-Fiction','Animation','Action','Crime'],array['Français'],array['France','Japan']);
 SELECT new_movie('Annihilation','Annihilation','https://image.tmdb.org/t/p/original/wkg01fefEWL7GMec8J7QaaQ6XFK.jpg',array['Alex Garland'],'2018-02-22','115',array['Natalie Portman','Jennifer Jason Leigh','Gina Rodriguez','Tessa Thompson','Tuva Novotny'],'Bonjour à toutes et à tous. Si je ne me trompe pas de lieu pour publier, je propose pour cette semaine le visionnage de Annihilation d’Alex Garland d’après le roman de Jeff VanderMeer. Bon film.','2021-12-06',29,2,array['Science-Fiction','Horreur'],array['English'],array['United Kingdom','United States of America']);
 SELECT new_movie('Paterson','Paterson','https://image.tmdb.org/t/p/original/AuJ1ZlfqwuAr9H5Qr1U9KILylse.jpg',array['Jim Jarmusch'],'2016-11-17','118',array['Adam Driver','Golshifteh Farahani','Barry Shabaka Henley','Method Man','Chasten Harmon'],'Bonjour, le film de cette semaine n''est pas un film gris mais un film sur le gris. Je vous proposons Paterson de Jim Jarmusch, avec Kylo Ren ce gros nullos dans le rôle principal et Farahani Golshifteh de la série nulle Invasion. C''est disponible sur la plateforme Prime, de ce gros con de Jeff.','2021-12-13',14,2,array['Comédie','Drame','Romance'],array['English','Italiano'],array['Germany','United States of America','France']);
-SELECT new_movie('Père Noël Origines','Rare Exports','https://image.tmdb.org/t/p/original/eWJQaLdVP6TFYc6NTJp4HJAU5Jw.jpg',array['Jalmari Helander'],'2010-12-03','80',array['Per Christian Ellefsen','Jorma Tommila','Tommi Korpela','Onni Tommila','Jonathan Hutchings'],'Cette semaine, semaine des fêtes de Noël, je vous propose ''Père Noël Origines'' ou ''Rare Exports: A Christmas Tale'' de Jalmari Helander, film finlando-franco-norvégio-suédois. En Finlande, près de la frontière russo-finlandaise un homme d''affaires engage des chercheurs pour découvrir l''un des plus grands mystères de Noël. Les habitants sont menacés par ce qu''ils découvrent, un jeune garçon apprend la vraie nature du Père Noël et doit trouver un moyen de sauver les habitants et Noël !
-C''est sombre, mais pas trop, et ça puise dans le réservoir de la mythologie du Père Noël et ce qui l''entoure. C''est aussi un film sincère et rédempteur sans être trop mesquin. Et si vous êtes d''humeur à casser du vieux (Et pas en salle de cinéma cette fois-ci) vous êtes au bon endroit. C''est un buffet nordique à l''écran.','2021-12-21',17,2,array['Fantastique'],array['English','suomi'],array['Finland','France','Norway','Sweden']);
-SELECT new_movie('Okkadu','ఒక్కడు','https://image.tmdb.org/t/p/original/1JU2kNk4D7B5E2sWY2IMbyMqjqe.jpg',array['Gunasekhar'],'2003-01-15','170',array['Mahesh Babu','Bhumika Chawla','Prakash Raj','Mukesh Rishi','Geetha'],'C’est avec grand plaisir que j’ouvre cette saison 3 de Cinévorace grâce à la confiance de Yves Signal.
-Ayant découvert le Kabaddi avec une série animée nommé Shakunetsu Kabaddi (https://myanimelist.net/anime/42395/Shakunetsu_Kabaddi), je me suis dit, pourquoi ne pas proposer un film sur ce thème.
-Ils existent plusieurs films sur le sujet, mais je vous propose Okkadu (2003), car il semble avoir de bonnes critiques, bien que malheureusement je crois que le Kabaddi joue un rôle mineur.
-Le film n’est bien sûr disponible nulle part (sauf Amazone prime aux US/UK?), par contre il est disponible sur YouTube avec des sous-titres anglais uniquement: https://www.youtube.com/watch?v=KbvPhITOhrw
-Mais grâce à la magie de YouTube, il est possible de faire traduire les sous-titres anglais à la volée en français! (si vous comprenez l''anglais j''éviterais cette option :p)','2022-01-02',7,3,array['Action','Drame'],array['తెలుగు'],array['India']);
-SELECT new_movie('La Vie rêvée de Walter Mitty','The Secret Life of Walter Mitty','https://image.tmdb.org/t/p/original/1WKxLcAmM4liIaZ3aLEE123HrJG.jpg',array['Ben Stiller'],'2013-12-18','114',array['Ben Stiller','Kristen Wiig','Sean Penn','Shirley MacLaine','Adam Scott'],'Au menu de cette semaine je vous propose un film disponible sur Disney +, La vie rêvée de Walter Mitty avec Ben Stiller et réalisé par lui même en 2013 ( 2013? put*** déjà? Fichtre...). C''est un film que j''avais découvert sans rien en connaître, hormis l''acteur principal que j''aime beaucoup et ce fut un visionnage très agréable. Je vous colle un résumé osef trouvé sur allo ciné pour le principe mais franchement vous focalisez pas là dessus et allez y en yolo comme moi.
-Walter Mitty est un homme ordinaire, enfermé dans son quotidien, qui n’ose s’évader qu’à travers des rêves à la fois drôles et extravagants. Mais confronté à une difficulté dans sa vie professionnelle, Walter doit trouver le courage de passer à l''action dans le monde réel. Il embarque alors dans un périple incroyable, pour vivre une aventure bien plus riche que tout ce qu''il aurait pu imaginer jusqu’ici. Et qui devrait changer sa vie à jamais.','2022-01-10',26,3,array['Aventure','Comédie','Drame','Fantastique'],array['English','Íslenska','Español'],array['United States of America','United Kingdom']);
-SELECT new_movie('The Descent','The Descent','https://image.tmdb.org/t/p/original/gCsVUf2HyfYub0IwByeJ9Ld4dLQ.jpg',array['Neil Marshall'],'2005-07-08','109',array['Shauna Macdonald','Natalie Mendoza','Alex Reid','MyAnna Buring','Saskia Mulder'],'Pour cette semaine je vous propose The Descent, un film de Neil Marshall (2005). Pour le pitch c’est un groupe de copines qui s’embarque dans l’exploration d’une cavité souterraine à l’occasion d’un week-end de retrouvailles entre amatrices d’activités nature et d’adrénaline. Mais, spoiler alert : ça tourne mal ! Je n’en dis pas beaucoup plus pour vous laisser découvrir le film. J’ai beaucoup aimé son ambiance générale qui évolue au cours du temps.
-PS : Je vous le déconseille si vous prévoyez une sortie spéléo ce week-end...','2021-01-17',10,3,array['Aventure','Horreur'],array['English'],array['United Kingdom']);
-SELECT new_movie('Le Corbeau','Le Corbeau','https://image.tmdb.org/t/p/original/wM87JtxQqD0bq8xyAvlmuNbI66B.jpg',array['Henri-Georges Clouzot'],'1943-09-28','92',array['Pierre Fresnay','Ginette Leclerc','Micheline Francey','Héléna Manson','Jeanne Fusier-Gir'],'Bonjour tout le monde ! Cette semaine, je vous propose de souffler la poussière sur l''étagère des classiques, pour dégager un film au contexte sulfureux et ô combien débattu, mais qui me semble constituer un jalon important bien que souvent oublié de l''histoire du cinéma français.
-Retour en 1943, donc, pour Le Corbeau, d''Henri-Georges Clouzot.
-Impossible de passer sous silence le contexte de sortie du film : produit en plein cœur de l''occupation par la Continental, passée sous pavillon allemand et dirigée par Alfred Greven - chargé en ligne directe par Goebbels de superviser toute la production cinématographique française pour l''en dépouiller de tout message politique au profit du divertissement le plus inoffensif -, le film relate l''enquête d''un médecin fraîchement nommé dans un petit village français pour retrouver l''auteur anonyme de lettres de dénonciation qui sèment la panique, la rancœur et le chaos parmi les habitants.
-Inspiré d''un fait réel, le scénario parviendra à franchir tous les barrages de la censure nazie, sous le prétexte de ne jamais faire intervenir l''occupant, de se concentrer sur une intrigue purement française, pour finalement s''attirer les foudres tant des collabos (qui y virent, assez justement, une dénonciation de la délation) que des résistants, qui bannirent Clouzot dès la Libération de toute possibilité de travailler en France, avant que son sort ne soit revu et sauvé quelques années plus tard par quelques intellectuels et artistes, qui parvinrent à le réhabiliter.
-On pourrait entrer bien plus en détail dans la carrière de Clouzot, son travail sous l''occupation qui ne l''empêcha pourtant pas de développer des thèmes honnis tant par la censure que la bonne société conservatrice, mais je laisse peut-être cela pour la prochaine Grande Bouffe. Car au-delà de la polémique historique, Le Corbeau est un grand film, chers amis !
-Véritable jeu de massacre, peinture d''un effondrement des valeurs au sein d''un groupe d''individus où la justice est impuissante et laisse place à la vengeance personnelle, tableau grisant mais glaçant de l''ambigüité humaine et de la part d''ombre ancrée en chacun de nous, il s''agit non seulement d''un discours philosophique passionnant de complexité et de profondeur, mais également d''une belle leçon de mise en scène. Dans un noir et blanc de grande qualité, Clouzot déploie une solide science du cadre et du récit visuel, comme cette scène mémorable d''une lampe qui se balance (je n''en dis pas plus), et offre à Pierre Fresnay un très grand rôle.
-Bon visionnage !','2022-01-24',21,3,array['Drame','Thriller','Crime','Mystère'],array['Français'],array['France']);
-SELECT new_movie('Train de vie','Train de vie','https://image.tmdb.org/t/p/original/3KtZfqNpUXPJkF4OYqNhELbH6ep.jpg',array['Radu Mihăileanu'],'1998-09-16','103',array['Lionel Abelanski','Rufus','Clément Harari','Agathe de La Fontaine','Michel Muller'],'Malheureusement, l’actualité étant par moment toujours la même qu’il y a 80 ans, je vous propose un film comique sur ce thème pas très joyeux que fut la déportation, je vous propose Train de vie (1998) réalisé par Radu Mihaileanu. Attention, mon premier visionnage date d’il y a plus de 20 ans ! (aïe), mais j’en garde plutôt un bon souvenir, on verra ce que ça va donner. En toute cas, je suis ravi de le redécouvrir avec mon regard de vieux et de le partager avec vous. En effet, il me semble qu’il soit vite rentré dans l’oubli le plus total. Ou le voir ? Et ben c’est très compliqué, il me semble qu’il soit introuvable, c’est ça de tomber dans l’oubli. Alors n’hésitez pas à MP pour un prêt. @Morbo sapin roi des gorets, tu devrais trouver quelques rouflaquettes.','2022-01-30',9,3,array['Drame','Comédie','Guerre'],array['Deutsch','Français'],array['Belgium','Israel','Netherlands','Romania','France']);
-SELECT new_movie('Take Shelter','Take Shelter','https://image.tmdb.org/t/p/original/pnKTLhnxQttndOFZgyaHv08RgrY.jpg',array['Jeff Nichols'],'2011-09-30','120',array['Michael Shannon','Jessica Chastain','Katy Mixon','Shea Whigham','Ray McKinnon'],'Salut tout le monde ! J''ai longuement hésité concernant le film de la semaine. 12 Hommes en Colère, Equilibrium, The Mist, The Frighteners ou encore le director''s cut de Daredevil (ne riez pas trop vite, ce film, loin d''être parfait, a subi une grosse injustice à sa sortie à cause de la prod) auraient pu être proposés mais je reste finalement sur le choix qui s''est imposé initialement : Take Shelter écrit et réalisé par Jeff Nichols, un de mes cinéastes préférés (et accessoirement un de mes films préférés). 
-On y retrouve Michael Shannon dans le rôle de Curtis LaForche, un père de famille dans une banlieue de province qui est de plus en plus en proie à des visions apocalyptiques. Un problème qu''il tente de cacher à sa femme Samantha (Jessica Chastain), se réfugiant physiquement et mentalement dans la construction d''un abri sous le jardin afin de préserver sa femme et sa fille malentendante d''une apocalypse imminente.
-Je ne souhaite vraiment pas en dire plus afin de ne pas ternir d''une quelconque façon votre visionnage. J''ai très hâte d''avoir vos retours et surtout de discuter du film.','2022-02-07',22,3,array['Thriller','Drame','Horreur'],array['English'],array['United States of America']);
-SELECT new_movie('Gone Girl','Gone Girl','https://image.tmdb.org/t/p/original/7xkJ1ACu40BjzLHVPRILWjFvW7.jpg',array['David Fincher'],'2014-10-01','145',array['Ben Affleck','Rosamund Pike','Neil Patrick Harris','Tyler Perry','Carrie Coon'],'Ce jour de Saint-Valentin je vous propose de voir ou revoir l''une des plus belle histoire d''amour du cinéma moderne : Gone Girl (2014) de David Fincher d''après l''œuvre de Gillian Flynn.
-Le pitch : Ben et Rosamund se kiffent trop, mais un jour…
-Si avec ça vous n''avez pas envie de le voir c''est que vous êtes biens difficiles.','2022-02-14',14,3,array['Mystère','Thriller','Drame'],array['English'],array['United States of America']);
-SELECT new_movie('Copland','Cop Land','https://image.tmdb.org/t/p/original/zp2vxJVMkSSyoaF4vX6P9pLLtt0.jpg',array['James Mangold'],'1997-08-15','104',array['Sylvester Stallone','Harvey Keitel','Ray Liotta','Robert De Niro','Peter Berg'],'Bonjour à tous, pour cette semaine, je vous propose de voir (ou de revoir) Copland de James Mangold (Ford vs Ferrari, Logan, Walk the Line), sorti en 1997. C''est son deuxième film en tant que réalisateur, et il se retrouve déjà avec un gros casting, notamment avec De Niro, Stallone, Keitel, ou Ray Liotta.
-Synopsis:  Garrison, cité-dortoir du New Jersey, est surnommée «Copland», en raison des nombreux policiers new-yorkais qui y habitent. Freddy Heflin, le shérif de Garrison, rêve d''intégrer la police de New York. Lorsque Murray Babitch, un jeune officier, tue deux Noirs, Heflin découvre un vaste réseau de corruption...','2022-02-21',30,3,array['Action','Crime','Drame'],array['English'],array['United States of America']);
-SELECT new_movie('Victoria','Victoria','https://image.tmdb.org/t/p/original/wWMDg02KtaB9Pa4UC1OmJkKL0hV.jpg',array['Sebastian Schipper'],'2015-06-11','138',array['Laia Costa','Frederick Lau','Franz Rogowski','Burak Yiğit','Max Mauff'],'Salut à tous !
-Pour cette semaine je vous propose Victoria de Sebastian Schipper.
-Victoria ça raconte l''histoire d''une jeune femme espagnole, fraîchement débarquée à Berlin, qui se laisse embarquer par quatre garçons dans une virée nocturne qui va rapidement déraper.
-Mais c''est surtout un impressionnant plan séquence de plus de deux heures qui m''avait scotché lors de mon premier visionnage. Voilà pourquoi je vous propose de le découvrir ou le redécouvrir aujourd''hui.','2022-02-28',31,3,array['Crime','Thriller','Romance'],array['Deutsch','Español','English'],array['Germany']);
-SELECT new_movie('The Power of the Dog','The Power of the Dog','https://image.tmdb.org/t/p/original/uJauPbe1UWaAfJB7UBOM2jDBEAT.jpg',array['Jane Campion'],'2021-11-17','125',array['Benedict Cumberbatch','Kodi Smit-McPhee','Kirsten Dunst','Jesse Plemons','Thomasin McKenzie'],'Cette semaine je vous propose de découvrir la dernière oeuvre d''une grande cinéaste : Jane Campion.
-Habituée des festival, c''est une des figures féminines majeures  du cinéma contemporain qui a su, je le pense, tirer partie d''une formation académique en anthropologie pour sonder et restituer sa perception de l''âme humaine et la complexité des relations sociales.
-Après deux saisons de Top of The Lake, Campion revient au ''cinéma'' (c''est une production Netflix) et adapte The Power of the Dog (2021), un drame qui s''attache à traiter de la masculinité toxique, dans le milieu des garçons vachers du Montana en dans les années 20 (celles de l''autre siècle).
-C''est l''occasion pour moi, je l''espère, de me réconcilier avec un cinéma qui m''a toujours soufflé le chaud et le froid. Sachant qu''au pire, les plaines néo-zélandaises vaudront malgré tout le temps investi.
-Côté palmarès, la coqueluche des festivals a récolté le lion d''argent du meilleur réalisateur à Venise, 3 Golden Globes et 12 nominations aux Oscars, si tant est que les événements d''auto-congratulation soient signifiants et des indicateurs fiables et pertinents.
-Bonne semaine et bon film !','2022-03-09',2,3,array['Drame','Western'],array['English'],array['Australia','Canada','Greece','New Zealand','United Kingdom']);
-SELECT new_movie('Ascenseur pour l''échafaud','Ascenseur pour l''échafaud','https://image.tmdb.org/t/p/original/r6iFAvndVjJmGBK955zL0gwGtuq.jpg',array['Louis Malle'],'1958-01-29','88',array['Jeanne Moreau','Maurice Ronet','Georges Poujouly','Yori Bertin','Lino Ventura'],'Bonjour à tous. Cette semaine, je vous propose Ascenseur pour l’échafaud de Louis Malle.
-Je ne l’ai jamais vu mais j’ai effleuré la filmographie de son réalisateur et à chaque fois ça a fait mouche.
-Il est considéré comme l’un des premiers films de la nouvelle vague et comme un grand film noir. Casting impressionnant, musique de Miles Davis, à priori peu de chance que je sois déçu. Hâte de découvrir ça avec vous.
-Bon visionnage !
-(J’ai hésité avec Le Voleur du même Louis Malle mais il était beaucoup moins dispo. Je le recommande chaudement, c’est un de mes films préférés. Belmondo y est parfait).','2022-03-15',1,3,array['Crime','Drame','Thriller'],array['Deutsch','Français'],array['France']);
-SELECT new_movie('Memories of Murder','살인의 추억','https://image.tmdb.org/t/p/original/fz5NYI8PUmPplu3UA70AOqEDJL7.jpg',array['Bong Joon-ho'],'2003-05-02','129',array['Song Kang-ho','Kim Sang-kyung','Kim Roi-ha','Jae-ho Song','Park Hae-il'],'Je profite de ce début de printemps pour vous proposer un film de saison. Memories of Murder, puisque c''est de lui qu''il s''agit, est un film de Corée du Sud, dirigé par Bong Joon-Ho. Sortit en 2003, en pleine canicule ou presque, il narre la traque d''un individu peu recommandable par un duo de policier moustachus.','2022-03-21',14,3,array['Crime','Drame','Thriller'],array['한국어/조선말','English'],array['South Korea']);
-SELECT new_movie('Ali','Ali','https://image.tmdb.org/t/p/original/7qJmvv6vIs810icshXo0FeEqGuc.jpg',array['Michael Mann'],'2001-12-10','157',array['Will Smith','Jamie Foxx','Jon Voight','Mario Van Peebles','Ron Silver'],'Bonjour à tous, au vu de l’actualité, cette semaine je vous propose Ali de Michael Mann, sorti en 2001. Considéré comme un des meilleurs biopics, il raconte la vie de Mohamed Ali en se focalisant sur sa vie entre 64 et 74. Peut-être le meilleur rôle de Will Smith et Michael Mann derrière la caméra, ça ne peut être qu’un bon film.','2022-03-29',30,3,array['Drame'],array['English'],array['South Africa','United States of America']);
-SELECT new_movie('tick, tick... BOOM!','tick, tick... BOOM!','https://image.tmdb.org/t/p/original/wopPaXrewT53omRIqaSK3cRXOQX.jpg',array['Lin-Manuel Miranda'],'2021-11-11','115',array['Andrew Garfield','Alexandra Shipp','Robin de Jesús','Vanessa Hudgens','Joshua Henry'],'Cette semaine on se trémousse devant Tick, Tick... Boom! un film avec des chansons qui dansent, de Lin-Manuel Miranda, basé sur la comédie musicale de Jonathan Larson. Y a l''ex de Gwen Stacy dedans et la fille qui jouait Kelly dans Bad Boys for life avec Will. Forcément ça donne super envie à tout le monde. En plus c''est un film Netflix. Un gage de qualité.','2022-04-06',14,3,array['Drame'],array['English','Español'],array['United States of America']);
-SELECT new_movie('Kate','Kate','https://image.tmdb.org/t/p/original/3P2DglSM20g8B27OQn3Ge4yM2Gz.jpg',array['Cedric Nicolas-Troyan'],'2021-09-10','106',array['Mary Elizabeth Winstead','Woody Harrelson','Tadanobu Asano','Miku Martineau','Jun Kunimura'],'Cette semaine, fi de la musique, fi de la poesie, on balance des pruneaux et on botte des culs avec KATE de Cédric Nicolas-Troyan, exclu Netflix sortie en 2021 ou comment surfer sur la vague John Wick mais au féminin avec Mary Elisabeth Winstead dans le rôle titre.','2022-04-11',27,3,array['Action'],array['English','日本語'],array['Japan','Thailand','United States of America']);
-SELECT new_movie('Donnie Darko','Donnie Darko','https://image.tmdb.org/t/p/original/z3gIuT4e4tjCKYEYJChcBI44U21.jpg',array['Richard Kelly'],'2001-10-24','114',array['Jake Gyllenhaal','Jena Malone','James Duval','Drew Barrymore','Beth Grant'],'Le peuple à parlé, et c''est le lapinou qui l''emporte d''une courte tête.
-Je vous propose donc de découvrir ou de redécouvrir un de mes films préférés : Donnie Darko
-Réalisé par Richard Kelly en 2001 avec Jake Gyllenhaal dans le rôle titre, le film raconte la vie d''un adolescent tourmenté dont la vie va basculer après avoir miraculeusement échappé à un accident.
-C''est disponible sur MyCanal et la plupart des plateformes de location ou en MP pour un prêt.
-Bon visionnage !','2022-04-18',31,3,array['Fantastique','Drame','Mystère'],array['English'],array['United States of America']);
-SELECT new_movie('Doomsday','Doomsday','https://image.tmdb.org/t/p/original/qqz5E5KOz7IUwa2BmU3sGVoFDdC.jpg',array['Neil Marshall'],'2008-03-14','112',array['Rhona Mitra','Bob Hoskins','Adrian Lester','Alexander Siddig','David O''Hara'],'Vous n''avez rien vu. On recommence tout depuis le début.
-Suite à une campagne de vote chaotique comprenant en vrac votes multiples frauduleux, retournement de veste éhonté durant le dépouillement, indécision caractérisée du pouvoir décisionnaire (c''est à dire moi ) je me vois contraint par moi même de prendre des mesures exceptionnelles et drastiques!
-Encore plus puissant et plus impérieux qu''un 49.3 dégainé par gang de baltringues en costard j''invoque ici et maintenant le point Olive qui tue ! Ce faisant le résultat dudit vote est balayé, outrepassé par le bulletin du fruit dégueulasse sus nommé.
-Nous allons donc souffrir tous ensemble car c''est donc la vache qui l''emporte!
-Cette semaine je vous propose donc Doomsday ( de 2008 lui aussi ) réalisé par Neil Marshall sur un scenario de Neil Marshall avec en ''tête'' d''affiche Rhona Mitra !
-''Thriller d''action futuriste'' aussi con qu''un fanzouze, j''en garde à la fois le souvenir d''une séance de cinéma trèèèès longue et éprouvante mais aussi moult facepalm hilarants.
-Comme je disais un peu plus tôt ce n''est pas un film que j''ai particulièrement envie de revoir mais j''ai par contre très envie d''entendre vos retour dessus. De plus en allant voir la fiche IMDB j''ai été très surpris du 5.9 qu''il se tape, je le voyais beaucoup plus bas que ça. Du coup je suis tout de même curieux de voir quel regard je porterai sur ce film aujourd''hui. Peut-être que mon goût pour le nanard qui s''est depuis développé offrira un semblant de rédemption à ce truc ?
-Bref Doomsday dispo sur Prime, enjoy! ( Checco, je t''expliquerai pourquoi les meumeu m''ont marquées ensuite )','2022-04-25',26,3,array['Action','Thriller','Science-Fiction'],array['English'],array['Germany','United Kingdom','United States of America','South Africa']);
-SELECT new_movie('The Dictator','The Dictator','https://image.tmdb.org/t/p/original/zKcCaWewiEF2XGJDSureoXb2uoo.jpg',array['Larry Charles'],'2012-05-15','83',array['Sacha Baron Cohen','Ben Kingsley','Anna Faris','Jason Mantzoukas','Sayed Badreya'],'Je cherchais un film absurde, drôle ou politiquement incorrecte. J’avais d’abord pensé à Tonnerre sous les Tropiques (Tropic Thunder, 2008), mais finalement je l’ai trouvé trop convenu/connu. Alors, j’ai plutôt pensé au Le Fantôme de la liberté (1974) de Buñuel. Mais en le rematant (voyez comme je prends mon travail de proposeur au sérieux), je l’ai trouvé pas assez absurde et drôle, un peu déçu quoi. Alors, je me suis retourné vers ce vieux Chaplin, avec naturellement* Le Dictateur* (The Great Dictator, 1940), que tout le monde connaît, mais que personne n’a réellement vu en entier. Pareil (et ramaté) ce n’est pas un film super drôle/absurde, certes il montre l’absurdité des régimes fascistes, se moque de Hitler et Benito, mais son discours est une mise en garde, qui par les temps qui courent, on en sort le cœur lourd. Bon finalement, j’ai retiré Great, et je vous propose donc plutôt … Le Dictateur (The Dictator, 2012), de Larry Charles, avec naturellement Sacha Cohen ! Niveau humour con, vous serez servi !','2022-05-02',9,3,array['Comédie'],array['English','עִבְרִית'],array['United States of America']);
-SELECT new_movie('Chasseurs de Dragons','Chasseurs de dragons','https://image.tmdb.org/t/p/original/gHjcaVaXVqjYItJzjD5Y8YrXh84.jpg',array['Guillaume Ivernel','Arthur Qwak'],'2008-03-19','82',array['Vincent Lindon','Patrick Timsit','Philippe Nahon','Amanda Lear','Marie Drion'],'Alors, au menu cette semaine, je vous propose Chasseur de dragons, un film réalisé par Guillaume Ivernel, Arthur Qwak, produit par Philippe Delarue et Futurikon et sorti en 2008. Un des seuls films d''animation français que je peux visionner sans avoir envie de me petit-suissider (ref) et qui ne donne pas trop l''impression de prendre nos chères têtes blondes (rousses,brunes, bref) pour des c@ns. ça casse pas trois pattes à un c@nnard et le design des persos m''a rendue perplexe quand je l''ai visionné la première fois mais, l''ambiance complètement désolée, les paysages claqués de fou et certains passages un peu malaisants laissent une sensation de vide, chelou, mais pas déplaisante. C''est doublé avec de vrais acteurs, y''a des plans biens sympas, une bo pas dégueu (Klaus Badelt) bref, y''a moyen de passer un bon moment sans  se prendre le chou. Ah, ce film est adapté de la série animée du même nom, toujours du môsieur Qwak. Dispo sur Amazon Prime seulement (hélas, ni sur Netflix ou Disney +). Bon visionnage !','2022-05-10',32,3,array['Animation','Familial'],array['العربية','Français','Español'],array['France']);
-SELECT new_movie('Les Pleins Pouvoirs','Absolute Power','https://image.tmdb.org/t/p/original/sU0SPvZPJj9AORrCqoI8JnhJiIw.jpg',array['Clint Eastwood'],'1997-02-14','121',array['Clint Eastwood','Gene Hackman','Ed Harris','Laura Linney','Scott Glenn'],'Au menu cette semaine, j''ai envie de vous replonger dans l''ambiance si particulière des grands thrillers flamboyants des nineties ! Réalisation mineure d''un cinéaste majeur, Absolute Power (Les Pleins Pouvoirs, 1997) signe le retour aux affaires de Clint Eastwood, alors au sommet de sa gloire de réalisateur après les triomphes publics et critiques d''Impitoyable, et Sur la route de Maddison. Seulement voilà, ce thriller politique au casting cinq étoiles (les merveilleux Gene Hackman et Ed Harris sont de la partie) signe une phase de déclin pour Clint, avec une réception tiède aux Etats-Unis qui poussera Eastwood à annuler sa venue à Cannes, où le film devait être présenté en clôture de festival. Pourtant, le film bénéficiera d''un excellent accueil en France. Adapté du roman éponyme de David Baldacci, Absolute Power reste intéressant en ce qu''il est un témoignage limpide de la pensée politique du Clint : une méfiance totale envers un pouvoir central corrompu à tous les niveaux, auquel il oppose un héros certes hors-la-loi mais respectueux d''un code d''honneur. Bon visionnage ! ','2022-05-16',21,3,array['Crime','Drame','Action'],array['English','Español'],array['United States of America']);
-SELECT new_movie('Les bas-fonds','Les bas-fonds','https://image.tmdb.org/t/p/original/74yEC8c42SGC4GtWozcWcA6lmMu.jpg',array['Jean Renoir'],'1936-12-11','92',array['Jean Gabin','Suzy Prim','Louis Jouvet','Jany Holt','Junie Astor'],'Au menu cette semaine, du vieux, du très vieux même. J''ai décidé de vous proposer un film de Jean Renoir que je n''ai pas vu : Les Bas-fonds. J''ai surtout vu des films plus récent (La grande Illusion <3 , French Cancan, ...) et à chaque fois j''ai adoré. Le film est disponible sur Mycanal, c''est l''occasion de le découvrir. Il s''agit de l''adaptation d''une pièce de théâtre de Maxime Gorki dans laquelle Pépel (Jean Gabin) rencontre un baron ruiné (Louis Jouvet que j''adore) et l''accueille finalement dans la pension miteuse dans laquelle il survit. Que vous dire de plus ? Rien puisque je ne connais le film que de réputation. Hâte d''en parler avec vous. Bon visionnage.','2022-05-23',1,3,array['Romance','Crime','Drame'],array['Français'],array['France']);
-SELECT new_movie('The Square','The Square','https://image.tmdb.org/t/p/original/lqJteErtfU1rZ0Y8Z3fRrlEo4G5.jpg',array['Ruben Östlund'],'2017-08-25','142',array['Claes Bang','Elisabeth Moss','Dominic West','Terry Notary','Christopher Læssø'],'Afin de rendre hommage au palmarès 2022 (ridicule) de notre sérénissime Festival de Cannes, je vous propose pour cette semaine ex-aequo : 2 films !
-Ici je vous présente le premier d''entre eux, dicté par l''actualité, choix du jury et de l''intelligentzia Gaumont-Pathesque : The Square  de Ruben Östlund, palme d''or 2017. Film un peu drôle, sur le milieu de l''art contemporain d''avant Covid et NFT. Intéressant, et clivant.
-Disponible sur Canal+ et OCS en France et à l''achat en Suisse (à un tarif honteux).','2022-05-30',14,3,array['Drame'],array['Dansk','English','svenska'],array['Denmark','France','Germany','Sweden']);
-SELECT new_movie('Mademoiselle','아가씨','https://image.tmdb.org/t/p/original/z4cpSCLQLbe2TwDZhmf8uzsKUMj.jpg',array['Park Chan-wook'],'2016-06-01','145',array['Kim Min-hee','Kim Tae-ri','Ha Jung-woo','Cho Jin-woong','Kim Hae-sook'],'Après The Square de Östlund, je vous propose un deuxième film, choix du public, et du cœur : Mademoiselle , le plus aboutit des films de Park Chan-wook et disponible sur Prime depuis le mois dernier. Un film beau, un film malin, un film rythmé : un film bien. Récompensé en 2016 du prix technique dans notre Festival Cannois national de la honte.
-Mesdames, Messieurs faites votre choix.','2022-06-01',14,3,array['Thriller','Drame','Romance'],array['日本語','한국어/조선말'],array['South Korea']);
+SELECT new_movie(
+  'Père Noël Origines',
+  'Rare Exports',
+  'https://image.tmdb.org/t/p/original/eWJQaLdVP6TFYc6NTJp4HJAU5Jw.jpg',
+  array['Jalmari Helander'],
+  '2010-12-03',
+  '80',
+  array['Per Christian Ellefsen','Jorma Tommila','Tommi Korpela','Onni Tommila','Jonathan Hutchings'],
+  'Cette semaine, semaine des fêtes de Noël, je vous propose ''Père Noël Origines'' ou ''Rare Exports: A Christmas Tale'' de Jalmari Helander, film finlando-franco-norvégio-suédois. En Finlande, près de la frontière russo-finlandaise un homme d''affaires engage des chercheurs pour découvrir l''un des plus grands mystères de Noël. Les habitants sont menacés par ce qu''ils découvrent, un jeune garçon apprend la vraie nature du Père Noël et doit trouver un moyen de sauver les habitants et Noël ! C''est sombre, mais pas trop, et ça puise dans le réservoir de la mythologie du Père Noël et ce qui l''entoure. C''est aussi un film sincère et rédempteur sans être trop mesquin. Et si vous êtes d''humeur à casser du vieux (Et pas en salle de cinéma cette fois-ci) vous êtes au bon endroit. C''est un buffet nordique à l''écran.',
+  '2021-12-21',
+  17,
+  2,
+  array['Fantastique'],
+  array['English','suomi'],
+  array['Finland','France','Norway','Sweden'])
+;
+-- SEASON 3
+SELECT new_movie(
+  'Okkadu',
+  'ఒక్కడు',
+  'https://image.tmdb.org/t/p/original/1JU2kNk4D7B5E2sWY2IMbyMqjqe.jpg',
+  array['Gunasekhar'],
+  '2003-01-15',4
+  '170',
+  array['Mahesh Babu','Bhumika Chawla','Prakash Raj','Mukesh Rishi','Geetha'],
+  'C’est avec grand plaisir que j’ouvre cette saison 3 de Cinévorace grâce à la confiance de Yves Signal. Ayant découvert le Kabaddi avec une série animée nommé Shakunetsu Kabaddi (https://myanimelist.net/anime/42395/Shakunetsu_Kabaddi), je me suis dit, pourquoi ne pas proposer un film sur ce thème. Ils existent plusieurs films sur le sujet, mais je vous propose Okkadu (2003), car il semble avoir de bonnes critiques, bien que malheureusement je crois que le Kabaddi joue un rôle mineur. Le film n’est bien sûr disponible nulle part (sauf Amazone prime aux US/UK?), par contre il est disponible sur YouTube avec des sous-titres anglais uniquement: https://www.youtube.com/watch?v=KbvPhITOhrw Mais grâce à la magie de YouTube, il est possible de faire traduire les sous-titres anglais à la volée en français! (si vous comprenez l''anglais j''éviterais cette option :p)',
+  '2022-01-02',
+  7,
+  3,
+  array['Action','Drame'],
+  array['తెలుగు'],
+  array['India'])
+;
+SELECT new_movie(
+  'La Vie rêvée de Walter Mitty',
+  'The Secret Life of Walter Mitty',
+  'https://image.tmdb.org/t/p/original/1WKxLcAmM4liIaZ3aLEE123HrJG.jpg',
+  array['Ben Stiller'],
+  '2013-12-18',
+  '114',
+  array['Ben Stiller','Kristen Wiig','Sean Penn','Shirley MacLaine','Adam Scott'],
+  'Au menu de cette semaine je vous propose un film disponible sur Disney +, La vie rêvée de Walter Mitty avec Ben Stiller et réalisé par lui même en 2013 ( 2013? put*** déjà? Fichtre...). C''est un film que j''avais découvert sans rien en connaître, hormis l''acteur principal que j''aime beaucoup et ce fut un visionnage très agréable. Je vous colle un résumé osef trouvé sur allo ciné pour le principe mais franchement vous focalisez pas là dessus et allez y en yolo comme moi. Walter Mitty est un homme ordinaire, enfermé dans son quotidien, qui n’ose s’évader qu’à travers des rêves à la fois drôles et extravagants. Mais confronté à une difficulté dans sa vie professionnelle, Walter doit trouver le courage de passer à l''action dans le monde réel. Il embarque alors dans un périple incroyable, pour vivre une aventure bien plus riche que tout ce qu''il aurait pu imaginer jusqu’ici. Et qui devrait changer sa vie à jamais.',
+  '2022-01-10',
+  26,
+  3,
+  array['Aventure','Comédie','Drame','Fantastique'],
+  array['English','Íslenska','Español'],array['United States of America','United Kingdom'])
+;
+SELECT new_movie(
+  'The Descent',
+  'The Descent',
+  'https://image.tmdb.org/t/p/original/gCsVUf2HyfYub0IwByeJ9Ld4dLQ.jpg',
+  array['Neil Marshall'],
+  '2005-07-08',
+  '109',
+  array['Shauna Macdonald','Natalie Mendoza','Alex Reid','MyAnna Buring','Saskia Mulder'],
+  'Pour cette semaine je vous propose The Descent, un film de Neil Marshall (2005). Pour le pitch c’est un groupe de copines qui s’embarque dans l’exploration d’une cavité souterraine à l’occasion d’un week-end de retrouvailles entre amatrices d’activités nature et d’adrénaline. Mais, spoiler alert : ça tourne mal ! Je n’en dis pas beaucoup plus pour vous laisser découvrir le film. J’ai beaucoup aimé son ambiance générale qui évolue au cours du temps. PS : Je vous le déconseille si vous prévoyez une sortie spéléo ce week-end...',
+  '2022-01-17',
+  10,
+  3,
+  array['Aventure','Horreur'],array['English'],array['United Kingdom'])
+;
+SELECT new_movie(
+  'Le Corbeau',
+  'Le Corbeau',
+  'https://image.tmdb.org/t/p/original/wM87JtxQqD0bq8xyAvlmuNbI66B.jpg',
+  array['Henri-Georges Clouzot'],
+  '1943-09-28',
+  '92',
+  array['Pierre Fresnay','Ginette Leclerc','Micheline Francey','Héléna Manson','Jeanne Fusier-Gir'],
+  'Bonjour tout le monde ! Cette semaine, je vous propose de souffler la poussière sur l''étagère des classiques, pour dégager un film au contexte sulfureux et ô combien débattu, mais qui me semble constituer un jalon important bien que souvent oublié de l''histoire du cinéma français. Retour en 1943, donc, pour Le Corbeau, d''Henri-Georges Clouzot. Impossible de passer sous silence le contexte de sortie du film : produit en plein cœur de l''occupation par la Continental, passée sous pavillon allemand et dirigée par Alfred Greven - chargé en ligne directe par Goebbels de superviser toute la production cinématographique française pour l''en dépouiller de tout message politique au profit du divertissement le plus inoffensif -, le film relate l''enquête d''un médecin fraîchement nommé dans un petit village français pour retrouver l''auteur anonyme de lettres de dénonciation qui sèment la panique, la rancœur et le chaos parmi les habitants. Inspiré d''un fait réel, le scénario parviendra à franchir tous les barrages de la censure nazie, sous le prétexte de ne jamais faire intervenir l''occupant, de se concentrer sur une intrigue purement française, pour finalement s''attirer les foudres tant des collabos (qui y virent, assez justement, une dénonciation de la délation) que des résistants, qui bannirent Clouzot dès la Libération de toute possibilité de travailler en France, avant que son sort ne soit revu et sauvé quelques années plus tard par quelques intellectuels et artistes, qui parvinrent à le réhabiliter. On pourrait entrer bien plus en détail dans la carrière de Clouzot, son travail sous l''occupation qui ne l''empêcha pourtant pas de développer des thèmes honnis tant par la censure que la bonne société conservatrice, mais je laisse peut-être cela pour la prochaine Grande Bouffe. Car au-delà de la polémique historique, Le Corbeau est un grand film, chers amis ! Véritable jeu de massacre, peinture d''un effondrement des valeurs au sein d''un groupe d''individus où la justice est impuissante et laisse place à la vengeance personnelle, tableau grisant mais glaçant de l''ambigüité humaine et de la part d''ombre ancrée en chacun de nous, il s''agit non seulement d''un discours philosophique passionnant de complexité et de profondeur, mais également d''une belle leçon de mise en scène. Dans un noir et blanc de grande qualité, Clouzot déploie une solide science du cadre et du récit visuel, comme cette scène mémorable d''une lampe qui se balance (je n''en dis pas plus), et offre à Pierre Fresnay un très grand rôle. Bon visionnage !',
+  '2022-01-24',
+  21,
+  3,
+  array['Drame','Thriller','Crime','Mystère'],
+  array['Français'],
+  array['France'])
+;
+SELECT new_movie(
+  'Train de vie',
+  'Train de vie',
+  'https://image.tmdb.org/t/p/original/3KtZfqNpUXPJkF4OYqNhELbH6ep.jpg',
+  array['Radu Mihăileanu'],
+  '1998-09-16',
+  '103',
+  array['Lionel Abelanski','Rufus','Clément Harari','Agathe de La Fontaine','Michel Muller'],
+  'Malheureusement, l’actualité étant par moment toujours la même qu’il y a 80 ans, je vous propose un film comique sur ce thème pas très joyeux que fut la déportation, je vous propose Train de vie (1998) réalisé par Radu Mihaileanu. Attention, mon premier visionnage date d’il y a plus de 20 ans ! (aïe), mais j’en garde plutôt un bon souvenir, on verra ce que ça va donner. En toute cas, je suis ravi de le redécouvrir avec mon regard de vieux et de le partager avec vous. En effet, il me semble qu’il soit vite rentré dans l’oubli le plus total. Ou le voir ? Et ben c’est très compliqué, il me semble qu’il soit introuvable, c’est ça de tomber dans l’oubli. Alors n’hésitez pas à MP pour un prêt. @Morbo sapin roi des gorets, tu devrais trouver quelques rouflaquettes.',
+  '2022-01-30',
+  9,
+  3,
+  array['Drame','Comédie','Guerre'],
+  array['Deutsch','Français'],
+  array['Belgium','Israel','Netherlands','Romania','France'])
+;
+SELECT new_movie(
+  'Take Shelter',
+  'Take Shelter',
+  'https://image.tmdb.org/t/p/original/pnKTLhnxQttndOFZgyaHv08RgrY.jpg',
+  array['Jeff Nichols'],
+  '2011-09-30',
+  '120',
+  array['Michael Shannon','Jessica Chastain','Katy Mixon','Shea Whigham','Ray McKinnon'],
+  'Salut tout le monde ! J''ai longuement hésité concernant le film de la semaine. 12 Hommes en Colère, Equilibrium, The Mist, The Frighteners ou encore le director''s cut de Daredevil (ne riez pas trop vite, ce film, loin d''être parfait, a subi une grosse injustice à sa sortie à cause de la prod) auraient pu être proposés mais je reste finalement sur le choix qui s''est imposé initialement : Take Shelter écrit et réalisé par Jeff Nichols, un de mes cinéastes préférés (et accessoirement un de mes films préférés). On y retrouve Michael Shannon dans le rôle de Curtis LaForche, un père de famille dans une banlieue de province qui est de plus en plus en proie à des visions apocalyptiques. Un problème qu''il tente de cacher à sa femme Samantha (Jessica Chastain), se réfugiant physiquement et mentalement dans la construction d''un abri sous le jardin afin de préserver sa femme et sa fille malentendante d''une apocalypse imminente. Je ne souhaite vraiment pas en dire plus afin de ne pas ternir d''une quelconque façon votre visionnage. J''ai très hâte d''avoir vos retours et surtout de discuter du film.',
+  '2022-02-07',
+  22,
+  3,
+  array['Thriller','Drame','Horreur'],
+  array['English'],
+  array['United States of America'])
+;
+SELECT new_movie(
+  'Gone Girl',
+  'Gone Girl',
+  'https://image.tmdb.org/t/p/original/7xkJ1ACu40BjzLHVPRILWjFvW7.jpg',
+  array['David Fincher'],
+  '2014-10-01',
+  '145',
+  array['Ben Affleck','Rosamund Pike','Neil Patrick Harris','Tyler Perry','Carrie Coon'],
+  'Ce jour de Saint-Valentin je vous propose de voir ou revoir l''une des plus belle histoire d''amour du cinéma moderne : Gone Girl (2014) de David Fincher d''après l''œuvre de Gillian Flynn. Le pitch : Ben et Rosamund se kiffent trop, mais un jour… Si avec ça vous n''avez pas envie de le voir c''est que vous êtes biens difficiles.',
+  '2022-02-14',
+  14,
+  3,
+  array['Mystère','Thriller','Drame'],
+  array['English'],
+  array['United States of America'])
+;
+SELECT new_movie(
+  'Copland',
+  'Cop Land',
+  'https://image.tmdb.org/t/p/original/zp2vxJVMkSSyoaF4vX6P9pLLtt0.jpg',
+  array['James Mangold'],
+  '1997-08-15',
+  '104',
+  array['Sylvester Stallone','Harvey Keitel','Ray Liotta','Robert De Niro','Peter Berg'],
+  'Bonjour à tous, pour cette semaine, je vous propose de voir (ou de revoir) Copland de James Mangold (Ford vs Ferrari, Logan, Walk the Line), sorti en 1997. C''est son deuxième film en tant que réalisateur, et il se retrouve déjà avec un gros casting, notamment avec De Niro, Stallone, Keitel, ou Ray Liotta. Synopsis:  Garrison, cité-dortoir du New Jersey, est surnommée «Copland», en raison des nombreux policiers new-yorkais qui y habitent. Freddy Heflin, le shérif de Garrison, rêve d''intégrer la police de New York. Lorsque Murray Babitch, un jeune officier, tue deux Noirs, Heflin découvre un vaste réseau de corruption...',
+  '2022-02-21',
+  30,
+  3,
+  array['Action','Crime','Drame'],
+  array['English'],
+  array['United States of America'])
+;
+SELECT new_movie(
+  'Victoria',
+  'Victoria',
+  'https://image.tmdb.org/t/p/original/wWMDg02KtaB9Pa4UC1OmJkKL0hV.jpg',
+  array['Sebastian Schipper'],
+  '2015-06-11',
+  '138',
+  array['Laia Costa','Frederick Lau','Franz Rogowski','Burak Yiğit','Max Mauff'],
+  'Salut à tous ! Pour cette semaine je vous propose Victoria de Sebastian Schipper. Victoria ça raconte l''histoire d''une jeune femme espagnole, fraîchement débarquée à Berlin, qui se laisse embarquer par quatre garçons dans une virée nocturne qui va rapidement déraper. Mais c''est surtout un impressionnant plan séquence de plus de deux heures qui m''avait scotché lors de mon premier visionnage. Voilà pourquoi je vous propose de le découvrir ou le redécouvrir aujourd''hui.',
+  '2022-02-28',
+  31,
+  3,
+  array['Crime','Thriller','Romance'],
+  array['Deutsch','Español','English'],
+  array['Germany'])
+;
+SELECT new_movie(
+  'The Power of the Dog','The Power of the Dog',
+  'https://image.tmdb.org/t/p/original/uJauPbe1UWaAfJB7UBOM2jDBEAT.jpg',
+  array['Jane Campion'],
+  '2021-11-17',
+  '125',
+  array['Benedict Cumberbatch','Kodi Smit-McPhee','Kirsten Dunst','Jesse Plemons','Thomasin McKenzie'],
+  'Cette semaine je vous propose de découvrir la dernière oeuvre d''une grande cinéaste : Jane Campion. Habituée des festival, c''est une des figures féminines majeures  du cinéma contemporain qui a su, je le pense, tirer partie d''une formation académique en anthropologie pour sonder et restituer sa perception de l''âme humaine et la complexité des relations sociales. Après deux saisons de Top of The Lake, Campion revient au ''cinéma'' (c''est une production Netflix) et adapte The Power of the Dog (2021), un drame qui s''attache à traiter de la masculinité toxique, dans le milieu des garçons vachers du Montana en dans les années 20 (celles de l''autre siècle). C''est l''occasion pour moi, je l''espère, de me réconcilier avec un cinéma qui m''a toujours soufflé le chaud et le froid. Sachant qu''au pire, les plaines néo-zélandaises vaudront malgré tout le temps investi. Côté palmarès, la coqueluche des festivals a récolté le lion d''argent du meilleur réalisateur à Venise, 3 Golden Globes et 12 nominations aux Oscars, si tant est que les événements d''auto-congratulation soient signifiants et des indicateurs fiables et pertinents. Bonne semaine et bon film !',
+  '2022-03-09',
+  2,
+  3,
+  array['Drame','Western'],
+  array['English'],
+  array['Australia','Canada','Greece','New Zealand','United Kingdom'])
+;
+SELECT new_movie(
+  'Ascenseur pour l''échafaud',
+  'Ascenseur pour l''échafaud',
+  'https://image.tmdb.org/t/p/original/r6iFAvndVjJmGBK955zL0gwGtuq.jpg',
+  array['Louis Malle'],
+  '1958-01-29',
+  '88',
+  array['Jeanne Moreau','Maurice Ronet','Georges Poujouly','Yori Bertin','Lino Ventura'],
+  'Bonjour à tous. Cette semaine, je vous propose Ascenseur pour l’échafaud de Louis Malle. Je ne l’ai jamais vu mais j’ai effleuré la filmographie de son réalisateur et à chaque fois ça a fait mouche. Il est considéré comme l’un des premiers films de la nouvelle vague et comme un grand film noir. Casting impressionnant, musique de Miles Davis, à priori peu de chance que je sois déçu. Hâte de découvrir ça avec vous. Bon visionnage ! (J’ai hésité avec Le Voleur du même Louis Malle mais il était beaucoup moins dispo. Je le recommande chaudement, c’est un de mes films préférés. Belmondo y est parfait).',
+  '2022-03-15',
+  1,
+  3,
+  array['Crime','Drame','Thriller'],
+  array['Deutsch','Français'],
+  array['France'])
+;
+SELECT new_movie(
+  'Memories of Murder',
+  '살인의 추억',
+  'https://image.tmdb.org/t/p/original/fz5NYI8PUmPplu3UA70AOqEDJL7.jpg',
+  array['Bong Joon-ho'],
+  '2003-05-02',
+  '129',
+  array['Song Kang-ho','Kim Sang-kyung','Kim Roi-ha','Jae-ho Song','Park Hae-il'],
+  'Je profite de ce début de printemps pour vous proposer un film de saison. Memories of Murder, puisque c''est de lui qu''il s''agit, est un film de Corée du Sud, dirigé par Bong Joon-Ho. Sortit en 2003, en pleine canicule ou presque, il narre la traque d''un individu peu recommandable par un duo de policier moustachus.',
+  '2022-03-21',
+  14,
+  3,
+  array['Crime','Drame','Thriller'],
+  array['한국어/조선말','English'],
+  array['South Korea'])
+;
+SELECT new_movie(
+  'Ali',
+  'Ali',
+  'https://image.tmdb.org/t/p/original/7qJmvv6vIs810icshXo0FeEqGuc.jpg',
+  array['Michael Mann'],
+  '2001-12-10',
+  '157',
+  array['Will Smith','Jamie Foxx','Jon Voight','Mario Van Peebles','Ron Silver'],
+  'Bonjour à tous, au vu de l’actualité, cette semaine je vous propose Ali de Michael Mann, sorti en 2001. Considéré comme un des meilleurs biopics, il raconte la vie de Mohamed Ali en se focalisant sur sa vie entre 64 et 74. Peut-être le meilleur rôle de Will Smith et Michael Mann derrière la caméra, ça ne peut être qu’un bon film.',
+  '2022-03-29',
+  30,
+  3,
+  array['Drame'],
+  array['English'],
+  array['South Africa','United States of America'])
+;
+SELECT new_movie(
+  'tick, tick... BOOM!',
+  'tick, tick... BOOM!',
+  'https://image.tmdb.org/t/p/original/wopPaXrewT53omRIqaSK3cRXOQX.jpg',
+  array['Lin-Manuel Miranda'],
+  '2021-11-11',
+  '115',
+  array['Andrew Garfield','Alexandra Shipp','Robin de Jesús','Vanessa Hudgens','Joshua Henry'],
+  'Cette semaine on se trémousse devant Tick, Tick... Boom! un film avec des chansons qui dansent, de Lin-Manuel Miranda, basé sur la comédie musicale de Jonathan Larson. Y a l''ex de Gwen Stacy dedans et la fille qui jouait Kelly dans Bad Boys for life avec Will. Forcément ça donne super envie à tout le monde. En plus c''est un film Netflix. Un gage de qualité.',
+  '2022-04-06',
+  14,
+  3,
+  array['Drame'],
+  array['English','Español'],
+  array['United States of America'])
+;
+SELECT new_movie(
+  'Kate',
+  'Kate',
+  'https://image.tmdb.org/t/p/original/3P2DglSM20g8B27OQn3Ge4yM2Gz.jpg',
+  array['Cedric Nicolas-Troyan'],
+  '2021-09-10',
+  '106',
+  array['Mary Elizabeth Winstead','Woody Harrelson','Tadanobu Asano','Miku Martineau','Jun Kunimura'],
+  'Cette semaine, fi de la musique, fi de la poesie, on balance des pruneaux et on botte des culs avec KATE de Cédric Nicolas-Troyan, exclu Netflix sortie en 2021 ou comment surfer sur la vague John Wick mais au féminin avec Mary Elisabeth Winstead dans le rôle titre.',
+  '2022-04-11',
+  27,
+  3,
+  array['Action'],
+  array['English','日本語'],
+  array['Japan','Thailand','United States of America'])
+;
+SELECT new_movie(
+  'Donnie Darko',
+  'Donnie Darko',
+  'https://image.tmdb.org/t/p/original/z3gIuT4e4tjCKYEYJChcBI44U21.jpg',
+  array['Richard Kelly'],
+  '2001-10-24',
+  '114',
+  array['Jake Gyllenhaal','Jena Malone','James Duval','Drew Barrymore','Beth Grant'],
+  'Le peuple à parlé, et c''est le lapinou qui l''emporte d''une courte tête. Je vous propose donc de découvrir ou de redécouvrir un de mes films préférés : Donnie Darko Réalisé par Richard Kelly en 2001 avec Jake Gyllenhaal dans le rôle titre, le film raconte la vie d''un adolescent tourmenté dont la vie va basculer après avoir miraculeusement échappé à un accident. C''est disponible sur MyCanal et la plupart des plateformes de location ou en MP pour un prêt. Bon visionnage !',
+  '2022-04-18',
+  31,
+  3,
+  array['Fantastique','Drame','Mystère'],
+  array['English'],
+  array['United States of America'])
+;
+SELECT new_movie(
+  'Doomsday',
+  'Doomsday',
+  'https://image.tmdb.org/t/p/original/qqz5E5KOz7IUwa2BmU3sGVoFDdC.jpg',
+  array['Neil Marshall'],
+  '2008-03-14',
+  '112',
+  array['Rhona Mitra','Bob Hoskins','Adrian Lester','Alexander Siddig','David O''Hara'],
+  'Vous n''avez rien vu. On recommence tout depuis le début. Suite à une campagne de vote chaotique comprenant en vrac votes multiples frauduleux, retournement de veste éhonté durant le dépouillement, indécision caractérisée du pouvoir décisionnaire (c''est à dire moi ) je me vois contraint par moi même de prendre des mesures exceptionnelles et drastiques! Encore plus puissant et plus impérieux qu''un 49.3 dégainé par gang de baltringues en costard j''invoque ici et maintenant le point Olive qui tue ! Ce faisant le résultat dudit vote est balayé, outrepassé par le bulletin du fruit dégueulasse sus nommé. Nous allons donc souffrir tous ensemble car c''est donc la vache qui l''emporte! Cette semaine je vous propose donc Doomsday ( de 2008 lui aussi ) réalisé par Neil Marshall sur un scenario de Neil Marshall avec en ''tête'' d''affiche Rhona Mitra ! ''Thriller d''action futuriste'' aussi con qu''un fanzouze, j''en garde à la fois le souvenir d''une séance de cinéma trèèèès longue et éprouvante mais aussi moult facepalm hilarants. Comme je disais un peu plus tôt ce n''est pas un film que j''ai particulièrement envie de revoir mais j''ai par contre très envie d''entendre vos retour dessus. De plus en allant voir la fiche IMDB j''ai été très surpris du 5.9 qu''il se tape, je le voyais beaucoup plus bas que ça. Du coup je suis tout de même curieux de voir quel regard je porterai sur ce film aujourd''hui. Peut-être que mon goût pour le nanard qui s''est depuis développé offrira un semblant de rédemption à ce truc ? Bref Doomsday dispo sur Prime, enjoy! ( Checco, je t''expliquerai pourquoi les meumeu m''ont marquées ensuite )',
+  '2022-04-25',
+  26,
+  3,
+  array['Action','Thriller','Science-Fiction'],
+  array['English'],
+  array['Germany','United Kingdom','United States of America','South Africa'])
+;
+SELECT new_movie(
+  'The Dictator',
+  'The Dictator',
+  'https://image.tmdb.org/t/p/original/zKcCaWewiEF2XGJDSureoXb2uoo.jpg',
+  array['Larry Charles'],
+  '2012-05-15',
+  '83',
+  array['Sacha Baron Cohen','Ben Kingsley','Anna Faris','Jason Mantzoukas','Sayed Badreya'],
+  'Je cherchais un film absurde, drôle ou politiquement incorrecte. J’avais d’abord pensé à Tonnerre sous les Tropiques (Tropic Thunder, 2008), mais finalement je l’ai trouvé trop convenu/connu. Alors, j’ai plutôt pensé au Le Fantôme de la liberté (1974) de Buñuel. Mais en le rematant (voyez comme je prends mon travail de proposeur au sérieux), je l’ai trouvé pas assez absurde et drôle, un peu déçu quoi. Alors, je me suis retourné vers ce vieux Chaplin, avec naturellement* Le Dictateur* (The Great Dictator, 1940), que tout le monde connaît, mais que personne n’a réellement vu en entier. Pareil (et ramaté) ce n’est pas un film super drôle/absurde, certes il montre l’absurdité des régimes fascistes, se moque de Hitler et Benito, mais son discours est une mise en garde, qui par les temps qui courent, on en sort le cœur lourd. Bon finalement, j’ai retiré Great, et je vous propose donc plutôt … Le Dictateur (The Dictator, 2012), de Larry Charles, avec naturellement Sacha Cohen ! Niveau humour con, vous serez servi !',
+  '2022-05-02',
+  9,
+  3,
+  array['Comédie'],
+  array['English','עִבְרִית'],
+  array['United States of America'])
+;
+SELECT new_movie(
+  'Chasseurs de Dragons',
+  'Chasseurs de dragons',
+  'https://image.tmdb.org/t/p/original/gHjcaVaXVqjYItJzjD5Y8YrXh84.jpg',
+  array['Guillaume Ivernel','Arthur Qwak'],
+  '2008-03-19',
+  '82',
+  array['Vincent Lindon','Patrick Timsit','Philippe Nahon','Amanda Lear','Marie Drion'],
+  'Alors, au menu cette semaine, je vous propose Chasseur de dragons, un film réalisé par Guillaume Ivernel, Arthur Qwak, produit par Philippe Delarue et Futurikon et sorti en 2008. Un des seuls films d''animation français que je peux visionner sans avoir envie de me petit-suissider (ref) et qui ne donne pas trop l''impression de prendre nos chères têtes blondes (rousses,brunes, bref) pour des c@ns. ça casse pas trois pattes à un c@nnard et le design des persos m''a rendue perplexe quand je l''ai visionné la première fois mais, l''ambiance complètement désolée, les paysages claqués de fou et certains passages un peu malaisants laissent une sensation de vide, chelou, mais pas déplaisante. C''est doublé avec de vrais acteurs, y''a des plans biens sympas, une bo pas dégueu (Klaus Badelt) bref, y''a moyen de passer un bon moment sans  se prendre le chou. Ah, ce film est adapté de la série animée du même nom, toujours du môsieur Qwak. Dispo sur Amazon Prime seulement (hélas, ni sur Netflix ou Disney +). Bon visionnage !',
+  '2022-05-10',
+  32,
+  3,
+  array['Animation','Familial'],
+  array['العربية','Français','Español'],
+  array['France'])
+;
+SELECT new_movie(
+  'Les Pleins Pouvoirs',
+  'Absolute Power',
+  'https://image.tmdb.org/t/p/original/sU0SPvZPJj9AORrCqoI8JnhJiIw.jpg',
+  array['Clint Eastwood'],
+  '1997-02-14',
+  '121',
+  array['Clint Eastwood','Gene Hackman','Ed Harris','Laura Linney','Scott Glenn'],
+  'Au menu cette semaine, j''ai envie de vous replonger dans l''ambiance si particulière des grands thrillers flamboyants des nineties ! Réalisation mineure d''un cinéaste majeur, Absolute Power (Les Pleins Pouvoirs, 1997) signe le retour aux affaires de Clint Eastwood, alors au sommet de sa gloire de réalisateur après les triomphes publics et critiques d''Impitoyable, et Sur la route de Maddison. Seulement voilà, ce thriller politique au casting cinq étoiles (les merveilleux Gene Hackman et Ed Harris sont de la partie) signe une phase de déclin pour Clint, avec une réception tiède aux Etats-Unis qui poussera Eastwood à annuler sa venue à Cannes, où le film devait être présenté en clôture de festival. Pourtant, le film bénéficiera d''un excellent accueil en France. Adapté du roman éponyme de David Baldacci, Absolute Power reste intéressant en ce qu''il est un témoignage limpide de la pensée politique du Clint : une méfiance totale envers un pouvoir central corrompu à tous les niveaux, auquel il oppose un héros certes hors-la-loi mais respectueux d''un code d''honneur. Bon visionnage ! ',
+  '2022-05-16',
+  21,
+  3,
+  array['Crime','Drame','Action'],
+  array['English','Español'],
+  array['United States of America'])
+;
+SELECT new_movie(
+  'Les bas-fonds',
+  'Les bas-fonds',
+  'https://image.tmdb.org/t/p/original/74yEC8c42SGC4GtWozcWcA6lmMu.jpg',
+  array['Jean Renoir'],
+  '1936-12-11',
+  '92',
+  array['Jean Gabin','Suzy Prim','Louis Jouvet','Jany Holt','Junie Astor'],
+  'Au menu cette semaine, du vieux, du très vieux même. J''ai décidé de vous proposer un film de Jean Renoir que je n''ai pas vu : Les Bas-fonds. J''ai surtout vu des films plus récent (La grande Illusion <3 , French Cancan, ...) et à chaque fois j''ai adoré. Le film est disponible sur Mycanal, c''est l''occasion de le découvrir. Il s''agit de l''adaptation d''une pièce de théâtre de Maxime Gorki dans laquelle Pépel (Jean Gabin) rencontre un baron ruiné (Louis Jouvet que j''adore) et l''accueille finalement dans la pension miteuse dans laquelle il survit. Que vous dire de plus ? Rien puisque je ne connais le film que de réputation. Hâte d''en parler avec vous. Bon visionnage.',
+  '2022-05-23',
+  1,
+  3,
+  array['Romance','Crime','Drame'],
+  array['Français'],
+  array['France'])
+;
+SELECT new_movie(
+  'The Square',
+  'The Square',
+  'https://image.tmdb.org/t/p/original/lqJteErtfU1rZ0Y8Z3fRrlEo4G5.jpg',
+  array['Ruben Östlund'],
+  '2017-08-25',
+  '142',
+  array['Claes Bang','Elisabeth Moss','Dominic West','Terry Notary','Christopher Læssø'],
+  'Afin de rendre hommage au palmarès 2022 (ridicule) de notre sérénissime Festival de Cannes, je vous propose pour cette semaine ex-aequo : 2 films ! Ici je vous présente le premier d''entre eux, dicté par l''actualité, choix du jury et de l''intelligentzia Gaumont-Pathesque : The Square  de Ruben Östlund, palme d''or 2017. Film un peu drôle, sur le milieu de l''art contemporain d''avant Covid et NFT. Intéressant, et clivant. Disponible sur Canal+ et OCS en France et à l''achat en Suisse (à un tarif honteux).',
+  '2022-05-30',
+  14,
+  3,
+  array['Drame'],
+  array['Dansk','English','svenska'],
+  array['Denmark','France','Germany','Sweden'])
+;
+SELECT new_movie(
+  'Mademoiselle',
+  '아가씨',
+  'https://image.tmdb.org/t/p/original/z4cpSCLQLbe2TwDZhmf8uzsKUMj.jpg',
+  array['Park Chan-wook'],
+  '2016-06-01',
+  '145',
+  array['Kim Min-hee','Kim Tae-ri','Ha Jung-woo','Cho Jin-woong','Kim Hae-sook'],
+  'Après The Square de Östlund, je vous propose un deuxième film, choix du public, et du cœur : Mademoiselle , le plus aboutit des films de Park Chan-wook et disponible sur Prime depuis le mois dernier. Un film beau, un film malin, un film rythmé : un film bien. Récompensé en 2016 du prix technique dans notre Festival Cannois national de la honte. Mesdames, Messieurs faites votre choix.',
+  '2022-06-01',
+  14,
+  3,
+  array['Thriller','Drame','Romance'],
+  array['日本語','한국어/조선말'],
+  array['South Korea'])
+;
 
--- Mise à jour des statuts des films archivés
+-- Update seeded movies status
 UPDATE movie
 SET is_published = 'true';
-
---Ajout des créneaux
-INSERT INTO proposition_slot ("season_number","episode","publishing_date","is_booked") VALUES
-(3,24,'2022-06-06',false),
-(3,25,'2022-06-13',false),
-(3,26,'2022-06-20',false),
-(3,27,'2022-06-27',false),
-(3,28,'2022-07-04',false),
-(3,29,'2022-07-11',false),
-(3,30,'2022-07-18',false),
-(3,31,'2022-07-25',false),
-(3,32,'2022-08-01',false),
-(3,33,'2022-08-08',false),
-(3,34,'2022-08-15',false),
-(3,35,'2022-08-22',false),
-(3,36,'2022-08-29',false),
-(3,37,'2022-09-05',false),
-(3,38,'2022-09-12',false),
-(3,39,'2022-09-19',false),
-(3,40,'2022-09-26',false),
-(3,41,'2022-10-03',false),
-(3,42,'2022-10-10',false),
-(3,43,'2022-10-17',false),
-(3,44,'2022-10-24',false),
-(3,45,'2022-10-31',false),
-(3,46,'2022-11-07',false),
-(3,47,'2022-11-14',false),
-(3,48,'2022-11-21',false),
-(3,49,'2022-11-28',false),
-(3,50,'2022-12-05',false),
-(3,51,'2022-12-12',false),
-(3,52,'2022-12-19',false),
-(3,53,'2022-12-26',false);
 
 COMMIT;

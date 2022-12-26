@@ -29,7 +29,7 @@ export async function ROUTES_SEASONS(server: TestServer) {
 
       // DELETE TEST ROWS
       server.fastify.pgClient.query(
-        `DELETE FROM proposition_slot WHERE season_number = ${seasonToCreate}`
+        `DELETE FROM slot WHERE season_number = ${seasonToCreate}`
       );
       server.fastify.pgClient.query(
         `DELETE FROM season WHERE number = ${seasonToCreate}`

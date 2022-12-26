@@ -32,7 +32,7 @@ export const getSlots = (
   }
 
   return {
-    text: ` SELECT * FROM "proposition_slot"
+    text: ` SELECT * FROM "slot"
             ${WHERE?.count ? `WHERE ${WHERE.query}` : ''}
             ${ORDERBY}
             ${LIMIT};`,
@@ -52,7 +52,7 @@ export const updateSlot = (
   is_booked: boolean
 ): Query.preparedQuery => {
   return {
-    text: ` UPDATE "proposition_slot"
+    text: ` UPDATE "slot"
             SET is_booked=$2
             WHERE id=$1;`,
     values: [id, is_booked],

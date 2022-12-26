@@ -7,7 +7,7 @@ export enum Tables {
   MOVIE_HAS_COUNTRY= 'movie_has_country',
   MOVIE_HAS_GENRE= 'movie_has_genre',
   MOVIE_HAS_LANGUAGE= 'movie_has_language',
-  PROPOSITION_SLOT= 'proposition_slot',
+  SLOT= 'slot',
   REVIEW= 'review',
   SEASON= 'season',
   USER= 'user',

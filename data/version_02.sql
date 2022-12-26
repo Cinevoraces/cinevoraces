@@ -1,9 +1,7 @@
 -- Deploy cinevoraces:version_4 to pg
 
 BEGIN;
-
--- TODO: 1. Change SQL Function to allow user_id to be declared at the last index
--- WARNING. version_2.sql contain db seeding that will be impacted
+-- WARNING. version_04.sql contain db seeding that will be impacted
 CREATE OR REPLACE FUNCTION new_movie(
 	title TEXT,
 	original_title TEXT,
@@ -13,12 +11,11 @@ CREATE OR REPLACE FUNCTION new_movie(
 	runtime INT,
 	casting TEXT[],
 	presentation TEXT,
-	publishing_date DATE,
-	user_id INT,
-	season_id INT,
   movie_genres TEXT[],
 	movie_languages TEXT[],
 	movie_countries TEXT[]
+	slot_id INT,
+	user_id INT,
 ) RETURNS void AS $$
 
 DECLARE
@@ -33,9 +30,10 @@ DECLARE
 
 BEGIN
 	IF NOT EXISTS (SELECT * FROM movie WHERE title=movie.french_title) THEN
-		INSERT INTO movie("french_title", "original_title", "poster_url", "directors", "release_date", "runtime", "casting", "presentation", "publishing_date", "user_id", "season_id")
-		VALUES (title, original_title, poster_url, directors, release_date, runtime, casting, presentation, publishing_date, user_id, season_id)
+		INSERT INTO movie("french_title", "original_title", "poster_url", "directors", "release_date", "runtime", "casting", "presentation", "user_id", "slot_id")
+		VALUES (title, original_title, poster_url, directors, release_date, runtime, casting, presentation, user_id, slot_id)
 		RETURNING id INTO movie_id;
+		-- Create genre if not exists
 		FOREACH g IN ARRAY movie_genres
 			LOOP
 				IF NOT EXISTS (SELECT * FROM genre WHERE name=g) THEN
@@ -48,6 +46,7 @@ BEGIN
 				INSERT INTO movie_has_genre(movie_id, genre_id)
 				SELECT movie_id, genre_id;
 			END LOOP;
+		-- Create language if not exists
 		FOREACH l IN ARRAY movie_languages
 			LOOP
 				IF NOT EXISTS (SELECT * FROM "language" WHERE name=l) THEN
@@ -60,6 +59,7 @@ BEGIN
 				INSERT INTO movie_has_language(movie_id, language_id)
 				SELECT movie_id, language_id;
 			END LOOP;
+		-- Create country if not exists
 		FOREACH c IN ARRAY movie_countries
 			LOOP
 				IF NOT EXISTS (SELECT * FROM country WHERE name=c) THEN
@@ -85,26 +85,24 @@ first_episode DATE
 ) RETURNS void AS $$
 
 DECLARE
--- 	Variables annonymes
     episode INT := 1;
     episode_date DATE;
 BEGIN
-    --On rajoute la saison dans la table correspondante
+  -- Create season if not exists
 	IF NOT EXISTS (SELECT * FROM season WHERE season_to_add=season.number) THEN
 		INSERT INTO "season"("number","year") VALUES
         (season_to_add,year_to_add);
-		-- Remplissage de la table proposition_slot
+		-- Create episodes
         episode_date := first_episode;
         WHILE EXTRACT(YEAR FROM episode_date) < (year_to_add + 1)
         LOOP
-            INSERT INTO "proposition_slot" ("season_number","episode","publishing_date") VALUES
+            INSERT INTO "slot" ("season_number","episode","publishing_date") VALUES
             (season_to_add,episode,episode_date);
-            -- On incrémente les pointeurs
             episode_date := episode_date + 7;
             episode := episode + 1;
 		END LOOP;
 	ELSE
-		RAISE EXCEPTION 'Saison (%) déjà là', season_to_add;
+		RAISE EXCEPTION 'Season (%) already exist', season_to_add;
 	END IF;
 END
 $$LANGUAGE plpgsql;

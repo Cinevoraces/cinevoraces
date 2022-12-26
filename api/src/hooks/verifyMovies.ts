@@ -136,7 +136,7 @@ export const verifyMoviesHooks: FastifyPluginCallback = async (
 
     const { rowCount: bookedSlot } = await pgClient.query({
       text: ` SELECT is_booked
-                FROM proposition_slot
+                FROM slot
                 WHERE id = $1 AND is_booked = true;`,
       values: [slotId],
     });

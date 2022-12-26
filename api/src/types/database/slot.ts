@@ -1,4 +1,4 @@
-export interface proposition_slot {
+export interface slot {
   id: number
   season_number: number
   episode: number

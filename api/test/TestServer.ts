@@ -5,7 +5,7 @@ import { faker } from '@faker-js/faker';
 import App from '../src/app';
 import parseOptions from '../src/utils/parseOptions';
 import type {
-  proposition_slot as DBSlot,
+  slot as DBSlot,
   movie as DBMovie
 } from '../src/types/_index';
 
@@ -582,7 +582,7 @@ export default class TestServer {
     if (slot) Object.assign(s, slot);
 
     await this.fastify.pgClient.query({
-      text: ` INSERT INTO proposition_slot (is_booked, season_number, episode, publishing_date)
+      text: ` INSERT INTO slot (is_booked, season_number, episode, publishing_date)
               VALUES ($1, $2, $3, $4)`,
       values: [
         s.is_booked,
@@ -592,7 +592,7 @@ export default class TestServer {
       ]
     });
     await this.fastify.pgClient.query({
-      text: ` SELECT id FROM proposition_slot WHERE
+      text: ` SELECT id FROM slot WHERE
               season_number = $1 AND episode = $2 AND publishing_date = $3`,
       values: [s.season_number, s.episode, s.publishing_date]
     }).then(r => s.id = r.rows[0].id);
@@ -600,7 +600,7 @@ export default class TestServer {
       ...s,
       delete: async () => {
         await this.fastify.pgClient.query({
-          text: ` DELETE FROM proposition_slot 
+          text: ` DELETE FROM slot 
                   WHERE season_number = $1 
                   AND episode = $2
                   AND publishing_date = $3`,
