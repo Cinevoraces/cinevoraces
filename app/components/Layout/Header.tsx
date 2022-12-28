@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import Link from 'next/link';
 import { useAppSelector, useAppDispatch } from '@store/store';
 import { toggleBurgerMenu, toggleUserMenu, toggleConnectionModal, globals } from '@store/slices/global';
@@ -9,10 +9,11 @@ import CompleteLogo from './CompleteLogo';
 import Modal from '@components/Modal';
 import Button from '@components/Input/Button';
 import { ConnectionForm } from '@components/Forms';
+import useSWR from 'swr'; 
 
-export default function Header() {
+const Header = () => {
   const { isBurgerMenuOpen, isUserMenuOpen, isConnectionModalOpen } = useAppSelector(globals);
-  const { isConnected, id, role } = useAppSelector(user);
+  const { id, role } = useAppSelector(user);
   const dispatch = useAppDispatch();
 
   //Toggle menu display when clicking outside them
@@ -25,12 +26,27 @@ export default function Header() {
     dispatch(toggleConnectionModal())
   );
 
-  const navLinks = [
+  const [navLinks, setNavLinks] = useState([
     ['Accueil', '/'],
     ['Les films', '/films'],
-    ['Le film de la semaine', '/films/1'], // à pimper
-  ];
-  isConnected && navLinks.push(['Proposer un film', '/proposition'],);
+    ['Le film de la semaine', '/films/1'], // Mandatory to avoid the apparition of the link after data fetching
+  ]);
+
+  const { data: lastMovie } = useSWR('/movies?where[is_published]=true&limit=1');
+  useEffect(() => {
+    if (lastMovie && lastMovie.length > 0) {
+      console.log('on purge les liens');
+      setNavLinks([
+        ...navLinks.filter((l) => (!l[0].includes('semaine') && !l[0].includes('Proposer'))), 
+        ['Le film de la semaine', `/films/${lastMovie[0].id}`]
+      ]);
+    }
+    if (id) {
+      // Adding proposition for connected users
+      setNavLinks([...navLinks, ['Proposer un film', '/proposition']]);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [lastMovie, id]);
   
   const userMenuLinks = [
     ['Mon Profil', `/profil/${id}`],
@@ -69,7 +85,7 @@ export default function Header() {
           ))}
         </nav>
         {
-          !isConnected 
+          !id 
             ? <Button onClick={() => dispatch(toggleConnectionModal())}>Connexion</Button>
             : <HeaderMenu
               type="user"
@@ -90,4 +106,6 @@ export default function Header() {
       )}
     </>
   );
-}
+};
+
+export default Header;
