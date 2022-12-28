@@ -35,7 +35,6 @@ const Header = () => {
   const { data: lastMovie } = useSWR('/movies?where[is_published]=true&limit=1');
   useEffect(() => {
     if (lastMovie && lastMovie.length > 0) {
-      console.log('on purge les liens');
       setNavLinks([
         ...navLinks.filter((l) => (!l[0].includes('semaine') && !l[0].includes('Proposer'))), 
         ['Le film de la semaine', `/films/${lastMovie[0].id}`]
