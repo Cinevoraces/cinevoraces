@@ -20,33 +20,33 @@ services:
     depends_on:
       - postgres
 
-  api:
-    hostname: cinevoraces_api
-    env_file:
-      - .env.db
-      - .env.api
-    depends_on:
-      - postgres
-    build:
-      context: ./api
-      dockerfile: Dockerfile.dev
-    ports:
-      - 3005:3005
-    restart: always
-    volumes:
-      - ./api:/api
+  # api:
+  #   hostname: cinevoraces_api
+  #   env_file:
+  #     - .env.db
+  #     - .env.api
+  #   depends_on:
+  #     - postgres
+  #   build:
+  #     context: ./api
+  #     dockerfile: Dockerfile.dev
+  #   ports:
+  #     - 3005:3005
+  #   restart: always
+  #   volumes:
+  #     - ./api:/api
 
-  app:
-    hostname: cinevoraces_app
-    env_file:
-      - .env.app
-    depends_on:
-      - api
-    build:
-      context: ./app
-      dockerfile: Dockerfile.dev
-    ports:
-      - 3000:3000
-    restart: always
-    volumes:
-      - ./app:/app
+  # app:
+  #   hostname: cinevoraces_app
+  #   env_file:
+  #     - .env.app
+  #   depends_on:
+  #     - api
+  #   build:
+  #     context: ./app
+  #     dockerfile: Dockerfile.dev
+  #   ports:
+  #     - 3000:3000
+  #   restart: always
+  #   volumes:
+  #     - ./app:/app

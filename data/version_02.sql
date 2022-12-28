@@ -2,7 +2,6 @@
 
 BEGIN;
 -- WARNING. version_04.sql contain db seeding that will be impacted
--- TODO: Update episode availability
 CREATE OR REPLACE FUNCTION new_movie(
 	title TEXT,
 	original_title TEXT,

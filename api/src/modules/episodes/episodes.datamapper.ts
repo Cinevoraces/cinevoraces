@@ -8,9 +8,10 @@ import { queryBuilder } from '../../utils/queryBuilder';
  * @returns SQL query object
 */
 export const getEpisodes = (
-  querystring: Query.querystring
+  querystring: Query.querystring,
+  getAvailable = true
 ): Query.preparedQuery => {
-  const enumerator = [ 'id', 'is_booked', 'season_number', 'episode_number'];
+  const enumerator = ['id', 'season_number'];
   const { where, limit, sort } = querystring;
   let values = [] as Array<unknown>,
     WHERE = { query: '', count: 0, values: [] as Array<unknown> },
@@ -32,29 +33,14 @@ export const getEpisodes = (
   }
 
   return {
-    text: ` SELECT * FROM "episode"
-            ${WHERE?.count ? `WHERE ${WHERE.query}` : ''}
+    text: ` SELECT ep.id, ep.season_number, ep.episode_number, ep.publishing_date, mv.id as movie_id
+            FROM "episode" ep
+              LEFT JOIN (SELECT "movie".id, "movie".episode_id FROM movie) mv 
+                ON mv.episode_id = ep.id
+              WHERE mv.id ${getAvailable? 'IS NULL' : 'IS NOT NULL'}
+            ${WHERE?.count ? `AND ${WHERE.query}` : ''}
             ${ORDERBY}
             ${LIMIT};`,
     values,
-  };
-};
-
-/**
- * **updateEpisode**
- * @param id Episode id.
- * @param is_booked *is_booked* new value.
- * @description Update booking status of one episode.
- * @returns SQL query object
- */
-export const updateEpisode = (
-  id: number,
-  is_booked: boolean
-): Query.preparedQuery => {
-  return {
-    text: ` UPDATE "episode"
-            SET is_booked=$2
-            WHERE id=$1;`,
-    values: [id, is_booked],
   };
 };
