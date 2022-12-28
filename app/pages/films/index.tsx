@@ -106,7 +106,7 @@ export default function Films() {
   const movieResults = useAppSelector(filteredMovies).filteredMovies;
 
   return (
-    <main className="custom-container justify-start min-h-[80vh]">
+    <main className="custom-container justify-start">
       <section className='w-full'>
         <h1 className='hero-text text-start mb-4'>Les films de la communauté</h1>
         <p>Retrouvez saison par saison les films sélectionnés par les <span className='emphasis'>membres de CinéVoraces</span>.
