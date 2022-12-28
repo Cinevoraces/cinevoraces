@@ -63,26 +63,7 @@ export const handleProposeMovie = async (
   reply: Reply
 ) => {
   const { pgClient, body, user } = request;
-  // TODO: 
-  // from episode => season_number
-  // from episode => episode_number
-  // from episode => publishing_date
-  const payload = { 
-    french_title: body.french_title,
-    original_title: body.original_title,
-    poster_url: body.poster_url,
-    directors: body.directors,
-    release_date: body.release_date,
-    runtime: body.runtime,
-    casting: body.casting,
-    presentation: body.presentation,
-    publishing_date: body.publishing_date,
-    user_id: user.id,
-    season_id: body.season_id,
-    movie_genres: body.movie_genres,
-    movie_languages: body.movie_languages,
-    movie_countries: body.movie_countries,
-  };
+  const payload = { ...body, user_id: user.id };
   
   await pgClient.query(
     proposeMovie(payload)

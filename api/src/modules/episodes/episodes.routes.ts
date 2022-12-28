@@ -1,12 +1,10 @@
 import type { FastifyInstance } from 'fastify';
 import { 
   getEpisodesSchema, 
-  bookEpisodeSchema,
   adminUnbookEpisodeSchema,
 } from './episodes.schema';
 import { 
   handleGetEpisodes, 
-  handleBookEpisode,
   handleAdminUnbookEpisode,
 } from './episodes.handler';
 
@@ -17,15 +15,6 @@ export const episodes = async (fastify: FastifyInstance) => {
     schema: getEpisodesSchema,
     handler: handleGetEpisodes,
     onRequest: [fastify.verifyAccessToken],
-  });
-
-  fastify.route({
-    method: 'PUT',
-    url: '/episodes/book/:id',
-    schema: bookEpisodeSchema,
-    handler: handleBookEpisode,
-    onRequest: [fastify.verifyAccessToken],
-    preValidation: [fastify.hasProposition, fastify.isEpisodeBooked],
   });
 
   fastify.route({

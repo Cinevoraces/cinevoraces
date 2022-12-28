@@ -39,28 +39,6 @@ export const getEpisodesSchema: FastifySchema = {
   },
 };
 
-export const bookEpisodeSchema: FastifySchema = {
-  summary: '(TOKEN REQUIRED)',
-  description: `**Book an episode by token**.
-  Episode's *id* must be set in *params* and access token in bearer to pass user id.`,
-  tags: ['Episodes'],
-  params: {
-    type: 'object',
-    properties: {
-      id: { type: 'number' },
-    },
-  },
-  response: {
-    204: { 
-      type: 'object',
-      properties: {
-        message: { type: 'string' },
-      },
-      required: ['message'],
-    },
-  },
-};
-
 export const adminUnbookEpisodeSchema: FastifySchema = {
   description: `**Unbook an episode by id**.
   Route protected by *admin* role.

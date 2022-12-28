@@ -141,6 +141,7 @@ export const verifyMoviesHooks: FastifyPluginCallback = async (
       values: [episodeId],
     });
 
+    // TODO: Add User case in another hook (episode_id in body)
     // If episode booking route is called
     if (url.includes('/episodes/book') && bookedEpisode) 
       error.send(ApiError.UNAVAILABLE_EPISODE, 401);

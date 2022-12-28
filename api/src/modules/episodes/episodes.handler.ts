@@ -28,23 +28,6 @@ export const handleGetEpisodes = async (request: Request, reply: Reply) => {
 };
 
 /**
- * **Book episode**
- * @description Book a episode as user
-*/
-export const handleBookEpisode = async (request: Request, reply: Reply) => {
-  const { pgClient, params } = request;
-  const { id: episodeId } = params;
-
-  await pgClient.query(
-    updateEpisode(episodeId, true)
-  );
-
-  reply
-    .code(204)
-    .send({ message: ApiResponse.EPISODE_BOOKING_SUCCESS });
-};
-
-/**
  * **Unbook episode (ADMIN)**
  * @description Unbook an episode as Admin
 */

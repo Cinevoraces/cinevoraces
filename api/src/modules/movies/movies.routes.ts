@@ -29,7 +29,7 @@ export const movies = async (fastify: FastifyInstance) => {
     schema: proposeMovieSchema,
     handler: handleProposeMovie,
     onRequest: [fastify.verifyAccessToken],
-    preValidation: [fastify.doesPropositionExist],
+    preValidation: [fastify.doesPropositionExist, fastify.hasProposition, fastify.isEpisodeBooked],
   });
 
   fastify.route({
