@@ -9,11 +9,11 @@ import { getRequestCSR } from '@utils/fetchApi';
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <Provider store={store}>
-      <Layout>
-        <SWRConfig value={{ fetcher: getRequestCSR }}>
+      <SWRConfig value={{ fetcher: getRequestCSR }}>
+        <Layout>
           <Component {...pageProps} />
-        </SWRConfig>
-      </Layout>
+        </Layout>
+      </SWRConfig>
     </Provider>
   );
 }
