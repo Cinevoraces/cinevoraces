@@ -50,4 +50,3 @@ services:
     restart: always
     volumes:
       - ./app:/app
-

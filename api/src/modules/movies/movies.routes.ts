@@ -29,7 +29,7 @@ export const movies = async (fastify: FastifyInstance) => {
     schema: proposeMovieSchema,
     handler: handleProposeMovie,
     onRequest: [fastify.verifyAccessToken],
-    preValidation: [fastify.doesPropositionExist],
+    preValidation: [fastify.movieProposalSafeGuards],
   });
 
   fastify.route({
@@ -38,7 +38,7 @@ export const movies = async (fastify: FastifyInstance) => {
     schema: updateProposedMovieSchema,
     handler: handleUpdateProposedMovie,
     onRequest: [fastify.verifyAccessToken],
-    preValidation: [fastify.isMoviePublished],
+    preValidation: [fastify.putMovieSafeGuards],
   });
 
   fastify.route({
@@ -47,7 +47,7 @@ export const movies = async (fastify: FastifyInstance) => {
     schema: adminPublishMovieSchema,
     handler: handleAdminPublishMovie,
     onRequest: [fastify.isAdmin],
-    preValidation: [fastify.verifyPassword, fastify.isMoviePublished],
+    preValidation: [fastify.verifyPassword, fastify.putMovieSafeGuards],
   });
 
   fastify.route({
@@ -57,6 +57,5 @@ export const movies = async (fastify: FastifyInstance) => {
     handler: handleAdminDeleteMovie,
     onRequest: [fastify.isAdmin],
     preValidation: [fastify.verifyPassword, fastify.doesMovieExist],
-
   });
 };

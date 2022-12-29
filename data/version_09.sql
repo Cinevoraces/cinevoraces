@@ -91,17 +91,17 @@ SELECT
       COALESCE((SELECT JSON_AGG(
             JSON_BUILD_OBJECT(
                   'movie_id', movie.id,
-                  'season_number', season.number,
+                  'season_number', episode.season_number,
                   'french_title', movie.french_title, 
                   'original_title', movie.original_title, 
                   'poster_url', movie.poster_url,
                   'presentation', movie.presentation,
-                  'publishing_date', movie.publishing_date,
+                  'publishing_date', episode.publishing_date,
                   'avg_rating', ROUND(COALESCE(ar.avg_rating,0),1)
             ))
             FROM movie
-                  LEFT JOIN season 
-                        ON season.id = movie.season_id
+                  LEFT JOIN episode 
+                        ON episode.id = movie.episode_id
                   LEFT JOIN
 	                  (SELECT review.movie_id AS "movie_id", AVG(rating) "avg_rating"
 		                  FROM "review" WHERE "rating" IS NOT NULL GROUP BY review.movie_id) ar
@@ -139,12 +139,13 @@ SELECT
             'french_title', "movie".french_title,
             'original_title', "movie".original_title,
             'poster_url', "movie".poster_url,
-            'publishing_date', "movie".publishing_date,
-            'season_id', "movie".season_id
+            'publishing_date', "episode".publishing_date,
+            'season_id', "episode".season_number
       ) AS "movie")
 FROM "review"
 	INNER JOIN "user" ON review.user_id="user".id
       INNER JOIN "movie" ON review.movie_id="movie".id
+      LEFT JOIN "episode" ON episode.id = "movie".episode_id
 WHERE review.comment IS NOT NULL
 GROUP BY 
       review.comment, 
@@ -157,8 +158,8 @@ GROUP BY
       "movie".french_title,
       "movie".original_title,
       "movie".poster_url,
-      "movie".publishing_date,
-      "movie".season_id
+      "episode".publishing_date,
+      "episode".season_number
 ;
 
 -- Movies Full object
@@ -167,18 +168,19 @@ CREATE VIEW movieView AS
 	
 SELECT
       -- Movie columns selection
-      movie.id, 
-      movie.user_id AS author_id, 
-	season.number AS season_number,
-      movie.is_published, 
-      movie.french_title, 
-      movie.original_title, 
-      movie.poster_url, 
-      movie.casting, 
-      movie.directors,
-      movie.runtime, 
-      movie.publishing_date,
-      movie.release_date,
+      "movie".id, 
+      "movie".user_id AS author_id, 
+	"episode".season_number AS season_number,
+	"episode".episode_number AS episode_number,
+      "movie".is_published, 
+      "movie".french_title, 
+      "movie".original_title, 
+      "movie".poster_url, 
+      "movie".casting, 
+      "movie".directors,
+      "movie".runtime, 
+      "episode".publishing_date,
+      "movie".release_date,
       -- Aggregated Genres selection 
 	array_agg(DISTINCT genre.name) AS genres,
       -- Aggregated Countries selection 
@@ -221,65 +223,65 @@ SELECT
 FROM movie
       -- USER
 	LEFT JOIN "user" 
-            ON "user".id = movie.user_id
+            ON "user".id = "movie".user_id
       -- SEASON
-	LEFT JOIN season
-            ON season.id = movie.season_id
+	LEFT JOIN episode
+            ON "episode".id = "movie".episode_id
       -- GENRES
 	LEFT JOIN movie_has_genre 
-            ON movie.id = movie_has_genre.movie_id
+            ON "movie".id = "movie_has_genre".movie_id
 	LEFT JOIN genre 
-            ON movie_has_genre.genre_id = genre.id
+            ON "movie_has_genre".genre_id = genre.id
       -- COUNTRIES
 	LEFT JOIN movie_has_country 
-            ON movie.id = movie_has_country.movie_id
+            ON "movie".id = "movie_has_country".movie_id
 	LEFT JOIN country 
-            ON movie_has_country.country_id = country.id
+            ON "movie_has_country".country_id = country.id
       -- LANGUAGES
 	LEFT JOIN movie_has_language 
-            ON movie.id = movie_has_language.movie_id
+            ON "movie".id = "movie_has_language".movie_id
 	LEFT JOIN "language" 
-            ON movie_has_language.language_id = "language".id
+            ON "movie_has_language".language_id = "language".id
       -- MOVIE METRICS
 	LEFT JOIN
-	      (SELECT review.movie_id AS "movie_id", COUNT(*) "watchlist_count"
+	      (SELECT "review".movie_id AS "movie_id", COUNT(*) "watchlist_count"
 	      	FROM review where "bookmarked" = true GROUP BY movie_id) wc
-	            ON movie.id = wc.movie_id
+	            ON "movie".id = wc.movie_id
 	LEFT JOIN
-	      (SELECT review.movie_id AS "movie_id", COUNT(*) "views_count"
+	      (SELECT "review".movie_id AS "movie_id", COUNT(*) "views_count"
 	      	FROM review where "viewed" = true GROUP BY movie_id) vc
-	            ON movie.id = vc.movie_id
+	            ON "movie".id = vc.movie_id
 	LEFT JOIN
-	      (SELECT review.movie_id AS "movie_id", COUNT(*) "likes_count"
+	      (SELECT "review".movie_id AS "movie_id", COUNT(*) "likes_count"
 	      	FROM review where "liked" = true GROUP BY movie_id) lc
-	            ON movie.id = lc.movie_id
+	            ON "movie".id = lc.movie_id
 	LEFT JOIN
-	      (SELECT review.movie_id AS "movie_id", COUNT(*) "ratings_count"
-	      	FROM "review" WHERE "rating" IS NOT NULL GROUP BY review.movie_id) rc
-	            ON movie.id = rc.movie_id
+	      (SELECT "review".movie_id AS "movie_id", COUNT(*) "ratings_count"
+	      	FROM "review" WHERE "rating" IS NOT NULL GROUP BY "review".movie_id) rc
+	            ON "movie".id = rc.movie_id
 	LEFT JOIN
-	      (SELECT review.movie_id AS "movie_id", AVG(rating) "avg_rating"
-		      FROM "review" WHERE "rating" IS NOT NULL GROUP BY review.movie_id) ar
-	            ON movie.id = ar.movie_id
+	      (SELECT "review".movie_id AS "movie_id", AVG(rating) "avg_rating"
+		      FROM "review" WHERE "rating" IS NOT NULL GROUP BY "review".movie_id) ar
+	            ON "movie".id = ar.movie_id
 GROUP BY
-	movie.id,
-      movie.french_title,
-      movie.original_title,
-      movie.directors,
-      movie.release_date,
-	movie.runtime, 
-      movie.casting,
-      movie.presentation, 
-      movie.is_published,
-	movie.publishing_date, 
-      movie.user_id, 
-      movie.season_id,
-	movie."user_id",
+	"movie".id,
+      "movie".french_title,
+      "movie".original_title,
+      "movie".directors,
+      "movie".release_date,
+	"movie".runtime, 
+      "movie".casting,
+      "movie".presentation, 
+      "movie".is_published,
+	"episode".publishing_date, 
+      "episode".season_number,
+      "episode".episode_number,
+      "movie".user_id, 
+	"movie".user_id,
       "user".pseudo,
       "user".avatar_url,
       "user".role,
       "user".created_at,
-      season_number,
 	watchlist_count,
       views_count,
       likes_count,

@@ -8,7 +8,7 @@ interface LayoutProps {
 
 export default function Layout({ children }: LayoutProps) {
   return (
-    <>
+    <div className='flex flex-col min-h-screen'>
       <Toaster 
         position="top-center"
         reverseOrder={false}
@@ -27,6 +27,6 @@ export default function Layout({ children }: LayoutProps) {
       <Header />
       {children}
       <Footer />
-    </>
+    </div>
   );
 }

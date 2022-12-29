@@ -9,7 +9,8 @@ import { toast } from 'react-hot-toast';
 interface HeaderMenuButtonProps {
   type: 'burger' | 'user';
   stateValue: boolean;
-  setter(value: boolean): void;
+  setter: (value: boolean)=>void;
+  
 }
 
 /**
@@ -96,14 +97,14 @@ const HeaderMenu = forwardRef<HTMLElement, HeaderMenuProps>((props, ref) => {
             href={link[1]}
             key={link[0]}
             className={linkStyle}
-            onClick={setter}>
+            onClick={() => setter}>
             {link[0]}
           </Link>
         ))}
         {
           type === 'user' &&
             <Link
-              href='#'
+              href=''
               key='logout'
               className={linkStyle}
               onClick={logoutHandler}>
