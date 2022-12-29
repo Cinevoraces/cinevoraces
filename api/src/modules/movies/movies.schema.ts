@@ -3,7 +3,7 @@ import type { FastifySchema } from 'fastify';
 export const getMoviesSchema: FastifySchema = {
   description: `
   **Get movies**.
-  Use query parameters to filter the results using the following format: */movies?where[is_published]=true&select[metrics]=true&limit=5&sort[desc]=id*.
+  Use query parameters to filter the results using the following format: */movies?where[is_published]=true&select[metrics]=true&limit=5&sort=desc*.
   To access users related filters, the accessToken is needed. Using thoses will return only movies where the user has an **review object**.  
   **Available filters:**
   - where[id] -> number
@@ -25,7 +25,7 @@ export const getMoviesSchema: FastifySchema = {
   
   **Misc:**
   - limit -> number: *limit the number of results*.
-  - sort -> 'asc' | 'desc' as string *(Will sort by id)*
+  - sort -> 'asc' | 'desc' as string *(Will sort by publishing_date)*
   `,
   tags: ['Movies'],
   querystring: {
