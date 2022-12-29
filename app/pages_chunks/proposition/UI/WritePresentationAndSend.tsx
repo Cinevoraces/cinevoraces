@@ -4,13 +4,13 @@ import { TextAreaRef, Button } from '@components/Input';
 import SendLogo from '@public/icons/send-icon.svg';
 import type { FormEvent } from 'react';
 import type { TMDBMovie } from '@custom_types/index';
-import type { Episode } from '@custom_types/propositionPage';
+import type { EpisodeOption } from '@custom_types/index';
 
 interface WritePresentationAndSendProps {
   searchResults: TMDBMovie[];
   selectedMovieId: number;
-  handlePropositionSubmit: (e: FormEvent)=>Promise<string | undefined>;
-  episode: Episode;
+  handlePropositionSubmit: (e: FormEvent)=>Promise<string|boolean>;
+  episode: EpisodeOption;
 }
 const helpingTextStyle = 'px-1 text-sm font-light italic text-gray-300';
 
@@ -62,15 +62,13 @@ const WritePresentationAndSend = forwardRef<HTMLTextAreaElement, WritePresentati
         <div className='w-full flex flex-col gap-2 items-end'>
           <Button 
             customStyle='rounded' 
-            disabled={
-              (episode.value.season_id === 0 || selectedMovieId === 0)
-            }>
+            disabled={!(episode.value !== 0 && selectedMovieId !== 0) ? true : false}>
             <Image src={SendLogo} alt='' width={16} height={16}/>
               Publier
           </Button>
-          <p className='hidden peer-disabled:block text-sm font-light text-red-500 text-right'>
+          <p className={!(episode.value !== 0 && selectedMovieId !== 0) ? 'text-sm font-light text-red-500 text-right' : 'hidden'}>
             {
-              (episode.value.season_id === 0) 
+              (episode.value === 0) 
                 ? 'Selectionnez un épisode.' 
                 : (selectedMovieId === 0) 
                     && 'Selectionnez un film'

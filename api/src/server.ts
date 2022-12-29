@@ -18,9 +18,10 @@ export default async function createServer() {
 
     fastify.setErrorHandler(function (error, request, reply) {
       this.log.error(error);
-      reply
-        .status(error.statusCode)
-        .send({ message: error.message, statusCode: error.statusCode });
+      if (error.statusCode)
+        reply.status(error.statusCode);
+      
+      reply.send({ message: error.message });
     });
     
     fastify.listen({ ...serverConfig });

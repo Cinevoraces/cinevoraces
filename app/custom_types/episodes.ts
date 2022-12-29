@@ -1,7 +1,6 @@
-export interface Slot {
-  episode: number;
+export interface Episode {
   id: number;
-  is_booked: boolean;
+  episode_number: number;
   publishing_date: string;
   season_number: number;
 };

@@ -1,6 +1,6 @@
-export interface Episode {
+export interface EpisodeOption {
   name: string; 
-  value: { id: number; season_id: number; publishing_date: string }
+  value: number;
 }
 
 export interface MovieBody {
@@ -12,8 +12,7 @@ export interface MovieBody {
   runtime: number;
   casting: string[];
   presentation: string;
-  publishing_date: string;
-  season_id: number;
+  episode_id: number;
   movie_genres: string[];
   movie_languages: string[];
   movie_countries: string[];

@@ -1,17 +1,17 @@
 import { Select } from '@components/Input';
 import type { Dispatch, SetStateAction } from 'react';
-import type { Episode } from '@custom_types/propositionPage';
+import type { EpisodeOption } from '@custom_types/propositionPage';
 
 interface PickEpisodeProps {
-  availableSlotsArray: Episode [];
+  episodesArray: EpisodeOption [];
   areOptionsDisplayed: boolean;
   handleOptionsDisplay: ()=>void;
-  episode: Episode;
-  setEpisode: Dispatch<SetStateAction<Episode>>
+  episode: EpisodeOption;
+  setEpisode: Dispatch<SetStateAction<EpisodeOption>>
 }
 
 const PickEpisode = ((props: PickEpisodeProps) => {
-  const { availableSlotsArray, areOptionsDisplayed, handleOptionsDisplay, episode, setEpisode } = props;
+  const { episodesArray, areOptionsDisplayed, handleOptionsDisplay, episode, setEpisode } = props;
   return (
     <>
       <section className="custom-container py-4 items-start gap-4">
@@ -19,12 +19,12 @@ const PickEpisode = ((props: PickEpisodeProps) => {
         <p>
           1 saison = 1 année <br /> 1 épisode = 1 semaine
         </p>
-        { (availableSlotsArray) && (
+        { (episodesArray) && (
           <Select
             name="select-episode"
             displayOptionsState={areOptionsDisplayed}
             displayOptionsSetter={handleOptionsDisplay}
-            options={availableSlotsArray}
+            options={episodesArray}
             stateValue={episode}
             valueSetter={setEpisode}
           />
