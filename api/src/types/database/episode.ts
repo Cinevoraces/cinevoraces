@@ -3,5 +3,5 @@ export interface episode {
   season_number: number
   episode_number: number
   publishing_date: Date
-  is_booked: boolean | null
+  movie_id?: number
 }

@@ -31,7 +31,7 @@ export const handleGetMovies = async (request: Request, reply: Reply) => {
   if (!rowCount) 
     error.send(ApiError.NOT_FOUND_MOVIE, 404);
 
-  // TODO: 2. This solution must be treated using SQL.
+  // TODO: This solution must be treated using SQL.
   // Populate movies with user existing reviews if logged
   if (user) {
     const { rows: reviews, rowCount: reviewCount } = await pgClient.query(
