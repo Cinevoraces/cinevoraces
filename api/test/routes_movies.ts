@@ -2,11 +2,6 @@ import type TestServer from './TestServer';
 
 export async function ROUTES_MOVIES(server: TestServer) {
   describe('MOVIES ENDPOINTS', () => {
-    const postMoviePayload = {
-      french_title: server.faker.lorem.words(2),
-      original_title: server.faker.lorem.words(2),
-      release_date: server.faker.date.past().toISOString(),
-    };
     
     test('GET MOVIES', async () => {
       const SUCCESSFULL_GET_ALL_MOVIES = await server.RequestMovies();
@@ -41,20 +36,27 @@ export async function ROUTES_MOVIES(server: TestServer) {
         password: server.ressources.users[0].password.clear,
       });
 
+      const postMoviePayload = {
+        french_title: server.faker.lorem.words(2),
+        original_title: server.faker.lorem.words(2),
+        release_date: server.faker.date.past().toISOString(),
+        episode_id: server.ressources.episodes[0].id,
+      };
+
       // Test post/update movie proposal as user
-      const SUCCESSFULL_POST_MOVIE = await server.RequestProposeMovie(
-        logUser.tokens.accessToken,
-        postMoviePayload
-      );
       const FAILURE_POST_MOVIE = await server.RequestProposeMovie(
         logUser.tokens.accessToken,
         {
           french_title: 'Les Chaussons rouges',
           original_title: 'The Red Shoes'
         });
+      const SUCCESSFULL_POST_MOVIE = await server.RequestProposeMovie(
+        logUser.tokens.accessToken,
+        postMoviePayload
+      );
+      
       expect(SUCCESSFULL_POST_MOVIE.statusCode).toEqual(201);
       expect(FAILURE_POST_MOVIE.statusCode).toEqual(422);
-
       const SUCCESSFULL_UPDATE_MOVIE_PROPOSAL = await server.RequestUpdateMovieProposal(
         logUser.tokens.accessToken,
         'Tester, c\'est douter.',

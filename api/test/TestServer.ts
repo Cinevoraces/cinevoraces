@@ -22,7 +22,6 @@ interface User extends RessourcesEtity {
 }
 interface Episode extends RessourcesEtity {
   id: number;
-  is_booked: boolean;
   season_number: number;
   episode_number: number;
   publishing_date: string;
@@ -267,12 +266,10 @@ export default class TestServer {
       runtime?: number;
       casting?: string[];
       presentation?: string;
-      publishing_date?: string;
-      user_id?: number;
-      season_id?: number;
       movie_genres?: string[];
       movie_languages?: string[];
       movie_countries?: string[]
+      episode_id?: number;
     }
   ) {
     const req = await this.fastify.inject({
@@ -288,11 +285,10 @@ export default class TestServer {
         runtime: 150,
         casting: [faker.name.firstName()],
         presentation: faker.lorem.paragraph(),
-        publishing_date: faker.date.past(),
-        season_id: 3,
         movie_genres: ['TEST_GENRE'],
         movie_languages: ['TEST_LANGUAGE'],
         movie_countries: ['TEST_COUNTRY'],
+        episode_id: -1,
         ...payload
       }
     });
@@ -341,13 +337,11 @@ export default class TestServer {
   }
   public async RequestEpisodes(
     token: string,
-    query: string
   ) {
     const req = await this.fastify.inject({
       headers: { Authorization: `Bearer ${token}` },
       method: ECrudMethods.GET,
       url: EEndpoints.EPISODES,
-      query
     });
 
     const res = await req.json();
@@ -574,7 +568,6 @@ export default class TestServer {
   public async createEpisode(episode?: DBEpisode) {
     const e = {
       id: -1,
-      is_booked: false,
       season_number: 3,
       episode_number: 1,
       publishing_date: this.faker.date.past().toISOString()
@@ -582,10 +575,9 @@ export default class TestServer {
     if (episode) Object.assign(e, episode);
 
     await this.fastify.pgClient.query({
-      text: ` INSERT INTO episode (is_booked, season_number, episode_number, publishing_date)
-              VALUES ($1, $2, $3, $4)`,
+      text: ` INSERT INTO episode (season_number, episode_number, publishing_date)
+              VALUES ($1, $2, $3)`,
       values: [
-        e.is_booked,
         e.season_number,
         e.episode_number,
         e.publishing_date

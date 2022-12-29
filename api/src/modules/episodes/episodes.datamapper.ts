@@ -2,6 +2,28 @@ import type { Query } from '../../types/_index';
 import { queryBuilder } from '../../utils/queryBuilder';
 
 /**
+ * **getAvailableEpisodes**
+ * @description Get episodes next 5 available episodes within 1 month.
+ * @returns SQL query object
+*/
+export const getAvailableEpisodes = (): Query.preparedQuery => {
+  return {
+    text: ` SELECT ep.id, ep.season_number, ep.episode_number, ep.publishing_date
+            FROM "episode" ep
+              LEFT JOIN (SELECT "movie".id, "movie".episode_id FROM movie) mv 
+                ON mv.episode_id = ep.id
+              WHERE mv.id IS NULL
+              AND ep.publishing_date <= NOW()
+              AND ep.publishing_date > NOW() - INTERVAL '1 month'
+              ORDER BY ep.publishing_date ASC
+              LIMIT 5
+            ;`,
+    values: [],
+  };
+};
+
+// NOTE: This function is a WIP, not currently in use.
+/**
  * **getEpisodes**
  * @description Get episodes according to query.
  * @param querystring URL querystring.
@@ -32,6 +54,7 @@ export const getEpisodes = (
     LIMIT = `LIMIT ${limit}`;
   }
 
+  // TODO: Make a is_booked equivalent selector
   return {
     text: ` SELECT ep.id, ep.season_number, ep.episode_number, ep.publishing_date, mv.id as movie_id
             FROM "episode" ep

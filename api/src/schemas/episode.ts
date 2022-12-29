@@ -5,7 +5,6 @@ export const episodeSchema = {
     'season_number',
     'episode_number',
     'publishing_date',
-    'is_booked',
   ],
   type: 'object',
   properties: {
@@ -13,6 +12,6 @@ export const episodeSchema = {
     season_number: { type: 'number' },
     episode_number: { type: 'number' },
     publishing_date: { type: 'string' },
-    is_booked: { type: 'boolean' },
+    movie_id: { type: 'number' },
   },
 };

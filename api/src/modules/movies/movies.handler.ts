@@ -64,7 +64,7 @@ export const handleProposeMovie = async (
 ) => {
   const { pgClient, body, user } = request;
   const payload = { ...body, user_id: user.id };
-  
+
   await pgClient.query(
     proposeMovie(payload)
   );
