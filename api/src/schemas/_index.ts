@@ -3,7 +3,7 @@ import { globalMetricsSchema, userMetricsSchema } from './metrics';
 import { movieSchema } from './movie';
 import { reviewSchema } from './review';
 import { seasonSchema } from './season';
-import { slotSchema } from './slot';
+import { episodeSchema } from './episode';
 import { userSchema } from './user';
 
 /**
@@ -18,7 +18,7 @@ export const schemas = [
   movieSchema,
   reviewSchema,
   seasonSchema,
-  slotSchema,
+  episodeSchema,
   userMetricsSchema,
   userSchema,
 ];

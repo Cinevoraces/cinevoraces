@@ -3,7 +3,7 @@ import { metrics } from './metrics/metrics.routes';
 import { movies } from './movies/movies.routes';
 import { reviews } from './reviews/reviews.routes';
 import { seasons } from './seasons/seasons.routes';
-import { slots } from './slots/slots.routes';
+import { episodes } from './episodes/episodes.routes';
 import { users } from './users/users.routes';
 
 /**
@@ -18,6 +18,6 @@ export const routes = [
   movies,
   reviews,
   seasons,
-  slots,
+  episodes,
   users
 ];
