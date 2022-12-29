@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import React, { useEffect, useRef, useState } from 'react';
 import type { FormEvent } from 'react';
 import Head from 'next/head';
@@ -26,6 +27,8 @@ import type { NextPage, GetStaticPaths, GetStaticProps } from 'next';
 import type { ParsedUrlQuery } from 'querystring';
 import type { MinimalMovie, CompleteMovie } from '@custom_types/movies';
 import type { BodyData } from '@utils/fetchApi';
+import { useRouter } from 'next/router';
+import Loader from '@components/Loader';
 interface FilmProps {
   movies: CompleteMovie[];
 }
@@ -51,11 +54,19 @@ const metadatas = [
 let selectQueryString: string = '';
 metadatas.forEach((dataName) => (selectQueryString += `&select[${dataName}]=true`));
 
-const Film: NextPage<FilmProps> = (props) => {
-  const movieId = props.movies[0].id;
+const Film: NextPage<FilmProps> = ({ movies }) => {
+  const router = useRouter();
+  if (router.isFallback){
+    return (
+      <main className='custom-container'>
+        <Loader/>
+      </main>
+    );
+  }
+  const movieId = movies[0].id;
   const userId = useAppSelector(user).id;
   // Defining cache management and inititializing it with initial props :
-  const { data, mutate } = useSWR(`/movies?where[id]=${movieId}` + selectQueryString, { fallbackData: props.movies });
+  const { data, mutate } = useSWR(`/movies?where[id]=${movieId}` + selectQueryString, { fallbackData: movies });
   // Safeguard mostly for TS type assertion
   if (!data || data?.length === 0) throw new Error('Le film demandé n\'a pas été retrouvé.');
   // Basic data extraction
@@ -265,28 +276,33 @@ interface Params extends ParsedUrlQuery {
   article: string;
 }
 
-export const getStaticPaths: GetStaticPaths<Params> = async () => {
-  const movies = await getDataFromEndpointSSR('/movies?where[is_published]=true');
-  const paths = movies.map((movie: MinimalMovie) => ({ params: { film: '' + movie.id } }));
-  return {
-    paths,
-    fallback: true,
-  };
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const getStaticPaths: ()=>Promise<{ paths: { params: {} }[]; fallback: boolean | string; } | []> = async () => {
+  try {
+    const movies = await getDataFromEndpointSSR('/movies?where[is_published]=true');
+    const paths = movies.map((movie: MinimalMovie) => ({ params: { film: '' + movie.id } }));
+    return {
+      paths,
+      fallback: true,
+    };
+  } catch (err) {
+    console.error(err);
+    return [];
+  }
 };
 
 export const getStaticProps: GetStaticProps<FilmProps, Params> = async (context) => {
   const { film: id } = context.params!;
   try {
     const result = await getDataFromEndpointSSR(`/movies?where[id]=${id}` + selectQueryString);
-    if (!result[0]) throw new Error('Le film demandé n\'existe pas');
-    // Type of result have to be a movie[] since we use SWR for cache management
+    if (result.message === 'Aucun film trouvé') throw new Error(result.message);
     return {
       props: {
         movies: result,
         revalidate: 60,
       },
     };
-  } catch (err) {
+  } catch (err){
     return { notFound: true };
   }
 };
