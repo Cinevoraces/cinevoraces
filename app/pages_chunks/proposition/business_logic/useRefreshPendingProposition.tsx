@@ -22,7 +22,7 @@ const useRefreshPendingProposition = (
       ? setUserHasPendingProposition(true) 
       : setUserHasPendingProposition(false);
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userId]);
+  }, [userId, userPendingProposition]);
 };
 
 export default useRefreshPendingProposition;
