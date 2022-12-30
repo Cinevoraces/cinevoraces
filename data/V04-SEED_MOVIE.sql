@@ -1,0 +1,10 @@
+BEGIN;
+
+INSERT INTO public."movie" 
+  ("id", "french_title", "original_title", "poster_url", "directors", "release_date", "runtime", "casting", "presentation", "is_published", "publishing_date", "user_id", "season_id", "created_at", "updated_at") 
+VALUES 
+  (
+    87,   'Mutafukaz',  'Mutafukaz',  'https://image.tmdb.org/t/p/original/lwnkzrfBYXDK4JzQsTzSNjFNJVY.jpg',  '{"Shoujirou Nishimi","Guillaume Renard"}', '2018-05-23', 93, '{Orelsan,Gringe,"Redouanne Harjane","Féodor Atkine","Kelly Marot"}', 'Cette semaine, je remonte le quota ''film d''animation'' de Cinévorace avec Mutafukaz . J''ai cru comprendre que certains aiment bien ça en plus (coucou Arcanes). Je n''ai moi même pas vu ce film, donc je me suis dis que c''était l''occasion. Je ne connais pas particulièrement les univers de l''auteur (Guillaume Renard, alias Run), mais le monsieur semble avoir une affection pour les histoires de gangs, les petits frappes et des personnages qui sont souvent des losers.
+Synopsis : Angelino est un jeune loser parmi tant d’autres à Dark Meat City, une mégalopole sans pitié sous le soleil de Californie. La journée, il livre des pizzas dans tous les recoins de la ville et la nuit, il squatte une chambre d’hôtel minable avec son coloc Vinz et une armada de cafards qui font désormais un peu partie de sa famille. À la suite d’un accident de scooter lorsque son chemin a croisé par inadvertance la divine Luna, une fille aux cheveux noir de jais, notre jeune lascar commence à souffrir de maux de tête et d’étranges hallucinations. Des hallucinations, vous avez dit ? Hmm, peut-être pas... Pourchassé par des hommes en noir, Angelino n’a plus aucun doute : il est pris pour cible. Mais pourquoi lui ?', true, '2021-11-29', 20, 2, '2022-06-02 11:27:09.971031+02', '2022-06-06 15:02:15.907119+02');
+
+COMMIT;
