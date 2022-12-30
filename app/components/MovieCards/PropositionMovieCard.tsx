@@ -4,7 +4,7 @@ import type { Proposition } from '@custom_types/index';
 
 interface PropositionMovieCardProps extends Proposition {};
 
-const resultCardStyle = `w-full flex flex-between peer 
+const resultCardStyle = `w-full flex flex-between text-start
 border border-transparent rounded-xl overflow-hidden 
 bg-dark-gray border-orange-primary`;
 const posterStyle = 'rounded-lg object-cover h-full shadow-lg max-w-[125px]';
@@ -32,7 +32,7 @@ const PropositionMovieCard = (movie: PropositionMovieCardProps) => {
           </p>
           <p className="text-sm text-start">{movie.presentation ? cutText(movie.presentation, 100) : 'Pas de résumé disponible.'}</p>
         </div>
-        <p className="text-xs text-orange-primary hover:underline self-end justify-self-end">
+        <p className="text-xs text-orange-primary self-end justify-self-end">
           {`Publication prévue pour le : ${movie.publishing_date}`}
         </p>
       </div>
