@@ -6,6 +6,7 @@ import type { EpisodeOption, MovieBody } from './propositionPage';
 import type { TMDBMovie, TMDBDetailedMovie, TMDBMovieCredits } from './tmdbMovie';
 import type { Episode } from './episodes';
 import type User from './user';
+import type { Proposition } from './proposition';
 
 export type{
   MinimalMovie, Presentation, Metrics, Comment, UserReview, CompleteMovie,
@@ -16,4 +17,5 @@ export type{
   TMDBMovie, TMDBDetailedMovie, TMDBMovieCredits,
   Episode,
   User,
+  Proposition,
 };
