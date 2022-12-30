@@ -1,3 +1,5 @@
+import type { Roles } from './global';
+
 export interface MinimalMovie {
   id: number;
   author_id: number;
@@ -12,7 +14,7 @@ export interface Presentation{
   author_id: number;
   author_pseudo: string;
   author_avatar: string;
-  author_role: string;
+  author_role: Roles;
   presentation: string;
 }
 
@@ -29,7 +31,7 @@ export interface Comment {
   author_id: number;
   author_pseudo: string;
   author_avatar: string;
-  author_role: string;
+  author_role: Roles;
   comment: string;
   rating: number;
   created_at: string;
