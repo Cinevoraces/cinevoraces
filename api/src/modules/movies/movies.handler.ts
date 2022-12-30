@@ -31,7 +31,7 @@ export const handleGetMovies = async (request: Request, reply: Reply) => {
   if (!rowCount) 
     error.send(ApiError.NOT_FOUND_MOVIE, 404);
 
-  // TODO: 2. This solution must be treated using SQL.
+  // TODO: This solution must be treated using SQL.
   // Populate movies with user existing reviews if logged
   if (user) {
     const { rows: reviews, rowCount: reviewCount } = await pgClient.query(
@@ -63,26 +63,8 @@ export const handleProposeMovie = async (
   reply: Reply
 ) => {
   const { pgClient, body, user } = request;
-  // TODO: 1. Change SQL Function to allow user_id to be declared at the last index
-  // Payload must be declared this way to add user_id with token
-  // and keep keys order.
-  const payload = { 
-    french_title: body.french_title,
-    original_title: body.original_title,
-    poster_url: body.poster_url,
-    directors: body.directors,
-    release_date: body.release_date,
-    runtime: body.runtime,
-    casting: body.casting,
-    presentation: body.presentation,
-    publishing_date: body.publishing_date,
-    user_id: user.id,
-    season_id: body.season_id,
-    movie_genres: body.movie_genres,
-    movie_languages: body.movie_languages,
-    movie_countries: body.movie_countries,
-  };
-  
+  const payload = { ...body, user_id: user.id };
+
   await pgClient.query(
     proposeMovie(payload)
   );

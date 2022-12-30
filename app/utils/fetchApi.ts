@@ -8,13 +8,14 @@ const baseUrlSSR = process.env.NEXT_PUBLIC_API_BASE_URL_SSR,
  */
 const getDataFromEndpointSSR = async (endpoint: string) => {
   if (baseUrlSSR) {
-    return fetch(baseUrlSSR + endpoint)
-      .then(res => res.json());
+    const res = await fetch(baseUrlSSR + endpoint);
+    return handleResponse(res);
   }
 };
 
 interface BodyData {
-  [key: string]: string | number | boolean | null;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  [key: string]: any;
 }
 
 interface FetchOptions extends RequestInit {
@@ -42,12 +43,7 @@ const getRequestCSR = async (endpoint: string) => {
   }
 
   const res = await fetch(baseUrlCSR + endpoint, options);
-  const responsePayload = await res.json();
-  if (responsePayload.error){
-    const { message } = responsePayload;
-    throw new Error(message);
-  }
-  return responsePayload;
+  return handleResponse(res);
 };
 
 /**
@@ -71,13 +67,35 @@ const mutationRequestCSR = async (method: 'POST' | 'PUT' | 'DELETE', endpoint: s
     options.headers['Authorization'] = 'Bearer ' + localStorage.accessToken;
   }
   const res = await fetch(baseUrlCSR + endpoint, options);
-  const responsePayload = await res.json();
-  if (responsePayload.error){
-    const { message } = responsePayload;
-    throw new Error(message);
-  }
-  return responsePayload;
+  return handleResponse(res);
 };
 
-export { getDataFromEndpointSSR, getRequestCSR, mutationRequestCSR };
+/**
+ * Generic function for get methods, specific to client side requests toward external APis
+ * @param baseUrl string
+ * @param apiKey string
+ * @param endpoint string
+ * @returns data from API
+ */
+const externalGetRequest = async (baseUrl: string, endpoint: string, apiKey: string, options: string) => {
+  const res = await fetch(baseUrl + endpoint + `?api_key=${apiKey}` + '&' + options, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+  return handleResponse(res);
+};
+
+const handleResponse = async (res: Response) => {
+  const responseBody = await res.json();
+  if (responseBody.error) {
+    const { message } = responseBody;
+    throw new Error(message);
+  }
+  //return { body: responseBody, status: res.status }; // --------- enhanced version with status codes for better response testings --------
+  return responseBody;
+};
+
+export { getDataFromEndpointSSR, getRequestCSR, mutationRequestCSR, externalGetRequest };
 export type { BodyData };

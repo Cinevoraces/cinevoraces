@@ -3,7 +3,7 @@ import type { FastifySchema } from 'fastify';
 export const getMoviesSchema: FastifySchema = {
   description: `
   **Get movies**.
-  Use query parameters to filter the results using the following format: */movies?where[is_published]=true&select[metrics]=true&limit=5&sort[desc]=id*.
+  Use query parameters to filter the results using the following format: */movies?where[is_published]=true&select[metrics]=true&limit=5&sort=desc*.
   To access users related filters, the accessToken is needed. Using thoses will return only movies where the user has an **review object**.  
   **Available filters:**
   - where[id] -> number
@@ -25,7 +25,7 @@ export const getMoviesSchema: FastifySchema = {
   
   **Misc:**
   - limit -> number: *limit the number of results*.
-  - sort -> 'asc' | 'desc' as string *(Will sort by id)*
+  - sort -> 'asc' | 'desc' as string *(Will sort by publishing_date)*
   `,
   tags: ['Movies'],
   querystring: {
@@ -88,11 +88,10 @@ export const proposeMovieSchema: FastifySchema = {
       runtime: { type: 'number' },
       casting: { type: 'array', items: { type: 'string' } },
       presentation: { type: 'string' },
-      publishing_date: { type: 'string' },
-      season_id: { type: 'number' },
       movie_genres: { type: 'array', items: { type: 'string' } },
       movie_languages: { type: 'array', items: { type: 'string' } },
       movie_countries: { type: 'array', items: { type: 'string' } },
+      episode_id: { type: 'number' },
     },
     required: [
       'french_title',
@@ -103,11 +102,10 @@ export const proposeMovieSchema: FastifySchema = {
       'runtime',
       'casting',
       'presentation',
-      'publishing_date',
-      'season_id',
       'movie_genres',
       'movie_languages',
       'movie_countries',
+      'episode_id',
     ],
   },
   response: {

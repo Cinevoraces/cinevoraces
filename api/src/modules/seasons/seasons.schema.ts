@@ -16,7 +16,7 @@ export const getAllSeasonsSchema: FastifySchema = {
 
 export const createSeasonSchema: FastifySchema = {
   description: `
-  **Create new season and all associated episodes (proposition slots).**
+  **Create new season and all associated episodes.**
   `,
   tags: ['Admin'],
   body: {

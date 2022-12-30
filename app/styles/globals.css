@@ -31,7 +31,7 @@ input[type='range']::-webkit-slider-runnable-track {
 
 @layer components {
   .custom-container {
-    @apply container mx-auto px-3 py-8 lg:py-16 flex flex-col items-center justify-between gap-6 xl:px-0 md:gap-8 lg:gap-10 xl:gap-14
+    @apply container grow mx-auto px-3 py-8 lg:py-16 flex flex-col items-center justify-between gap-6 xl:px-0 md:gap-8 lg:gap-10 xl:gap-14
   }
   .hero-text{
     @apply text-4xl font-bold lg:text-6xl

@@ -53,7 +53,7 @@ export const getMovies = (
   }
   // Build ORDERBY query
   if (sort === 'asc' || sort === 'desc') {
-    ORDERBY = `ORDER BY id ${sort}`;
+    ORDERBY = `ORDER BY publishing_date ${sort}`;
   }
   // Build LIMIT query
   if (typeof limit === 'number' && limit > 0) {
@@ -82,8 +82,9 @@ export const getMovies = (
 export const proposeMovie = (
   payload: TProposeMovie
 ): Query.preparedQuery => {
+  console.log(payload);
   return {
-    text: 'SELECT new_movie($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14)',
+    text: 'SELECT new_movie($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13)',
     values: Object.values(payload)
   };
 };

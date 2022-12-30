@@ -21,7 +21,7 @@ interface HomeProps {
 
 const Home: NextPage<HomeProps> = (props) => {
   const { metrics, lastSixMovies } = props;
-  const isConnected = useAppSelector(user).isConnected;
+  const id = useAppSelector(user).id;
   const lastSixMoviesInfos = lastSixMovies.map((m) => ({
     id: m.id,
     french_title: m.french_title,
@@ -57,7 +57,7 @@ const Home: NextPage<HomeProps> = (props) => {
               <div className="flex justify-start gap-4">
                 <Button to={'/films'}>Découvrir les films</Button>
                 {
-                  !isConnected &&
+                  !id &&
                   <Button
                     to={'/inscription'}
                     customStyle={'empty'}>
@@ -124,7 +124,7 @@ const Home: NextPage<HomeProps> = (props) => {
               {'Envie de rejoindre l\'aventure ?'}
               <br />
               {
-                !isConnected ?
+                !id ?
                   <Link
                     href={'/inscription'}
                     className={emStyle}>
@@ -135,7 +135,7 @@ const Home: NextPage<HomeProps> = (props) => {
               pour partager votre passion pour le cinéma avec nous.
             </p>
             {
-              !isConnected &&
+              !id &&
               <div className="flex justify-end">
                 <Button
                   to={'/inscription'}
