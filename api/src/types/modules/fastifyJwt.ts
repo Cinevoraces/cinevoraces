@@ -1,4 +1,4 @@
-import type { review } from '../_index';
+import type { review, Roles } from '../_index';
 
 declare module '@fastify/jwt' {
   interface VerifyOptions {
@@ -9,7 +9,7 @@ declare module '@fastify/jwt' {
       id?: number;
       pseudo?: string;
       mail?: string;
-      role?: string;
+      role?: Roles;
       avatar_url?: string;
       previous_review?: Partial<review>;
     };

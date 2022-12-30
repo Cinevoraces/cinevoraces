@@ -6,7 +6,9 @@ import App from '../src/app';
 import parseOptions from '../src/utils/parseOptions';
 import type {
   episode as DBEpisode,
-  movie as DBMovie
+  movie as DBMovie } from '../src/types/_index';
+import {
+  Roles as UserRoles,
 } from '../src/types/_index';
 
 interface RessourcesEtity {
@@ -90,7 +92,7 @@ export default class TestServer {
         user: expect.objectContaining({
           id: expect.any(String),
           pseudo: expect.any(String),
-          role: expect.any(String),
+          role: expect.any(Number),
           avatar_url: expect.any(String),
         }),
         token: expect.any(String),
@@ -145,7 +147,7 @@ export default class TestServer {
         pseudo: expect.any(String),
         mail: expect.any(String),
         avatar_url: expect.any(String),
-        role: expect.any(String),
+        role: expect.any(Number),
         created_at: expect.anything(),
         propositions: expect.anything(),
         reviews: expect.anything(),
@@ -538,7 +540,7 @@ export default class TestServer {
     return { res, statusCode };
   }
   // RESSOURCES METHODS
-  public async createUser(role = 'user') {
+  public async createUser(role = UserRoles.USER) {
     const user = {
       pseudo: this.faker.internet.userName(),
       mail: this.faker.internet.email(),
