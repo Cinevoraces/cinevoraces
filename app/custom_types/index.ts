@@ -5,6 +5,7 @@ import type { SvgProps } from './global';
 import type { EpisodeOption, MovieBody } from './propositionPage';
 import type { TMDBMovie, TMDBDetailedMovie, TMDBMovieCredits } from './tmdbMovie';
 import type { Episode } from './episodes';
+import type User from './user';
 
 export type{
   MinimalMovie, Presentation, Metrics, Comment, UserReview, CompleteMovie,
@@ -14,4 +15,5 @@ export type{
   EpisodeOption, MovieBody,
   TMDBMovie, TMDBDetailedMovie, TMDBMovieCredits,
   Episode,
+  User,
 };

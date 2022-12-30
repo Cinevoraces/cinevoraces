@@ -48,7 +48,7 @@ const Header = () => {
   }, [lastMovie, id]);
   
   const userMenuLinks = [
-    ['Mon Profil', `/profil/${id}`],
+    ['Mon Profil', `/membres/${id}`],
   ];
   (role === 'admin') && userMenuLinks.push(['Administration', '/administration']);
 

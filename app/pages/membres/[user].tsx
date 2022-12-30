@@ -1,34 +1,50 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Loader from '@components/Loader';
 import type { NextPage } from 'next';
-import Image from 'next/image';
 import { useRouter } from 'next/router';
 import useSWR from 'swr';
+import { User } from '@custom_types/index';
+import { useAppSelector } from '@store/store';
+import { user } from 'store/slices/user';
+
+import UserMetrics from 'pages_chunks/user/UI/UserMetrics';
+import UserCard from 'pages_chunks/user/UI/UserCard';
 
 const User: NextPage = () => {
+  // Retrieve asked member id
   const router = useRouter();
   const userId = router.asPath.split('/')[2];
+  // Getting public datas and store them in local state
   const addProposition = '&select[proposition]=true';
-  console.log('/users?select[metrics]&where[id]=' + userId);
-  const { data, error } = useSWR(() => (userId !== '[user]') ? '/users?select[metrics]&where[id]=' + userId : '');
+  // Next initialise the slug with generic [user], prevent unnecessary fetching and downstream errors
+  const { data: userData, error } = useSWR(() => (userId !== '[user]') ? '/users?select[metrics]=true&select[propositions]=true&where[id]=' + userId : '');
+  const [askedUser, setAskedUser] = useState<User|undefined>(undefined);
   useEffect(() => {
-    console.log(data);
+    if (userData && userData.length > 0) {
+      console.log(userData);
+      setAskedUser(userData[0]);
+    }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data]);
+  }, [userId, userData]);
+  const connectedUserId = useAppSelector(user).id;
   return (
     <main className='custom-container'>
-      <h1 className='hero-text'>Profil</h1>
+      <h1 className='w-full hero-text text-center'>
+        {
+          (connectedUserId && Number(connectedUserId) === askedUser?.id ) 
+            ? 'Mon profil public' 
+            : 'Profil'}
+      </h1>
       {
-        (!data && !error) &&
+        (!userData && !error) &&
         <Loader/>
       }
       {
-        data &&
-        <div id='user-card' 
-          className='flex flex-col gap-2 rounded-xl bg-medium-gray'>
-          <div>
-          </div>
-        </div>
+        (askedUser !== undefined) &&
+        <>
+          <UserCard {...askedUser}/>
+          <UserMetrics {...askedUser}/>
+        </>
       }
     </main>
   );
