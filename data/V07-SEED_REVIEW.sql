@@ -1,24 +1,4 @@
---
--- PostgreSQL database dump
---
-
--- Dumped from database version 12.12 (Ubuntu 12.12-0ubuntu0.20.04.1)
--- Dumped by pg_dump version 12.12 (Ubuntu 12.12-0ubuntu0.20.04.1)
-
-SET statement_timeout = 0;
-SET lock_timeout = 0;
-SET idle_in_transaction_session_timeout = 0;
-SET client_encoding = 'UTF8';
-SET standard_conforming_strings = on;
-SELECT pg_catalog.set_config('search_path', '', false);
-SET check_function_bodies = false;
-SET xmloption = content;
-SET client_min_messages = warning;
-SET row_security = off;
-
---
--- Data for Name: review; Type: TABLE DATA; Schema: public; Owner: benoit
---
+BEGIN;
 
 INSERT INTO public.review (user_id, movie_id, bookmarked, viewed, liked, rating, comment, created_at, updated_at) VALUES (2, 1, false, true, true, 4, NULL, '2022-06-03 16:08:06.174271+02', '2022-06-03 16:08:08.654892+02');
 INSERT INTO public.review (user_id, movie_id, bookmarked, viewed, liked, rating, comment, created_at, updated_at) VALUES (2, 113, false, true, true, 4, NULL, '2022-06-02 18:03:10.205508+02', '2022-06-02 18:03:11.616163+02');
@@ -887,8 +867,4 @@ INSERT INTO public.review (user_id, movie_id, bookmarked, viewed, liked, rating,
 Ça partait bien mais je me suis ennuyé. Genre beaucoup. Et ça m''embête d''être aussi définitif parce que le film a vraiment des atouts. Mais ça n''a pas pris sur moi.', '2022-12-27 15:40:00.315861+01', '2022-12-27 15:45:44.504204+01');
 INSERT INTO public.review (user_id, movie_id, bookmarked, viewed, liked, rating, comment, created_at, updated_at) VALUES (2, 177, false, true, false, 3, NULL, '2022-12-29 02:00:48.922547+01', '2022-12-29 02:00:51.712091+01');
 
-
---
--- PostgreSQL database dump complete
---
-
+COMMIT;
