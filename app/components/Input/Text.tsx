@@ -10,12 +10,12 @@ interface BaseTextProps<T> {
   minLength?: number;
   errorMessage?: string;
   defaultValue?: string;
+  customStyle?: 'searchbar' | 'light'
 }
 export interface ControlledTextProps<T> extends BaseTextProps<T> {
   value?: string;
   onChange?: React.ChangeEventHandler<T>;
   onInput?: React.ChangeEventHandler<T>;
-  customStyle?: 'searchbar';
 }
 
 const basicStyle = `peer
@@ -132,10 +132,11 @@ export const TextRef = forwardRef<HTMLInputElement, BaseTextProps<HTMLInputEleme
  * @param minLength          set \<input\> 'minlength' param
  * @param errorMessage       set \<input\> 'pattern' param
  * @param defaultValue       set \<input\> 'defaultValue' param
+ * @param customStyle        set background colot for contrast purposes
  */
 export const TextAreaRef = forwardRef<HTMLTextAreaElement, BaseTextProps<HTMLTextAreaElement>>((props, ref) => {
   TextAreaRef.displayName = 'TextAreaRef';
-  const { errorMessage, ...inputProps } = props;
+  const { errorMessage, customStyle, ...inputProps } = props;
   const { label, id } = inputProps;
 
   return (
@@ -145,7 +146,7 @@ export const TextAreaRef = forwardRef<HTMLTextAreaElement, BaseTextProps<HTMLTex
         {...inputProps}
         name={id}
         rows={15}
-        className={standardStyle.replace('bg-medium-gray', 'bg-dark-gray')}
+        className={(customStyle === 'light') ? standardStyle : standardStyle.replace('bg-medium-gray', 'bg-dark-gray')}
         ref={ref}
         onInput={() => {
           if (ref && typeof ref !== 'function' && ref.current) ref.current.setCustomValidity('');

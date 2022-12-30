@@ -26,7 +26,8 @@ const ArrowSvg = ({ style }: SvgProps) => {
 
 export interface OptionProps {
   name: string;
-  value: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  value: any;
 }
 export interface SelectProps {
   name: string;
@@ -34,7 +35,8 @@ export interface SelectProps {
   displayOptionsState: boolean;
   displayOptionsSetter: ()=>void;
   stateValue: OptionProps;
-  valueSetter: Dispatch<SetStateAction<OptionProps>> | ((season: Season)=>{ payload: Season; type: string; });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  valueSetter: Dispatch<SetStateAction<OptionProps>> | ((season: Season)=>{ payload: Season; type: any; });
   customStyle?: 'searchbar';
 }
 

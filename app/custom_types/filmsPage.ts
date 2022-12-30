@@ -1,6 +1,6 @@
 import type { CompleteMovie } from './movies';
 
-export interface Season{
+export interface SeasonOption{
   name: string;
   value: string;
 }
@@ -24,7 +24,7 @@ export interface FilterUserInputs {
 }
 
 export interface FilteredMoviesStateInterface {
-  season?: Season;
+  season?: SeasonOption;
   searchQuery?: string;
   isSeasonSelectOpened: boolean;
   isFilterMenuOpen: boolean;
