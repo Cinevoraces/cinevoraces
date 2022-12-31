@@ -1,7 +1,3 @@
--- Deploy cinevoraces:version_10 to pg
--- Created the following views:
---     seasonView: return all seasons with counters
-
 BEGIN;
 
 DROP VIEW IF EXISTS seasonView;

@@ -1,10 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { RootState } from '../store';
+import type { Roles } from '@custom_types/global';
 
 interface UserProps {
   id?: number;
   pseudo?: string;
-  role?: string;
+  role?: Roles;
   avatar_url?: string;
 }
 

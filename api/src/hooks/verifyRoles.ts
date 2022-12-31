@@ -3,7 +3,7 @@ import type {
   FastifyReply as Reply,
   FastifyPluginCallback,
 } from 'fastify';
-import { ApiError } from '../types/_index';
+import { ApiError, Roles } from '../types/_index';
 import plugin from 'fastify-plugin';
 
 export const verifyRolesHooks: FastifyPluginCallback = async (
@@ -19,7 +19,7 @@ export const verifyRolesHooks: FastifyPluginCallback = async (
   fastify.decorate('isAdmin', async (request: Request, reply: Reply) => {
     const { error } = request;
     await request.jwtVerify();
-    if (request.user.role !== 'admin') 
+    if (request.user.role !== Roles.ADMIN) 
       error.send(ApiError.ADMIN_ONLY, 403);
   });
 

@@ -43,7 +43,6 @@ const metadatas = [
 ];
 let selectQueryString: string = '';
 metadatas.forEach((dataName) => (selectQueryString += `&select[${dataName}]=true`));
-console.log(selectQueryString);
 
 export default function Films() {
   const dispatch = useAppDispatch();

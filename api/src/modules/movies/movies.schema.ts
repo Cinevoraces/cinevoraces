@@ -15,6 +15,7 @@ export const getMoviesSchema: FastifySchema = {
   - select[casting] -> boolean
   - select[directors] -> boolean
   - select[runtime] -> boolean
+  - select[episode_number] -> boolean
   - select[release_date] -> boolean
   - select[genres] -> boolean
   - select[countries] -> boolean
@@ -50,6 +51,7 @@ export const getMoviesSchema: FastifySchema = {
           casting: { type: 'boolean' },
           directors: { type: 'boolean' },
           runtime: { type: 'boolean' },
+          episode_number: { type: 'boolean' },
           release_date: { type: 'boolean' },
           genres: { type: 'boolean' },
           countries: { type: 'boolean' },

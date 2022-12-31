@@ -1,7 +1,7 @@
 import type { MinimalMovie, Presentation, Metrics, Comment, UserReview, CompleteMovie } from './movies';
 import type Season from './season';
 import type { SeasonOption, FilterOptions, FilterUserInputs, FilteredMoviesStateInterface } from './filmsPage';
-import type { SvgProps } from './global';
+import type { SvgProps, Roles } from './global';
 import type { EpisodeOption, MovieBody } from './propositionPage';
 import type { TMDBMovie, TMDBDetailedMovie, TMDBMovieCredits } from './tmdbMovie';
 import type { Episode } from './episodes';
@@ -13,5 +13,5 @@ export type{
   SvgProps,
   EpisodeOption, MovieBody,
   TMDBMovie, TMDBDetailedMovie, TMDBMovieCredits,
-  Episode,
+  Episode, Roles
 };

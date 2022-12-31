@@ -1,7 +1,6 @@
--- Deploy cinevoraces:version_5 to pg
-
 BEGIN;
 
+-- Auto update "updated_at" fields
 CREATE FUNCTION fill_updated_at()
 	RETURNS TRIGGER AS $$
 	BEGIN

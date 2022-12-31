@@ -1,5 +1,3 @@
--- Deploy cinevoraces:version_6 to pg
-
 BEGIN;
 
 CREATE INDEX country_idx ON country USING btree (id);
