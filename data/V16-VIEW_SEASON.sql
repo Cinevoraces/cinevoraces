@@ -10,7 +10,7 @@ SELECT
 FROM "season"
 LEFT JOIN ( 
       SELECT episode.season_number, COUNT(*) as mc FROM movie
-            LEFT JOIN episode ON movie.episode_id = episode.id
+            LEFT JOIN episode ON movie.episode_id = episode.id AND movie.is_published = TRUE
             GROUP BY episode.season_number
       ) mc ON mc.season_number = "season".number;
 
