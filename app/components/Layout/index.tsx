@@ -11,7 +11,7 @@ interface LayoutProps {
 }
 
 export default function Layout({ children }: LayoutProps) {
-  // Page redirection closes misc opened menus
+  // Page redirection closes opened menus
   const dispatch = useAppDispatch();
   const path = useRouter().asPath;
   const { isBurgerMenuOpen, isUserMenuOpen, isConnectionModalOpen } = useAppSelector(globals);

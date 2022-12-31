@@ -110,9 +110,8 @@ export default function InscriptionForm() {
           onChange={() => dispatch(toggleIsPWVisible())}
         />
         <p className={helpingTextStyle}>
-          {
-            'Doit comporter au moins 12 caractères, dont a minima une majuscule, une minuscule, un symbole et un chiffre.'
-          }
+          Longueur minimale : 12 caractères.<br/>
+          Doit comprendre au moins une majuscule, une minuscule, un chiffre et un symbole parmi ! # $ % * + = ? | -
         </p>
       </div>
       <div className="flex justify-end">

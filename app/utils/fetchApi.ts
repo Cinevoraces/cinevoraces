@@ -89,11 +89,11 @@ const externalGetRequest = async (baseUrl: string, endpoint: string, apiKey: str
 
 const handleResponse = async (res: Response) => {
   const responseBody = await res.json();
-  if (responseBody.error) {
+  // if (res.status.toString().match(/2\d{2}/)) {
+  if (!new RegExp(/2\d{2}/).test(res.status.toString())) {
     const { message } = responseBody;
     throw new Error(message);
   }
-  //return { body: responseBody, status: res.status }; // --------- enhanced version with status codes for better response testings --------
   return responseBody;
 };
 
