@@ -6,7 +6,7 @@ export default interface User {
   id: number;
   mail: string;
   pseudo: string;
-  role: string;
+  role: number;
   updated_at: string;
   propositions: Proposition[];
   reviews: UserReview[];
