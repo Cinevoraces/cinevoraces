@@ -9,8 +9,18 @@ import { mutationRequestCSR } from '@utils/fetchApi';
 import { toast } from 'react-hot-toast';
 import tryCatchWrapper from '@utils/tryCatchWrapper';
 import type { BodyData } from '@utils/fetchApi';
+import type { KeyedMutator } from 'swr';
+import type { User } from '@custom_types/index';
+import { File } from '@components/Input';
 
-const ParameterForm = () => {
+import { setUserModification } from '@store/slices/user';
+
+interface ParameterFormInterface {
+  mutate: KeyedMutator<User[]>
+  mail: string;
+}
+
+const ParameterForm = ({ mutate, mail }: ParameterFormInterface) => {
   const isPWVisible = useAppSelector(global).arePWVisible;
   const dispatch = useAppDispatch();
 
@@ -29,6 +39,15 @@ const ParameterForm = () => {
 
   const submitSuccess = async (method: 'POST' | 'PUT' | 'DELETE', endpoint: string, data?: BodyData) => {
     await mutationRequestCSR(method, endpoint, data);
+    // Clean input values before sending
+    allInputsRef.forEach((i) => {
+      if (i.current) {
+        i.current.value = '';
+        i.current.required = false;
+      }
+    });
+    const user = await mutate();
+    if (user && user.length > 0) dispatch(setUserModification({ pseudo: user[0].pseudo }));
     toast.success('Vos changements ont bien été pris en compte.');
   };
 
@@ -65,7 +84,6 @@ const ParameterForm = () => {
         password: PWRef.current!.value,
         update_user,
       };
-      console.log(data);
       tryCatchWrapper(submitSuccess)('PUT', '/users', data);
     };
   };
@@ -74,15 +92,19 @@ const ParameterForm = () => {
     <form
       action="submit"
       onSubmit={async (e) => handleSubmit(e, allInputsRef)}
-      className="flex flex-col w-full gap-6">
-      <TextInputRef
-        type="email"
-        id="email"
-        label="Modifier votre email"
-        placeholder="Votre nouvel email..."
-        errorMessage="Saisissez une addresse mail."
-        ref={emailRef}
-      />
+      className="flex flex-col w-full gap-6 max-w-lg">
+      <File/>
+      <div className='flex flex-col gap-1'>
+        <TextInputRef
+          type="email"
+          id="email"
+          label="Modifier votre email"
+          placeholder="Votre nouvel email..."
+          errorMessage="Saisissez une addresse mail."
+          ref={emailRef}
+        />
+        <p className={helpingTextStyle}>Mon addresse actuelle : <span className='emphasis'>{mail}</span></p>
+      </div>
       <TextInputRef
         id="username"
         label="Modifier mon nom d'utilisateur"

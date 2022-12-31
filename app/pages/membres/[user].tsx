@@ -1,18 +1,16 @@
-import { useEffect, useState } from 'react';
-import Loader from '@components/Loader';
+import { useState } from 'react';
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import useSWR from 'swr';
 import { User } from '@custom_types/index';
 import { useAppSelector } from '@store/store';
 import { user } from 'store/slices/user';
-import { Button } from '@components/Input';
-import { PropositionMovieCard } from '@components/MovieCards/index';
+import Loader from '@components/Loader';
 import ParameterForm from 'pages_chunks/user/UI/ParameterForm';
-
 import UserMetrics from 'pages_chunks/user/UI/UserMetrics';
 import UserCard from 'pages_chunks/user/UI/UserCard';
 import useRefreshUserData from 'pages_chunks/user/business_logic/useRefreshUserData';
+import PendingProposition from 'pages_chunks/user/UI/PendingProposition';
 
 const User: NextPage = () => {
   const connectedUserId = useAppSelector(user).id?.toString();
@@ -25,12 +23,8 @@ const User: NextPage = () => {
   // Getting public datas and store them in local state
   const addProposition = isPrivatePage ? '&select[propositions]=true' : '';
   // Next initializes the slug with a generic [user] string, this prevents unnecessary fetches and downstream errors
-  const {
-    data: userData,
-    error,
-    mutate,
-  } = useSWR(() =>
-    userId && userId !== '[user]' ? `/users?select[metrics]=true${addProposition}&where[id]=${userId}` : ''
+  const { data: userData, error, mutate } = useSWR(
+    () => userId && userId !== '[user]' ? `/users?select[metrics]=true${addProposition}&where[id]=${userId}` : ''
   );
   const [askedUser, setAskedUser] = useState<User | undefined>(undefined);
   useRefreshUserData(userId, connectedUserId, userData, mutate, setAskedUser);
@@ -53,7 +47,7 @@ const User: NextPage = () => {
             <Loader />
           ) : // Fetching data failed
             error ? (
-              <p className="custom-container grow-0">Une erreur est survenue, veuillez réessayer plus tard?</p>
+              <p className="custom-container grow-0">Une erreur est survenue. Veuillez réessayer plus tard.</p>
             ) : (
             // Fetched data
               askedUser && (
@@ -68,28 +62,10 @@ const User: NextPage = () => {
                     <section
                       id="private_section"
                       className="flex flex-col gap-6">
-                      <div
-                        id="pending_proposition"
-                        className="">
-                        <h2 className="custom-container grow-0 py-4 title-section">Proposition en attente</h2>
-                        <div className="w-full px-4 py-3 text-center bg-medium-gray">
-                          {askedUser && askedUser.propositions && askedUser.propositions.length > 0 ? (
-                            <PropositionMovieCard {...askedUser.propositions[0]}/>
-                          ) : (
-                            <div className="flex flex-col items-center gap-4">
-                              <p className="w-full">
-                                <span className="emphasis">{'Vous n\'avez pas de proposition en attente.'}</span>
-                                <br />
-                                {'Une idée ? C\'est par ici :'}
-                              </p>
-                              <Button to="/proposition">Proposer un film</Button>
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                      <div className="custom-container grow-0 py-4">
+                      <PendingProposition askedUser={askedUser}/>
+                      <div className="custom-container grow-0 pt-4">
                         <h2 className="title-section">Changer mes paramètres</h2>
-                        <ParameterForm/>
+                        <ParameterForm mutate={mutate} mail={askedUser.mail}/>
                       </div>
                     </section>
                   )}

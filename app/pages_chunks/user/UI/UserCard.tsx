@@ -10,7 +10,7 @@ const UserCard = ({ ...user }: UserCardProps) => {
   return (
     <div
       id="user-card"
-      className="w-full flex flex-col px-6 py-4 gap-3 items-center rounded-xl bg-medium-gray">
+      className="w-full flex flex-col px-6 py-4 gap-3 items-center rounded-xl bg-medium-gray max-w-lg">
       <div className="flex gap-2">
         <Avatar
           url={user.avatar_url}

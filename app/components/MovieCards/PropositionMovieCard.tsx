@@ -4,7 +4,7 @@ import type { Proposition } from '@custom_types/index';
 
 interface PropositionMovieCardProps extends Proposition {};
 
-const resultCardStyle = `w-full flex flex-between text-start
+const resultCardStyle = `w-full flex flex-between text-start max-w-lg
 border border-transparent rounded-xl overflow-hidden 
 bg-dark-gray border-orange-primary`;
 const posterStyle = 'rounded-lg object-cover h-full shadow-lg max-w-[125px]';
