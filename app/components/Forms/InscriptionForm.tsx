@@ -89,7 +89,7 @@ export default function InscriptionForm() {
           id="password"
           label="Entrez votre mot de passe"
           placeholder="Mot de passe..."
-          pattern="^(?=.*[A-Za-z])(?=.*\d)[!#$&%*+=?|\-A-Za-z\d]{8,}$"
+          pattern={process.env.NEXT_PUBLIC_PASS_REGEXP}
           errorMessage="La saisie ne réponds pas aux exigences de sécurité."
           ref={PWRef}
         />
@@ -97,7 +97,7 @@ export default function InscriptionForm() {
           type={!isPWVisible ? 'password' : undefined}
           id="password"
           placeholder="Confirmer votre mot de passe..."
-          pattern="^(?=.*[A-Za-z])(?=.*\d)[!#$&%*+=?|\-A-Za-z\d]{8,}$"
+          pattern={process.env.NEXT_PUBLIC_PASS_REGEXP}
           errorMessage={matchingErrorMessage || 'La saisie ne réponds pas aux exigences de sécurité.'}
           ref={confirmPWRef}
         />

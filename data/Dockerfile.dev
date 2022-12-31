@@ -6,4 +6,4 @@ RUN apt update -y && \
     apt install sqitch -y
 
 COPY . .
-COPY version_*.sql /docker-entrypoint-initdb.d/
+COPY V*.sql /docker-entrypoint-initdb.d/

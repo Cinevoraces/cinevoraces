@@ -12,8 +12,8 @@ export const getAvailableEpisodes = (): Query.preparedQuery => {
               LEFT JOIN (SELECT "movie".id, "movie".episode_id FROM movie) mv 
                 ON mv.episode_id = ep.id
               WHERE mv.id IS NULL
-              AND ep.publishing_date <= NOW()
-              AND ep.publishing_date > NOW() - INTERVAL '1 month'
+              AND ep.publishing_date >= NOW()
+              AND ep.publishing_date < (NOW() + interval '1 month')
               ORDER BY ep.publishing_date ASC
               LIMIT 5
             ;`,

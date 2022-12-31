@@ -1,3 +1,5 @@
+import type { Roles } from '../_index';
+
 export interface user {
   id: number
   pseudo: string
@@ -5,7 +7,7 @@ export interface user {
   password: string
   avatar_url: string | null
   mail_sub: boolean | null
-  role: string
+  role: Roles
   created_at: Date
   updated_at: Date | null
 }

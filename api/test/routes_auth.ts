@@ -1,4 +1,3 @@
-import { Console } from 'console';
 import type TestServer from './TestServer';
 
 export async function ROUTES_AUTH(Server: TestServer) {

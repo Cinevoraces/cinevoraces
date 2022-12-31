@@ -9,7 +9,8 @@ import CompleteLogo from './CompleteLogo';
 import Modal from '@components/Modal';
 import Button from '@components/Input/Button';
 import { ConnectionForm } from '@components/Forms';
-import useSWR from 'swr'; 
+import useSWR from 'swr';
+import { Roles } from '@custom_types/global';
 
 const Header = () => {
   const { isBurgerMenuOpen, isUserMenuOpen, isConnectionModalOpen } = useAppSelector(globals);
@@ -50,7 +51,7 @@ const Header = () => {
   const userMenuLinks = [
     ['Mon Profil', '/membres/moi'],
   ];
-  (role === 'admin') && userMenuLinks.push(['Administration', '/administration']);
+  (role === Roles.ADMIN) && userMenuLinks.push(['Administration', '/administration']);
 
   return (
     <>

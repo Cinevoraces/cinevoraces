@@ -6,7 +6,7 @@ export const userSchema = {
     pseudo: { type: 'string' },
     mail: { type: 'string' },
     avatar_url: { type: 'string' },
-    role: { type: 'string' },
+    role: { type: 'number' },
     created_at: { type: 'string' },
     updated_at: { type: 'string' },
     propositions: {
