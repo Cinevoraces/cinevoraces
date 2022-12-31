@@ -29,6 +29,7 @@ export default function InscriptionForm() {
   const router = useRouter();
   const submitSuccess = async (method: 'POST' | 'PUT' | 'DELETE', endpoint: string, data?: BodyData) => {
     const responseData = await mutationRequestCSR(method, endpoint, data);
+    console.log(responseData);
     toast.success(responseData.message);
     router.push('/');
   };
