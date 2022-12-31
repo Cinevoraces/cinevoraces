@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from 'react';
 import Link from 'next/link';
 import { useAppSelector, useAppDispatch } from '@store/store';
-import { toggleBurgerMenu, toggleUserMenu, toggleConnectionModal, globals } from '@store/slices/global';
+import { toggleBurgerMenu, toggleUserMenu, toggleConnectionModal, global } from '@store/slices/global';
 import { user } from '@store/slices/user';
 import useCloseMenuOnOutsideClick from '@hooks/useCloseMenuOnOutsideClick';
 import HeaderMenu from './HeaderMenu';
@@ -13,7 +13,7 @@ import useSWR from 'swr';
 import { Roles } from '@custom_types/global';
 
 const Header = () => {
-  const { isBurgerMenuOpen, isUserMenuOpen, isConnectionModalOpen } = useAppSelector(globals);
+  const { isBurgerMenuOpen, isUserMenuOpen, isConnectionModalOpen } = useAppSelector(global);
   const { id, role } = useAppSelector(user);
   const dispatch = useAppDispatch();
 

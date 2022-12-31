@@ -1,6 +1,5 @@
 import { useRef, useState } from 'react';
 import Image from 'next/image';
-import { useRouter } from 'next/router';
 import { useAppSelector, useAppDispatch } from '@store/store';
 import { TextInputRef, Toggle } from '@components/Input';
 import { toggleArePWVisible, global } from '@store/slices/global';
@@ -11,15 +10,16 @@ import { toast } from 'react-hot-toast';
 import tryCatchWrapper from '@utils/tryCatchWrapper';
 import type { BodyData } from '@utils/fetchApi';
 
-export default function InscriptionForm() {
+const ParameterForm = () => {
   const isPWVisible = useAppSelector(global).arePWVisible;
   const dispatch = useAppDispatch();
 
   const emailRef = useRef<HTMLInputElement>(null);
   const usernameRef = useRef<HTMLInputElement>(null);
   const PWRef = useRef<HTMLInputElement>(null);
-  const confirmPWRef = useRef<HTMLInputElement>(null);
-  const allInputsRef = [emailRef, usernameRef, PWRef, confirmPWRef];
+  const newPWRef = useRef<HTMLInputElement>(null);
+  const confirmNewPWRef = useRef<HTMLInputElement>(null);
+  const allInputsRef = [emailRef, usernameRef, PWRef, newPWRef, confirmNewPWRef];
 
   const [arePWMatching, setArePWMatching] = useState(true);
 
@@ -27,12 +27,9 @@ export default function InscriptionForm() {
 
   const matchingErrorMessage = 'Les deux saisies ne correspondent pas.';
 
-  const router = useRouter();
   const submitSuccess = async (method: 'POST' | 'PUT' | 'DELETE', endpoint: string, data?: BodyData) => {
-    const responseData = await mutationRequestCSR(method, endpoint, data);
-    console.log(responseData);
-    toast.success(responseData.message);
-    router.push('/');
+    await mutationRequestCSR(method, endpoint, data);
+    toast.success('Vos changements ont bien été pris en compte.');
   };
 
   const handleSubmit = async (
@@ -40,26 +37,37 @@ export default function InscriptionForm() {
     allInputsRef: React.RefObject<HTMLInputElement>[]
   ) => {
     e.preventDefault();
-    // Passing all inputs as required
-    allInputsRef.forEach((inputRef) => {
-      if (inputRef.current) inputRef.current.required = true;
+    // Checking which inputs are used and current PW
+    const modifiers = allInputsRef.filter((i) => i.current && (i.current.value || i === PWRef));
+    // Passing all used input as required
+    modifiers.forEach((i) => {
+      if (i.current) i.current.required = true;
     });
-    // Checking PW correspondance
-    setArePWMatching(PWRef.current?.value === confirmPWRef.current?.value);
-    if (!arePWMatching) {
-      confirmPWRef.current?.setCustomValidity(matchingErrorMessage);
-      return;
+    // Checking PW correspondance if password modification requested
+    if (newPWRef.current && newPWRef.current.value){
+      setArePWMatching((!newPWRef.current?.value && !confirmNewPWRef.current?.value) 
+        ? true 
+        : (newPWRef.current?.value === confirmNewPWRef.current?.value)
+      );
+      if (!arePWMatching) {
+        confirmNewPWRef.current?.setCustomValidity(matchingErrorMessage);
+        return;
+      }
     }
     // Checking all inputs validation status
-    const inputValidationStatus = allInputsRef.map((inputRef) => inputRef.current?.reportValidity());
-    if (!inputValidationStatus.includes(false)) {
+    const inputValidationStatus = allInputsRef.map((inputRef) => inputRef.current?.value && inputRef.current?.reportValidity());
+    if (inputValidationStatus.length > 0 && !inputValidationStatus.includes(false)) {
+      const update_user: {[key: string]: string } = {};
+      if (modifiers.includes(emailRef) && emailRef.current) update_user['mail'] = emailRef.current.value;
+      if (modifiers.includes(usernameRef) && usernameRef.current) update_user['pseudo'] = usernameRef.current.value;
+      if (modifiers.includes(newPWRef) && newPWRef.current) update_user['password'] = newPWRef.current.value;
       const data = {
         password: PWRef.current!.value,
-        mail: emailRef.current!.value,
-        pseudo: usernameRef.current!.value,
+        update_user,
       };
-      tryCatchWrapper(submitSuccess)('POST', '/register', data);
-    }
+      console.log(data);
+      tryCatchWrapper(submitSuccess)('PUT', '/users', data);
+    };
   };
 
   return (
@@ -70,16 +78,15 @@ export default function InscriptionForm() {
       <TextInputRef
         type="email"
         id="email"
-        label="Email"
-        placeholder="Votre email..."
+        label="Modifier votre email"
+        placeholder="Votre nouvel email..."
         errorMessage="Saisissez une addresse mail."
         ref={emailRef}
       />
-      <p className={helpingTextStyle}>{'Votre email sera utilisé pour la récupération de votre mot de passe.'}</p>
       <TextInputRef
         id="username"
-        label="Nom d'utilisateur"
-        placeholder="Votre nom d'utilisateur..."
+        label="Modifier mon nom d'utilisateur"
+        placeholder="Votre nouveau nom d'utilisateur..."
         minLength={3}
         errorMessage="Saisissez un nom d'utilisateur de plus de 3 lettres."
         ref={usernameRef}
@@ -89,31 +96,37 @@ export default function InscriptionForm() {
         <TextInputRef
           type={!isPWVisible ? 'password' : undefined}
           id="password"
-          label="Entrez votre mot de passe"
-          placeholder="Mot de passe..."
-          pattern={process.env.NEXT_PUBLIC_PASS_REGEXP}
-          errorMessage="La saisie ne réponds pas aux exigences de sécurité."
-          ref={PWRef}
+          label="Modifier votre mot de passe"
+          placeholder="Nouveau mot de passe..."
+          ref={newPWRef}
         />
         <TextInputRef
           type={!isPWVisible ? 'password' : undefined}
           id="password"
-          placeholder="Confirmer votre mot de passe..."
+          placeholder="Confirmez votre nouveau mot de passe..."
           pattern={process.env.NEXT_PUBLIC_PASS_REGEXP}
           errorMessage={!arePWMatching ? matchingErrorMessage : 'La saisie ne réponds pas aux exigences de sécurité.'}
-          ref={confirmPWRef}
-        />
-        <Toggle
-          id="showPasswordInscription"
-          name="showPasswordInscription"
-          label="Montrer le mot de passe ?"
-          checked={isPWVisible || false}
-          onChange={() => dispatch(toggleArePWVisible())}
+          ref={confirmNewPWRef}
         />
         <p className={helpingTextStyle}>
           Longueur minimale : 12 caractères.<br/>
           Doit comprendre au moins une majuscule, une minuscule, un chiffre et un symbole parmi ! # $ % * + = ? | -
         </p>
+        <TextInputRef
+          type={!isPWVisible ? 'password' : undefined}
+          id="password"
+          label="Confirmez les modifications avec votre mot de passe actuel"
+          placeholder="Mot de passe actuel..."
+          errorMessage={'Saisir votre mot de passe actuel pour confirmer.'}
+          ref={PWRef}
+        />
+        <Toggle
+          id="showPasswordInscription"
+          name="showPasswordInscription"
+          label="Montrer les mots de passe ?"
+          checked={isPWVisible || false}
+          onChange={() => dispatch(toggleArePWVisible())}
+        />
       </div>
       <div className="flex justify-end">
         <Button customStyle="rounded">
@@ -128,4 +141,6 @@ export default function InscriptionForm() {
       </div>
     </form>
   );
-}
+};
+
+export default ParameterForm;

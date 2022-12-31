@@ -8,6 +8,7 @@ import { useAppSelector } from '@store/store';
 import { user } from 'store/slices/user';
 import { Button } from '@components/Input';
 import { PropositionMovieCard } from '@components/MovieCards/index';
+import ParameterForm from 'pages_chunks/user/UI/ParameterForm';
 
 import UserMetrics from 'pages_chunks/user/UI/UserMetrics';
 import UserCard from 'pages_chunks/user/UI/UserCard';
@@ -88,6 +89,7 @@ const User: NextPage = () => {
                       </div>
                       <div className="custom-container grow-0 py-4">
                         <h2 className="title-section">Changer mes paramètres</h2>
+                        <ParameterForm/>
                       </div>
                     </section>
                   )}
