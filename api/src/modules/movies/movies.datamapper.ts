@@ -26,6 +26,7 @@ export const getMovies = (
       'casting',
       'directors',
       'runtime',
+      'episode_number',
       'release_date',
       'genres',
       'countries',
@@ -82,7 +83,6 @@ export const getMovies = (
 export const proposeMovie = (
   payload: TProposeMovie
 ): Query.preparedQuery => {
-  console.log(payload);
   return {
     text: 'SELECT new_movie($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13)',
     values: Object.values(payload)

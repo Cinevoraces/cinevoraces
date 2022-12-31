@@ -11,7 +11,10 @@ export async function ROUTES_MOVIES(server: TestServer) {
       const { res: ORD_LMT } = SUCCESSFULL_GET_MOVIES_ORDERED_AND_LIMITED;
       expect(ORD_LMT.length).toEqual(3);
       expect(ORD_LMT[0].id > ORD_LMT[ORD_LMT.length - 1].id).toBeTruthy();
-      
+
+      const SUCCESSFULL_GET_MOVIES_SELECT_EPISODE_FIELD = await server.RequestMovies('select[episode_number]=true');
+      expect(SUCCESSFULL_GET_MOVIES_SELECT_EPISODE_FIELD.res[0].episode_number).toBeDefined();
+
       const SUCCESSFULL_GET_MOVIES_FILTERED_BY_ID = await server.RequestMovies('where[id]=1');
       expect(SUCCESSFULL_GET_MOVIES_FILTERED_BY_ID.res[0].id).toEqual(1);
 

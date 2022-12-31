@@ -74,7 +74,7 @@ export const loginSchema: FastifySchema = {
           properties: {
             id: { type: 'string' },
             pseudo: { type: 'string' },
-            role: { type: 'string' },
+            role: { type: 'number' },
             avatar_url: { type: 'string' },
           },
         },
@@ -112,7 +112,7 @@ export const refreshSchema: FastifySchema = {
             id: { type: 'string' },
             pseudo: { type: 'string' },
             mail: { type: 'string' },
-            role: { type: 'string' },
+            role: { type: 'number' },
             avatar_url: { type: 'string' },
           },
         },

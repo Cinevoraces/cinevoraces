@@ -1,4 +1,5 @@
 import TestServer from './TestServer';
+import { Roles } from '../src/types/_index';
 import { ROUTES_AUTH } from './routes_auth';
 import { ROUTES_METRICS } from './routes_metrics';
 import { ROUTES_MOVIES } from './routes_movies';
@@ -13,9 +14,9 @@ beforeAll(async () => {
   await Server.start();
 
   // Create test users
-  Server.ressources.admins.push(await Server.createUser('admin'));
-  Server.ressources.users.push(await Server.createUser('user'));
-  Server.ressources.users.push(await Server.createUser('user'));
+  Server.ressources.admins.push(await Server.createUser(Roles.ADMIN));
+  Server.ressources.users.push(await Server.createUser(Roles.USER));
+  Server.ressources.users.push(await Server.createUser(Roles.USER));
   Server.ressources.episodes.push(await Server.createEpisode());
 });
 
