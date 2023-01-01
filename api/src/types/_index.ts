@@ -26,4 +26,5 @@ export type { user } from './database/user';
 
 // ELSE
 export type { updateProposedMovie, proposeMovie } from './proposeMoviePayload';
+export type { fileManager } from './fileManager';
 export type { Query } from './query';

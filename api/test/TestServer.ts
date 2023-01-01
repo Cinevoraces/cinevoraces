@@ -427,7 +427,10 @@ export default class TestServer {
     const req = await this.fastify.inject({
       method: ECrudMethods.PUT,
       url: EEndpoints.USERS_AVATAR,
-      headers: { Authorization: `Bearer ${token}` },
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-type': `multipart/form-data; boundary=${form.getBoundary()}`
+      },
       payload: form
     });
 

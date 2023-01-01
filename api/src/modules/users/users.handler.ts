@@ -71,7 +71,7 @@ export const handlePutUserAvatar = async (request: Request, reply: Reply) => {
 
   const data = await request.file();
 
-  console.log(data);
+  console.log('data: ', data);
   // TODO: FINISH ME
   // const publicAvatarUrl = cloudinary.uploadImg(pseudo, 'FILE PATH');
   // await pgClient.query(

@@ -2,6 +2,7 @@ import type {
   FastifyRequest as Request,
   FastifyReply as Reply,
 } from 'fastify';
+import type { fileManager } from '../../types/_index';
 import type { Pool } from 'pg';
 
 declare module 'fastify' {
@@ -11,6 +12,7 @@ declare module 'fastify' {
     bcryptCompare: (pass_1: string, pass_2: string) => Promise<boolean>;
     bcryptHash: (password: string) => Promise<string>;
     cloudinary: { uploadImg: (userPseudo: string, filePath: string) => Promise<string> };
+    fileManager: fileManager;
   }
   interface FastifyInstance {
     pgClient: Pool;
@@ -18,6 +20,7 @@ declare module 'fastify' {
     bcryptCompare: (pass_1: string, pass_2: string) => Promise<boolean>;
     bcryptHash: (password: string) => Promise<string>;
     cloudinary: { uploadImg: (userPseudo: string, filePath: string) => Promise<string> };
+    fileManager: fileManager;
 
     // Hooks
     findOrCreateReview: (request: Request, reply: Reply) => void;
