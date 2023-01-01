@@ -2,6 +2,7 @@ import type {
   FastifyRequest as Request,
   FastifyReply as Reply,
 } from 'fastify';
+import type Multer from 'fastify-multer';
 import type { Pool } from 'pg';
 
 declare module 'fastify' {
@@ -10,16 +11,16 @@ declare module 'fastify' {
     error: { send: (message: string, statusCode: number, detailedMessage?: string) => void };
     bcryptCompare: (pass_1: string, pass_2: string) => Promise<boolean>;
     bcryptHash: (password: string) => Promise<string>;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    cloudinary: {[key: string]: any };
+    cloudinary: { uploadImg: (userPseudo: string, filePath: string) => Promise<string> };
+    file: { name: string, location: string, path: string };
   }
   interface FastifyInstance {
     pgClient: Pool;
     error: { send: (message: string, statusCode: number, detailedMessage?: string) => void };
     bcryptCompare: (pass_1: string, pass_2: string) => Promise<boolean>;
     bcryptHash: (password: string) => Promise<string>;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    cloudinary: {[key: string]: any };
+    cloudinary: { uploadImg: (userPseudo: string, filePath: string) => Promise<string> };
+    multer: typeof Multer;
 
     // Hooks
     findOrCreateReview: (request: Request, reply: Reply) => void;
@@ -31,5 +32,6 @@ declare module 'fastify' {
     verifyAccessToken: (request: Request, reply: Reply) => void;
     verifyAccessTokenOptionnal: (request: Request, reply: Reply) => void;
     verifyRefreshToken: (request: Request, reply: Reply) => void;
+    uploadUserAvatar: (request: Request, reply: Reply) => void;
   }
 }

@@ -6,13 +6,14 @@ import App from '../src/app';
 import parseOptions from '../src/utils/parseOptions';
 import type {
   episode as DBEpisode,
-  movie as DBMovie } from '../src/types/_index';
+  movie as DBMovie
+} from '../src/types/_index';
 import {
   Roles as UserRoles,
 } from '../src/types/_index';
 
 interface RessourcesEtity {
-  delete: ()=>Promise<void>;
+  delete: () => Promise<void>;
 }
 interface User extends RessourcesEtity {
   pseudo: string;
@@ -61,6 +62,7 @@ enum EEndpoints {
   SEASONS = '/seasons',
   EPISODES = '/episodes',
   USERS = '/users',
+  USERS_AVATAR = '/users/avatar',
   BOOK_EPISODE = '/episodes/book',
   ADMIN = '/admin',
   ADMIN_USERS = '/admin/users',
@@ -199,7 +201,7 @@ export default class TestServer {
       tokens.refreshToken = (req.cookies[0] as Record<string, string>).name + '=' + (req.cookies[0] as Record<string, string>).value;
       tokens.accessToken = await res.token;
     }
-    
+
     return { res, statusCode, tokens };
   }
   public async RequestRefresh(refreshToken: string) {
@@ -222,14 +224,14 @@ export default class TestServer {
     });
     const res = await req.json();
     const statusCode = req.statusCode;
-    
+
     return { res, statusCode };
   }
   public async RequestMovies(query = '', token?: string) {
     const headers = token
       ? { Authorization: `Bearer ${token}` }
       : {};
-    
+
     const req = await this.fastify.inject({
       headers,
       method: ECrudMethods.GET,
@@ -375,7 +377,7 @@ export default class TestServer {
       url: EEndpoints.ADMIN_UNBOOK_EPISODE + `/${episodeId}`,
       payload
     });
-    
+
     const res = await req.json();
     const statusCode = req.statusCode;
     return { res, statusCode };
@@ -412,6 +414,18 @@ export default class TestServer {
     const res = await req.json();
     const statusCode = req.statusCode;
     return { res, statusCode };
+  }
+  public async RequestUserAvatar(
+    token: string,
+  ) {
+    const req = await this.fastify.inject({
+      method: ECrudMethods.PUT,
+      url: EEndpoints.USERS_AVATAR,
+      headers: { Authorization: `Bearer ${token}` },
+
+      // TODO: FINISH ME
+    });
+
   }
   public async RequestAdminDeleteUser(
     token: string,
@@ -456,7 +470,7 @@ export default class TestServer {
       headers: { Authorization: `Bearer ${token}` },
       payload
     });
-  
+
     const res = await req.json();
     const statusCode = req.statusCode;
     return { res, statusCode };
@@ -521,7 +535,7 @@ export default class TestServer {
     const statusCode = req.statusCode;
     return { res, statusCode };
   }
-  public async RequestAdminCreateSeason( 
+  public async RequestAdminCreateSeason(
     token: string,
     payload: {
       year: number,
@@ -652,7 +666,7 @@ export default class TestServer {
       }
     };
   }
-                  
+
   // PRIVATE METHODS
   private async generatePassword() {
     const password = this.faker.internet.password();

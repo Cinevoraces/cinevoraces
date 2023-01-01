@@ -17,6 +17,7 @@
     "bcryptjs": "^2.4.3",
     "cloudinary": "^1.33.0",
     "fastify": "^4.5.3",
+    "fastify-multer": "^2.0.3",
     "fastify-plugin": "^4.2.1",
     "pg": "^8.8.0",
     "qs": "^6.11.0",

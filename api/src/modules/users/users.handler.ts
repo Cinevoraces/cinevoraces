@@ -65,17 +65,18 @@ export const handlePutUser = async (request: Request, reply: Reply) => {
  * **Put user picture**
  * @description Put user picture by token
 */
-export const handlePutUserPicture = async (request: Request, reply: Reply) => {
-  const { pgClient, cloudinary, user } = request;
+export const handlePutUserAvatar = async (request: Request, reply: Reply) => {
+  const { pgClient, cloudinary, user, file } = request;
   const { id, pseudo } = user;
 
-  const publicPicUrl = cloudinary.uploadImg(pseudo, 'FILE PATH');
+  // TODO: FINISH ME
+  const publicAvatarUrl = cloudinary.uploadImg(pseudo, 'FILE PATH');
   await pgClient.query(
-    updateUser(id, { avatar_url: publicPicUrl })
+    updateUser(id, { avatar_url: publicAvatarUrl })
   );
 
   reply
-    .code(200)
+    .code(204)
     .send({ message: ApiResponse.UPDATE_USER_PIC_SUCCESS });
 };
 
