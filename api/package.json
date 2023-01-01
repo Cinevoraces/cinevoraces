@@ -15,6 +15,7 @@
     "@fastify/jwt": "^6.3.2",
     "@fastify/swagger": "^7.6.1",
     "bcryptjs": "^2.4.3",
+    "cloudinary": "^1.33.0",
     "fastify": "^4.5.3",
     "fastify-plugin": "^4.2.1",
     "pg": "^8.8.0",

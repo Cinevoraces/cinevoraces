@@ -9,5 +9,6 @@ export enum ApiResponse {
   DELETE_COMMENT_SUCCESS = 'Commentaire supprimé avec succès.',
   DELETE_USER_SUCCESS = 'Utilisateur supprimé avec succès.',
   UPDATE_USER_SUCCESS = 'Votre profil a bien été mis à jour.',
+  UPDATE_USER_PIC_SUCCESS = 'Votre avatar a bien été mis à jour.',
   SEASON_CREATED_SUCCESS = 'Nouvelle saison créée.',
 }

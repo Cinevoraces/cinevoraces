@@ -7,6 +7,7 @@ export enum Env {
   POSTGRES_PASSWORD,
   POSTGRES_HOST,
   POSTGRES_PORT,
+  CLOUDINARY_URL
 }
 
 export const EEnvValues: Env[] = [
@@ -18,6 +19,7 @@ export const EEnvValues: Env[] = [
   Env.POSTGRES_PASSWORD,
   Env.POSTGRES_HOST,
   Env.POSTGRES_PORT,
+  Env.CLOUDINARY_URL
 ];
 
 export const EEnvKeys = {
@@ -29,4 +31,5 @@ export const EEnvKeys = {
   [Env.POSTGRES_PASSWORD]: 'POSTGRES_PASSWORD',
   [Env.POSTGRES_HOST]: 'POSTGRES_HOST',
   [Env.POSTGRES_PORT]: 'POSTGRES_PORT',
+  [Env.CLOUDINARY_URL]: 'CLOUDINARY_URL'
 };

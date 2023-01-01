@@ -47,10 +47,10 @@ export const handlePutUser = async (request: Request, reply: Reply) => {
     // Test and Hash new password
     if (!update_user.password.match(process.env.PASS_REGEXP))
       error.send(ApiError.INVALID_PASSWORD_FORMAT, 422);
-    
+
     update_user.password = await request.bcryptHash(update_user.password);
   }
-    
+
   // Update user
   await pgClient.query(
     updateUser(id, update_user)
@@ -59,6 +59,24 @@ export const handlePutUser = async (request: Request, reply: Reply) => {
   reply
     .code(204)
     .send({ message: ApiResponse.UPDATE_USER_SUCCESS });
+};
+
+/**
+ * **Put user picture**
+ * @description Put user picture by token
+*/
+export const handlePutUserPicture = async (request: Request, reply: Reply) => {
+  const { pgClient, cloudinary, user } = request;
+  const { id, pseudo } = user;
+
+  const publicPicUrl = cloudinary.uploadImg(pseudo, 'FILE PATH');
+  await pgClient.query(
+    updateUser(id, { avatar_url: publicPicUrl })
+  );
+
+  reply
+    .code(200)
+    .send({ message: ApiResponse.UPDATE_USER_PIC_SUCCESS });
 };
 
 /**
@@ -80,7 +98,7 @@ export const handleAdminDeleteUserById = async (request: Request, reply: Reply) 
   await pgClient.query(
     deleteUser(id)
   );
-    
+
   reply
     .code(204)
     .send({ message: ApiResponse.DELETE_USER_SUCCESS });
