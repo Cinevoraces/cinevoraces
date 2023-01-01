@@ -4,7 +4,8 @@ import type {
   FastifyPluginCallback,
 } from 'fastify';
 import type { FileFilter, Options } from 'fastify-multer/lib/interfaces';
-import { ApiError, ApiStorage, MimeType } from 'src/types/_index';
+import { MimeType } from '../types/_index';
+import { ApiError, ApiStorage } from '../types/_index';
 import plugin from 'fastify-plugin';
 
 export const multer: FastifyPluginCallback = async (
@@ -26,6 +27,7 @@ export const multer: FastifyPluginCallback = async (
         },
       },
     );
+
     const fileFilter: FileFilter = (req, file, cb) => {
       if (!allowedMimeTypes.includes(file.mimetype as MimeType)) {
         cb(null, false);
@@ -46,20 +48,19 @@ export const multer: FastifyPluginCallback = async (
   */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   fastify.decorate('uploadUserAvatar', async (request: Request, reply: Reply) => {
-    fastify.multer(
-      buildOpts(
-        ApiStorage.TEMP,
-        [
-          MimeType.PNG,
-          MimeType.GIF,
-          MimeType.JPEG,
-          MimeType.JPG,
-          MimeType.WEBP,
-          MimeType.ICO
-        ],
-        { fileSize: 1024 * 1024 * 2, }
-      )
-    ).single('picture');
+    const opts = buildOpts(
+      ApiStorage.TEMP,
+      [
+        MimeType.PNG,
+        MimeType.GIF,
+        MimeType.JPEG,
+        MimeType.JPG,
+        MimeType.WEBP,
+        MimeType.ICO
+      ],
+      { fileSize: 1024 * 1024 * 2, }
+    );
+    fastify.multer({ dest: '/api/src/storage/temp' }).single('avatar');
   });
 
   done();

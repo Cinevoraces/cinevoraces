@@ -19,9 +19,8 @@ const fastifyMulter: FastifyPluginCallback = async (fastify, opts, done) => {
 
   fastify.register(multer.contentParser);
   fastify
-    .decorate('multer', {})
-    .decorateRequest('file', file);
-
+    .decorate('multer', multer)
+    .decorateRequest('file', { getter: () => file });
   done();
 };
 

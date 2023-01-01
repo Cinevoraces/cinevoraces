@@ -1,6 +1,7 @@
 import Fastify from 'fastify';
 import plugin from 'fastify-plugin';
 import qs from 'qs';
+import formData from 'form-data';
 import { faker } from '@faker-js/faker';
 import App from '../src/app';
 import parseOptions from '../src/utils/parseOptions';
@@ -8,6 +9,7 @@ import type {
   episode as DBEpisode,
   movie as DBMovie
 } from '../src/types/_index';
+import type { ReadStream } from 'fs';
 import {
   Roles as UserRoles,
 } from '../src/types/_index';
@@ -417,15 +419,21 @@ export default class TestServer {
   }
   public async RequestUserAvatar(
     token: string,
+    readStream: ReadStream,
   ) {
+    const form = new formData();
+    form.append('avatar', readStream);
+
     const req = await this.fastify.inject({
       method: ECrudMethods.PUT,
       url: EEndpoints.USERS_AVATAR,
       headers: { Authorization: `Bearer ${token}` },
-
-      // TODO: FINISH ME
+      payload: form
     });
 
+    const res = await req.json();
+    const statusCode = req.statusCode;
+    return { res, statusCode };
   }
   public async RequestAdminDeleteUser(
     token: string,

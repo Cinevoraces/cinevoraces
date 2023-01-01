@@ -1,5 +1,5 @@
 import type { FastifyPluginCallback } from 'fastify';
-import { ApiError } from 'src/types/_index';
+import { ApiError } from '../types/_index';
 import { v2 } from 'cloudinary';
 import plugin from 'fastify-plugin';
 
