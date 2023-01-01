@@ -1,6 +1,4 @@
 import type { FastifyInstance } from 'fastify';
-import multer from 'fastify-multer';
-const upload = multer({ dest: 'api/src/storage/temp' });
 import {
   getUsersSchema,
   putUserSchema,
@@ -30,14 +28,13 @@ export const users = async (fastify: FastifyInstance) => {
     preValidation: [fastify.verifyPassword],
   });
 
+  // TODO: FINISH ME
   fastify.route({
     method: 'PUT',
     url: '/users/avatar',
-    // schema: putUserSchema,
+    // schema: putUserAvatarSchema,
     handler: handlePutUserAvatar,
     onRequest: [fastify.verifyAccessToken],
-    // preHandler: [fastify.uploadUserAvatar],
-    preHandler: upload.single('avatar')
   });
 
   fastify.route({

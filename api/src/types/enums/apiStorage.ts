@@ -1,5 +1,5 @@
 export enum ApiStorage {
-  TEMP = './src/storage/temp',
-  POSTER = './src/storage/poster',
-  AVATAR = './src/storage/avatar',
+  TEMP = 'storage/temp',
+  POSTER = 'storage/poster',
+  AVATAR = 'storage/avatar',
 }

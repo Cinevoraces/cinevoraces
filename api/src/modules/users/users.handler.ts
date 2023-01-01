@@ -66,10 +66,12 @@ export const handlePutUser = async (request: Request, reply: Reply) => {
  * @description Put user picture by token
 */
 export const handlePutUserAvatar = async (request: Request, reply: Reply) => {
-  const { pgClient, cloudinary, user, file } = request;
+  const { pgClient, cloudinary, user } = request;
   const { id, pseudo } = user;
 
-  console.log('request.file: ', file);
+  const data = await request.file();
+
+  console.log(data);
   // TODO: FINISH ME
   // const publicAvatarUrl = cloudinary.uploadImg(pseudo, 'FILE PATH');
   // await pgClient.query(

@@ -11,7 +11,7 @@ export async function FILE_UPLOADS(server: TestServer) {
         password: server.ressources.users[1].password.clear,
       });
 
-      const test = await server.RequestUserAvatar(logUser.tokens.accessToken, fs.createReadStream(path.join(__dirname, 'TestImage.jpg')));
+      const test = await server.RequestUserAvatarUpload(logUser.tokens.accessToken, fs.createReadStream(path.join(__dirname, 'TestImage.jpg')));
 
       console.log(test);
     });

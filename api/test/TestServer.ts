@@ -417,7 +417,7 @@ export default class TestServer {
     const statusCode = req.statusCode;
     return { res, statusCode };
   }
-  public async RequestUserAvatar(
+  public async RequestUserAvatarUpload(
     token: string,
     readStream: ReadStream,
   ) {

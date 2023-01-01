@@ -4,7 +4,6 @@ import { verifyMoviesHooks } from './verifyMovies';
 import { verifyPasswordHooks } from './verifyPassword';
 import { findOrCreateReviewHooks } from './findOrCreateReview';
 import { sanitizePayloadHooks } from './sanitizePayload';
-import { multer } from './multer';
 
 /**
  * **Hooks _index**
@@ -19,5 +18,4 @@ export const hooks = [
   verifyRolesHooks,
   verifyMoviesHooks,
   verifyPasswordHooks,
-  multer
 ];
