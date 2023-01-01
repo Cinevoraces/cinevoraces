@@ -7,6 +7,7 @@ _Ask a project admin for sensitive informations._
 ### .env.api:
 
 ```
+CLOUDINARY_URL=
 COOKIE_SECRET=
 JWT_SECRET=
 PASS_REGEXP='^(?=.*[A-Za-z])(?=.*\d)[!#$&%*+=?|\-A-Za-z\d]{8,}$'
