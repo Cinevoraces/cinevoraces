@@ -104,7 +104,7 @@ const HeaderMenu = forwardRef<HTMLElement, HeaderMenuProps>((props, ref) => {
         {
           type === 'user' &&
             <Link
-              href=''
+              href='/'
               key='logout'
               className={linkStyle}
               onClick={logoutHandler}>

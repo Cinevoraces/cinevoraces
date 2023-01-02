@@ -88,12 +88,13 @@ const externalGetRequest = async (baseUrl: string, endpoint: string, apiKey: str
 };
 
 const handleResponse = async (res: Response) => {
+  // No body comes with 204 status
+  if (res.status === 204 ) return;
   const responseBody = await res.json();
-  if (responseBody.error) {
+  if (!new RegExp(/[1-3]\d{2}/).test(res.status.toString())) {
     const { message } = responseBody;
     throw new Error(message);
   }
-  //return { body: responseBody, status: res.status }; // --------- enhanced version with status codes for better response testings --------
   return responseBody;
 };
 

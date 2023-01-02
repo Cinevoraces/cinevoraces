@@ -6,12 +6,14 @@ interface globalStateInterface {
   isBurgerMenuOpen: boolean;
   isUserMenuOpen: boolean;
   isConnectionModalOpen: boolean;
+  arePWVisible: boolean;
 }
 
 const initialState: globalStateInterface = {
   isBurgerMenuOpen: false,
   isUserMenuOpen: false,
   isConnectionModalOpen: false,
+  arePWVisible: false,
 };
 
 const globalSlice = createSlice({
@@ -27,13 +29,17 @@ const globalSlice = createSlice({
     toggleConnectionModal(state) {
       return { ...state, isConnectionModalOpen: !state.isConnectionModalOpen };
     },
+    toggleArePWVisible(state) {
+      return { ...state, arePWVisible: !state.arePWVisible };
+    },
   },
 });
 
-export const globals = (state: RootState) => state.global;
+export const global = (state: RootState) => state.global;
 export const {
   toggleBurgerMenu,
   toggleUserMenu,
   toggleConnectionModal,
+  toggleArePWVisible,
 } = globalSlice.actions;
 export default globalSlice.reducer;

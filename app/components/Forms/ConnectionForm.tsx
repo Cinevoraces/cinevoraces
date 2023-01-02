@@ -3,7 +3,7 @@ import { useAppSelector, useAppDispatch } from '@store/store';
 import Button from '@components/Input/Button';
 import { TextInputRef, Toggle } from '@components/Input';
 import { toggleConnectionModal } from '@store/slices/global';
-import { toggleIsPWVisible, connection } from '@store/slices/connection';
+import { toggleArePWVisible, global } from '@store/slices/global';
 import { mutationRequestCSR } from '@utils/fetchApi';
 import { login } from '@store/slices/user';
 import { toast } from 'react-hot-toast';
@@ -11,7 +11,7 @@ import tryCatchWrapper from '@utils/tryCatchWrapper';
 import type { BodyData } from '@utils/fetchApi';
 
 const ConnectionForm = () => {
-  const isPWVisible = useAppSelector(connection).isPWVisible;
+  const isPWVisible = useAppSelector(global).arePWVisible;
   const dispatch = useAppDispatch();
 
   const identifierRef = useRef<HTMLInputElement>(null);
@@ -79,7 +79,7 @@ const ConnectionForm = () => {
         name="showPasswordConnection"
         label="Montrer le mot de passe ?"
         checked={isPWVisible}
-        onChange={() => dispatch(toggleIsPWVisible())}
+        onChange={() => dispatch(toggleArePWVisible())}
       />
       <div className="mt-4 flex flex-col justify-center gap-6 sm:flex-row">
         <Button>Se connecter</Button>

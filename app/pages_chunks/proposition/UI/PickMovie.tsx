@@ -1,5 +1,5 @@
 import { forwardRef } from 'react';
-import MovieCard from '@components/MovieCard';
+import { TmdbMovieCard } from '@components/MovieCards/index';
 import type { FormEventHandler } from 'react';
 import type { TMDBMovie } from '@custom_types/index';
 
@@ -50,7 +50,7 @@ const PickMovie = forwardRef<HTMLInputElement, PickMovieProps>(({ searchResults,
                     name="select-movie"
                     className={radioStyle}
                   />
-                  <MovieCard
+                  <TmdbMovieCard
                     resultCardStyle={resultCardStyle}
                     posterStyle={posterStyle}
                     movie={m}
@@ -58,7 +58,7 @@ const PickMovie = forwardRef<HTMLInputElement, PickMovieProps>(({ searchResults,
                 </label>
               ))
             ) : (
-              <MovieCard
+              <TmdbMovieCard
                 resultCardStyle={resultCardStyle}
                 posterStyle={posterStyle}
                 movie={{
