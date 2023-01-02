@@ -177,8 +177,9 @@ const countFilters = (userFilters: FilterUserInputs, availableFilters: FilterOpt
   let counter = 0;
   for (const category in userFilters) {
     if (userFilters[category]) {
-      if (category === 'runtime' || category === 'avgRate') counter++;
+      if (category === 'avgRate') counter++;
       if (category === 'genres' || category === 'countries' || category === 'review') counter += userFilters[category]!.length;
+      if (category === 'runtime' && userFilters[category]![0] !== availableFilters[category][1] ) counter ++;
       if (
         category === 'releaseYear' &&
         (userFilters[category]![0] !== availableFilters[category][0] ||
