@@ -15,11 +15,13 @@ export default function StarRadio(props: StarRadioProps) {
   hover:border-orange-primary hover:ring-none 
   `;
   const starStyle = `absolute z-10 fill-dark-gray 
-  peer-hover:fill-yellow peer-focus:fill-yellow peer-checked:fill-yellow 
+  peer-hover:fill-yellow peer-checked:fill-yellow 
   ease-out duration-300 `;
   const starEffectStyle = `absolute scale-[1.75] -top-[0.5px] fill-transparent 
   peer-hover:fill-white/5 peer-focus:fill-white/5 
   ease-out duration-300`;
+
+  console.log(props);
 
   return (
     <fieldset
@@ -36,8 +38,8 @@ export default function StarRadio(props: StarRadioProps) {
             value={5 - i}
             name="rating"
             className={radioStyle}
-            defaultChecked={props.value === 5 - i}
-          />
+            checked={(props.value === 5 - i)}
+            autoComplete="off"/>
           <StarSvg style={'star-icon ' + starStyle} />
           <StarSvg style={starEffectStyle} />
         </label>
