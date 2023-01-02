@@ -33,7 +33,7 @@ const runtimeAggregate = (movies: CompleteMovie []) => {
         ];
       }, [])
     .filter((r) => r); // extract the NaN due to duplicate values
-  return [Math.min(...runtimeArray), Math.max(...runtimeArray)];
+  return [Math.min(...runtimeArray).toString(), Math.max(...runtimeArray).toString()];
 };
 
 const filtersSync = (movies: CompleteMovie []) => {
