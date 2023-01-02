@@ -1,0 +1,42 @@
+import { useEffect } from 'react';
+import useSWR from 'swr';
+import { mutationRequestCSR } from '@utils/fetchApi';
+import { useAppSelector } from '@store/store';
+import { user } from '@store/slices/user';
+import { Roles } from '@custom_types/index';
+// import type { User, Proposition } from '@custom_types/index';
+
+import PropositionsSection from 'pages_chunks/administration/UI/PropositionsSection';
+import UsersSection from 'pages_chunks/administration/UI/UsersSection';
+
+// TO DO once merged with user page, add correct types ---------------------------------------
+const Administration = () => {
+  const isAdmin = (useAppSelector(user).role === Roles.ADMIN);
+  console.log(isAdmin);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { data: propositions, error: propositionsError, mutate: propositionsMutate } = useSWR<any, Error>('/movies?where[is_published]=false');
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { data: users, error: usersError, mutate: usersMutate } = useSWR<any, Error>('/users');
+  useEffect(() => {
+    propositions && console.log('propositions : ', propositions);
+  }, [propositions]);
+  useEffect(() => {
+    users && console.log('users : ', users);
+  }, [users]);
+  return (
+    <main>
+      <h1 className="custom-container items-start hero-text">Administration</h1>
+      {
+        !isAdmin 
+          ? <p className='custom-container'>Cette section est réservée aux admins.</p>
+          : (
+            <>
+              <PropositionsSection propositions={propositions} error={propositionsError} />
+              <UsersSection users={users} error={usersError}/>
+            </>
+          )
+      }
+    </main>
+  );
+};
+export default Administration;
