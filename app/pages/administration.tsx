@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import useSWR from 'swr';
 import { mutationRequestCSR } from '@utils/fetchApi';
 import { useAppSelector } from '@store/store';
@@ -8,6 +8,7 @@ import { Roles } from '@custom_types/index';
 
 import PropositionsSection from 'pages_chunks/administration/UI/PropositionsSection';
 import UsersSection from 'pages_chunks/administration/UI/UsersSection';
+import Modal from '@components/Modal';
 
 // TO DO once merged with user page, add correct types ---------------------------------------
 const Administration = () => {
@@ -23,20 +24,54 @@ const Administration = () => {
   useEffect(() => {
     users && console.log('users : ', users);
   }, [users]);
+
+  const [isConfirmationModalOpened, setIsConfirmationModalOpened] = useState<boolean>(false);
+  const setConfirmationModal = (action: string, id: number) => {
+    setIsConfirmationModalOpened(isConfirmationModalOpened);
+  };
+  const pwModalRef = useRef<HTMLElement>(null);
+
+  const handleMoviePublishing = (id: number, data: { password: string }) => {
+    mutationRequestCSR('DELETE', `/admin/users/${id}`, data );
+  };
+  const handleMovieDeletion = (id: number, data: { password: string }) => {
+    mutationRequestCSR('DELETE', `/admin/movies/${id}`, data );
+  };
+  const handleUserDeletion = (id: number, data: { password: string }) => {
+    mutationRequestCSR('DELETE', `/admin/users/${id}`, data );
+  };
+  const handleSubmitActions = [
+    { actionType: 'PUBLISHMOVIE', description: 'publication du film', handlingFunction: handleMoviePublishing },
+    { actionType: 'DELETEMOVIE', description: 'suppression du film', handlingFunction: handleMovieDeletion },
+    { actionType: 'DELETEUSER', description: 'suppression de l\'utilisateur', handlingFunction: handleUserDeletion },
+  ];
+
   return (
-    <main>
-      <h1 className="custom-container items-start hero-text">Administration</h1>
+    <>
+      <main>
+        <h1 className="custom-container items-start hero-text">Administration</h1>
+        {
+          !isAdmin 
+            ? <p className='custom-container'>Cette section est réservée aux admins.</p>
+            : (
+              <>
+                <PropositionsSection propositions={propositions} error={propositionsError} />
+                <UsersSection users={users} error={usersError}/>
+              </>
+            )
+        }
+      </main>
       {
-        !isAdmin 
-          ? <p className='custom-container'>Cette section est réservée aux admins.</p>
-          : (
-            <>
-              <PropositionsSection propositions={propositions} error={propositionsError} />
-              <UsersSection users={users} error={usersError}/>
-            </>
-          )
+        isConfirmationModalOpened && (
+          <Modal 
+            stateValue={isConfirmationModalOpened}
+            setter={() => setIsConfirmationModalOpened(!isConfirmationModalOpened)}
+            ref={pwModalRef}>
+            <form action="submit"></form>
+          </Modal>
+        )
       }
-    </main>
+    </>
   );
 };
 export default Administration;
