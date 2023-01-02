@@ -7,7 +7,6 @@ interface StarRadioProps {
 }
 
 export default function StarRadio(props: StarRadioProps) {
-
   const radioStyle = ` radio-input absolute z-20 cursor-pointer 
   peer w-6 h-6 border-none 
   bg-transparent text-transparent 
@@ -23,22 +22,26 @@ export default function StarRadio(props: StarRadioProps) {
   ease-out duration-300`;
 
   return (
-    <fieldset className='w-52 h-10 flex flex-row-reverse gap-10 ' {...props}>
+    <fieldset
+      className="w-52 h-10 flex flex-row-reverse gap-10 "
+      {...props}>
       <legend className="sr-only">Note sur 5</legend>
-      {
-        [...Array(5)].map((_, i) => (
-          <label htmlFor="rating" className='relative ' key={`rating-${5 - i}`}>
-            <input type="radio"
-              value={5 - i} 
-              name='rating' 
-              className={radioStyle} 
-              defaultChecked={(props.value === (5 - i))}/>
-            <StarSvg style={'star-icon ' + starStyle}/>
-            <StarSvg style={starEffectStyle}/>
-          </label>)
-        )
-      }
+      {[...Array(5)].map((_, i) => (
+        <label
+          htmlFor="rating"
+          className={`relative ${(props.value === 5 - i) ? 'is_checked' : ''}`} //Mandatory class trick as :has is still not supported on Firefox & Edge
+          key={`rating-${5 - i}`}>
+          <input
+            type="radio"
+            value={5 - i}
+            name="rating"
+            className={radioStyle}
+            defaultChecked={props.value === 5 - i}
+          />
+          <StarSvg style={'star-icon ' + starStyle} />
+          <StarSvg style={starEffectStyle} />
+        </label>
+      ))}
     </fieldset>
   );
 }
-

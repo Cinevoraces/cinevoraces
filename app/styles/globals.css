@@ -48,7 +48,11 @@ input[type='range']::-webkit-slider-runnable-track {
   .interaction--clicked{
     box-shadow: 0px 2px 0px rgba(0, 0, 0, 0.25), 0px -3px 0px #FC783F;
   }
-  label:has(> input:checked) ~ label > .star-icon {
+  /* Incompatible to date with Edge and Firefox*/
+  /* label:has(> input:checked) ~ label > .star-icon {
+    @apply fill-yellow;
+  } */
+  label.is_checked ~ label > .star-icon {
     @apply fill-yellow;
   }
   label:hover ~ label > .star-icon {
