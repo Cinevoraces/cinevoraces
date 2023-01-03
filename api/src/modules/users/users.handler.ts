@@ -73,7 +73,7 @@ export const handlePutUserAvatar = async (request: Request, reply: Reply) => {
   file.path = `${process.env.STORAGE_TEMP}/${file.fileName}`;
 
   // Save file to server (Cloudinary uploads supports only local files)
-  pump(fs.createWriteStream(file.fileName), async (err) => {
+  pump(file.file, fs.createWriteStream(file.path), async (err) => {
     if (err) error.send(ApiError.CLOUDINARY_FAILURE, 500);
 
     const avatar_url = await cloudinary.uploadImg(pseudo, file.fileName);

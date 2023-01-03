@@ -29,7 +29,7 @@ export const users = async (fastify: FastifyInstance) => {
   });
 
   fastify.route({
-    method: 'PUT',
+    method: 'POST',
     url: '/users/avatar',
     // TODO: Add schema for avatar upload,
     handler: handlePutUserAvatar,
