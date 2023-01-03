@@ -1,19 +1,21 @@
 import type { FastifyPluginCallback } from 'fastify';
-import type { fileManager } from 'src/types/_index';
+import { fileManager } from 'src/types/_index';
 import FastifyMultipart from '@fastify/multipart';
+import fetch from 'node-fetch';
 import fs from 'fs';
 import pump from 'pump';
 import plugin from 'fastify-plugin';
 
 /**
- * **Fastify Multipart**
+ * **File Manager**
  * @description
  * This plugin is used to parse multipart/form-data requests.
+ * It also provides a fileManager object that can be used to manage files stored on the server.
  */
-const fastifyMultipart: FastifyPluginCallback = async (fastify, opts, done) => {
+const fileManager: FastifyPluginCallback = async (fastify, opts, done) => {
+  // Register FastifyMultipart plugin
   if (fastify.multipartErrors) 
     return fastify.log.warn('Fastify/multipart already registered');
-  
   fastify.register(FastifyMultipart, {
     limits: {
       fieldNameSize: 100, // Field name size in bytes
@@ -23,6 +25,7 @@ const fastifyMultipart: FastifyPluginCallback = async (fastify, opts, done) => {
     }
   });
 
+  // File Manager object
   const fileManager: fileManager = {
     file: {
       url: null,
@@ -46,4 +49,4 @@ const fastifyMultipart: FastifyPluginCallback = async (fastify, opts, done) => {
   done();
 };
 
-export default plugin(fastifyMultipart);
+export default plugin(fileManager);
