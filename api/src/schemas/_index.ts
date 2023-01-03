@@ -1,6 +1,6 @@
 import { apiErrorSchema } from './apiError';
 import { globalMetricsSchema, userMetricsSchema } from './metrics';
-import { movieSchema } from './movie';
+import { movieSchema, reducedMovieSchema } from './movie';
 import { reviewSchema } from './review';
 import { seasonSchema } from './season';
 import { episodeSchema } from './episode';
@@ -16,6 +16,7 @@ export const schemas = [
   apiErrorSchema,
   globalMetricsSchema,
   movieSchema,
+  reducedMovieSchema,
   reviewSchema,
   seasonSchema,
   episodeSchema,

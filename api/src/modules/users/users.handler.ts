@@ -26,6 +26,8 @@ export const handleGetUsers = async (request: Request, reply: Reply) => {
   const { rows: users, rowCount } = await pgClient.query(
     getUsers(query)
   );
+
+  console.log(users, rowCount);
   if (!rowCount)
     error.send(ApiError.NOT_FOUND, 404);
 

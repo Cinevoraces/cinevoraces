@@ -9,34 +9,13 @@ export const userSchema = {
     role: { type: 'number' },
     created_at: { type: 'string' },
     updated_at: { type: 'string' },
-    proposition: {
-      type: 'object',
-      properties: {
-        movie_id: { type: 'number' },
-        season_number: { type: 'number' },
-        french_title: { type: 'string' },
-        original_title: { type: 'string' },
-        poster_url: { type: 'string' },
-        presentation: { type: 'string' },
-        publishing_date: { type: 'string' },
-        avg_rating: { type: 'number' },
-      },
+    propositions: { 
+      type: 'array',
+      items: { $ref: 'reducedMovie#' },
     },
     movies: {
       type: 'array',
-      items: {
-        type: 'object',
-        properties: {
-          movie_id: { type: 'number' },
-          season_number: { type: 'number' },
-          french_title: { type: 'string' },
-          original_title: { type: 'string' },
-          poster_url: { type: 'string' },
-          presentation: { type: 'string' },
-          publishing_date: { type: 'string' },
-          avg_rating: { type: 'number' },
-        },
-      },
+      items: { $ref: 'reducedMovie#' },
     },
     reviews: {
       type: 'array',

@@ -92,3 +92,27 @@ export const movieSchema = {
     'publishing_date',
   ],
 };
+
+export const reducedMovieSchema = {
+  $id: 'reducedMovie',
+  type: 'object',
+  properties: {
+    movie_id: { type: 'number' },
+    season_number: { type: 'number' },
+    french_title: { type: 'string' },
+    original_title: { type: 'string' },
+    poster_url: { type: 'string' },
+    publishing_date: { type: 'string' },
+    release_date: { type: 'string' },
+    presentation: {
+      type: 'object',
+      properties: {
+        author_id: { type: 'number' },
+        author_pseudo: { type: 'string' },
+        author_avatar: { type: 'string' },
+        author_role: { type: 'number' },
+        presentation: { type: 'string' },
+      },
+    },
+  },
+};

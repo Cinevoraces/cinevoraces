@@ -10,8 +10,11 @@ export async function ROUTES_USERS(server: TestServer) {
       });
 
       const SUCCESSFULL_GET_USERS = await server.RequestGetUsers(
-        'select[reviews]=true&select[metrics]=true&select[propositions]=true'
+        'select[reviews]=true&select[metrics]=true&select[propositions]=true&select[movies]=true&limit=1'
       );
+
+      console.log(SUCCESSFULL_GET_USERS.res);
+
       expect(SUCCESSFULL_GET_USERS.res).toEqual(
         expect.arrayContaining([server.expected.userWithMoviesReviewsAndMetrics])
       );
