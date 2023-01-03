@@ -2,11 +2,13 @@ import type { FastifyInstance } from 'fastify';
 import {
   getUsersSchema,
   putUserSchema,
+  putUserAvatarSchema,
   adminDeleteUserByIdSchema,
 } from './users.schema';
 import {
   handleGetUsers,
   handlePutUser,
+  handlePutUserAvatar,
   handleAdminDeleteUserById,
 } from './users.handler';
 
@@ -25,6 +27,15 @@ export const users = async (fastify: FastifyInstance) => {
     handler: handlePutUser,
     onRequest: [fastify.verifyAccessToken],
     preValidation: [fastify.verifyPassword],
+  });
+
+  fastify.route({
+    method: 'PUT',
+    url: '/users/avatar',
+    schema: putUserAvatarSchema,
+    handler: handlePutUserAvatar,
+    preHandler: [fastify.handleAvatarMultipartContent],
+    onRequest: [fastify.verifyAccessToken],
   });
 
   fastify.route({

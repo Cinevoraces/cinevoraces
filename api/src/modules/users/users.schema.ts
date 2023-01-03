@@ -11,7 +11,8 @@ export const getUsersSchema: FastifySchema = {
   - where[role] -> string
 
   **Available populators**
-  - select[propositions] -> boolean
+  - select[proposition] -> boolean
+  - select[movies] -> boolean
   - select[reviews] -> boolean
   - select[metrics] -> boolean
 
@@ -35,9 +36,10 @@ export const getUsersSchema: FastifySchema = {
       select: {
         type: 'object',
         properties: {
-          propositions: { type: 'boolean' },
+          proposition: { type: 'boolean' },
           movies: { type: 'boolean' },
           reviews: { type: 'boolean' },
+          metrics: { type: 'boolean' },
         },
       },
       limit: { type: 'number' },
@@ -87,6 +89,24 @@ export const putUserSchema: FastifySchema = {
       },
     },
   },
+  response: {
+    204: {
+      properties: {
+        message: { type: 'string' },
+      },
+      required: ['message'],
+    },
+  },
+};
+
+export const putUserAvatarSchema: FastifySchema = {
+  summary: '(TOKEN REQUIRED)',
+  description: `
+  **Modify user avatar by token**.
+  Send a multipart/form-data request with the following fields:
+  - avatar: file
+  `,
+  tags: ['Users'],
   response: {
     204: {
       properties: {

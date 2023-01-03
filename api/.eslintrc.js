@@ -29,7 +29,7 @@ module.exports = {
     '@typescript-eslint/keyword-spacing': ['warn', { before: true, after: true }],
     'object-curly-spacing': 'off',
     '@typescript-eslint/object-curly-spacing': ['warn', 'always', { 'arraysInObjects': false }],
-    '@typescript-eslint/type-annotation-spacing': ['warn', { 'before': false, 'after': false, overrides: { colon: { before: false, after: true } } }],
+    '@typescript-eslint/type-annotation-spacing': ['warn', { 'before': true, 'after': true, overrides: { colon: { before: false, after: true } } }],
     "@typescript-eslint/no-namespace": "off",
     'no-multi-spaces': ['error'],
     "eol-last": ["error", "always"],

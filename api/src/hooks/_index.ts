@@ -4,6 +4,7 @@ import { verifyMoviesHooks } from './verifyMovies';
 import { verifyPasswordHooks } from './verifyPassword';
 import { findOrCreateReviewHooks } from './findOrCreateReview';
 import { sanitizePayloadHooks } from './sanitizePayload';
+import { fileManagerHooks } from './fileManager';
 
 /**
  * **Hooks _index**
@@ -18,4 +19,5 @@ export const hooks = [
   verifyRolesHooks,
   verifyMoviesHooks,
   verifyPasswordHooks,
+  fileManagerHooks,
 ];

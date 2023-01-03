@@ -11,8 +11,8 @@ export const getUsers = (
   querystring: Query.querystring
 ): Query.preparedQuery => {
   const enums = {
-    where: [ 'id', 'pseudo', 'mail', 'role'],
-    select: ['propositions', 'reviews', 'metrics']
+    where: ['id', 'pseudo', 'mail', 'role'],
+    select: ['proposition', 'reviews', 'metrics', 'movies']
   };
   const { select, where, limit, sort } = querystring;
   let values = [] as Array<unknown>,
@@ -62,7 +62,7 @@ export const updateUser = (
   set: Record<string, unknown>
 
 ): Query.preparedQuery => {
-  const enumerator = ['pseudo', 'mail', 'password'];
+  const enumerator = ['pseudo', 'mail', 'password', 'avatar_url'];
   const SET = queryBuilder.where(set, ',', enumerator, 1);
 
   return {

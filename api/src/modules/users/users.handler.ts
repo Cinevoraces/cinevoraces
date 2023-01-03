@@ -47,10 +47,10 @@ export const handlePutUser = async (request: Request, reply: Reply) => {
     // Test and Hash new password
     if (!update_user.password.match(process.env.PASS_REGEXP))
       error.send(ApiError.INVALID_PASSWORD_FORMAT, 422);
-    
+
     update_user.password = await request.bcryptHash(update_user.password);
   }
-    
+
   // Update user
   await pgClient.query(
     updateUser(id, update_user)
@@ -59,6 +59,38 @@ export const handlePutUser = async (request: Request, reply: Reply) => {
   reply
     .code(204)
     .send({ message: ApiResponse.UPDATE_USER_SUCCESS });
+};
+
+/**
+ * **Put user picture**
+ * @description Put user picture by token
+*/
+export const handlePutUserAvatar = async (request: Request, reply: Reply) => {
+  const { pgClient, cloudinary, user, fileManager } = request;
+  const { file, fs, pump } = fileManager;
+  const { id, pseudo } = user;
+
+  file.path = `${process.env.STORAGE_TEMP}/${file.fileName}`;
+
+  // Save file to server (Cloudinary uploads supports only local files)
+  pump(file.file, fs.createWriteStream(file.path));
+
+  // Upload file to Cloudinary
+  const avatar_url = await cloudinary.uploadImg(`avatar_${id}_${pseudo}`, file.path);
+  await pgClient.query(updateUser(id, { avatar_url }));
+
+  // Remove temp file from server
+  try {
+    fs.unlinkSync(file.path);
+  } catch (err) {
+    // TODO: SERVER ERROR LOG FILES
+    // This is not a critical error, so we don't want to stop the process.
+    // We do want to trace it in a log file
+  }
+
+  reply
+    .code(204)
+    .send({ message: ApiResponse.UPDATE_USER_PIC_SUCCESS });
 };
 
 /**
@@ -80,7 +112,7 @@ export const handleAdminDeleteUserById = async (request: Request, reply: Reply) 
   await pgClient.query(
     deleteUser(id)
   );
-    
+
   reply
     .code(204)
     .send({ message: ApiResponse.DELETE_USER_SUCCESS });

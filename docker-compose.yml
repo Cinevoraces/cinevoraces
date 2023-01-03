@@ -35,6 +35,7 @@ services:
     restart: always
     volumes:
       - ./api:/api
+      - ./storage:/storage
 
   app:
     hostname: cinevoraces_app
