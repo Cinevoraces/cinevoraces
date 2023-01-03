@@ -72,7 +72,7 @@ export const handlePutUserAvatar = async (request: Request, reply: Reply) => {
   const { file, fs, pump } = fileManager;
   const { id, pseudo } = user;
 
-  file.path = `${process.env.STORAGE_TEMP}/${file.fileName}`;
+  file.path = `/${process.env.STORAGE_TEMP}/${file.fileName}`;
 
   // Save file to server (Cloudinary uploads supports only local files)
   pump(file.file, fs.createWriteStream(file.path));

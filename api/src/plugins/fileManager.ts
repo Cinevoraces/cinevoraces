@@ -1,7 +1,7 @@
 import type { FastifyPluginCallback } from 'fastify';
 import { fileManager } from 'src/types/_index';
 import FastifyMultipart from '@fastify/multipart';
-import fetch from 'node-fetch';
+import FastifyStatic from '@fastify/static';
 import fs from 'fs';
 import pump from 'pump';
 import plugin from 'fastify-plugin';
@@ -16,14 +16,16 @@ const fileManager: FastifyPluginCallback = async (fastify, opts, done) => {
   // Register FastifyMultipart plugin
   if (fastify.multipartErrors) 
     return fastify.log.warn('Fastify/multipart already registered');
+  if (fastify.hasDecorator('sendFile'))
+    return fastify.log.warn('Fastify/sendFile already registered');
   fastify.register(FastifyMultipart, {
-    limits: {
-      fieldNameSize: 100, // Field name size in bytes
-      fieldSize: 100, // Field value size in bytes
-      fields: 10, // Number of non-file fields
-      fileSize: 10000000, // File size in bytes (10Mb)
+    limits: { // limits in bytes
+      fieldNameSize: 100, 
+      fieldSize: 100,
+      fileSize: 10000000,
     }
   });
+  fastify.register(FastifyStatic, { root: '/' } );
 
   // File Manager object
   const fileManager: fileManager = {

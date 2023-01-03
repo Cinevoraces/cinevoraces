@@ -12,10 +12,11 @@ COOKIE_SECRET=
 JWT_SECRET=
 PASS_REGEXP='^(?=.*[A-Za-z])(?=.*\d)[!#$&%*+=?|\-A-Za-z\d]{8,}$'
 PORT=
-STORAGE_TEMP = '/storage/temp'
-STORAGE_POSTER = '/storage/poster'
-STORAGE_AVATAR = '/storage/avatar'
+STORAGE_TEMP = 'storage/temp'
+STORAGE_POSTER = 'storage/poster'
+STORAGE_AVATAR = 'storage/avatar'
 ```
+
 ### .env.db:
 
 ```
@@ -28,6 +29,7 @@ PGADMIN_DEFAULT_PASSWORD=
 ```
 
 ### .env.app:
+
 ```
 NEXT_PUBLIC_PASS_REGEXP=
 NEXT_PUBLIC_TMDB_KEY=
@@ -37,7 +39,9 @@ NEXT_PUBLIC_API_BASE_URL_SSR=
 ```
 
 ## :satellite: API Documentation
+
 Swagger documentation is accessible on `/dev-docs` endpoint.
+
 - [Data Dictionnary](./doc/API-data_dictionnary.md)
 - [Endpoints description](./doc/API-Endpoints.md)
 - [MCD/MLD](./doc/API-MCD-MLD.md)
