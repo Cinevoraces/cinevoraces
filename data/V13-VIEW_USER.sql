@@ -76,7 +76,27 @@ SELECT
 		                  FROM "review" WHERE "rating" IS NOT NULL GROUP BY review.movie_id) ar
 	            ON movie.id = ar.movie_id
             WHERE "user".id = movie.user_id
-      ), '[]') AS propositions
+      ), '[]') AS movies,
+      -- user pending proposition
+      (SELECT JSON_BUILD_OBJECT(
+                  'movie_id', movie.id,
+                  'season_number', episode.season_number,
+                  'french_title', movie.french_title, 
+                  'original_title', movie.original_title, 
+                  'poster_url', movie.poster_url,
+                  'presentation', movie.presentation,
+                  'publishing_date', episode.publishing_date,
+                  'avg_rating', ROUND(COALESCE(ar.avg_rating,0),1)
+            )
+            FROM movie
+                  LEFT JOIN episode 
+                        ON episode.id = movie.episode_id
+                  LEFT JOIN
+	                  (SELECT review.movie_id AS "movie_id", AVG(rating) "avg_rating"
+		                  FROM "review" WHERE "rating" IS NOT NULL GROUP BY review.movie_id) ar
+	            ON movie.id = ar.movie_id
+            WHERE "user".id = movie.user_id AND movie.is_published = false
+      ) AS proposition
 FROM "user"
 GROUP BY 
       "user".id,

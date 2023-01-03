@@ -12,7 +12,7 @@ export const getUsers = (
 ): Query.preparedQuery => {
   const enums = {
     where: ['id', 'pseudo', 'mail', 'role'],
-    select: ['propositions', 'reviews', 'metrics']
+    select: ['proposition', 'reviews', 'metrics', 'movies']
   };
   const { select, where, limit, sort } = querystring;
   let values = [] as Array<unknown>,

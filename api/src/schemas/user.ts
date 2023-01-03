@@ -9,9 +9,22 @@ export const userSchema = {
     role: { type: 'number' },
     created_at: { type: 'string' },
     updated_at: { type: 'string' },
-    propositions: {
+    proposition: {
+      type: 'object',
+      properties: {
+        movie_id: { type: 'number' },
+        season_number: { type: 'number' },
+        french_title: { type: 'string' },
+        original_title: { type: 'string' },
+        poster_url: { type: 'string' },
+        presentation: { type: 'string' },
+        publishing_date: { type: 'string' },
+        avg_rating: { type: 'number' },
+      },
+    },
+    movies: {
       type: 'array',
-      items: { 
+      items: {
         type: 'object',
         properties: {
           movie_id: { type: 'number' },
