@@ -18,7 +18,8 @@ const useRefreshPendingProposition = (
 ) => {
   useEffect(() => {
     userId && userPendingPropositionMutate();
-    (userPendingProposition && userPendingProposition.length > 0) 
+    userPendingProposition && console.log(userPendingProposition);
+    (userPendingProposition) 
       ? setUserHasPendingProposition(true) 
       : setUserHasPendingProposition(false);
   // eslint-disable-next-line react-hooks/exhaustive-deps

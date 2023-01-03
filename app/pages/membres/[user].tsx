@@ -8,7 +8,7 @@ import { user } from 'store/slices/user';
 import Loader from '@components/Loader';
 import ParameterForm from 'pages_chunks/user/UI/ParameterForm';
 import UserMetrics from 'pages_chunks/user/UI/UserMetrics';
-import UserCard from 'pages_chunks/user/UI/UserCard';
+import UserCard from '@components/UserCard';
 import useRefreshUserData from 'pages_chunks/user/business_logic/useRefreshUserData';
 import PendingProposition from 'pages_chunks/user/UI/PendingProposition';
 
@@ -21,7 +21,8 @@ const User: NextPage = () => {
   const isPrivatePage = slug === 'moi';
   const userId = !isPrivatePage ? slug : connectedUserId?.toString();
   // Getting public datas and store them in local state
-  const addProposition = isPrivatePage ? '&select[propositions]=true' : '';
+  // API issue with select operator that can't be repeted for this specific endpoint ------------------------------------------------
+  const addProposition = isPrivatePage ? '&[proposition]=true' : '';
   // Next initializes the slug with a generic [user] string, this prevents unnecessary fetches and downstream errors
   const { data: userData, error, mutate } = useSWR(
     () => userId && userId !== '[user]' ? `/users?select[metrics]=true${addProposition}&where[id]=${userId}` : ''

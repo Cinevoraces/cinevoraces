@@ -1,4 +1,4 @@
-import type { UserReview, Proposition } from './index';
+import type { UserReview, Proposition, CompleteMovie } from './index';
 
 export default interface User {
   avatar_url: string;
@@ -10,5 +10,7 @@ export default interface User {
   updated_at: string;
   propositions: Proposition[];
   reviews: UserReview[];
-  metrics: {[key: string]: number };
+  metrics?: {[key: string]: number };
+  movies?: CompleteMovie[];
+  proposition?: Proposition;
 }

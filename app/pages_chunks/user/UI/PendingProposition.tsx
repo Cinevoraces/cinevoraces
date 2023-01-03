@@ -12,8 +12,8 @@ const PendingProposition = ({ askedUser }: PendingPropositionProps) => {
     <div id="pending_proposition">
       <h2 className="custom-container grow-0 py-4 title-section">Proposition en attente</h2>
       <div className="w-full px-4 py-3 flex justify-center bg-medium-gray">
-        {askedUser && askedUser.propositions && askedUser.propositions.length > 0 ? (
-          <PropositionMovieCard {...askedUser.propositions[0]}/>
+        {askedUser && askedUser.proposition ? (
+          <PropositionMovieCard {...askedUser.proposition}/>
         ) : (
           <div className="flex flex-col items-center gap-4">
             <p className="w-full">

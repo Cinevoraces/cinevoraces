@@ -42,7 +42,7 @@ const Proposition: NextPage = () => {
     data: userPendingProposition,
     error: errorUserPendingProposition,
     mutate: userPendingPropositionMutate,
-  } = useSWR(userId ? `/movies?where[author_id]=${userId}&[is_published]=false` : null);
+  } = useSWR(userId ? `/movies?where[author_id]=${userId}&where[is_published]=false` : null);
   const [userHasPendingProposition, setUserHasPendingProposition] = useState<boolean | undefined>(undefined);
   // if user manages to login / logout / change on this very page
   useRefreshPendingProposition(
@@ -122,7 +122,7 @@ const Proposition: NextPage = () => {
                     ref={searchRef}
                   />
                   <PickMovie
-                    searchResults={searchResults}
+                    movies={searchResults}
                     handleSelectMovie={handleSelectMovie}
                     styles={pickMovieStyles}
                   />

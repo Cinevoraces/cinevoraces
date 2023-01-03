@@ -1,6 +1,6 @@
 import { useRef } from 'react';
 import { Button, TextInputRef, Toggle } from '@components/Input';
-import { global } from '@store/slices';
+import { global, toggleArePWVisible } from '@store/slices/global';
 import { useAppDispatch, useAppSelector } from '@store/store';
 
 interface ConfirmationFormProps{
@@ -8,10 +8,9 @@ interface ConfirmationFormProps{
   handlingFunction: (id: number, data: { password: string })=>void [];
 }
 
-// TO DO -------- after last PR merge, use global state for password visibility to finish this component
 const ConfirmationForm = ({ actionType, handlingFunction }: ConfirmationFormProps) => {
   const dispatch = useAppDispatch();
-  const isPWVisible = useAppSelector(global).isPWVisible;
+  const isPWVisible = useAppSelector(global).arePWVisible;
   const pwModalRef = useRef<HTMLInputElement>(null);
   return (
     <>
@@ -30,7 +29,7 @@ const ConfirmationForm = ({ actionType, handlingFunction }: ConfirmationFormProp
           name="showPasswordConnection"
           label="Montrer le mot de passe ?"
           checked={isPWVisible}
-          onChange={() => dispatch(toggleIsPWVisible())}
+          onChange={() => dispatch(toggleArePWVisible())}
         />
         <Button>Confirmer</Button>
       </form>
