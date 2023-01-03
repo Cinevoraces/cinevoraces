@@ -11,7 +11,9 @@ const tryCatchWrapper = (func: GenericFunction): TryCatchWrapper<GenericFunction
     try {
       return await func(...args);
     } catch (err) {
-      (err instanceof Error && err.message) && toast.error(err.message);
+      console.error(err);
+      if (err instanceof Error && err.message) toast.error(err.message);
+      return;
     }
   };
 };

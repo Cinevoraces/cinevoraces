@@ -17,7 +17,7 @@ export default function Inscription({ metrics }: InscriptonProps) {
           <h1 className="text-3xl mb-10 font-bold lg:text-6xl">Créer un compte</h1>
           <InscriptionForm />
         </section>
-        <section className='w-full flex justify-center md:max-w-1/2 md:justify-start xl:ml-[10vh]'>
+        <section className='w-full flex justify-center mt-10 md:mt-0 md:max-w-1/2 md:justify-start xl:ml-[10vh]'>
           <PosterComponent number={3} />
         </section>
       </div>

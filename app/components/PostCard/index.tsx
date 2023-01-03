@@ -1,6 +1,5 @@
-import Image from 'next/image';
-import defaultUserPic from '@public/icons/user_default.svg';
 import Rate from '@components/Rate';
+import Avatar from '@components/Avatar';
 
 interface PostCardProps {
   type: 'presentation' | 'comment' | 'form';
@@ -34,14 +33,8 @@ export default function PostCardProps({
       className={type === 'presentation' ? presentationStyle : type === 'comment' ? commentStyle : formStyle}>
       <div className="flex flex-col gap-2" id="card-header">
         <div
-          className="flex gap-2">
-          <Image
-            src={author_avatar ? author_avatar : defaultUserPic}
-            alt={`avatar de ${author_pseudo}`}
-            height={50}
-            width={50}
-            className="border border-white rounded-full"
-          />
+          className="flex items-center gap-2">
+          <Avatar url={author_avatar} pseudo={author_pseudo}/>
           <div
             id="post-infos"
             className="flex flex-col justify-between">

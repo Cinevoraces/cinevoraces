@@ -5,6 +5,9 @@ import type { SvgProps } from './global';
 import type { EpisodeOption, MovieBody } from './propositionPage';
 import type { TMDBMovie, TMDBDetailedMovie, TMDBMovieCredits } from './tmdbMovie';
 import type { Episode } from './episodes';
+import type User from './user';
+import type { Proposition } from './proposition';
+
 import { Roles } from './global';
 
 export type{
@@ -14,7 +17,9 @@ export type{
   SvgProps,
   EpisodeOption, MovieBody,
   TMDBMovie, TMDBDetailedMovie, TMDBMovieCredits,
-  Episode
+  Episode,
+  User,
+  Proposition,
 };
 
 export { Roles };

@@ -1,3 +1,4 @@
+import { useRef, useLayoutEffect } from 'react';
 interface RangeCommonProps {
   label?: string;
   id: string;
@@ -21,21 +22,38 @@ interface RangeProps extends RangeCommonProps {
  */
 const Range = (props: RangeProps) => {
   const { label, setter, ...inputProps } = props;
-  const { id, value } = inputProps;
+  const { id, value, min, max } = inputProps;
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setter((e.currentTarget.value));
+    setter(e.currentTarget.value);
   };
+
+  const progressBar = useRef<HTMLDivElement>(null);
+  useLayoutEffect(() => {
+    if (progressBar.current) {
+      progressBar.current.style.width = Math.floor(((value - min) / (max - min)) * 100) + '%';
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [value]);
 
   return (
     <fieldset>
       <label htmlFor={id}>{label}</label>
       <div className="mt-1 flex justify-between items-center gap-3">
         <p className="min-w-[4rem]">{value + ' min'}</p>
-        <input
-          type="range"
-          {...inputProps}
-          onChange={handleOnChange}
-        />
+        <div className="range w-full relative">
+          <input
+            type="range"
+            {...inputProps}
+            onChange={handleOnChange}
+          />
+          <div
+            id="range_track"
+            className="absolute w-full right-0 h-2 rounded-full bg-orange-primary/20"/>
+          <div
+            id="range_progress"
+            className="absolute left-0 w-full px-2 h-2 rounded-full bg-orange-secondary"
+            ref={progressBar}/>
+        </div>
       </div>
     </fieldset>
   );
@@ -61,7 +79,7 @@ interface DoubleRangeProps extends RangeCommonProps {
  */
 const DoubleRange = (props: DoubleRangeProps) => {
   const { label, minSetter, maxSetter, minValue, maxValue, ...inputProps } = props;
-  const { id } = inputProps;
+  const { id, min, max } = inputProps;
   const minHandleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     minSetter(e.currentTarget.value);
   };
@@ -69,26 +87,40 @@ const DoubleRange = (props: DoubleRangeProps) => {
     maxSetter(e.currentTarget.value);
   };
 
+  const progressBar = useRef<HTMLDivElement>(null);
+  useLayoutEffect(() => {
+    if (progressBar.current) {
+      progressBar.current.style.left = Math.floor(((minValue - min) / (max - min)) * 100) + '%';
+      progressBar.current.style.width = `calc(${Math.floor(((maxValue - minValue) / (max - min)) * 100) + '%'} - 6px)`;
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [minValue, maxValue]);
+
   return (
     <fieldset className="w-full px-auto">
       <label htmlFor={id}>{label}</label>
       <div className="mt-1 flex justify-between items-center gap-4">
         <p className="block w-[16%]">{minValue}</p>
-        <div className="relative w-[68%] -mt-2">
+        <div className="double_range relative w-[68%] -mt-2">
           <input
             type="range"
             {...inputProps}
             value={minValue}
             onChange={minHandleOnChange}
-            className="absolute"
           />
           <input
             type="range"
             {...inputProps}
             value={maxValue}
             onChange={maxHandleOnChange}
-            className="absolute"
           />
+          <div
+            id="double_range_track"
+            className="absolute w-full px-2 h-2 rounded-full bg-orange-primary/20"/>
+          <div
+            id="double_range_inner"
+            className="absolute w-full px-2 h-2 rounded-full bg-orange-secondary"
+            ref={progressBar}/>
         </div>
         <p className="block w-[16%] text-right">{maxValue}</p>
       </div>
