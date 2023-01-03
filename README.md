@@ -7,10 +7,14 @@ _Ask a project admin for sensitive informations._
 ### .env.api:
 
 ```
+CLOUDINARY_URL=
 COOKIE_SECRET=
 JWT_SECRET=
 PASS_REGEXP='^(?=.*[A-Za-z])(?=.*\d)[!#$&%*+=?|\-A-Za-z\d]{8,}$'
 PORT=
+STORAGE_TEMP = '/storage/temp'
+STORAGE_POSTER = '/storage/poster'
+STORAGE_AVATAR = '/storage/avatar'
 ```
 ### .env.db:
 

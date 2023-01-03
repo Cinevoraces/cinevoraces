@@ -6,7 +6,8 @@ import jwt from './fastifyJwt';
 import pgClient from './pgClient';
 import serverError from './serverError';
 import swagger from './swagger';
-
+import cloudinaryService from './cloudinary';
+import fastifyMultipart from './fastifyMultipart';
 /**
  * **Plugins _index**
  * @description
@@ -22,4 +23,6 @@ export const plugins = [
   serverError,
   swagger,
   bcryptPlugin,
+  fastifyMultipart,
+  cloudinaryService,
 ];

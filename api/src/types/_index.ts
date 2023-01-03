@@ -6,6 +6,7 @@ export { Env, EEnvValues, EEnvKeys } from './enums/env';
 export { ReviewTypes, AddReview, UpdateReview } from './enums/review';
 export { ApiError } from './enums/apiError';
 export { ApiResponse } from './enums/apiResponse';
+export { MimeType } from './enums/mimeType';
 export { Roles } from './enums/roles';
 export { Tables } from './enums/tables';
 
@@ -24,4 +25,5 @@ export type { user } from './database/user';
 
 // ELSE
 export type { updateProposedMovie, proposeMovie } from './proposeMoviePayload';
+export type { fileManager } from './fileManager';
 export type { Query } from './query';

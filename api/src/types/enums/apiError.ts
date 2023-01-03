@@ -4,6 +4,8 @@ export enum ApiError {
   DUPLICATE_PSEUDO = 'Ce pseudo est déjà utilisé.',
   INVALID_PASSWORD = 'Mot de passe incorrect.',
   INVALID_PASSWORD_FORMAT = 'Le format du mot de passe est invalide.',
+  INVALID_MIME_TYPE = 'Le format du fichier est invalide.',
+  INVALID_FILE_SIZE = 'Le fichier est trop volumineux.',
   INVALID_USER = 'Utilisateur introuvable.',
   INVALID_TOKEN = 'Session compromise. Veuillez vous reconnecter.',
   INVALID_PROPOSAL = 'Ce film a déjà été proposé.',
@@ -17,4 +19,5 @@ export enum ApiError {
   UNAVAILABLE_EPISODE = 'Ce créneau est déjà réservé.',
   UNBOOKED_EPISODE = 'Ce créneau n\'est pas réservé.',
   USER_HAS_PROPOSAL = 'Vous avez déjà une proposition en attente. Vous pourrez réserver un nouveau créneau une fois votre proposition publiée.',
+  CLOUDINARY_FAILURE = 'Erreur lors de l\'upload de l\'image.',
 }

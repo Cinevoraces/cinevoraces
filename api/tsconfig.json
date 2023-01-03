@@ -3,15 +3,24 @@
     "src/**/*",
     "src/*",
     "test/**/*.ts",
-    "test/*.ts"
+    "test/*.ts",
+    "test/file_uploads.js"
   ],
-  "exclude": ["dist"],
+  "exclude": [
+    "dist"
+  ],
   "compilerOptions": {
-    "types": ["@types/jest", "node"],
+    "types": [
+      "@types/jest",
+      "node"
+    ],
     "moduleResolution": "node",
     "target": "es2022",
     "module": "commonjs",
-    "lib": ["es2022", "esnext.asynciterable"],
+    "lib": [
+      "es2022",
+      "esnext.asynciterable"
+    ],
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
