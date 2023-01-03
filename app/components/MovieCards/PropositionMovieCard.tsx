@@ -6,6 +6,7 @@ import useCloseMenuOnOutsideClick from '@hooks/useCloseMenuOnOutsideClick';
 import { Button } from '@components/Input';
 import Modal from '@components/Modal';
 import type { MovieWithPresentation, Presentation } from '@custom_types/index';
+import { AdminActions } from 'enums';
 
 interface PropositionMovieCardProps {
   movie: MovieWithPresentation;
@@ -49,7 +50,7 @@ const PropositionMovieCard = ({ movie, propositionCardStyle, posterStyle }: Prop
           <p className="text-sm justify-self-end">
             {`Publication le : ${dateFormater(publishing_date)}`}
           </p>
-          <a onClick={handleOpenPresentationModal} className='hover: underline text-xs text-orange-primary self-end justify-self-end'>
+          <a onClick={handleOpenPresentationModal} className='text-xs text-orange-primary self-end justify-self-end hover:underline'>
             Lire la présentation
           </a>
         </div>

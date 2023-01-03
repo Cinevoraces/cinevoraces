@@ -4,15 +4,17 @@ import { mutationRequestCSR } from '@utils/fetchApi';
 import { useAppSelector } from '@store/store';
 import { user } from '@store/slices/user';
 import { Roles } from '@custom_types/index';
-// import type { User, Proposition } from '@custom_types/index';
+import { AdminActions } from 'enums';
 
 import PropositionsSection from 'pages_chunks/administration/UI/PropositionsSection';
 import UsersSection from 'pages_chunks/administration/UI/UsersSection';
 import Modal from '@components/Modal';
+import useCloseMenuOnOutsideClick from '@hooks/useCloseMenuOnOutsideClick';
 
-// TO DO once merged with user page, add correct types ---------------------------------------
 const Administration = () => {
+  // User role check
   const isAdmin = useAppSelector(user).role === Roles.ADMIN;
+  // Data fetching
   const {
     data: propositions,
     error: propositionsError,
@@ -21,6 +23,7 @@ const Administration = () => {
   } = useSWR<any, Error>('/movies?select[presentation]=true&where[is_published]=false');
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data: users, error: usersError, mutate: usersMutate } = useSWR<any, Error>('/users');
+  // Data vizualization ---------- TEMP -----------------------------------------------------
   useEffect(() => {
     propositions && console.log('propositions : ', propositions);
   }, [propositions]);
@@ -28,14 +31,20 @@ const Administration = () => {
     users && console.log('users : ', users);
   }, [users]);
 
+  // Confirmation Modal and pw management
   const [isConfirmationModalOpened, setIsConfirmationModalOpened] = useState<boolean>(false);
-  const setConfirmationModal = (action: string, id: number) => {
-    setIsConfirmationModalOpened(isConfirmationModalOpened);
+  const handleOpenPWModal = () => setIsConfirmationModalOpened(!isConfirmationModalOpened);
+  const handleConfirmationModal = (action: AdminActions, id: number) => {
+    setIsConfirmationModalOpened(!isConfirmationModalOpened);
+    console.log('On confirme le truc là, sur ?');
   };
   const pwModalRef = useRef<HTMLElement>(null);
+  useCloseMenuOnOutsideClick(pwModalRef, 'modal', isConfirmationModalOpened, handleOpenPWModal);
+  const password = useRef<string>('');
 
+  // Edition actions
   const handleMoviePublishing = (id: number, data: { password: string }) => {
-    mutationRequestCSR('DELETE', `/admin/users/${id}`, data);
+    mutationRequestCSR('PUT', `admin/movies/publish/${id}`, data);
   };
   const handleMovieDeletion = (id: number, data: { password: string }) => {
     mutationRequestCSR('DELETE', `/admin/movies/${id}`, data);
@@ -44,9 +53,9 @@ const Administration = () => {
     mutationRequestCSR('DELETE', `/admin/users/${id}`, data);
   };
   const handleSubmitActions = [
-    { actionType: 'PUBLISHMOVIE', description: 'publication du film', handlingFunction: handleMoviePublishing },
-    { actionType: 'DELETEMOVIE', description: 'suppression du film', handlingFunction: handleMovieDeletion },
-    { actionType: 'DELETEUSER', description: 'suppression de l\'utilisateur', handlingFunction: handleUserDeletion },
+    { actionType: AdminActions.PUBLISHMOVIE, description: 'publication du film', handlingFunction: handleMoviePublishing },
+    { actionType: AdminActions.DELETEMOVIE, description: 'suppression du film', handlingFunction: handleMovieDeletion },
+    { actionType: AdminActions.DELETEUSER, description: 'suppression de l\'utilisateur', handlingFunction: handleUserDeletion },
   ];
 
   return (
@@ -60,6 +69,7 @@ const Administration = () => {
             <PropositionsSection
               propositions={propositions}
               error={propositionsError}
+              handleConfirmationModal={handleConfirmationModal}
             />
             <UsersSection
               users={users}
@@ -71,9 +81,11 @@ const Administration = () => {
       {isConfirmationModalOpened && (
         <Modal
           stateValue={isConfirmationModalOpened}
-          setter={() => setIsConfirmationModalOpened(!isConfirmationModalOpened)}
+          setter={handleOpenPWModal}
           ref={pwModalRef}>
-          <form action="submit"></form>
+          <form action="submit">
+            <p>TOTO</p>
+          </form>
         </Modal>
       )}
     </>

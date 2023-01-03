@@ -19,6 +19,7 @@
       "@public/*" : ["public/*"],
       "@components/*" : ["components/*"],
       "@custom_types/*" : ["custom_types/*"],
+      "@enums" : ["enums/*"],
       "@hooks/*" : ["hooks/*"],
       "@pages/*" : ["pages/*"],
       "@store/*" : ["store/*"],

@@ -3,12 +3,15 @@ import MoviePicker from '@components/MoviePicker';
 import type { FormEvent } from 'react';
 import { useState } from 'react';
 import type { SWRResponse } from 'swr';
+import { Button } from '@components/Input';
+import { AdminActions } from 'enums';
 
 interface PropositionsSectionProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   propositions: MovieWithPresentation[];
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   error?: Error;
+  handleConfirmationModal: (action: AdminActions, id: number)=>void;
 }
 
 const pickMovieStyles = {
@@ -29,7 +32,7 @@ const pickMovieStyles = {
     `,
 };
 
-const PropositionsSection = ({ propositions, error }: PropositionsSectionProps) => {
+const PropositionsSection = ({ propositions, error, handleConfirmationModal }: PropositionsSectionProps) => {
   // Proposition Selection logic
   const [selectedPropositionId, setSelectedPropositionId] = useState(0);
   const handleSelectProposition = (e: FormEvent) => {
@@ -37,18 +40,9 @@ const PropositionsSection = ({ propositions, error }: PropositionsSectionProps) 
       setSelectedPropositionId(Number(e.target.value));
     }
   };
-  // const handlePublishMovie = async (e: FormEvent) => {
-  //   e.preventDefault();
-  //   const res = await propositionSubmit(selectedMovieId);
-  //   // Toast feedback, if success mutate the cache and return to homepage
-  //   if (res.message.includes('bien été enregistrée')) {
-  //     toast.success(res.message);
-  //     userPendingPropositionMutate();
-  //     return router.push('/');
-  //   } else {
-  //     return toast.error(res.message);
-  //   }
-  // };
+  // Actions logic
+  const handleMoviePublishingConfirmation = () => handleConfirmationModal(AdminActions.PUBLISHMOVIE, selectedPropositionId);
+  const handleMovieDeletionConfirmation = () => handleConfirmationModal(AdminActions.DELETEMOVIE, selectedPropositionId);
 
   return (
     <section>
@@ -61,11 +55,17 @@ const PropositionsSection = ({ propositions, error }: PropositionsSectionProps) 
         </div>
       ) : (
         propositions && (
-          <MoviePicker
-            movies={propositions}
-            handleSelectMovie={handleSelectProposition}
-            styles={pickMovieStyles}
-          />
+          <>
+            <MoviePicker
+              movies={propositions}
+              handleSelectMovie={handleSelectProposition}
+              styles={pickMovieStyles}
+            />
+            <div className='w-full flex gap-4 justify-center mt-4'>
+              <Button onClick={handleMoviePublishingConfirmation}>Publier</Button>
+              <Button onClick={handleMovieDeletionConfirmation} customStyle='empty'>Supprimer</Button>
+            </div>
+          </>
         )
       )}
     </section>
