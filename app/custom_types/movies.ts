@@ -8,6 +8,8 @@ export interface MinimalMovie {
   french_title: string;
   original_title: string;
   poster_url: string;
+  publishing_date: string;
+  release_date: string;
 }
 
 export interface Presentation{
@@ -45,16 +47,18 @@ export interface UserReview {
   rating: number | null;
   comment: string | null;
 }
-export interface CompleteMovie extends MinimalMovie {
+
+export interface MovieWithPresentation extends MinimalMovie {
+  presentation: Presentation;
+}
+export interface CompleteMovie extends MovieWithPresentation {
   casting: string[];
   directors: string[];
   runtime: number;
-  publishing_date: string;
   release_date: string;
   genres: string[];
   countries: string[];
   languages: string[];
-  presentation: Presentation;
   metrics: Metrics;
   comments: Comment[];
   user_review?: UserReview;

@@ -1,4 +1,4 @@
-// import type { Proposition } from '@custom_types/index';
+import type { MovieWithPresentation } from '@custom_types/index';
 import MoviePicker from '@components/MoviePicker';
 import type { FormEvent } from 'react';
 import { useState } from 'react';
@@ -6,7 +6,7 @@ import type { SWRResponse } from 'swr';
 
 interface PropositionsSectionProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  propositions: any[];
+  propositions: MovieWithPresentation[];
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   error?: Error;
 }
@@ -63,7 +63,7 @@ const PropositionsSection = ({ propositions, error }: PropositionsSectionProps) 
         propositions && (
           <MoviePicker
             movies={propositions}
-            handleSelectMovie={handleSelectMovie}
+            handleSelectMovie={handleSelectProposition}
             styles={pickMovieStyles}
           />
         )

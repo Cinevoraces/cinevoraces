@@ -12,10 +12,13 @@ import Modal from '@components/Modal';
 
 // TO DO once merged with user page, add correct types ---------------------------------------
 const Administration = () => {
-  const isAdmin = (useAppSelector(user).role === Roles.ADMIN);
-  console.log(isAdmin);
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { data: propositions, error: propositionsError, mutate: propositionsMutate } = useSWR<any, Error>('/movies?where[is_published]=false');
+  const isAdmin = useAppSelector(user).role === Roles.ADMIN;
+  const {
+    data: propositions,
+    error: propositionsError,
+    mutate: propositionsMutate,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } = useSWR<any, Error>('/movies?select[presentation]=true&where[is_published]=false');
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data: users, error: usersError, mutate: usersMutate } = useSWR<any, Error>('/users');
   useEffect(() => {
@@ -32,13 +35,13 @@ const Administration = () => {
   const pwModalRef = useRef<HTMLElement>(null);
 
   const handleMoviePublishing = (id: number, data: { password: string }) => {
-    mutationRequestCSR('DELETE', `/admin/users/${id}`, data );
+    mutationRequestCSR('DELETE', `/admin/users/${id}`, data);
   };
   const handleMovieDeletion = (id: number, data: { password: string }) => {
-    mutationRequestCSR('DELETE', `/admin/movies/${id}`, data );
+    mutationRequestCSR('DELETE', `/admin/movies/${id}`, data);
   };
   const handleUserDeletion = (id: number, data: { password: string }) => {
-    mutationRequestCSR('DELETE', `/admin/users/${id}`, data );
+    mutationRequestCSR('DELETE', `/admin/users/${id}`, data);
   };
   const handleSubmitActions = [
     { actionType: 'PUBLISHMOVIE', description: 'publication du film', handlingFunction: handleMoviePublishing },
@@ -50,27 +53,29 @@ const Administration = () => {
     <>
       <main>
         <h1 className="custom-container items-start hero-text">Administration</h1>
-        {
-          !isAdmin 
-            ? <p className='custom-container'>Cette section est réservée aux admins.</p>
-            : (
-              <>
-                <PropositionsSection propositions={propositions} error={propositionsError} />
-                <UsersSection users={users} error={usersError}/>
-              </>
-            )
-        }
+        {!isAdmin ? (
+          <p className="custom-container">Cette section est réservée aux admins.</p>
+        ) : (
+          <>
+            <PropositionsSection
+              propositions={propositions}
+              error={propositionsError}
+            />
+            <UsersSection
+              users={users}
+              error={usersError}
+            />
+          </>
+        )}
       </main>
-      {
-        isConfirmationModalOpened && (
-          <Modal 
-            stateValue={isConfirmationModalOpened}
-            setter={() => setIsConfirmationModalOpened(!isConfirmationModalOpened)}
-            ref={pwModalRef}>
-            <form action="submit"></form>
-          </Modal>
-        )
-      }
+      {isConfirmationModalOpened && (
+        <Modal
+          stateValue={isConfirmationModalOpened}
+          setter={() => setIsConfirmationModalOpened(!isConfirmationModalOpened)}
+          ref={pwModalRef}>
+          <form action="submit"></form>
+        </Modal>
+      )}
     </>
   );
 };

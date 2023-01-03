@@ -1,4 +1,4 @@
-import type { MinimalMovie, Presentation, Metrics, Comment, UserReview, CompleteMovie } from './movies';
+import type { MinimalMovie, Presentation, Metrics, Comment, UserReview, MovieWithPresentation, CompleteMovie } from './movies';
 import type Season from './season';
 import type { SeasonOption, FilterOptions, FilterUserInputs, FilteredMoviesStateInterface } from './filmsPage';
 import type { SvgProps } from './global';
@@ -11,7 +11,7 @@ import type { Proposition } from './proposition';
 import { Roles } from './global';
 
 export type{
-  MinimalMovie, Presentation, Metrics, Comment, UserReview, CompleteMovie,
+  MinimalMovie, Presentation, Metrics, Comment, UserReview, MovieWithPresentation, CompleteMovie,
   Season,
   SeasonOption, FilterOptions, FilterUserInputs, FilteredMoviesStateInterface,
   SvgProps,
