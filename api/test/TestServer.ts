@@ -152,6 +152,7 @@ export default class TestServer {
         role: expect.any(Number),
         created_at: expect.anything(),
         propositions: expect.anything(),
+        movies: expect.anything(),
         reviews: expect.anything(),
         metrics: expect.anything(),
       }),
