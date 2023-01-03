@@ -66,28 +66,31 @@ export const handlePutUser = async (request: Request, reply: Reply) => {
  * @description Put user picture by token
 */
 export const handlePutUserAvatar = async (request: Request, reply: Reply) => {
-  const { error, pgClient, cloudinary, user, fileManager } = request;
+  const { pgClient, cloudinary, user, fileManager } = request;
   const { file, fs, pump } = fileManager;
   const { id, pseudo } = user;
 
   file.path = `${process.env.STORAGE_TEMP}/${file.fileName}`;
 
   // Save file to server (Cloudinary uploads supports only local files)
-  pump(file.file, fs.createWriteStream(file.path), async (err) => {
-    if (err) error.send(ApiError.CLOUDINARY_FAILURE, 500);
+  pump(file.file, fs.createWriteStream(file.path));
 
-    const avatar_url = await cloudinary.uploadImg(pseudo, file.fileName);
-    await pgClient.query(
-      updateUser(id, { avatar_url })
-    );
+  // Upload file to Cloudinary
+  const avatar_url = await cloudinary.uploadImg(`avatar_${id}_${pseudo}`, file.path);
+  await pgClient.query(updateUser(id, { avatar_url }));
 
-    // Remove temp file from server
-    fs.unlinkSync(file.fileName);
-    
-    reply
-      .code(204)
-      .send({ message: ApiResponse.UPDATE_USER_PIC_SUCCESS });
-  });
+  // Remove temp file from server
+  try {
+    fs.unlinkSync(file.path);
+  } catch (err) {
+    // TODO: SERVER ERROR LOG FILES
+    // This is not a critical error, so we don't want to stop the process.
+    // We do want to trace it in a log file
+  }
+
+  reply
+    .code(204)
+    .send({ message: ApiResponse.UPDATE_USER_PIC_SUCCESS });
 };
 
 /**

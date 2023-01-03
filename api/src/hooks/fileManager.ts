@@ -35,6 +35,8 @@ export const fileManagerHooks: FastifyPluginCallback = async (
     ];
 
     // File validation checks
+    if (!avatar)
+      error.send(ApiError.INVALID_FILE, 400);
     if (!allowedMimeTypes.includes(avatar.mimetype as MimeType))
       error.send(ApiError.INVALID_MIME_TYPE, 415);
     avatar.file.on('limit', () => {

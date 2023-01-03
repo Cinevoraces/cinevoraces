@@ -99,6 +99,24 @@ export const putUserSchema: FastifySchema = {
   },
 };
 
+export const putUserAvatarSchema: FastifySchema = {
+  summary: '(TOKEN REQUIRED)',
+  description: `
+  **Modify user avatar by token**.
+  Send a multipart/form-data request with the following fields:
+  - avatar: file
+  `,
+  tags: ['Users'],
+  response: {
+    204: {
+      properties: {
+        message: { type: 'string' },
+      },
+      required: ['message'],
+    },
+  },
+};
+
 export const adminDeleteUserByIdSchema: FastifySchema = {
   description: `
   **Delete user by id**.
