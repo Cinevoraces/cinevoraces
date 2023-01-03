@@ -28,7 +28,6 @@ export const users = async (fastify: FastifyInstance) => {
     preValidation: [fastify.verifyPassword],
   });
 
-  // TODO: FINISH ME
   fastify.route({
     method: 'PUT',
     url: '/users/avatar',
