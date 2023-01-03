@@ -16,7 +16,7 @@ const PropositionsSection = ({ propositions, error }: PropositionsSectionProps) 
         <div className='custom-container'>
           {
             error
-              ? <p>Une erreur est survenue</p>
+              ? <p>{error.message}</p>
               : (propositions && propositions.length > 0)
                 ? (
                   <ul>

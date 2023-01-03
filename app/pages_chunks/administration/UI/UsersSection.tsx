@@ -22,7 +22,7 @@ const UsersSection: NextPage<UsersSectionProps> = ({ users, error }) => {
       <h2 className='title-section w-full'>Membres</h2>
       {
         error
-          ? <p>Une erreur est survenue</p>
+          ? <p>{error.message}</p>
           : (users && users.length > 0)
             ? ( 
               <table className='table-auto rounded-lg overflow-hidden'>
