@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { bindActionCreators, createSlice } from '@reduxjs/toolkit';
 import type { RootState } from '../store';
 import type { Roles } from '@custom_types/global';
 
@@ -24,7 +24,15 @@ const userSlice = createSlice({
     },
     logout(){
       return initialState;
-    }
+    },
+    setUserModification(state, action) {
+      const newState = {
+        ...state,
+        ...action.payload,
+      };
+      console.log(newState);
+      return newState;
+    },
   },
 });
 
@@ -32,5 +40,6 @@ export const user = (state: RootState) => state.user;
 export const {
   login,
   logout,
+  setUserModification,
 } = userSlice.actions;
 export default userSlice.reducer;

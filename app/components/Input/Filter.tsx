@@ -8,7 +8,7 @@ import { FilterSvg, ResetSvg } from '@components/SvgComponents/Filter';
 import { BookmarkSvg, LikeSvg } from '@components/SvgComponents/InteractionsSVG';
 import UnwatchedSvg from '@components/SvgComponents/Unwatched';
 
-import type { CompleteMovie, FilterOptions, FilterUserInputs } from '@custom_types/index';
+import type { FilterOptions, FilterUserInputs } from '@custom_types/index';
 export interface FilterProps {
   filterOptions: FilterOptions;
   isMenuOpened: boolean;

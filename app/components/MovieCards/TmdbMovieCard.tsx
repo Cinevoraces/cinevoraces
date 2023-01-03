@@ -2,13 +2,13 @@ import Image from 'next/image';
 import cutText from '@utils/cutText';
 import type { TMDBMovie } from '@custom_types/index';
 
-interface MovieCardProps {
+interface TmdbMovieCardProps {
   resultCardStyle: string;
   posterStyle: string;
   movie: TMDBMovie;
 }
 
-const MovieCard = ({ resultCardStyle, posterStyle, movie }: MovieCardProps) => {
+const TmdbMovieCard = ({ resultCardStyle, posterStyle, movie }: TmdbMovieCardProps) => {
   return (
     <div
       id="tmdb-result-card"
@@ -49,4 +49,4 @@ const MovieCard = ({ resultCardStyle, posterStyle, movie }: MovieCardProps) => {
   );
 };
 
-export default MovieCard;
+export default TmdbMovieCard;

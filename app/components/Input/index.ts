@@ -12,6 +12,7 @@ import Select from './Select';
 import SearchBar from './SearchBar';
 import Filter from './Filter';
 import StarRadio from './StarRadio';
+import File from './File';
 
 export {
   Form,
@@ -31,4 +32,5 @@ export {
   SearchBar,
   Filter,
   StarRadio,
+  File,
 };

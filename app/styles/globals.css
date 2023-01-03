@@ -12,21 +12,46 @@
     @apply bg-dark-gray;
   }
 }
-  /* Reset for special range inputs*/
-input[type='range'] {
-  @apply z-0 appearance-none w-full h-2 rounded-full cursor-pointer bg-orange-primary/20 focus:outline-none focus:ring-4 focus:ring-offset-0 focus:ring-white/5 hover:outline-none hover:ring-4 hover:ring-offset-0 hover:ring-white/5
+/* Reset for special range inputs*/
+.range input {
+  @apply z-10 absolute appearance-none w-full h-2 rounded-full cursor-pointer bg-transparent 
+  focus:outline-none focus:ring-4 focus:ring-offset-0 focus:ring-white/5 
+  hover:outline-none hover:ring-4 hover:ring-offset-0 hover:ring-white/5
 }
-input[type='range']::-moz-range-thumb {
-  @apply z-10 appearance-none pointer-events-auto w-5 h-5 rounded-full border-none ring-4 ring-medium-gray/50 bg-orange-secondary hover:scale-110
+.range input::-moz-range-thumb {
+  @apply z-20 appearance-none pointer-events-auto w-5 h-5 rounded-full border-none ring-4 ring-medium-gray/50 bg-orange-secondary hover:scale-110
 }
-input[type='range']::-moz-range-progress {
+.range input::-moz-range-progress {
   @apply appearance-none pointer-events-auto w-full h-2 rounded-full bg-orange-secondary 
 }
-input[type='range']::-webkit-slider-thumb {
-  @apply z-10 appearance-none -mt-[.4rem] pointer-events-auto w-5 h-5 rounded-full border-none ring-4 ring-medium-gray/50 bg-orange-secondary hover:scale-110
+.range input::-webkit-slider-thumb {
+  @apply z-20 appearance-none -mt-[.4rem] pointer-events-auto w-5 h-5 rounded-full border-none ring-4 ring-medium-gray/50 bg-orange-secondary hover:scale-110
 }
-input[type='range']::-webkit-slider-runnable-track {
-  @apply bg-orange-secondary/50 w-full h-2 rounded-full
+.range input::-webkit-slider-runnable-track {
+  @apply bg-transparent w-full h-2 rounded-full
+}
+
+/*Double range*/
+.double_range input {
+  @apply absolute z-10 pointer-events-none appearance-none w-full h-2 rounded-full cursor-pointer
+  bg-transparent focus:outline-none focus:ring-4 focus:ring-offset-0 focus:ring-white/5 
+  hover:outline-none hover:ring-4 hover:ring-offset-0 hover:ring-white/5
+}
+.double_range input::-moz-range-thumb {
+  @apply z-50 appearance-none pointer-events-auto w-5 h-5 rounded-full border-none ring-4 ring-medium-gray/50 bg-orange-secondary hover:scale-110
+}
+.double_range input::-moz-range-progress {
+  @apply z-10 pointer-events-none appearance-none w-full h-2 rounded-full
+}
+.double_range input::-webkit-slider-runnable-track {
+  @apply  bg-orange-primary/20 w-full h-2 rounded-full
+}
+.double_range input::-webkit-slider-thumb {
+  @apply z-50 appearance-none -mt-[.4rem] pointer-events-auto w-5 h-5 rounded-full border-none ring-4 ring-medium-gray/50 bg-orange-secondary hover:scale-110
+}
+
+input[type='file']::file-selector-button {
+  @apply px-5 py-2 shadow-inner border-none font-semibold bg-orange-primary text-dark-gray rounded-full hover:ring-4 hover:ring-offset-0 hover:ring-white/5 hover:scale-105 transition duration-150 hover:ease-out
 }
 
 @layer components {
@@ -48,7 +73,11 @@ input[type='range']::-webkit-slider-runnable-track {
   .interaction--clicked{
     box-shadow: 0px 2px 0px rgba(0, 0, 0, 0.25), 0px -3px 0px #FC783F;
   }
-  label:has(> input:checked) ~ label > .star-icon {
+  /* Incompatible to date with Edge and Firefox*/
+  /* label:has(> input:checked) ~ label > .star-icon {
+    @apply fill-yellow;
+  } */
+  label.is_checked ~ label > .star-icon {
     @apply fill-yellow;
   }
   label:hover ~ label > .star-icon {
