@@ -5,6 +5,7 @@ export enum ApiError {
   INVALID_PASSWORD = 'Mot de passe incorrect.',
   INVALID_PASSWORD_FORMAT = 'Le format du mot de passe est invalide.',
   INVALID_MIME_TYPE = 'Le format du fichier est invalide.',
+  INVALID_FILE_SIZE = 'Le fichier est trop volumineux.',
   INVALID_USER = 'Utilisateur introuvable.',
   INVALID_TOKEN = 'Session compromise. Veuillez vous reconnecter.',
   INVALID_PROPOSAL = 'Ce film a déjà été proposé.',

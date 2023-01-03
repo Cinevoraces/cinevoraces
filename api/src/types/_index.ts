@@ -6,7 +6,6 @@ export { Env, EEnvValues, EEnvKeys } from './enums/env';
 export { ReviewTypes, AddReview, UpdateReview } from './enums/review';
 export { ApiError } from './enums/apiError';
 export { ApiResponse } from './enums/apiResponse';
-export { ApiStorage } from './enums/apiStorage';
 export { MimeType } from './enums/mimeType';
 export { Roles } from './enums/roles';
 export { Tables } from './enums/tables';

@@ -13,12 +13,12 @@ const cloudinaryService: FastifyPluginCallback = async (fastify, opts, done) => 
     return fastify.log.warn('Cloudinary already registered');
 
   /**
- * **Upload image**
- * @description
- * Uploads an image to Cloudinary.
- * @param userPseudo - The user's pseudo that will prefix filename.
- * @param filePath - The name of the file to upload.
- */
+   * **Upload image**
+   * @description
+   * Uploads an image to Cloudinary.
+   * @param userPseudo - The user's pseudo that will prefix filename.
+   * @param filePath - The name of the file to upload.
+  */
   const uploadImg = async (userPseudo: string, filePath: string) => {
     v2.config({ cloudinary_url: process.env.CLOUDINARY_URL });
     const { url } = await v2.uploader.upload(filePath, {
@@ -34,8 +34,7 @@ const cloudinaryService: FastifyPluginCallback = async (fastify, opts, done) => 
 
     if (!url)
       fastify.error.send(ApiError.CLOUDINARY_FAILURE, 500);
-    // TODO: Create file management service
-    // TODO: Remove temp file from server
+    
     return url;
   };
 

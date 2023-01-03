@@ -20,6 +20,7 @@
     "fastify": "^4.5.3",
     "fastify-plugin": "^4.2.1",
     "pg": "^8.8.0",
+    "pump": "^3.0.0",
     "qs": "^6.11.0",
     "sanitize-html": "^2.7.3"
   },
@@ -30,6 +31,7 @@
     "@types/jest": "^29.0.3",
     "@types/node": "^18.7.16",
     "@types/pg": "^8.6.5",
+    "@types/pump": "^1.1.1",
     "@types/qs": "^6.9.7",
     "@types/sanitize-html": "^2.6.2",
     "@typescript-eslint/eslint-plugin": "^5.40.0",

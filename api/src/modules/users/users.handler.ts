@@ -66,21 +66,28 @@ export const handlePutUser = async (request: Request, reply: Reply) => {
  * @description Put user picture by token
 */
 export const handlePutUserAvatar = async (request: Request, reply: Reply) => {
-  const { pgClient, cloudinary, user } = request;
+  const { error, pgClient, cloudinary, user, fileManager } = request;
+  const { file, fs, pump } = fileManager;
   const { id, pseudo } = user;
 
-  const data = await request.file();
+  file.path = `${process.env.STORAGE_TEMP}/${file.fileName}`;
 
-  console.log('data: ', data);
-  // TODO: FINISH ME
-  // const publicAvatarUrl = cloudinary.uploadImg(pseudo, 'FILE PATH');
-  // await pgClient.query(
-  //   updateUser(id, { avatar_url: publicAvatarUrl })
-  // );
+  // Save file to server (Cloudinary uploads supports only local files)
+  pump(fs.createWriteStream(file.fileName), async (err) => {
+    if (err) error.send(ApiError.CLOUDINARY_FAILURE, 500);
 
-  reply
-    .code(204)
-    .send({ message: ApiResponse.UPDATE_USER_PIC_SUCCESS });
+    const avatar_url = await cloudinary.uploadImg(pseudo, file.fileName);
+    await pgClient.query(
+      updateUser(id, { avatar_url })
+    );
+
+    // Remove temp file from server
+    fs.unlinkSync(file.fileName);
+    
+    reply
+      .code(204)
+      .send({ message: ApiResponse.UPDATE_USER_PIC_SUCCESS });
+  });
 };
 
 /**

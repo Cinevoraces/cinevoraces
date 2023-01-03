@@ -34,6 +34,7 @@ export const users = async (fastify: FastifyInstance) => {
     url: '/users/avatar',
     // schema: putUserAvatarSchema,
     handler: handlePutUserAvatar,
+    preHandler: [fastify.handleAvatarMultipartContent],
     onRequest: [fastify.verifyAccessToken],
   });
 

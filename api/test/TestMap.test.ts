@@ -7,7 +7,6 @@ import { ROUTES_REVIEWS } from './routes_reviews';
 import { ROUTES_SEASONS } from './routes_seasons';
 import { ROUTES_EPISODES } from './routes_episodes';
 import { ROUTES_USERS } from './routes_users';
-import { FILE_UPLOADS } from './file_uploads';
 
 const Server = new TestServer();
 
@@ -28,11 +27,10 @@ afterAll(async () => {
   await Server.stop();
 });
 
-// ROUTES_AUTH(Server);
-// ROUTES_METRICS(Server);
-// ROUTES_MOVIES(Server);
-// ROUTES_REVIEWS(Server);
-// ROUTES_SEASONS(Server);
-// ROUTES_EPISODES(Server);
-// ROUTES_USERS(Server);
-FILE_UPLOADS(Server);
+ROUTES_AUTH(Server);
+ROUTES_METRICS(Server);
+ROUTES_MOVIES(Server);
+ROUTES_REVIEWS(Server);
+ROUTES_SEASONS(Server);
+ROUTES_EPISODES(Server);
+ROUTES_USERS(Server);

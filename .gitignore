@@ -25,3 +25,14 @@ api/coverage
 # misc
 */.DS_Store
 */.vscode
+
+# Server files storage
+api/test/Result.jpg
+storage/*/*.jpg
+storage/*/*.png
+storage/*/*.gif
+storage/*/*.jpeg
+storage/*/*.bmp
+storage/*/*.webp
+storage/*/*.svg
+storage/*/*.ico

@@ -32,5 +32,6 @@ declare module 'fastify' {
     verifyAccessToken: (request: Request, reply: Reply) => void;
     verifyAccessTokenOptionnal: (request: Request, reply: Reply) => void;
     verifyRefreshToken: (request: Request, reply: Reply) => void;
+    handleAvatarMultipartContent: (request: Request, reply: Reply) => void;
   }
 }
