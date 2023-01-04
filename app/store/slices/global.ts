@@ -1,12 +1,14 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { RootState } from '../store';
 import type { PayloadAction } from '@reduxjs/toolkit';
+import { addRequestMeta } from 'next/dist/server/request-meta';
 
 interface globalStateInterface {
   isBurgerMenuOpen: boolean;
   isUserMenuOpen: boolean;
   isConnectionModalOpen: boolean;
   arePWVisible: boolean;
+  isConfirmationModalOpen: boolean;
 }
 
 const initialState: globalStateInterface = {
@@ -14,6 +16,7 @@ const initialState: globalStateInterface = {
   isUserMenuOpen: false,
   isConnectionModalOpen: false,
   arePWVisible: false,
+  isConfirmationModalOpen: false,
 };
 
 const globalSlice = createSlice({
@@ -32,6 +35,9 @@ const globalSlice = createSlice({
     toggleArePWVisible(state) {
       return { ...state, arePWVisible: !state.arePWVisible };
     },
+    toggleConfirmationModal(state) {
+      return { ...state, isConfirmationModalOpen: !state.isConfirmationModalOpen };
+    },
   },
 });
 
@@ -41,5 +47,6 @@ export const {
   toggleUserMenu,
   toggleConnectionModal,
   toggleArePWVisible,
+  toggleConfirmationModal,
 } = globalSlice.actions;
 export default globalSlice.reducer;

@@ -22,7 +22,7 @@ const User: NextPage = () => {
   const userId = !isPrivatePage ? slug : connectedUserId?.toString();
   // Getting public datas and store them in local state
   // API issue with select operator that can't be repeted for this specific endpoint ------------------------------------------------
-  const addProposition = isPrivatePage ? '&[proposition]=true' : '';
+  const addProposition = isPrivatePage ? '&select[propositions]=true' : '';
   // Next initializes the slug with a generic [user] string, this prevents unnecessary fetches and downstream errors
   const { data: userData, error, mutate } = useSWR(
     () => userId && userId !== '[user]' ? `/users?select[metrics]=true${addProposition}&where[id]=${userId}` : ''
@@ -63,7 +63,7 @@ const User: NextPage = () => {
                     <section
                       id="private_section"
                       className="flex flex-col gap-6">
-                      <PendingProposition askedUser={askedUser}/>
+                      <PendingProposition propositions={askedUser.propositions}/>
                       <div className="custom-container grow-0 pt-4">
                         <h2 className="title-section">Changer mes paramètres</h2>
                         <ParameterForm mutate={mutate} mail={askedUser.mail}/>

@@ -7,6 +7,7 @@ import type { TMDBMovie, TMDBDetailedMovie, TMDBMovieCredits } from './tmdbMovie
 import type { Episode } from './episodes';
 import type User from './user';
 import type { Proposition } from './proposition';
+import type { HandleSubmitAction, HandleSubmitActions } from './administration';
 
 import { Roles } from './global';
 
@@ -20,6 +21,7 @@ export type{
   Episode,
   User,
   Proposition,
+  HandleSubmitAction, HandleSubmitActions,
 };
 
 export { Roles };

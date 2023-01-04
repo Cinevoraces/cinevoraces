@@ -1,28 +1,35 @@
+import type { FormEvent } from 'react';
 import { useRef } from 'react';
 import { Button, TextInputRef, Toggle } from '@components/Input';
 import { global, toggleArePWVisible } from '@store/slices/global';
 import { useAppDispatch, useAppSelector } from '@store/store';
 
-interface ConfirmationFormProps{
-  actionType: string;
-  handlingFunction: (id: number, data: { password: string })=>void [];
+import type { HandleSubmitAction } from '@custom_types/index';
+
+interface ConfirmationFormProps {
+  handlingAction: HandleSubmitAction;
+  id: number;
 }
 
-const ConfirmationForm = ({ actionType, handlingFunction }: ConfirmationFormProps) => {
+const ConfirmationForm = ({ handlingAction: { description, handlingFunction }, id }: ConfirmationFormProps) => {
   const dispatch = useAppDispatch();
   const isPWVisible = useAppSelector(global).arePWVisible;
-  const pwModalRef = useRef<HTMLInputElement>(null);
+  const passwordRef = useRef<HTMLInputElement>(null);
+  const handleSubmit = (e: FormEvent) => handlingFunction(e, id, { password: passwordRef.current ? passwordRef.current?.value : '' });
   return (
     <>
-      <h2 className="section-title">Confirmer</h2>
-      <form action="submit">
+      <h2 className="title-section mb-4">{`Confirmez ${description}`}</h2>
+      <form
+        className="flex flex-col w-full gap-3"
+        action="submit"
+        onSubmit={(e: FormEvent) => handleSubmit(e)}>
         <TextInputRef
           type={!isPWVisible ? 'password' : undefined}
           id="password"
           label="Entrez votre mot de passe"
           placeholder="Mot de passe..."
           errorMessage="Le mot de passe ne respecte pas les règles de sécurité."
-          ref={pwModalRef}
+          ref={passwordRef}
         />
         <Toggle
           id="showPasswordConnection"
@@ -31,7 +38,10 @@ const ConfirmationForm = ({ actionType, handlingFunction }: ConfirmationFormProp
           checked={isPWVisible}
           onChange={() => dispatch(toggleArePWVisible())}
         />
-        <Button>Confirmer</Button>
+        <div>
+          <Button disabled={(!id) && true}>Confirmer</Button>
+          <p className={!id ? 'text-sm font-light text-red-500 text-right' : 'hidden'}>{'N\'oubliez pas d\'effectuer une sélection!'}</p>
+        </div>
       </form>
     </>
   );

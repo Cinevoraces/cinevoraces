@@ -2,14 +2,11 @@ import type { MovieWithPresentation } from '@custom_types/index';
 import MoviePicker from '@components/MoviePicker';
 import type { FormEvent } from 'react';
 import { useState } from 'react';
-import type { SWRResponse } from 'swr';
 import { Button } from '@components/Input';
 import { AdminActions } from 'enums';
 
 interface PropositionsSectionProps {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  propositions: MovieWithPresentation[];
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  propositions?: MovieWithPresentation[];
   error?: Error;
   handleConfirmationModal: (action: AdminActions, id: number)=>void;
 }

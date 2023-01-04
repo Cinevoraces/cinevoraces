@@ -1,6 +1,7 @@
 import { TmdbMovieCard, PropositionMovieCard } from '@components/MovieCards/index';
 import type { FormEventHandler } from 'react';
 import type { TMDBMovie, MovieWithPresentation } from '@custom_types/index';
+import { useRouter } from 'next/router';
 
 interface MoviePickerProps {
   movies: TMDBMovie[] | MovieWithPresentation[];
@@ -10,13 +11,12 @@ interface MoviePickerProps {
 
 const MoviePicker = ({ movies, handleSelectMovie, styles }: MoviePickerProps) => {
   const { posterStyle, radioStyle, resultCardStyle, gridStyle } = styles;
-  // Type Predicate based on proper publishing_date property presence
+  const router = useRouter();
+  // Type Predicate based on asPath : if proposition page, component is made for TMDBMovies
+  // Could be improved with other test or additionnal param for a less specific test
   const instanceofTMDBMovie = (movies: TMDBMovie[] | MovieWithPresentation[]): movies is TMDBMovie[] => {
-    return !movies[0].publishing_date;
+    return router.asPath === '/proposition';
   };
-
-  console.log('movies : ', movies);
-  console.log(instanceofTMDBMovie(movies));
 
   return (
     <div className="w-full bg-medium-gray">

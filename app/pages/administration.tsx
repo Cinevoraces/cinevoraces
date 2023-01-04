@@ -1,15 +1,25 @@
+import type { FormEvent } from 'react';
 import { useEffect, useState, useRef } from 'react';
 import useSWR from 'swr';
 import { mutationRequestCSR } from '@utils/fetchApi';
-import { useAppSelector } from '@store/store';
 import { user } from '@store/slices/user';
 import { Roles } from '@custom_types/index';
-import { AdminActions } from 'enums';
+import type { AdminActions } from 'enums';
+import { useAppDispatch, useAppSelector } from '@store/store';
+import { toggleArePWVisible, toggleConfirmationModal, global } from '@store/slices/global';
+import { TextInputRef, Toggle, Button } from '@components/Input';
+import type { User, MovieWithPresentation } from '@custom_types/index';
 
 import PropositionsSection from 'pages_chunks/administration/UI/PropositionsSection';
 import UsersSection from 'pages_chunks/administration/UI/UsersSection';
 import Modal from '@components/Modal';
 import useCloseMenuOnOutsideClick from '@hooks/useCloseMenuOnOutsideClick';
+import ConfirmationForm from 'pages_chunks/administration/UI/ConfirmationForm';
+
+import tryCatchWrapper from '@utils/tryCatchWrapper';
+import { toast } from 'react-hot-toast';
+
+import type { HandleSubmitAction, HandleSubmitActions } from '@custom_types/index';
 
 const Administration = () => {
   // User role check
@@ -19,44 +29,54 @@ const Administration = () => {
     data: propositions,
     error: propositionsError,
     mutate: propositionsMutate,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  } = useSWR<any, Error>('/movies?select[presentation]=true&where[is_published]=false');
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { data: users, error: usersError, mutate: usersMutate } = useSWR<any, Error>('/users');
-  // Data vizualization ---------- TEMP -----------------------------------------------------
-  useEffect(() => {
-    propositions && console.log('propositions : ', propositions);
-  }, [propositions]);
-  useEffect(() => {
-    users && console.log('users : ', users);
-  }, [users]);
+  } = useSWR<MovieWithPresentation[], Error>('/movies?select[presentation]=true&where[is_published]=false');
+  const { data: users, error: usersError, mutate: usersMutate } = useSWR<User[], Error>('/users');
+  
+  const dispatch = useAppDispatch();
+  const isConfirmationModalOpen = useAppSelector(global).isConfirmationModalOpen;
+  const handleOpenConfirmationModal = () => dispatch(toggleConfirmationModal());
+  const submitSuccess = async (method: 'POST' | 'PUT' | 'DELETE', endpoint: string, data: { password: string }) => {
+    const response = await mutationRequestCSR(method, endpoint, data); 
+    console.log('response: ', response);
+    // No response data as it is a 204 success Status
+    toast.success('Opération réalisée avec succès.');
+    propositionsMutate();
+    handleOpenConfirmationModal();
+  };
+  // Edition actions
+  const handleMoviePublishing = async (e: FormEvent, id: number, data: { password: string }) => {
+    e.preventDefault();
+    return tryCatchWrapper(submitSuccess)('PUT', `/admin/movies/publish/${id}`, data);
+  };
 
-  // Confirmation Modal and pw management
-  const [isConfirmationModalOpened, setIsConfirmationModalOpened] = useState<boolean>(false);
-  const handleOpenPWModal = () => setIsConfirmationModalOpened(!isConfirmationModalOpened);
+  const handleMovieDeletion = (e: FormEvent, id: number, data: { password: string }) => {
+    tryCatchWrapper(submitSuccess)('DELETE', `/admin/users/${id}`, data);
+    return propositionsMutate();
+  };
+  const handleUserDeletion = (e: FormEvent, id: number, data: { password: string }) => {
+    tryCatchWrapper(submitSuccess)('DELETE', `/admin/users/${id}`, data);
+    return usersMutate();
+  };
+
+  const handleSubmitActions: HandleSubmitActions = {
+    0: { description: 'la publication du film', handlingFunction: handleMoviePublishing },
+    1: { description: 'la suppression du film', handlingFunction: handleMovieDeletion },
+    2: { description: 'la suppression de l\'utilisateur', handlingFunction: handleUserDeletion },
+  };
+  // Arbitrary initial State
+  const [confirmationAction, setConfirmationAction] = useState<{ handlingAction: HandleSubmitAction, id: number }>({
+    handlingAction : {
+      description: 'Erreur',
+      handlingFunction: (e: FormEvent, id: number, data: { password: string }) => console.log(id, data),
+    },
+    id: 0,
+  });
   const handleConfirmationModal = (action: AdminActions, id: number) => {
-    setIsConfirmationModalOpened(!isConfirmationModalOpened);
-    console.log('On confirme le truc là, sur ?');
+    handleOpenConfirmationModal();
+    setConfirmationAction({ handlingAction: handleSubmitActions[action], id });
   };
   const pwModalRef = useRef<HTMLElement>(null);
-  useCloseMenuOnOutsideClick(pwModalRef, 'modal', isConfirmationModalOpened, handleOpenPWModal);
-  const password = useRef<string>('');
-
-  // Edition actions
-  const handleMoviePublishing = (id: number, data: { password: string }) => {
-    mutationRequestCSR('PUT', `admin/movies/publish/${id}`, data);
-  };
-  const handleMovieDeletion = (id: number, data: { password: string }) => {
-    mutationRequestCSR('DELETE', `/admin/movies/${id}`, data);
-  };
-  const handleUserDeletion = (id: number, data: { password: string }) => {
-    mutationRequestCSR('DELETE', `/admin/users/${id}`, data);
-  };
-  const handleSubmitActions = [
-    { actionType: AdminActions.PUBLISHMOVIE, description: 'publication du film', handlingFunction: handleMoviePublishing },
-    { actionType: AdminActions.DELETEMOVIE, description: 'suppression du film', handlingFunction: handleMovieDeletion },
-    { actionType: AdminActions.DELETEUSER, description: 'suppression de l\'utilisateur', handlingFunction: handleUserDeletion },
-  ];
+  useCloseMenuOnOutsideClick(pwModalRef, 'modal', isConfirmationModalOpen, handleOpenConfirmationModal);
 
   return (
     <>
@@ -78,14 +98,12 @@ const Administration = () => {
           </>
         )}
       </main>
-      {isConfirmationModalOpened && (
+      {isConfirmationModalOpen && (
         <Modal
-          stateValue={isConfirmationModalOpened}
-          setter={handleOpenPWModal}
+          stateValue={isConfirmationModalOpen}
+          setter={handleOpenConfirmationModal}
           ref={pwModalRef}>
-          <form action="submit">
-            <p>TOTO</p>
-          </form>
+          {confirmationAction && <ConfirmationForm {...confirmationAction} />}
         </Modal>
       )}
     </>

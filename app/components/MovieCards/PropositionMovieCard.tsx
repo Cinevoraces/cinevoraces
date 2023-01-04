@@ -3,10 +3,8 @@ import Image from 'next/image';
 import cutText from '@utils/cutText';
 import dateFormater from '@utils/dateFormater';
 import useCloseMenuOnOutsideClick from '@hooks/useCloseMenuOnOutsideClick';
-import { Button } from '@components/Input';
 import Modal from '@components/Modal';
 import type { MovieWithPresentation, Presentation } from '@custom_types/index';
-import { AdminActions } from 'enums';
 
 interface PropositionMovieCardProps {
   movie: MovieWithPresentation;
@@ -65,7 +63,6 @@ const PropositionMovieCard = ({ movie, propositionCardStyle, posterStyle }: Prop
           </Modal>
         )
       }
-      
     </>
   );
 };

@@ -31,7 +31,7 @@ export default function Button({
   disabled,
 }: ButtonProps) {
   const [baseStyle, classic, empty, rounded, white, select] = [
-    `peer
+    `peer 
       group 
       px-5 py-2 flex gap-2 justify-center 
       shadow-inner font-semibold ring-none 

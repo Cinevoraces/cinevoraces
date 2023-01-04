@@ -4,13 +4,11 @@ import type { NextPage } from 'next';
 import dateFormater from '@utils/dateFormater';
 import { Roles } from '@custom_types/global';
 import { Button } from '@components/Input';
+import type { User } from '@custom_types/index';
 
 interface UsersSectionProps {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  users: any[];
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  users?: User[];
   error?: Error;
-
 }
 
 const userTableColumns = ['Id', 'Pseudo', 'Mail', 'Rôle', 'Date d\'inscription', 'Modification'];
