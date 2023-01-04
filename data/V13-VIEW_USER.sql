@@ -64,9 +64,16 @@ SELECT
                   'french_title', movie.french_title, 
                   'original_title', movie.original_title, 
                   'poster_url', movie.poster_url,
-                  'presentation', movie.presentation,
                   'publishing_date', episode.publishing_date,
-                  'avg_rating', ROUND(COALESCE(ar.avg_rating,0),1)
+                  'release_date', movie.release_date,
+                  'presentation', JSON_BUILD_OBJECT(
+                        'author_id', "user".id,
+                        'author_pseudo', "user".pseudo,
+                        'author_avatar', "user".avatar_url,
+                        'author_role', "user".role,
+                        'presentation', movie.presentation
+                  )
+                  --'avg_rating', ROUND(COALESCE(ar.avg_rating,0),1)
             ))
             FROM movie
                   LEFT JOIN episode 
@@ -78,16 +85,24 @@ SELECT
             WHERE "user".id = movie.user_id
       ), '[]') AS movies,
       -- user pending proposition
-      (SELECT JSON_BUILD_OBJECT(
+      COALESCE((SELECT JSON_AGG(
+            JSON_BUILD_OBJECT(
                   'movie_id', movie.id,
                   'season_number', episode.season_number,
                   'french_title', movie.french_title, 
                   'original_title', movie.original_title, 
                   'poster_url', movie.poster_url,
-                  'presentation', movie.presentation,
                   'publishing_date', episode.publishing_date,
-                  'avg_rating', ROUND(COALESCE(ar.avg_rating,0),1)
-            )
+                  'release_date', movie.release_date,
+                  'presentation', JSON_BUILD_OBJECT(
+                        'author_id', "user".id,
+                        'author_pseudo', "user".pseudo,
+                        'author_avatar', "user".avatar_url,
+                        'author_role', "user".role,
+                        'presentation', movie.presentation
+                  )
+                  --'avg_rating', ROUND(COALESCE(ar.avg_rating,0),1)
+            ))
             FROM movie
                   LEFT JOIN episode 
                         ON episode.id = movie.episode_id
@@ -96,7 +111,7 @@ SELECT
 		                  FROM "review" WHERE "rating" IS NOT NULL GROUP BY review.movie_id) ar
 	            ON movie.id = ar.movie_id
             WHERE "user".id = movie.user_id AND movie.is_published = false
-      ) AS proposition
+      ), '[]') AS propositions
 FROM "user"
 GROUP BY 
       "user".id,

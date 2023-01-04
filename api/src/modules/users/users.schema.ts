@@ -11,7 +11,7 @@ export const getUsersSchema: FastifySchema = {
   - where[role] -> string
 
   **Available populators**
-  - select[proposition] -> boolean
+  - select[propositions] -> boolean
   - select[movies] -> boolean
   - select[reviews] -> boolean
   - select[metrics] -> boolean
@@ -36,7 +36,7 @@ export const getUsersSchema: FastifySchema = {
       select: {
         type: 'object',
         properties: {
-          proposition: { type: 'boolean' },
+          propositions: { type: 'boolean' },
           movies: { type: 'boolean' },
           reviews: { type: 'boolean' },
           metrics: { type: 'boolean' },
