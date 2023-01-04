@@ -9,7 +9,7 @@ import type { EpisodeOption } from '@custom_types/index';
 interface WritePresentationAndSendProps {
   searchResults: TMDBMovie[];
   selectedMovieId: number;
-  handlePropositionSubmit: (e: FormEvent)=>Promise<string|boolean>;
+  handlePropositionSubmit: (e: FormEvent)=>Promise<void>;
   episode: EpisodeOption;
 }
 const helpingTextStyle = 'px-1 text-sm font-light italic text-gray-300';

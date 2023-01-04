@@ -6,7 +6,7 @@ import { user } from 'store/slices/user';
 import { PickEpisode, SearchMovie, PickMovie, WritePresentationAndSend } from 'pages_chunks/proposition/UI';
 
 import type { NextPage } from 'next';
-import type { FormEvent } from 'react';
+import type { FormEvent, RefObject } from 'react';
 import type { TMDBMovie, EpisodeOption } from '@custom_types/index';
 
 import useRefreshPendingProposition from 'pages_chunks/proposition/business_logic/useRefreshPendingProposition';
@@ -15,6 +15,7 @@ import { movieSearch } from 'pages_chunks/proposition/business_logic/movieSearch
 import propositionSubmit from 'pages_chunks/proposition/business_logic/propositionSubmit';
 import { useRouter } from 'next/router';
 import Loader from '@components/Loader';
+import tryCatchWrapper from '@utils/tryCatchWrapper';
 
 // Rendering bug forces to keep these declarations here for no reason and pass it as prop.
 const pickMovieStyles = {
@@ -81,17 +82,15 @@ const Proposition: NextPage = () => {
   const router = useRouter();
   const presentation = useRef<HTMLTextAreaElement>(null);
   // Sending proposition to backend logic
+  const submitSuccess = async (selectedMovieId: number, episode: EpisodeOption, presentation: RefObject<HTMLTextAreaElement>) => {
+    const response = await propositionSubmit(selectedMovieId, episode, presentation);
+    toast.success(response.message);
+    router.push('/');
+    return userPendingPropositionMutate();
+  };
   const handlePropositionSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    const res = await propositionSubmit(selectedMovieId, episode, presentation);
-    // Toast feedback, if success mutate the cache and return to homepage
-    if (res.message.includes('bien été enregistrée')) {
-      toast.success(res.message);
-      userPendingPropositionMutate();
-      return router.push('/');
-    } else {
-      return toast.error(res.message);
-    }
+    tryCatchWrapper(submitSuccess)(selectedMovieId, episode, presentation);
   };
   return (
     <main className="justify-start min-h-[81vh]">

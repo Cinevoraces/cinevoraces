@@ -31,31 +31,34 @@ const Administration = () => {
     mutate: propositionsMutate,
   } = useSWR<MovieWithPresentation[], Error>('/movies?select[presentation]=true&where[is_published]=false');
   const { data: users, error: usersError, mutate: usersMutate } = useSWR<User[], Error>('/users');
-  
+
   const dispatch = useAppDispatch();
   const isConfirmationModalOpen = useAppSelector(global).isConfirmationModalOpen;
   const handleOpenConfirmationModal = () => dispatch(toggleConfirmationModal());
   const submitSuccess = async (method: 'POST' | 'PUT' | 'DELETE', endpoint: string, data: { password: string }) => {
-    const response = await mutationRequestCSR(method, endpoint, data); 
+    const response = await mutationRequestCSR(method, endpoint, data);
     console.log('response: ', response);
     // No response data as it is a 204 success Status
-    toast.success('Opération réalisée avec succès.');
-    propositionsMutate();
-    handleOpenConfirmationModal();
+    toast.success(
+      `${method === 'PUT' ? 'Publication' : 'Supression'} ${
+        endpoint.includes('users') ? 'du membre' : 'de la proposition'
+      } réussie`
+    );
+    endpoint.includes('users') ? usersMutate() : propositionsMutate();
+    return handleOpenConfirmationModal();
   };
   // Edition actions
   const handleMoviePublishing = async (e: FormEvent, id: number, data: { password: string }) => {
     e.preventDefault();
-    return tryCatchWrapper(submitSuccess)('PUT', `/admin/movies/publish/${id}`, data);
+    tryCatchWrapper(submitSuccess)('PUT', `/admin/movies/publish/${id}`, data);
   };
-
   const handleMovieDeletion = (e: FormEvent, id: number, data: { password: string }) => {
+    e.preventDefault();
     tryCatchWrapper(submitSuccess)('DELETE', `/admin/users/${id}`, data);
-    return propositionsMutate();
   };
   const handleUserDeletion = (e: FormEvent, id: number, data: { password: string }) => {
+    e.preventDefault();
     tryCatchWrapper(submitSuccess)('DELETE', `/admin/users/${id}`, data);
-    return usersMutate();
   };
 
   const handleSubmitActions: HandleSubmitActions = {
@@ -64,8 +67,8 @@ const Administration = () => {
     2: { description: 'la suppression de l\'utilisateur', handlingFunction: handleUserDeletion },
   };
   // Arbitrary initial State
-  const [confirmationAction, setConfirmationAction] = useState<{ handlingAction: HandleSubmitAction, id: number }>({
-    handlingAction : {
+  const [confirmationAction, setConfirmationAction] = useState<{ handlingAction: HandleSubmitAction; id: number }>({
+    handlingAction: {
       description: 'Erreur',
       handlingFunction: (e: FormEvent, id: number, data: { password: string }) => console.log(id, data),
     },
