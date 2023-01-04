@@ -65,6 +65,8 @@ export const handleProposeMovie = async (
   const { pgClient, body, user } = request;
   const payload = { ...body, user_id: user.id };
 
+  // TODO: Save TMDB's poster locally
+  
   await pgClient.query(
     proposeMovie(payload)
   );

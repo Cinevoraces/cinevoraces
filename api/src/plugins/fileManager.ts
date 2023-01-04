@@ -2,9 +2,11 @@ import type { FastifyPluginCallback } from 'fastify';
 import { fileManager } from 'src/types/_index';
 import FastifyMultipart from '@fastify/multipart';
 import FastifyStatic from '@fastify/static';
+import { fetch } from 'undici';
 import fs from 'fs';
 import pump from 'pump';
 import plugin from 'fastify-plugin';
+import { Stream } from 'stream';
 
 /**
  * **File Manager**
@@ -42,6 +44,23 @@ const fileManager: FastifyPluginCallback = async (fastify, opts, done) => {
     generateGuid: () => {
       const s4 = () => Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
       return `${s4() + s4()}-${s4()}-${s4()}-${s4()}-${s4() + s4() + s4()}`;
+    },
+    saveFileFromExternalApi: async (url: string): Promise<string> => {
+      const res = await fetch(url);
+      let fileName: string;
+      let isUnique = false;
+
+      while (!isUnique) {
+        fileName = fileManager.generateGuid(); 
+        fs.readdirSync(`/${process.env.STORAGE_POSTER}`).find((file) => file === fileName)
+          ? isUnique = false
+          : isUnique = true;
+      }
+
+      fileName = `${fileName}.${(res.headers.get('content-type') as string).split('/')[1]}`;
+      const path = `/${process.env.STORAGE_POSTER}/${fileName}`;
+      Stream.Readable.fromWeb(res.body).pipe(fs.createWriteStream(path));
+      return fileName;
     }
   };
 

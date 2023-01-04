@@ -5,7 +5,7 @@ import { reviews } from './reviews/reviews.routes';
 import { seasons } from './seasons/seasons.routes';
 import { episodes } from './episodes/episodes.routes';
 import { users } from './users/users.routes';
-import { publicFilesApi } from './publicFilesApi';
+import { publicFilesApi } from './publicFiles/publicFiles.Api';
 
 /**
  * * **Routes _index**

@@ -30,6 +30,7 @@ const swagger: FastifyPluginCallback = async (fastify, opts, done) => {
         { name: 'Seasons', description: 'Seasons data related end-points' },
         { name: 'Episodes', description: 'Episodes data related end-points' },
         { name: 'Users', description: 'Users data related end-points' },
+        { name: 'FilesAPI', description: 'File management API' },
       ],
     },
     exposeRoute: true,

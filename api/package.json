@@ -23,7 +23,8 @@
     "pg": "^8.8.0",
     "pump": "^3.0.0",
     "qs": "^6.11.0",
-    "sanitize-html": "^2.7.3"
+    "sanitize-html": "^2.7.3",
+    "undici": "^5.14.0"
   },
   "devDependencies": {
     "@faker-js/faker": "^7.5.0",

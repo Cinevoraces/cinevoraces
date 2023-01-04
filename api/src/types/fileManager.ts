@@ -14,4 +14,5 @@ export interface fileManager {
   pump: typeof pump,
   fs: typeof fs,
   generateGuid: () => string,
+  saveFileFromExternalApi: (url: string) => Promise<string>,
 };
