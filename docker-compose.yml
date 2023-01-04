@@ -37,17 +37,17 @@ services:
       - ./api:/api
       - ./storage:/storage
 
-  # app:
-  #   hostname: cinevoraces_app
-  #   env_file:
-  #     - .env.app
-  #   depends_on:
-  #     - api
-  #   build:
-  #     context: ./app
-  #     dockerfile: Dockerfile.dev
-  #   ports:
-  #     - 3000:3000
-  #   restart: always
-  #   volumes:
-  #     - ./app:/app
+  app:
+    hostname: cinevoraces_app
+    env_file:
+      - .env.app
+    depends_on:
+      - api
+    build:
+      context: ./app
+      dockerfile: Dockerfile.dev
+    ports:
+      - 3000:3000
+    restart: always
+    volumes:
+      - ./app:/app

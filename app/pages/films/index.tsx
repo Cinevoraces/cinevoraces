@@ -169,7 +169,7 @@ export default function Films() {
                 <li key={movie.french_title}>
                   <Link href={`/films/${movie.id}`}>
                     <Image
-                      src={movie.poster_url}
+                      src={`${process.env.NEXT_PUBLIC_API_BASE_URL_SSR}${movie.poster_url}`}
                       alt={`${movie.french_title} movie poster`}
                       width={200}
                       height={(200 * 9) / 16}

@@ -18,7 +18,7 @@ const Poster = ({ poster_url, french_title }: PosterProps) => {
       className="relative h-fit self-center xl:w-full
         before:content-[''] before:absolute before:-inset-0.5 before:bg-gradient-to-tr before:from-dark-gray before:to-orange-primary before:rounded-xl">
       <Image
-        src={poster_url}
+        src={`${process.env.NEXT_PUBLIC_API_BASE_URL_SSR}${poster_url}`}
         alt={`Affiche de ${french_title}`}
         width={2*240}
         height={(2*240 * 9) / 16}

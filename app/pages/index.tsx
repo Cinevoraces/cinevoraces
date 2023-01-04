@@ -79,7 +79,7 @@ const Home: NextPage<HomeProps> = (props) => {
                   className="fourth-child:hidden fifth-child:hidden sixth-child:hidden md:fourth-child:block lg:fifth-child:block xl:sixth-child:block"
                   key={movie.french_title}>
                   <Image
-                    src={movie.poster_url}
+                    src={`${process.env.NEXT_PUBLIC_API_BASE_URL_SSR}${movie.poster_url}`}
                     alt={`${movie.french_title} movie poster`}
                     width={200}
                     height={(200 * 9) / 16}

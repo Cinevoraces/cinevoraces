@@ -62,11 +62,12 @@ export const handleProposeMovie = async (
   }>, 
   reply: Reply
 ) => {
-  const { pgClient, body, user } = request;
+  const { pgClient, fileManager, body, user } = request;
   const payload = { ...body, user_id: user.id };
 
-  // TODO: Save TMDB's poster locally
-  
+  // Save poster locally and update payload
+  body.poster_url = `/public/poster/${await fileManager.saveFileFromExternalApi(body.poster_url)}`;
+
   await pgClient.query(
     proposeMovie(payload)
   );
