@@ -20,7 +20,7 @@ const Modal = React.forwardRef<HTMLElement, ModalProps>((props, ref) => {
   const { stateValue, setter, children } = props;
   const lineStyle = 'modal h-0.5 w-5 rounded-full bg-orange-primary';
   return ReactDOM.createPortal(
-    <div className="fixed z-10 top-0 w-screen h-screen bg-black/50">
+    <div className="fixed z-50 top-0 w-screen h-screen bg-black/50">
       <section
         className="relative w-5/6 max-w-lg mt-[25vh] mx-auto p-8 pt-10 rounded-xl bg-dark-gray"
         ref={ref}>

@@ -1,5 +1,5 @@
 // import type { Users } from '@custom_types/index';
-import type { SWRResponse } from 'swr';
+import UserCard from '@components/UserCard';
 import type { NextPage } from 'next';
 import dateFormater from '@utils/dateFormater';
 import { Roles } from '@custom_types/global';
@@ -29,31 +29,45 @@ const UsersSection: NextPage<UsersSectionProps> = ({ users, error, handleConfirm
           ? <p>{error.message}</p>
           : (users && users.length > 0)
             ? ( 
-              <table className='table-auto rounded-lg overflow-hidden'>
-                <thead className='bg-medium-gray'>
-                  <tr className='text-lg'>
-                    {
-                      userTableColumns.map((c) => (<th key={c} className='px-4 py-2 font-semibold text-start'>{c}</th>))
-                    }
-                  </tr>
-                </thead>
-                <tbody>
+              <>
+              
+                <div className='grid gap-2 sm:grid-cols-2 lg:hidden'>
                   {
                     users.map((u) => (
-                      <tr key={u.pseudo} className='even:bg-medium-gray'>
-                        <td className={cellStyle}>{u.id}</td>
-                        <td className={cellStyle}>{u.pseudo}</td>
-                        <td className={cellStyle}>{u.mail}</td>
-                        <td className={cellStyle}>{Roles[u.role].toLowerCase()}</td>
-                        <td className={cellStyle}>{dateFormater(u.created_at)}</td>
-                        <td className={cellStyle + ' flex gap-4'}>
+                      <UserCard key={u.pseudo} user={u}>
+                        <div className='flex flex-col gap-2'>
                           <Button customStyle='rounded' disabled>Passer admin</Button>
                           <Button customStyle='rounded' onClick={() => handleUserDeletionConfirmation(u.id)}>Supprimer</Button>
-                        </td>
-                      </tr>))
+                        </div>
+                      </UserCard>))
                   }
-                </tbody>
-              </table>
+                </div>
+                <table className='hidden table-auto rounded-lg overflow-hidden md:block'>
+                  <thead className='bg-medium-gray'>
+                    <tr className='text-lg'>
+                      {
+                        userTableColumns.map((c) => (<th key={c} className='px-4 py-2 font-semibold text-start'>{c}</th>))
+                      }
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {
+                      users.map((u) => (
+                        <tr key={u.pseudo} className='even:bg-medium-gray'>
+                          <td className={cellStyle}>{u.id}</td>
+                          <td className={cellStyle}>{u.pseudo}</td>
+                          <td className={cellStyle}>{u.mail}</td>
+                          <td className={cellStyle}>{Roles[u.role].toLowerCase()}</td>
+                          <td className={cellStyle}>{dateFormater(u.created_at)}</td>
+                          <td className={cellStyle + ' flex gap-4 flex-col lg:flex-row'}>
+                            <Button customStyle='rounded' disabled>Passer admin</Button>
+                            <Button customStyle='rounded' onClick={() => handleUserDeletionConfirmation(u.id)}>Supprimer</Button>
+                          </td>
+                        </tr>))
+                    }
+                  </tbody>
+                </table>
+              </>
             )
             : <p>La liste des membres</p>
       }

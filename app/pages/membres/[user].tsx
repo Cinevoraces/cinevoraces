@@ -56,7 +56,7 @@ const User: NextPage = () => {
                   <section
                     id="public_section"
                     className="custom-container grow-0">
-                    <UserCard {...askedUser} />
+                    <UserCard user={askedUser} type={router.asPath.includes('moi') ? 'personal' : undefined}/>
                     <UserMetrics {...askedUser} />
                   </section>
                   {isPrivatePage && (

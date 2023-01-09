@@ -4,9 +4,13 @@ import dateFormater from '@utils/dateFormater';
 import type { User } from '@custom_types/index';
 import { Roles } from '@custom_types/index';
 
-interface UserCardProps extends User {}
+interface UserCardProps {
+  user: User;
+  type?: 'personal' | 'admin';
+  children?: React.ReactNode;
+}
 
-const UserCard = ({ ...user }: UserCardProps) => {
+const UserCard = ({ user, type, children }: UserCardProps) => {
   return (
     <div
       id="user-card"
@@ -21,7 +25,13 @@ const UserCard = ({ ...user }: UserCardProps) => {
       <p className="emphasis">
         {user.role === Roles.USER ? 'Membre' : user.role === Roles.MODERATOR ? 'Modo' : 'Admin'}
       </p>
+      {
+        type && <p>{user.mail}</p>
+      }
       <p>Inscrit•e depuis le {dateFormater(user.created_at)}</p>
+      {
+        children
+      }
     </div>
   );
 };
