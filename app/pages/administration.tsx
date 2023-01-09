@@ -75,8 +75,8 @@ const Administration = () => {
     id: 0,
   });
   const handleConfirmationModal = (action: AdminActions, id: number) => {
-    handleOpenConfirmationModal();
     setConfirmationAction({ handlingAction: handleSubmitActions[action], id });
+    handleOpenConfirmationModal();
   };
   const pwModalRef = useRef<HTMLElement>(null);
   useCloseMenuOnOutsideClick(pwModalRef, 'modal', isConfirmationModalOpen, handleOpenConfirmationModal);
@@ -97,6 +97,7 @@ const Administration = () => {
             <UsersSection
               users={users}
               error={usersError}
+              handleConfirmationModal={handleConfirmationModal}
             />
           </>
         )}

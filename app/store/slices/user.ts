@@ -30,7 +30,6 @@ const userSlice = createSlice({
         ...state,
         ...action.payload,
       };
-      console.log(newState);
       return newState;
     },
   },

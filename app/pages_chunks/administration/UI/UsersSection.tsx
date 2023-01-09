@@ -5,16 +5,22 @@ import dateFormater from '@utils/dateFormater';
 import { Roles } from '@custom_types/global';
 import { Button } from '@components/Input';
 import type { User } from '@custom_types/index';
+import { AdminActions } from 'enums';
 
 interface UsersSectionProps {
   users?: User[];
   error?: Error;
+  handleConfirmationModal: (action: AdminActions, id: number)=>void;
 }
 
 const userTableColumns = ['Id', 'Pseudo', 'Mail', 'Rôle', 'Date d\'inscription', 'Modification'];
 const cellStyle = 'px-4 py-2';
 
-const UsersSection: NextPage<UsersSectionProps> = ({ users, error }) => {
+const UsersSection: NextPage<UsersSectionProps> = ({ users, error, handleConfirmationModal }) => {
+  // Actions logic
+  const handleUserDeletionConfirmation = (id: number) => {
+    handleConfirmationModal(AdminActions.DELETEUSER, id);
+  };
   return (
     <section className="custom-container pt-4">
       <h2 className='title-section w-full'>Membres</h2>
@@ -42,7 +48,7 @@ const UsersSection: NextPage<UsersSectionProps> = ({ users, error }) => {
                         <td className={cellStyle}>{dateFormater(u.created_at)}</td>
                         <td className={cellStyle + ' flex gap-4'}>
                           <Button customStyle='rounded' disabled>Passer admin</Button>
-                          <Button customStyle='rounded'>Supprimer</Button>
+                          <Button customStyle='rounded' onClick={() => handleUserDeletionConfirmation(u.id)}>Supprimer</Button>
                         </td>
                       </tr>))
                   }

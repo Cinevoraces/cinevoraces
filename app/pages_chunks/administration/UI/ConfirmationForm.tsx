@@ -15,7 +15,8 @@ const ConfirmationForm = ({ handlingAction: { description, handlingFunction }, i
   const dispatch = useAppDispatch();
   const isPWVisible = useAppSelector(global).arePWVisible;
   const passwordRef = useRef<HTMLInputElement>(null);
-  const handleSubmit = (e: FormEvent) => handlingFunction(e, id, { password: passwordRef.current ? passwordRef.current?.value : '' });
+  const handleSubmit = (e: FormEvent) =>
+    handlingFunction(e, id, { password: passwordRef.current ? passwordRef.current?.value : '' });
   return (
     <>
       <h2 className="title-section mb-4">{`Confirmez ${description}`}</h2>
@@ -39,8 +40,10 @@ const ConfirmationForm = ({ handlingAction: { description, handlingFunction }, i
           onChange={() => dispatch(toggleArePWVisible())}
         />
         <div>
-          <Button disabled={(!id) && true}>Confirmer</Button>
-          <p className={!id ? 'text-sm font-light text-red-500 text-right' : 'hidden'}>{'N\'oubliez pas d\'effectuer une sélection!'}</p>
+          <Button disabled={!id && description.includes('film') && true}>Confirmer</Button>
+          <p className={!id && description.includes('film') ? 'text-sm font-light text-red-500 text-right' : 'hidden'}>
+            {'N\'oubliez pas d\'effectuer une sélection!'}
+          </p>
         </div>
       </form>
     </>
