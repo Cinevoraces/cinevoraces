@@ -1,0 +1,19 @@
+{
+    "name": "Cin\u00e9voraces",
+    "short_name": "Cin\u00e9voraces",
+    "icons": [
+        {
+            "src": "/android-chrome-192x192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "/android-chrome-512x512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ],
+    "theme_color": "#393945",
+    "background_color": "#393945",
+    "display": "standalone"
+}
