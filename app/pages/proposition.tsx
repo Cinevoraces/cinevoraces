@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import useSWR from 'swr';
 import { toast } from 'react-hot-toast';
 import { useAppSelector } from '@store/store';
@@ -39,18 +39,18 @@ const pickMovieStyles = {
 const Proposition: NextPage = () => {
   // User logic and verifications
   const userId = useAppSelector(user).id;
-  const {
-    data: userPendingProposition,
-    error: errorUserPendingProposition,
-    mutate: userPendingPropositionMutate,
-  } = useSWR(userId ? `/movies?where[author_id]=${userId}&where[is_published]=false` : null);
-  const [userHasPendingProposition, setUserHasPendingProposition] = useState<boolean | undefined>(undefined);
+  const [userHasPendingPropositions, setUserHasPendingPropositions] = useState<boolean | undefined>(undefined);
   // if user manages to login / logout / change on this very page
+  const {
+    data: userData,
+    error: userError,
+    mutate: userMutate,
+  } = useSWR(() => (userId ? `/users?select[propositions]=true&where[id]=${userId}` : null));
   useRefreshPendingProposition(
     userId,
-    userPendingProposition,
-    setUserHasPendingProposition,
-    userPendingPropositionMutate,
+    userData,
+    setUserHasPendingPropositions,
+    userMutate,
   );
 
   // Episode logic
@@ -59,7 +59,7 @@ const Proposition: NextPage = () => {
     name: 'Date - Épisode...',
     value: 0,
   });
-  const { data: episodes } = useSWR(() => userId ? '/episodes' : '');
+  const { data: episodes } = useSWR(() => (userId ? '/episodes' : ''));
   const episodesArray = useRef<EpisodeOption[]>([]);
   useFormatEpisodeOptions(episodes, episodesArray);
   const handleOptionsDisplay = () => setAreOptionsDisplayed(!areOptionsDisplayed);
@@ -82,11 +82,16 @@ const Proposition: NextPage = () => {
   const router = useRouter();
   const presentation = useRef<HTMLTextAreaElement>(null);
   // Sending proposition to backend logic
-  const submitSuccess = async (selectedMovieId: number, episode: EpisodeOption, presentation: RefObject<HTMLTextAreaElement>) => {
+  const submitSuccess = async (
+    selectedMovieId: number,
+    episode: EpisodeOption,
+    presentation: RefObject<HTMLTextAreaElement>
+  ) => {
     const response = await propositionSubmit(selectedMovieId, episode, presentation);
     toast.success(response.message);
+    userMutate();
     router.push('/');
-    return userPendingPropositionMutate();
+    return userMutate();
   };
   const handlePropositionSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -95,46 +100,42 @@ const Proposition: NextPage = () => {
   return (
     <main className="justify-start min-h-[81vh]">
       <h1 className="custom-container pb-4 hero-text items-start">Proposer un film</h1>
-      {
-        !userId 
-          ? (<p className="custom-container"> Vous devez être connecté•e pour proposer un film.</p>)
-          : (!userPendingProposition && !errorUserPendingProposition)
-            ? <Loader />
-            : userHasPendingProposition 
-              ? (
-                <p className="custom-container">
-                  Vous avez déjà une proposition en attente. Vous pourrez réserver un nouveau créneau une fois votre proposition
-                  publiée.
-                </p>
-              ) 
-              : (
-                <>
-                  <PickEpisode
-                    episodesArray={episodesArray.current}
-                    areOptionsDisplayed={areOptionsDisplayed}
-                    handleOptionsDisplay={handleOptionsDisplay}
-                    episode={episode}
-                    setEpisode={setEpisode}
-                  />
-                  <SearchMovie
-                    handleMovieSearch={handleMovieSearch}
-                    ref={searchRef}
-                  />
-                  <PickMovie
-                    movies={searchResults}
-                    handleSelectMovie={handleSelectMovie}
-                    styles={pickMovieStyles}
-                  />
-                  <WritePresentationAndSend
-                    searchResults={searchResults}
-                    selectedMovieId={selectedMovieId}
-                    handlePropositionSubmit={handlePropositionSubmit}
-                    episode={episode}
-                    ref={presentation}
-                  />
-                </>
-              )
-      }
+      {!userId ? (
+        <p className="custom-container"> Vous devez être connecté•e pour proposer un film.</p>
+      ) : !user && !userError ? (
+        <Loader />
+      ) : userHasPendingPropositions ? (
+        <p className="custom-container">
+          Vous avez déjà une proposition en attente. Vous pourrez réserver un nouveau créneau une fois votre proposition
+          publiée.
+        </p>
+      ) : (
+        <>
+          <PickEpisode
+            episodesArray={episodesArray.current}
+            areOptionsDisplayed={areOptionsDisplayed}
+            handleOptionsDisplay={handleOptionsDisplay}
+            episode={episode}
+            setEpisode={setEpisode}
+          />
+          <SearchMovie
+            handleMovieSearch={handleMovieSearch}
+            ref={searchRef}
+          />
+          <PickMovie
+            movies={searchResults}
+            handleSelectMovie={handleSelectMovie}
+            styles={pickMovieStyles}
+          />
+          <WritePresentationAndSend
+            searchResults={searchResults}
+            selectedMovieId={selectedMovieId}
+            handlePropositionSubmit={handlePropositionSubmit}
+            episode={episode}
+            ref={presentation}
+          />
+        </>
+      )}
     </main>
   );
 };

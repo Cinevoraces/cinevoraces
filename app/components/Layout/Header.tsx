@@ -34,19 +34,25 @@ const Header = () => {
   ]);
 
   const { data: lastMovie } = useSWR('/movies?where[is_published]=true&limit=1');
+  const { data: usersData } = useSWR(() => (id ? `/users?select[propositions]=true&where[id]=${id}` : null));
   useEffect(() => {
     if (lastMovie && lastMovie.length > 0) {
+      // First, remove all older/initial links
       setNavLinks([
-        ...navLinks.filter((l) => (!l[0].includes('semaine') && !l[0].includes('Proposer'))), 
+        ...navLinks
+          .filter((l) => (l[0] !== 'Le film de la semaine'))
+          .filter((l) => (l[0] !== 'Proposer un film')), 
         ['Le film de la semaine', `/films/${lastMovie[0].id}`]
       ]);
     }
-    if (id) {
-      // Adding proposition for connected users
+    // Adding proposition link for connected users that have no pending proposition
+    if (id && usersData[0].propositions.length === 0) {
+      console.log('modification des liens');
+      console.log('usersData dans le header : ', usersData[0]);
       setNavLinks([...navLinks, ['Proposer un film', '/proposition']]);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [lastMovie, id]);
+  }, [lastMovie, id, usersData]);
   
   const userMenuLinks = [
     ['Mon Profil', '/membres/moi'],

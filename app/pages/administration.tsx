@@ -23,7 +23,8 @@ import type { HandleSubmitAction, HandleSubmitActions } from '@custom_types/inde
 
 const Administration = () => {
   // User role check
-  const isAdmin = useAppSelector(user).role === Roles.ADMIN;
+  const { id, role } = useAppSelector(user);
+  const isAdmin = role === Roles.ADMIN;
   // Data fetching
   const {
     data: propositions,
@@ -31,7 +32,9 @@ const Administration = () => {
     mutate: propositionsMutate,
   } = useSWR<MovieWithPresentation[], Error>('/movies?select[presentation]=true&where[is_published]=false');
   const { data: users, error: usersError, mutate: usersMutate } = useSWR<User[], Error>('/users');
-
+  // In case the user is also admin and publishes its own movie
+  const { mutate: userMutate } = useSWR(`/users?select[propositions]=true&where[id]=${id}`);
+  // Global state management
   const dispatch = useAppDispatch();
   const isConfirmationModalOpen = useAppSelector(global).isConfirmationModalOpen;
   const handleOpenConfirmationModal = () => dispatch(toggleConfirmationModal());
@@ -45,6 +48,7 @@ const Administration = () => {
       } réussie`
     );
     endpoint.includes('users') ? usersMutate() : propositionsMutate();
+    userMutate();
     return handleOpenConfirmationModal();
   };
   // Edition actions
