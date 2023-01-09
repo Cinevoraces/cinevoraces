@@ -40,8 +40,7 @@ const Header = () => {
       // First, remove all older/initial links
       setNavLinks([
         ...navLinks
-          .filter((l) => (l[0] !== 'Le film de la semaine'))
-          .filter((l) => (l[0] !== 'Proposer un film')), 
+          .filter((l) => (l[0] !== 'Le film de la semaine' && l[0] !== 'Proposer un film')), 
         ['Le film de la semaine', `/films/${lastMovie[0].id}`]
       ]);
     }
