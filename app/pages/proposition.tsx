@@ -128,6 +128,7 @@ const Proposition: NextPage = () => {
             <PickMovie
               movies={searchResults}
               handleSelectMovie={handleSelectMovie}
+              ref={searchRef}
               styles={pickMovieStyles}
             />
             <WritePresentationAndSend

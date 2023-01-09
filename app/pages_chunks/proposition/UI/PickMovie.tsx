@@ -18,9 +18,9 @@ const PickMovie = forwardRef<HTMLInputElement, PickMovieProps>(({ movies, handle
     <section>
       <h2 className={titleStyle}>3 - Selectionnez votre film :</h2>
       {ref && searchRef.current?.value && (
-        <div className="flex-row py-0">
+        <div className="custom-container flex-row py-1">
           {movies.length > 0 ? (
-            <p className="mb-4">
+            <p className="w-full mb-4">
               <span className="emphasis">{movies.length}</span>
               {' résultats avec la recherche "'}
               <span className="emphasis">{searchRef.current?.value}</span>
