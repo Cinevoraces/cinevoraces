@@ -54,7 +54,7 @@ const Administration = () => {
   };
   const handleMovieDeletion = (e: FormEvent, id: number, data: { password: string }) => {
     e.preventDefault();
-    tryCatchWrapper(submitSuccess)('DELETE', `/admin/users/${id}`, data);
+    tryCatchWrapper(submitSuccess)('DELETE', `/admin/movies/${id}`, data);
   };
   const handleUserDeletion = (e: FormEvent, id: number, data: { password: string }) => {
     e.preventDefault();
