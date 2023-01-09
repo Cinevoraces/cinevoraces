@@ -45,7 +45,7 @@ const Header = () => {
       ]);
     }
     // Adding proposition link for connected users that have no pending proposition
-    if (id && usersData[0].propositions.length === 0) {
+    if (id && usersData && usersData[0].propositions.length === 0) {
       console.log('modification des liens');
       console.log('usersData dans le header : ', usersData[0]);
       setNavLinks([...navLinks, ['Proposer un film', '/proposition']]);

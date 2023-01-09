@@ -59,7 +59,7 @@ const Proposition: NextPage = () => {
     name: 'Date - Épisode...',
     value: 0,
   });
-  const { data: episodes } = useSWR(() => (userId ? '/episodes' : ''));
+  const { data: episodes, error: episodesError } = useSWR(() => (userId ? '/episodes' : ''));
   const episodesArray = useRef<EpisodeOption[]>([]);
   useFormatEpisodeOptions(episodes, episodesArray);
   const handleOptionsDisplay = () => setAreOptionsDisplayed(!areOptionsDisplayed);
@@ -109,33 +109,36 @@ const Proposition: NextPage = () => {
           Vous avez déjà une proposition en attente. Vous pourrez réserver un nouveau créneau une fois votre proposition
           publiée.
         </p>
-      ) : (
-        <>
-          <PickEpisode
-            episodesArray={episodesArray.current}
-            areOptionsDisplayed={areOptionsDisplayed}
-            handleOptionsDisplay={handleOptionsDisplay}
-            episode={episode}
-            setEpisode={setEpisode}
-          />
-          <SearchMovie
-            handleMovieSearch={handleMovieSearch}
-            ref={searchRef}
-          />
-          <PickMovie
-            movies={searchResults}
-            handleSelectMovie={handleSelectMovie}
-            styles={pickMovieStyles}
-          />
-          <WritePresentationAndSend
-            searchResults={searchResults}
-            selectedMovieId={selectedMovieId}
-            handlePropositionSubmit={handlePropositionSubmit}
-            episode={episode}
-            ref={presentation}
-          />
-        </>
-      )}
+      ) : episodesError ? (
+        <p className="custom-container">Tous les épisodes des semaines à venir sont réservés. Réessayez dans quelques semaines !</p>
+      ) 
+        : (
+          <>
+            <PickEpisode
+              episodesArray={episodesArray.current}
+              areOptionsDisplayed={areOptionsDisplayed}
+              handleOptionsDisplay={handleOptionsDisplay}
+              episode={episode}
+              setEpisode={setEpisode}
+            />
+            <SearchMovie
+              handleMovieSearch={handleMovieSearch}
+              ref={searchRef}
+            />
+            <PickMovie
+              movies={searchResults}
+              handleSelectMovie={handleSelectMovie}
+              styles={pickMovieStyles}
+            />
+            <WritePresentationAndSend
+              searchResults={searchResults}
+              selectedMovieId={selectedMovieId}
+              handlePropositionSubmit={handlePropositionSubmit}
+              episode={episode}
+              ref={presentation}
+            />
+          </>
+        )}
     </main>
   );
 };
