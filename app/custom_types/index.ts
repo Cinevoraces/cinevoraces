@@ -8,6 +8,7 @@ import type { Episode } from './episodes';
 import type User from './user';
 import type { Proposition } from './proposition';
 import type { HandleSubmitAction, HandleSubmitActions } from './administration';
+import type { TeamMember } from './teamMember';
 
 import { Roles } from './global';
 
@@ -22,6 +23,7 @@ export type{
   User,
   Proposition,
   HandleSubmitAction, HandleSubmitActions,
+  TeamMember,
 };
 
 export { Roles };
