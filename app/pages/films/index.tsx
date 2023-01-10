@@ -1,4 +1,5 @@
 import { useRef, useEffect } from 'react';
+import CustomHead from '@components/Head';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Filter, SearchBar } from '@components/Input';
@@ -118,70 +119,77 @@ export default function Films() {
   const movieResults = useAppSelector(filteredMovies).filteredMovies;
 
   return (
-    <main className="custom-container justify-start">
-      <section className="w-full">
-        <h1 className="hero-text text-start mb-4">Les films de la communauté</h1>
-        <p>
+    <>
+      <CustomHead
+        title="Cinévoraces - Les films"
+        description="Découvrez la cinémathèque, cherchez la perle rare."
+        slug="/films"
+      />
+      <main className="custom-container justify-start">
+        <section className="w-full">
+          <h1 className="hero-text text-start mb-4">Les films de la communauté</h1>
+          <p>
           Retrouvez saison par saison les films sélectionnés par les{' '}
-          <span className="emphasis">membres de CinéVoraces</span>. Chaque saison correspond à une année calendaire.
-          <br />
+            <span className="emphasis">membres de CinéVoraces</span>. Chaque saison correspond à une année calendaire.
+            <br />
           Bonnes découvertes !
-        </p>
-      </section>
-      <section className="w-full flex flex-col gap-6 align-start md:flex-row">
-        {season && (
-          <SearchBar
-            name="searchbarSelect"
-            options={seasons.current}
-            displayOptionsState={isSeasonSelectOpened}
-            displayOptionsSetter={handleToggleSeasonSelect}
-            stateValue={season}
-            valueSetter={handleSeasonChange}
-            customStyle="searchbar"
-            id="search"
-            placeholder="🔍 Rechercher un film"
-            value={searchQuery ? searchQuery : ''}
-            onChange={handleChangeSearchValue}
-          />
-        )}
-        {availableFilters && movieResults && (
-          <Filter
-            isMenuOpened={isFilterMenuOpen}
-            displayMenuSetter={handleToggleFilterMenu}
-            filterOptions={availableFilters}
-            userFilterInputs={userFilterInputs}
-            userFilterInputsSetter={handleSetFilters}
-            userFilterReset={handleFilterReset}
-            filtersCounter={Number(userFilterInputs.filtersCounter[0])}
-            resultsCount={movieResults.length}
-            isUserConnected={isUserConnected.current}
-          />
-        )}
-      </section>
-      <section id="movie-grid">
-        {error && <p>Une erreur est survenue.</p>}
-        {!movieResults && !error && <p>Chargement des données.</p>}
-        {movieResults && (
-          <div className="flex flex-col gap-3 font-medium">
-            <p className="">{movieResults.length + ' films'}</p>
-            <ul className={gridStyle}>
-              {movieResults.map((movie: CompleteMovie) => (
-                <li key={movie.french_title}>
-                  <Link href={`/films/${movie.id}`}>
-                    <Image
-                      src={movie.poster_url}
-                      alt={`${movie.french_title} movie poster`}
-                      width={200}
-                      height={(200 * 9) / 16}
-                      className={posterStyles}
-                    />
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
-      </section>
-    </main>
+          </p>
+        </section>
+        <section className="w-full flex flex-col gap-6 align-start md:flex-row">
+          {season && (
+            <SearchBar
+              name="searchbarSelect"
+              options={seasons.current}
+              displayOptionsState={isSeasonSelectOpened}
+              displayOptionsSetter={handleToggleSeasonSelect}
+              stateValue={season}
+              valueSetter={handleSeasonChange}
+              customStyle="searchbar"
+              id="search"
+              placeholder="🔍 Rechercher un film"
+              value={searchQuery ? searchQuery : ''}
+              onChange={handleChangeSearchValue}
+            />
+          )}
+          {availableFilters && movieResults && (
+            <Filter
+              isMenuOpened={isFilterMenuOpen}
+              displayMenuSetter={handleToggleFilterMenu}
+              filterOptions={availableFilters}
+              userFilterInputs={userFilterInputs}
+              userFilterInputsSetter={handleSetFilters}
+              userFilterReset={handleFilterReset}
+              filtersCounter={Number(userFilterInputs.filtersCounter[0])}
+              resultsCount={movieResults.length}
+              isUserConnected={isUserConnected.current}
+            />
+          )}
+        </section>
+        <section id="movie-grid">
+          {error && <p>Une erreur est survenue.</p>}
+          {!movieResults && !error && <p>Chargement des données.</p>}
+          {movieResults && (
+            <div className="flex flex-col gap-3 font-medium">
+              <p className="">{movieResults.length + ' films'}</p>
+              <ul className={gridStyle}>
+                {movieResults.map((movie: CompleteMovie) => (
+                  <li key={movie.french_title}>
+                    <Link href={`/films/${movie.id}`}>
+                      <Image
+                        src={movie.poster_url}
+                        alt={`${movie.french_title} movie poster`}
+                        width={200}
+                        height={(200 * 9) / 16}
+                        className={posterStyles}
+                      />
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </section>
+      </main>
+    </>
   );
 }

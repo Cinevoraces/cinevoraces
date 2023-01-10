@@ -1,3 +1,4 @@
+import CustomHead from '@components/Head';
 import { useState } from 'react';
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
@@ -31,50 +32,58 @@ const User: NextPage = () => {
   useRefreshUserData(userId, connectedUserId, userData, mutate, setAskedUser);
 
   return (
-    <main className="grow flex flex-col justify-start">
-      <h1 className="custom-container grow-0 pb-4 hero-text text-center">
-        {isPrivatePage
-          ? 'Mon profil privé'
-          : connectedUserId && Number(connectedUserId) === askedUser?.id
-            ? 'Mon profil public'
-            : 'Profil'}
-      </h1>
-      {
+    <>
+      <CustomHead
+        title={`Cinévoraces - ${isPrivatePage ? 'Mon profil' : `Profil de ${askedUser?.pseudo}`}`}
+        description='Découvrez les profils de nos membres.'
+        slug={router.asPath}
+        imageUrl={askedUser?.avatar_url}
+      />
+      <main className="grow flex flex-col justify-start">
+        <h1 className="custom-container grow-0 pb-4 hero-text text-center">
+          {isPrivatePage
+            ? 'Mon profil privé'
+            : connectedUserId && Number(connectedUserId) === askedUser?.id
+              ? 'Mon profil public'
+              : 'Profil'}
+        </h1>
+        {
         //Asked for private page without being logged
-        isPrivatePage && !connectedUserId ? (
-          <p className="custom-container grow-0">Vous devez vous connecter pour accèder à cette page.</p>
-        ) : // Loading status
-          !userData && !error ? (
-            <Loader />
-          ) : // Fetching data failed
-            error ? (
-              <p className="custom-container grow-0">Une erreur est survenue. Veuillez réessayer plus tard.</p>
-            ) : (
-            // Fetched data
-              askedUser && (
-                <>
-                  <section
-                    id="public_section"
-                    className="custom-container grow-0">
-                    <UserCard user={askedUser} type={router.asPath.includes('moi') ? 'personal' : undefined}/>
-                    <UserMetrics {...askedUser} />
-                  </section>
-                  {isPrivatePage && (
+          isPrivatePage && !connectedUserId ? (
+            <p className="custom-container grow-0">Vous devez vous connecter pour accèder à cette page.</p>
+          ) : // Loading status
+            !userData && !error ? (
+              <Loader />
+            ) : // Fetching data failed
+              error ? (
+                <p className="custom-container grow-0">Une erreur est survenue. Veuillez réessayer plus tard.</p>
+              ) : (
+              // Fetched data
+                askedUser && (
+                  <>
                     <section
-                      id="private_section"
-                      className="flex flex-col gap-6">
-                      <PendingProposition propositions={askedUser.propositions}/>
-                      <div className="custom-container grow-0 pt-4">
-                        <h2 className="title-section">Changer mes paramètres</h2>
-                        <ParameterForm mutate={mutate} mail={askedUser.mail}/>
-                      </div>
+                      id="public_section"
+                      className="custom-container grow-0">
+                      <UserCard user={askedUser} type={router.asPath.includes('moi') ? 'personal' : undefined}/>
+                      <UserMetrics {...askedUser} />
                     </section>
-                  )}
-                </>
+                    {isPrivatePage && (
+                      <section
+                        id="private_section"
+                        className="flex flex-col gap-6">
+                        <PendingProposition propositions={askedUser.propositions}/>
+                        <div className="custom-container grow-0 pt-4">
+                          <h2 className="title-section">Changer mes paramètres</h2>
+                          <ParameterForm mutate={mutate} mail={askedUser.mail}/>
+                        </div>
+                      </section>
+                    )}
+                  </>
+                )
               )
-            )
-      }
-    </main>
+        }
+      </main>
+    </>
   );
 };
 

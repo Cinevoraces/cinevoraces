@@ -1,4 +1,5 @@
-import { useState, useRef, useEffect } from 'react';
+import CustomHead from '@components/Head';
+import { useState, useRef } from 'react';
 import useSWR from 'swr';
 import { toast } from 'react-hot-toast';
 import { useAppSelector } from '@store/store';
@@ -98,49 +99,56 @@ const Proposition: NextPage = () => {
     tryCatchWrapper(submitSuccess)(selectedMovieId, episode, presentation);
   };
   return (
-    <main className="justify-start min-h-[81vh]">
-      <h1 className="custom-container pb-4 hero-text items-start">Proposer un film</h1>
-      {!userId ? (
-        <p className="custom-container"> Vous devez être connecté•e pour proposer un film.</p>
-      ) : !user && !userError ? (
-        <Loader />
-      ) : userHasPendingPropositions ? (
-        <p className="custom-container">
+    <>
+      <CustomHead
+        title="Cinévoraces - Proposer un film"
+        description="Un film à faire découvrir ? C'est par ici !"
+        slug={router.asPath}
+      />
+      <main className="justify-start min-h-[81vh]">
+        <h1 className="custom-container pb-4 hero-text items-start">Proposer un film</h1>
+        {!userId ? (
+          <p className="custom-container"> Vous devez être connecté•e pour proposer un film.</p>
+        ) : !user && !userError ? (
+          <Loader />
+        ) : userHasPendingPropositions ? (
+          <p className="custom-container">
           Vous avez déjà une proposition en attente. Vous pourrez réserver un nouveau créneau une fois votre proposition
           publiée.
-        </p>
-      ) : episodesError ? (
-        <p className="custom-container">Tous les épisodes des semaines à venir sont réservés. Réessayez dans quelques semaines !</p>
-      ) 
-        : (
-          <>
-            <PickEpisode
-              episodesArray={episodesArray.current}
-              areOptionsDisplayed={areOptionsDisplayed}
-              handleOptionsDisplay={handleOptionsDisplay}
-              episode={episode}
-              setEpisode={setEpisode}
-            />
-            <SearchMovie
-              handleMovieSearch={handleMovieSearch}
-              ref={searchRef}
-            />
-            <PickMovie
-              movies={searchResults}
-              handleSelectMovie={handleSelectMovie}
-              ref={searchRef}
-              styles={pickMovieStyles}
-            />
-            <WritePresentationAndSend
-              searchResults={searchResults}
-              selectedMovieId={selectedMovieId}
-              handlePropositionSubmit={handlePropositionSubmit}
-              episode={episode}
-              ref={presentation}
-            />
-          </>
-        )}
-    </main>
+          </p>
+        ) : episodesError ? (
+          <p className="custom-container">Tous les épisodes des semaines à venir sont réservés. Réessayez dans quelques semaines !</p>
+        ) 
+          : (
+            <>
+              <PickEpisode
+                episodesArray={episodesArray.current}
+                areOptionsDisplayed={areOptionsDisplayed}
+                handleOptionsDisplay={handleOptionsDisplay}
+                episode={episode}
+                setEpisode={setEpisode}
+              />
+              <SearchMovie
+                handleMovieSearch={handleMovieSearch}
+                ref={searchRef}
+              />
+              <PickMovie
+                movies={searchResults}
+                handleSelectMovie={handleSelectMovie}
+                ref={searchRef}
+                styles={pickMovieStyles}
+              />
+              <WritePresentationAndSend
+                searchResults={searchResults}
+                selectedMovieId={selectedMovieId}
+                handlePropositionSubmit={handlePropositionSubmit}
+                episode={episode}
+                ref={presentation}
+              />
+            </>
+          )}
+      </main>
+    </>
   );
 };
 
