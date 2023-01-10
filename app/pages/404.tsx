@@ -1,5 +1,5 @@
 import type { NextPage } from 'next';
-import Head from 'next/head';
+import CustomHead from '@components/Head';
 import { ErrorSvg } from '@components/SvgComponents';
 import { useRouter } from 'next/router';
 import { Button } from '@components/Input';
@@ -10,10 +10,11 @@ const Custom404: NextPage = () => {
   const path = router.asPath;
   return (
     <>
-      <Head>
-        <title>Cinévoraces - Erreur</title>
-        <meta name="description" content="Le contenu demandé n'est pas disponible."/>
-      </Head>
+      <CustomHead
+        title="Cinévoraces - Erreur"
+        description="Le contenu demandé n'est pas disponible."
+        slug="/erreur"
+      />
       <main className="custom-container flex flex-col lg:flex-row">
         <div className='w-full flex flex-col items-center gap-16'>
           <h1 className='hero-text'>Erreur 404</h1>

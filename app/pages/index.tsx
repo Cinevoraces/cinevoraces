@@ -1,6 +1,6 @@
 import React from 'react';
 import type { NextPage } from 'next';
-import Head from 'next/head';
+import CustomHead from '@components/Head';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Button } from '@components/Input';
@@ -14,6 +14,7 @@ import type { MinimalMovie } from '@custom_types/movies';
 import { getDataFromEndpointSSR } from '@utils/fetchApi';
 import { useAppSelector } from '@store/store';
 import { user } from '@store/slices/user';
+import { Router } from 'next/router';
 
 interface HomeProps {
   metrics: MetricsProps;
@@ -31,8 +32,7 @@ const Home: NextPage<HomeProps> = (props) => {
 
   // Prepared Tailwind Styles
   const sectionStyle = 'even:bg-medium-gray even:md:text-end ';
-  const sectionContentStyle =
-    'custom-container md:flex-row ';
+  const sectionContentStyle = 'custom-container md:flex-row ';
   const posterStyles = `rounded-lg w-full h-full object-cover shadow-lg max-w-[250px] 
     fourth-child:hidden fifth-child:hidden sixth-child:hidden
     md:fourth-child:block lg:fifth-child:block xl:sixth-child:block
@@ -45,10 +45,11 @@ const Home: NextPage<HomeProps> = (props) => {
 
   return (
     <>
-      <Head>
-        <title>Cinévoraces - Accueil</title>
-        <meta name="description" content="Votre ciné-club distantiel"/>
-      </Head>
+      <CustomHead
+        title="Cinévoraces - Accueil"
+        description="Votre ciné-club distantiel"
+        slug=""
+      />
       <main>
         <section
           id="hero"
@@ -57,19 +58,18 @@ const Home: NextPage<HomeProps> = (props) => {
             <div className="w-full flex justify-between">
               <div className="flex flex-col gap-8 flex-1">
                 <h1 className="hero-text ">
-                Bienvenue dans votre <span className="text-orange-primary">ciné-club</span> virtuel !
+                  Bienvenue dans votre <span className="text-orange-primary">ciné-club</span> virtuel !
                 </h1>
                 <h2 className={h2Style}>Chaque semaine, un film à découvrir</h2>
                 <div className="flex justify-start gap-4">
                   <Button to={'/films'}>Découvrir les films</Button>
-                  {
-                    !id &&
-                  <Button
-                    to={'/inscription'}
-                    customStyle={'empty'}>
-                    {'S\'inscrire'}
-                  </Button>
-                  }
+                  {!id && (
+                    <Button
+                      to={'/inscription'}
+                      customStyle={'empty'}>
+                      {'S\'inscrire'}
+                    </Button>
+                  )}
                 </div>
               </div>
               <div className="hidden lg:flex lg:w-full lg:max-w-lg lg:justify-end lg:flex-1">
@@ -123,33 +123,32 @@ const Home: NextPage<HomeProps> = (props) => {
                 <Link
                   href={'#discord'}
                   className={emStyle}>
-                notre serveur Discord.
+                  notre serveur Discord.
                 </Link>
                 <br />
                 <br />
                 {'Envie de rejoindre l\'aventure ?'}
                 <br />
-                {
-                  !id ?
-                    <Link
-                      href={'/inscription'}
-                      className={emStyle}>
-                      { 'Inscrivez-vous ' }
-                    </Link>
-                    : <span className={emStyle}>{'Inscrivez-vous '}</span>
-                }
-              pour partager votre passion pour le cinéma avec nous.
+                {!id ? (
+                  <Link
+                    href={'/inscription'}
+                    className={emStyle}>
+                    {'Inscrivez-vous '}
+                  </Link>
+                ) : (
+                  <span className={emStyle}>{'Inscrivez-vous '}</span>
+                )}
+                pour partager votre passion pour le cinéma avec nous.
               </p>
-              {
-                !id &&
-              <div className="flex justify-end">
-                <Button
-                  to={'/inscription'}
-                  customStyle="rounded">
-                  {'S\'inscrire'}
-                </Button>
-              </div>
-              }
+              {!id && (
+                <div className="flex justify-end">
+                  <Button
+                    to={'/inscription'}
+                    customStyle="rounded">
+                    {'S\'inscrire'}
+                  </Button>
+                </div>
+              )}
             </div>
           </div>
         </section>
@@ -160,12 +159,14 @@ const Home: NextPage<HomeProps> = (props) => {
             <div className="flex-1">
               <h2 className={h2Style + 'mb-8'}>Partagez vos avis sur les films proposés</h2>
               <p>
-              CinéVoraces est une <span className={emStyle}>proposition communautaire</span>. <br />
-              Pour pleinement en profiter, rejoignez la communauté et <span className={emStyle}>intéragissez</span> avec
-              les films. <br />
+                CinéVoraces est une <span className={emStyle}>proposition communautaire</span>. <br />
+                Pour pleinement en profiter, rejoignez la communauté et <span className={emStyle}>
+                  intéragissez
+                </span>{' '}
+                avec les films. <br />
                 <br />
-              Ajoutez-les dans votre liste de lecture, likez, notez, commentez : on veut savoir ce que vous en avez
-              pensé !
+                Ajoutez-les dans votre liste de lecture, likez, notez, commentez : on veut savoir ce que vous en avez
+                pensé !
               </p>
             </div>
             <Image
@@ -192,13 +193,13 @@ const Home: NextPage<HomeProps> = (props) => {
             <div className="flex flex-col items-center gap-6 md:items-end">
               <h2 className={h2Style + 'mb-8 hidden md:block'}>Rejoignez le serveur Discord</h2>
               <p>
-              Vous souhaitez rejoindre la communauté active de Cinévoraces ? <br />
-              Participer à des <span className={emStyle}>événements</span> et parler de cinéma et de beaucoup
+                Vous souhaitez rejoindre la communauté active de Cinévoraces ? <br />
+                Participer à des <span className={emStyle}>événements</span> et parler de cinéma et de beaucoup
                 {' d\''}
                 <span className={emStyle}>autres sujets</span> ?
                 <br />
                 <br />
-              Rejoignez-nous aussi sur Discord !
+                Rejoignez-nous aussi sur Discord !
               </p>
               <div className="self-start md:self-end">
                 <Button
@@ -210,7 +211,7 @@ const Home: NextPage<HomeProps> = (props) => {
                     width={25}
                     height={25}
                   />
-                Rejoindre le Discord
+                  Rejoindre le Discord
                 </Button>
               </div>
             </div>
@@ -232,7 +233,7 @@ export async function getServerSideProps() {
         lastSixMovies,
       },
     };
-  } catch (err){
+  } catch (err) {
     console.error(err);
   }
 }

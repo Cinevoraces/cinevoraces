@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { useEffect, useRef, useState } from 'react';
 import type { FormEvent } from 'react';
-import Head from 'next/head';
+import CustomHead from '@components/Head';
 import useSWR from 'swr';
 import {
   Poster,
@@ -182,13 +182,12 @@ const Film: NextPage<FilmProps> = ({ movies }) => {
 
   return (
     <>
-      <Head>
-        <title>{`Cinévoraces - ${french_title}`}</title>
-        <meta
-          name="description"
-          content={`Découvrez le film ${french_title}`}
-        />
-      </Head>
+      <CustomHead
+        title={`Cinévoraces - ${french_title}`}
+        description={`Découvrez ${french_title}`}
+        slug={router.asPath}
+        imageUrl={movie.poster_url}
+      />
       <main className="custom-container ">
         {Object.keys(movie).length === 0 && <p>Loading</p>}
         {movie && (

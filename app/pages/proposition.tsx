@@ -1,4 +1,4 @@
-import Head from 'next/head';
+import CustomHead from '@components/Head';
 import { useState, useRef } from 'react';
 import useSWR from 'swr';
 import { toast } from 'react-hot-toast';
@@ -100,9 +100,11 @@ const Proposition: NextPage = () => {
   };
   return (
     <>
-      <Head>
-        <title>Cinévoraces - Proposer un film</title>
-      </Head>
+      <CustomHead
+        title="Cinévoraces - Proposer un film"
+        description="Un film à faire découvrir ? C'est par ici !"
+        slug={router.asPath}
+      />
       <main className="justify-start min-h-[81vh]">
         <h1 className="custom-container pb-4 hero-text items-start">Proposer un film</h1>
         {!userId ? (

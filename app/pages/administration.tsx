@@ -1,5 +1,5 @@
 import type { NextPage } from 'next';
-import Head from 'next/head';
+import CustomHead from '@components/Head';
 import type { FormEvent } from 'react';
 import { useState, useRef } from 'react';
 import useSWR from 'swr';
@@ -88,10 +88,11 @@ const Administration: NextPage = () => {
 
   return (
     <>
-      <Head>
-        <title>Cinévoraces - Administration</title>
-        <meta name="description" content="Back Office"/>
-      </Head>
+      <CustomHead
+        title="Cinévoraces - Administration"
+        description="Back Office, pour les administrateurices"
+        slug="/administration"
+      />
       <main>
         <h1 className="custom-container items-start hero-text">Administration</h1>
         {!isAdmin ? (

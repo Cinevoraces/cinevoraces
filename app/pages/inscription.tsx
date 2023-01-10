@@ -1,5 +1,5 @@
 import type { NextPage } from 'next';
-import Head from 'next/head';
+import CustomHead from '@components/Head';
 import { InscriptionForm } from '@components/Forms';
 import PosterComponent from '@components/PostersComponent';
 import Metrics from '@components/Metrics';
@@ -13,10 +13,11 @@ interface InscriptonProps {
 const Inscription: NextPage<InscriptonProps> = ({ metrics }) => {
   return (
     <>
-      <Head>
-        <title>Cinévoraces - Inscription</title>
-        <meta name="description" content="Devenez membre de la communauté Cinévoraces."/>
-      </Head>
+      <CustomHead
+        title="Cinévoraces - Inscription"
+        description="Devenez membre de la communauté Cinévoraces."
+        slug="/inscription"
+      />
       <main className='container mx-auto px-4'>
         <div className='container mx-auto px-4 py-8 lg:py-16 flex flex-col items-center justify-between gap-8 md:flex-row-reverse '>
           <section className='w-full px-auto md:max-w-1/2 xl:mr-[10vh]'>

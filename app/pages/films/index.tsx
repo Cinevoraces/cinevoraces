@@ -1,5 +1,5 @@
 import { useRef, useEffect } from 'react';
-import Head from 'next/head';
+import CustomHead from '@components/Head';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Filter, SearchBar } from '@components/Input';
@@ -120,10 +120,11 @@ export default function Films() {
 
   return (
     <>
-      <Head>
-        <title>Cinévoraces - Les films</title>
-        <meta name="description" content="Découvrez la cinémathèque, cherchez la perle rare."/>
-      </Head>
+      <CustomHead
+        title="Cinévoraces - Les films"
+        description="Découvrez la cinémathèque, cherchez la perle rare."
+        slug="/films"
+      />
       <main className="custom-container justify-start">
         <section className="w-full">
           <h1 className="hero-text text-start mb-4">Les films de la communauté</h1>

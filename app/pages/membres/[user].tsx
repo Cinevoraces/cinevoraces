@@ -1,4 +1,4 @@
-import Head from 'next/head';
+import CustomHead from '@components/Head';
 import { useState } from 'react';
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
@@ -33,9 +33,12 @@ const User: NextPage = () => {
 
   return (
     <>
-      <Head>
-        <title>{`Cinévoraces - ${isPrivatePage ? 'Mon profil' : `Profil de ${askedUser?.pseudo}`}`}</title>
-      </Head>
+      <CustomHead
+        title={`Cinévoraces - ${isPrivatePage ? 'Mon profil' : `Profil de ${askedUser?.pseudo}`}`}
+        description='Découvrez les profils de nos membres.'
+        slug={router.asPath}
+        imageUrl={askedUser?.avatar_url}
+      />
       <main className="grow flex flex-col justify-start">
         <h1 className="custom-container grow-0 pb-4 hero-text text-center">
           {isPrivatePage
