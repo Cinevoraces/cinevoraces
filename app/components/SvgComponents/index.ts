@@ -4,6 +4,7 @@ import { BookmarkSvg, LikeSvg, StarSvg, ViewSvg } from './InteractionsSVG';
 import SimpleLogo from './SimpleLogo';
 import UnwatchedSvg from './Unwatched';
 import MagnifyingGlassSvg from './MagnifyingGlassSvg';
+import { GitHub, Linkedin, Website, Discord } from './Social';
 
 export { 
   ErrorSvg,
@@ -12,4 +13,5 @@ export {
   SimpleLogo,
   UnwatchedSvg,
   MagnifyingGlassSvg,
+  GitHub, Linkedin, Website, Discord,
 };

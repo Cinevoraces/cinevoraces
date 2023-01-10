@@ -14,8 +14,6 @@ import type { MinimalMovie } from '@custom_types/movies';
 import { getDataFromEndpointSSR } from '@utils/fetchApi';
 import { useAppSelector } from '@store/store';
 import { user } from '@store/slices/user';
-import { Router } from 'next/router';
-
 interface HomeProps {
   metrics: MetricsProps;
   lastSixMovies: MinimalMovie[];
@@ -40,8 +38,6 @@ const Home: NextPage<HomeProps> = (props) => {
     transition duration-150 hover:ease-out`;
   const h2Style = 'title-section ';
   const emStyle = 'emphasis ';
-
-  const discordInvitation = 'https://discord.gg/r6tK5PGyE7';
 
   return (
     <>
@@ -185,7 +181,7 @@ const Home: NextPage<HomeProps> = (props) => {
             <h2 className={h2Style + ' self-start md:hidden'}>Rejoignez le serveur Discord</h2>
             <Image
               src={discordInvite}
-              alt="Discord logo"
+              alt="Discord invite"
               width={1005}
               height={856}
               className="flex-1 w-5/6 max-w-lg min-w-[300px] rounded-xl"
@@ -203,7 +199,7 @@ const Home: NextPage<HomeProps> = (props) => {
               </p>
               <div className="self-start md:self-end">
                 <Button
-                  href={discordInvitation}
+                  href={process.env.NEXT_PUBLIC_DISCORD_INVITE_URL}
                   customStyle="rounded">
                   <Image
                     src={discordLogo}
