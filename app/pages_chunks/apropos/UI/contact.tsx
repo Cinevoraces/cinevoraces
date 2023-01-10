@@ -8,7 +8,7 @@ const Contact = () => {
         {'Vous pouvez joindre l\'équipe de Cinévoraces à l\'adresse suivante : '}
         <Link
           target="_blank"
-          href="cinevoraces@gmail.com"
+          href="mailto:cinevoraces@gmail.com"
           className="underline text-orange-primary">
               cinevoraces@gmail.com
         </Link>

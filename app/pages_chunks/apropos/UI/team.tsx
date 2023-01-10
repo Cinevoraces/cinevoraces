@@ -20,7 +20,7 @@ const Team = ({ teamMembers }: TeamProps) => {
         <p>
               Équipe v1 : <span className="emphasis">Anthony Espirat</span> (Design & FrontEnd),{' '}
           <span className="emphasis">{'Joffrey D\'Ortoli'}</span> (BackEnd) &{' '}
-          <span className="emphasis">Gino Salomé</span>(FrontEnd).
+          <span className="emphasis">Gino Salomé</span> (FrontEnd).
         </p>
         <p>
               Remerciements particuliers : <span className="emphasis">Camille Michalak</span> (Conseils en
