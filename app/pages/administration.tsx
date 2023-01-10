@@ -1,13 +1,14 @@
+import type { NextPage } from 'next';
+import Head from 'next/head';
 import type { FormEvent } from 'react';
-import { useEffect, useState, useRef } from 'react';
+import { useState, useRef } from 'react';
 import useSWR from 'swr';
 import { mutationRequestCSR } from '@utils/fetchApi';
 import { user } from '@store/slices/user';
 import { Roles } from '@custom_types/index';
 import type { AdminActions } from 'enums';
 import { useAppDispatch, useAppSelector } from '@store/store';
-import { toggleArePWVisible, toggleConfirmationModal, global } from '@store/slices/global';
-import { TextInputRef, Toggle, Button } from '@components/Input';
+import { toggleConfirmationModal, global } from '@store/slices/global';
 import type { User, MovieWithPresentation } from '@custom_types/index';
 
 import PropositionsSection from 'pages_chunks/administration/UI/PropositionsSection';
@@ -21,7 +22,7 @@ import { toast } from 'react-hot-toast';
 
 import type { HandleSubmitAction, HandleSubmitActions } from '@custom_types/index';
 
-const Administration = () => {
+const Administration: NextPage = () => {
   // User role check
   const { id, role } = useAppSelector(user);
   const isAdmin = role === Roles.ADMIN;
@@ -87,6 +88,10 @@ const Administration = () => {
 
   return (
     <>
+      <Head>
+        <title>Cinévoraces - Administration</title>
+        <meta name="description" content="Back Office"/>
+      </Head>
       <main>
         <h1 className="custom-container items-start hero-text">Administration</h1>
         {!isAdmin ? (

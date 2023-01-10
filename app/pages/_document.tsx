@@ -13,8 +13,6 @@ export default function Document() {
         <meta name="msapplication-TileColor" content="#da532c"/>
         <meta name="theme-color" content="#393945"/>
         <meta name="keywords" content="cinéma, ciné, films, ciné-club, cinéclub, club, communauté, communautaire"/>
-        <meta name="description" content="Votre ciné-club distantiel"/>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
       </Head>
       <body>
         <Main />

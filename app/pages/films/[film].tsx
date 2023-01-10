@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { FormEvent } from 'react';
 import Head from 'next/head';
 import useSWR from 'swr';
@@ -23,7 +23,7 @@ import { useAppSelector } from '@store/store';
 import { user } from '@store/slices/user';
 import { toast } from 'react-hot-toast';
 import cutText from '@utils/cutText';
-import type { NextPage, GetStaticPaths, GetStaticProps } from 'next';
+import type { NextPage, GetStaticProps } from 'next';
 import type { ParsedUrlQuery } from 'querystring';
 import type { MinimalMovie, CompleteMovie } from '@custom_types/movies';
 import type { BodyData } from '@utils/fetchApi';
