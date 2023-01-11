@@ -2,7 +2,7 @@ import { bindActionCreators, createSlice } from '@reduxjs/toolkit';
 import type { RootState } from '../store';
 import type { Roles } from '@custom_types/global';
 
-interface UserProps {
+export interface UserProps {
   id?: number;
   pseudo?: string;
   role?: Roles;
