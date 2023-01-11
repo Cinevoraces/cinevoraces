@@ -22,6 +22,8 @@ const Poster = ({ poster_url, french_title }: PosterProps) => {
         alt={`Affiche de ${french_title}`}
         width={2*240}
         height={(2*240 * 9) / 16}
+        placeholder='blur'
+        blurDataURL='/movie_posters/placeholder.jpg'
         className="relative z-10 rounded-xl self-center w-full "
       />
     </div>

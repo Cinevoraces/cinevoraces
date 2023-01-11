@@ -85,6 +85,8 @@ const Home: NextPage<HomeProps> = (props) => {
                       alt={`${movie.french_title} movie poster`}
                       width={200}
                       height={(200 * 9) / 16}
+                      placeholder='blur'
+                      blurDataURL='/movie_posters/placeholder.jpg'
                       className={posterStyles}
                     />
                   </Link>

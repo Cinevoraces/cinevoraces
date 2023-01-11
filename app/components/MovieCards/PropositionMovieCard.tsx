@@ -34,6 +34,8 @@ const PropositionMovieCard = ({ movie, propositionCardStyle, posterStyle }: Prop
           alt={`${french_title} movie poster`}
           width={150}
           height={(150 * 9) / 16}
+          placeholder='blur'
+          blurDataURL='/movie_posters/placeholder.jpg'
           className={posterStyle}
         />
         <div className="w-full h-fill px-3 py-1 flex flex-col justify-between gap-1">
