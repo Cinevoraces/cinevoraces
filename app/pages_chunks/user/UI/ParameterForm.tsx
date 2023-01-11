@@ -44,7 +44,7 @@ const ParameterForm = ({ mutate, mail }: ParameterFormInterface) => {
     <div className="flex flex-col gap-6">
       <form 
         action="submit"
-        className="flex flex-col gap-6 w-full max-w-xl border px-6 py-4 border-orange-primary rounded-xl"
+        className="flex flex-col gap-6 w-full max-w-xl border border-transparent px-6 py-4"
         onSubmit={(e) => handleAvatarUpload(e, avatar, mutate)}>
         <File fileSetter={setAvatar}/>
         <div className="flex justify-end">
