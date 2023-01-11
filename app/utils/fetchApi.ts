@@ -95,7 +95,7 @@ const handleResponse = async (res: Response, endpoint: string, method?: 'POST' |
   if (res.status === 401) {
     console.log('WOWOWOWOWOWOWOWOWOO une 401 les amis, le token a expiré !!!!!!!!!!!');
     // One attempt to refresh it
-    const refreshTokenAttempt = await getRequestCSR('/refresh');
+    const refreshTokenAttempt = await fetch('/refresh', writeOptionsCSR());
     // If it failed, send a permission error
     if (refreshTokenAttempt.status !== 200){
       const rTAResponseBody = await refreshTokenAttempt.json();
