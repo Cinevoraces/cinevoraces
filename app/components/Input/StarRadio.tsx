@@ -21,8 +21,6 @@ export default function StarRadio(props: StarRadioProps) {
   peer-hover:fill-white/5 peer-focus:fill-white/5 
   ease-out duration-300`;
 
-  console.log(props);
-
   return (
     <fieldset
       className="w-52 h-10 flex flex-row-reverse gap-10 "
@@ -39,6 +37,9 @@ export default function StarRadio(props: StarRadioProps) {
             name="rating"
             className={radioStyle}
             checked={(props.value === 5 - i)}
+            onChange={() => { // To by pass error due to checked use instead of defaultChecked
+              return;
+            }}
             autoComplete="off"/>
           <StarSvg style={'star-icon ' + starStyle} />
           <StarSvg style={starEffectStyle} />
