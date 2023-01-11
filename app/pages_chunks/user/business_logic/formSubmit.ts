@@ -32,7 +32,7 @@ const submitSuccess = async (
 
 export const matchingErrorMessage = 'Les deux saisies ne correspondent pas.';
 
-const handleSubmit = async (
+export const handleSubmit = async (
   e: React.FormEvent<HTMLFormElement>,
   allInputsRef: {[key: string]: RefObject<HTMLInputElement> },
   arePWMatching: boolean,
@@ -81,4 +81,12 @@ const handleSubmit = async (
   }
 };
 
-export default handleSubmit;
+export const handleAvatarUpload = (e: React.FormEvent, avatar: File | undefined, userMutation: KeyedMutator<User[]>) => {
+  e.preventDefault();
+  const formData = new FormData();
+  if (avatar) {
+    formData.append('avatar', avatar, avatar.name);
+    console.log('formData : ', formData);
+    tryCatchWrapper(mutationRequestCSR)('PUT', '/users/avatar', formData);
+  }
+};

@@ -1,4 +1,4 @@
-import type { RefObject } from 'react';
+import type { ChangeEvent, FormEvent, RefObject } from 'react';
 import { useRef, useState } from 'react';
 import Image from 'next/image';
 import { useAppSelector, useAppDispatch } from '@store/store';
@@ -7,7 +7,7 @@ import { toggleArePWVisible, global } from '@store/slices/global';
 import Button from '@components/Input/Button';
 import SendLogo from '@public/icons/send-icon.svg';
 import { File } from '@components/Input';
-import handleSubmit, { matchingErrorMessage } from '../business_logic/formSubmit';
+import { matchingErrorMessage, handleSubmit, handleAvatarUpload } from '../business_logic/formSubmit';
 import type { KeyedMutator } from 'swr';
 import type { User } from '@custom_types/index';
 
@@ -38,9 +38,27 @@ const ParameterForm = ({ mutate, mail }: ParameterFormInterface) => {
 
   const helpingTextStyle = 'px-1 text-sm font-light italic text-gray-300';
 
+  const [avatar, setAvatar] = useState<File>();
+
   return (
     <div className="flex flex-col gap-6">
-      <File />
+      <form 
+        action="submit"
+        className="flex flex-col gap-6 w-full max-w-xl border px-6 py-4 border-orange-primary rounded-xl"
+        onSubmit={(e) => handleAvatarUpload(e, avatar, mutate)}>
+        <File fileSetter={setAvatar}/>
+        <div className="flex justify-end">
+          <Button customStyle="rounded">
+            <Image
+              src={SendLogo}
+              alt=""
+              width={16}
+              height={16}
+            />
+            Envoyer
+          </Button>
+        </div>
+      </form>
       <form
         action="submit"
         // onSubmit={async (e) => handleSubmit(e, allInputsRef)}

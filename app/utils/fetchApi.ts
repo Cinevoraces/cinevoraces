@@ -54,14 +54,15 @@ const getRequestCSR = async (endpoint: string) => {
  * @param data facultative request payload
  * @returns 
  */
-const mutationRequestCSR = async (method: 'POST' | 'PUT' | 'DELETE', endpoint: string, body?: BodyData) => {
+const mutationRequestCSR = async (method: 'POST' | 'PUT' | 'DELETE', endpoint: string, body?: BodyData | FormData) => {
+  console.log('typeof body is FormData: ', body instanceof FormData, 'body : ', body);
   const options: FetchOptions = {
     method,
     headers: {
-      'Content-Type': 'application/json',
+      'Content-Type': (body instanceof FormData) ? 'multipart/form-data; boundary=???' : 'application/json',
     },
     credentials: 'include',
-    body: JSON.stringify(body),
+    body: (body instanceof FormData) ? body : JSON.stringify(body),
   };
   if (localStorage.accessToken && options.headers) {
     options.headers['Authorization'] = 'Bearer ' + localStorage.accessToken;
