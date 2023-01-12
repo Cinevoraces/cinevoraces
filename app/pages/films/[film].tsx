@@ -180,6 +180,13 @@ const Film: NextPage<FilmProps> = ({ movies }) => {
     setIsPresentationExpanded(!isPresentationExpanded);
   };
 
+  // Tailwind bug forces to let this part, even commented...
+  // const dataTitleStyle = 'text-lg uppercase text-light-gray pr-4 ';
+  // const dataStyle = 'text-lg font-medium text-white ';
+  // const hListStyle = 'flex items-center flex-wrap';
+  // const hListTypeStyle = dataTitleStyle + 'flex-shrink-0 ';
+  // const hListDataStyle = 'text-orange-primary flex-1 flex gap-1 items-end flex-wrap ';
+
   return (
     <>
       <CustomHead
