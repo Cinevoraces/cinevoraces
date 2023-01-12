@@ -11,7 +11,7 @@ import {
   Runtime,
   Casting,
 } from './PresentationSection';
-import MoviesGrid from './MoviesGrid';
+import MoviesGrid from '../../films/UI/MoviesGrid';
 
 export { CommentsSection, 
   Poster,
