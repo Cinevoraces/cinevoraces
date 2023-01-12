@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import Rate from '@components/Rate';
+import PosterImage from '@components/Poster';
 
 const dataTitleStyle = 'text-lg uppercase text-light-gray pr-4 ';
 const dataStyle = 'text-white ';
@@ -17,12 +18,10 @@ const Poster = ({ poster_url, french_title }: PosterProps) => {
       id="image-container"
       className="relative h-fit self-center xl:w-full
         before:content-[''] before:absolute before:-inset-0.5 before:bg-gradient-to-tr before:from-dark-gray before:to-orange-primary before:rounded-xl">
-      <Image
+      <PosterImage
         src={poster_url}
-        alt={`Affiche de ${french_title}`}
-        width={2*240}
-        height={(2*240 * 9) / 16}
-        className="relative z-10 rounded-xl self-center w-full "
+        title={french_title}
+        type='film'
       />
     </div>
   );

@@ -14,10 +14,10 @@ import {
   Languages,
   Runtime,
   Casting,
-} from '@components/FilmPageComponents';
+} from 'pages_chunks/film/UI';
 import { Button, BaseInteraction, RatingInteraction } from '@components/Input';
 import PostCard from '@components/PostCard';
-import { CommentsSection } from '@components/FilmPageComponents';
+import { CommentsSection } from 'pages_chunks/film/UI';
 import { getDataFromEndpointSSR, mutationRequestCSR } from '@utils/fetchApi';
 import { useAppSelector } from '@store/store';
 import { user } from '@store/slices/user';
