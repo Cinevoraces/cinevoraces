@@ -6,21 +6,22 @@ import { useEffect } from 'react';
 
 interface MovieGridProps{
   error?: Error;
-  moviesResults: CompleteMovie[] | undefined
+  moviesResults: CompleteMovie[]
+  isFilterMenuOpen: boolean;
 }
 const gridStyle = `w-full grid gap-4 grid-cols-2 
   sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6
   `;
 
-const MoviesGrid = ({ error, moviesResults }: MovieGridProps) => {
+const MoviesGrid = ({ error, moviesResults, isFilterMenuOpen }: MovieGridProps) => {
   // Animation Section
   const api = useSpringRef();
   const trail = useTrail(
-    moviesResults?.length || 52, {
+    moviesResults.length, {
       ref: api,
-      config: { mass: 1, tension: 500, friction: 36 },
-      reset: true,
-      from: { reset: true, opacity:0, y:25 },
+      config: { mass: 1, tension: 300, friction: 36 },
+      // reset: true,
+      from: { opacity:0, y:25 },
       to: { opacity:100, y:0 }
     }
   );

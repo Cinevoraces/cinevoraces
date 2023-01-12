@@ -163,7 +163,8 @@ export default function Films() {
         </section>
         <MoviesGrid
           error={error}
-          moviesResults={moviesResults}/>
+          moviesResults={moviesResults || []}
+          isFilterMenuOpen={isFilterMenuOpen}/>
       </main>
     </>
   );
