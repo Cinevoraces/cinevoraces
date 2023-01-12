@@ -15,6 +15,8 @@ import { getDataFromEndpointSSR } from '@utils/fetchApi';
 import { useAppSelector } from '@store/store';
 import { user } from '@store/slices/user';
 
+import { useTrail, useSpringRef, animated } from '@react-spring/web';
+
 import Poster from '@components/Poster';
 interface HomeProps {
   metrics: MetricsProps;
@@ -36,6 +38,15 @@ const Home: NextPage<HomeProps> = (props) => {
   const h2Style = 'title-section ';
   const emStyle = 'emphasis ';
 
+  // Animation section
+  const trail = useTrail(
+    lastSixMoviesInfos.length, {
+      config: { mass: 1, tension: 300, friction: 36 },
+      from: { opacity:0, x:25 },
+      to: { opacity:100, x:0 }
+    }
+  );
+
   return (
     <>
       <CustomHead
@@ -48,7 +59,7 @@ const Home: NextPage<HomeProps> = (props) => {
           id="hero"
           className={sectionStyle}>
           <div className={sectionContentStyle + 'md:flex-col'}>
-            <div className="w-full flex justify-between">
+            <div className="w-full flex justify-between items-center">
               <div className="flex flex-col gap-8 flex-1">
                 <h1 className="hero-text ">
                   Bienvenue dans votre <span className="text-orange-primary">ciné-club</span> virtuel !
@@ -71,20 +82,22 @@ const Home: NextPage<HomeProps> = (props) => {
             </div>
             <div className='w-full'>
               <h2 className={h2Style}>Les derniers ajouts de la communauté :</h2>
-              <div className="mt-8 grid grid-cols-3 gap-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
-                {lastSixMoviesInfos.map((movie) => (
-                  <Link
-                    href={`/films/${movie.id}`}
-                    className="fourth-child:hidden fifth-child:hidden sixth-child:hidden md:fourth-child:block lg:fifth-child:block xl:sixth-child:block"
-                    key={movie.french_title}>
-                    <Poster
-                      src={movie.poster_url}
-                      title={movie.french_title}
-                      type='caroussel'
-                    />
-                  </Link>
-                ))}
-              </div>
+              <ul className="mt-8 grid grid-cols-3 gap-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 animated-caroussel">
+                {
+                  trail.map((props, index) => (
+                    <animated.li style={props} key={index}>
+                      <Link
+                        href={`/films/${lastSixMovies[index].id}`}>
+                        <Poster
+                          src={lastSixMovies[index].poster_url}
+                          title={lastSixMovies[index].french_title}
+                          type='caroussel'
+                        />
+                      </Link>
+                    </animated.li>
+                  ))
+                }
+              </ul>
             </div>
           </div>
         </section>
