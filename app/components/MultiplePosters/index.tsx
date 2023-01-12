@@ -18,7 +18,7 @@ interface PostersComponentProps {
  * @returns Component composed of a various number of movie posters
  * @param number number of posters to display
  */
-export default function PostersComponent({ number }: PostersComponentProps) {
+export default function MultiplePosters({ number }: PostersComponentProps) {
   const posters = generatePosterArray('/movie_posters/', '.jpg', number);
   const posterStyles = 'absolute w-[1/2] rounded-lg object-cover shadow-lg';
   const indivStyles = [

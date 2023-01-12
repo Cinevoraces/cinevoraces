@@ -1,7 +1,7 @@
 import type { NextPage } from 'next';
 import CustomHead from '@components/Head';
 import { InscriptionForm } from '@components/Forms';
-import PosterComponent from '@components/PostersComponent';
+import PosterComponent from '@components/MultiplePosters';
 import Metrics from '@components/Metrics';
 import type { MetricsProps } from '@components/Metrics';
 import { getDataFromEndpointSSR } from '@utils/fetchApi';

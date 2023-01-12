@@ -1,11 +1,12 @@
 import Image from 'next/image';
 import Rate from '@components/Rate';
+import PosterImage from '@components/Poster';
 
 const dataTitleStyle = 'text-lg uppercase text-light-gray pr-4 ';
-const dataStyle = 'text-white ';
+const dataStyle = 'text-lg font-light text-white ';
 const hListStyle = 'flex items-baseline flex-wrap';
 const hListTypeStyle = dataTitleStyle + 'flex-shrink-0 ';
-const hListDataStyle = 'text-orange-primary flex-1 flex gap-1 items-end flex-wrap ';
+const hListDataStyle = 'text-lg text-orange-primary flex-1 flex gap-1 items-end flex-wrap ';
 
 interface PosterProps {
   poster_url: string;
@@ -17,12 +18,10 @@ const Poster = ({ poster_url, french_title }: PosterProps) => {
       id="image-container"
       className="relative h-fit self-center xl:w-full
         before:content-[''] before:absolute before:-inset-0.5 before:bg-gradient-to-tr before:from-dark-gray before:to-orange-primary before:rounded-xl">
-      <Image
+      <PosterImage
         src={poster_url}
-        alt={`Affiche de ${french_title}`}
-        width={2*240}
-        height={(2*240 * 9) / 16}
-        className="relative z-10 rounded-xl self-center w-full "
+        title={french_title}
+        type='film'
       />
     </div>
   );
@@ -36,7 +35,7 @@ const Title = ({ french_title, release_date }: TitleProps) => {
   return (
     <h1 className="mb-6 text-3xl font-semibold text-white">
       {french_title + ' '}
-      <span className="text-base font-light text-light-gray">{`(${release_date?.slice(0, 4)})`}</span>
+      <span className="font-light text-light-gray">{`(${release_date?.slice(0, 4)})`}</span>
     </h1>
   );
 };
@@ -80,7 +79,7 @@ const Directors = ({ directors }: DirectorsProps) => {
       id="directors"
       className={hListStyle}>
       <p className={dataTitleStyle + 'place-self-start'}>{'Réalisation :'}</p>
-      <ul className={dataStyle + 'mt-1 flex-1 flex flex-col'}>
+      <ul className={dataStyle + 'flex-1 flex flex-col'}>
         {directors.map((d) => (
           <li key={d}>{d}</li>
         ))}
@@ -159,9 +158,9 @@ const Casting = ({ casting }: CastingProps) => {
   return (
     <div
       id="casting"
-      className="flex justify-between items-center">
+      className={hListStyle}>
       <p className={dataTitleStyle + 'place-self-start'}>{'Casting :'}</p>
-      <ul className={dataStyle + 'mt-1 flex-1 flex flex-col'}>
+      <ul className={dataStyle + 'flex-1 flex flex-col'}>
         {casting.map((a) => (
           <li key={a}>{a}</li>
         ))}
