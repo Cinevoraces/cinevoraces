@@ -4,7 +4,7 @@ import CustomHead from '@components/Head';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Button } from '@components/Input';
-import PosterComponent from '@components/PostersComponent';
+import PosterComponent from '@components/MultiplePosters';
 import discordLogo from '@public/icons/discord.svg';
 import discordInvite from '@public/discord_invite.png';
 import commentsSample from '@public/comments_sample.jpg';
@@ -14,6 +14,8 @@ import type { MinimalMovie } from '@custom_types/movies';
 import { getDataFromEndpointSSR } from '@utils/fetchApi';
 import { useAppSelector } from '@store/store';
 import { user } from '@store/slices/user';
+
+import Poster from '@components/Poster';
 interface HomeProps {
   metrics: MetricsProps;
   lastSixMovies: MinimalMovie[];
@@ -31,11 +33,6 @@ const Home: NextPage<HomeProps> = (props) => {
   // Prepared Tailwind Styles
   const sectionStyle = 'even:bg-medium-gray even:md:text-end ';
   const sectionContentStyle = 'custom-container md:flex-row ';
-  const posterStyles = `rounded-lg w-full h-full object-cover shadow-lg max-w-[250px] 
-    fourth-child:hidden fifth-child:hidden sixth-child:hidden
-    md:fourth-child:block lg:fifth-child:block xl:sixth-child:block
-    hover:scale-105 
-    transition duration-150 hover:ease-out`;
   const h2Style = 'title-section ';
   const emStyle = 'emphasis ';
 
@@ -72,7 +69,7 @@ const Home: NextPage<HomeProps> = (props) => {
                 <PosterComponent number={8} />
               </div>
             </div>
-            <div>
+            <div className='w-full'>
               <h2 className={h2Style}>Les derniers ajouts de la communauté :</h2>
               <div className="mt-8 grid grid-cols-3 gap-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
                 {lastSixMoviesInfos.map((movie) => (
@@ -80,12 +77,10 @@ const Home: NextPage<HomeProps> = (props) => {
                     href={`/films/${movie.id}`}
                     className="fourth-child:hidden fifth-child:hidden sixth-child:hidden md:fourth-child:block lg:fifth-child:block xl:sixth-child:block"
                     key={movie.french_title}>
-                    <Image
+                    <Poster
                       src={movie.poster_url}
-                      alt={`${movie.french_title} movie poster`}
-                      width={200}
-                      height={(200 * 9) / 16}
-                      className={posterStyles}
+                      title={movie.french_title}
+                      type='caroussel'
                     />
                   </Link>
                 ))}
