@@ -3,7 +3,7 @@ import CustomHead from '@components/Head';
 import { ErrorSvg } from '@components/SvgComponents';
 import { useRouter } from 'next/router';
 import { Button } from '@components/Input';
-import PostersComponent from '@components/PostersComponent';
+import PostersComponent from '@components/MultiplePosters';
 
 const Custom404: NextPage = () => {
   const router = useRouter();

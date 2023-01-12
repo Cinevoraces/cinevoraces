@@ -1,6 +1,5 @@
 import { useRef, useEffect } from 'react';
 import CustomHead from '@components/Head';
-import Image from 'next/image';
 import Link from 'next/link';
 import { Filter, SearchBar } from '@components/Input';
 import useSWR from 'swr';
@@ -20,13 +19,11 @@ import {
 } from '@store/slices/filteredMovies';
 import type { CompleteMovie, Season } from '@custom_types/index';
 import type { ChangeEvent } from 'react';
+import Poster from '@components/Poster';
 
 import filtersSync from '@utils/filterSyncer';
 
-const posterStyles = `rounded-lg w-full h-full object-cover shadow-lg max-w-[250px] 
-    hover:scale-105 
-    transition duration-150 hover:ease-out `;
-const gridStyle = `w-full grid gap-2 grid-cols-2 
+const gridStyle = `w-full grid gap-4 grid-cols-2 
   sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6
   `;
 
@@ -165,23 +162,20 @@ export default function Films() {
             />
           )}
         </section>
-        <section id="movie-grid">
+        <section id="movie-grid" className='w-full'>
           {error && <p>Une erreur est survenue.</p>}
           {!movieResults && !error && <p>Chargement des données.</p>}
           {movieResults && (
-            <div className="flex flex-col gap-3 font-medium">
+            <div className="w-full flex flex-col gap-3 font-medium">
               <p className="">{movieResults.length + ' films'}</p>
               <ul className={gridStyle}>
                 {movieResults.map((movie: CompleteMovie) => (
-                  <li key={movie.french_title}>
+                  <li className='relative' key={movie.french_title}>
                     <Link href={`/films/${movie.id}`}>
-                      <Image
+                      <Poster
                         src={movie.poster_url}
-                        alt={`${movie.french_title} movie poster`}
-                        width={200}
-                        height={(200 * 9) / 16}
-                        className={posterStyles}
-                      />
+                        title={movie.french_title}
+                        type='grid'/>
                     </Link>
                   </li>
                 ))}
