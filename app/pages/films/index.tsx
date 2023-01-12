@@ -1,6 +1,5 @@
 import { useRef, useEffect } from 'react';
 import CustomHead from '@components/Head';
-import Link from 'next/link';
 import { Filter, SearchBar } from '@components/Input';
 import useSWR from 'swr';
 import { useAppSelector, useAppDispatch } from '@store/store';
@@ -19,13 +18,9 @@ import {
 } from '@store/slices/filteredMovies';
 import type { CompleteMovie, Season } from '@custom_types/index';
 import type { ChangeEvent } from 'react';
-import Poster from '@components/Poster';
 
 import filtersSync from '@utils/filterSyncer';
-
-const gridStyle = `w-full grid gap-4 grid-cols-2 
-  sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6
-  `;
+import { MoviesGrid } from 'pages_chunks/film/UI';
 
 const metadatas = [
   'casting',
@@ -86,7 +81,7 @@ export default function Films() {
     data: movies,
     error,
     mutate,
-  } = useSWR(
+  } = useSWR<CompleteMovie[], Error>(
     () =>
       season &&
       '/movies?where[is_published]=true' +
@@ -113,7 +108,11 @@ export default function Films() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [movies, searchQuery, userFilterInputs, isUserConnected.current]);
 
-  const movieResults = useAppSelector(filteredMovies).filteredMovies;
+  const moviesResults = useAppSelector(filteredMovies).filteredMovies;
+
+  useEffect(() => {
+    console.log('moviesResults has changed');
+  }, [moviesResults]);
 
   return (
     <>
@@ -148,7 +147,7 @@ export default function Films() {
               onChange={handleChangeSearchValue}
             />
           )}
-          {availableFilters && movieResults && (
+          {availableFilters && moviesResults && (
             <Filter
               isMenuOpened={isFilterMenuOpen}
               displayMenuSetter={handleToggleFilterMenu}
@@ -157,32 +156,14 @@ export default function Films() {
               userFilterInputsSetter={handleSetFilters}
               userFilterReset={handleFilterReset}
               filtersCounter={Number(userFilterInputs.filtersCounter[0])}
-              resultsCount={movieResults.length}
+              resultsCount={moviesResults.length}
               isUserConnected={isUserConnected.current}
             />
           )}
         </section>
-        <section id="movie-grid" className='w-full'>
-          {error && <p>Une erreur est survenue.</p>}
-          {!movieResults && !error && <p>Chargement des données.</p>}
-          {movieResults && (
-            <div className="w-full flex flex-col gap-3 font-medium">
-              <p className="">{movieResults.length + ' films'}</p>
-              <ul className={gridStyle}>
-                {movieResults.map((movie: CompleteMovie) => (
-                  <li className='relative' key={movie.french_title}>
-                    <Link href={`/films/${movie.id}`}>
-                      <Poster
-                        src={movie.poster_url}
-                        title={movie.french_title}
-                        type='grid'/>
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-        </section>
+        <MoviesGrid
+          error={error}
+          moviesResults={moviesResults}/>
       </main>
     </>
   );

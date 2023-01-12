@@ -11,6 +11,7 @@ import {
   Runtime,
   Casting,
 } from './PresentationSection';
+import MoviesGrid from './MoviesGrid';
 
 export { CommentsSection, 
   Poster,
@@ -22,5 +23,6 @@ export { CommentsSection,
   Countries,
   Languages,
   Runtime,
-  Casting, 
+  Casting,
+  MoviesGrid,
 };
