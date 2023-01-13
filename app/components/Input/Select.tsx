@@ -1,9 +1,9 @@
-import React, { useRef } from 'react';
 import type { Dispatch, SetStateAction } from 'react';
+import React, { useRef } from 'react';
 import { Button, RadioInput } from '@components/Input';
 import useCloseMenuOnOutsideClick from '@hooks/useCloseMenuOnOutsideClick';
 import useCloseMenuOnEnterKeyPress from '@hooks/useCloseOnEnterPress';
-import type { Season, SvgProps } from '@custom_types/index';
+import type { EpisodeOption, SvgProps } from '@custom_types/index';
 
 const ArrowSvg = ({ style }: SvgProps) => {
   return (
@@ -26,7 +26,7 @@ const ArrowSvg = ({ style }: SvgProps) => {
 
 export interface OptionProps {
   name: string;
-  value: string | number;
+  value: string;
 }
 export interface SelectProps {
   name: string;
@@ -35,7 +35,7 @@ export interface SelectProps {
   displayOptionsSetter: ()=>void;
   stateValue: OptionProps;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  valueSetter: (option: OptionProps)=>{ payload: OptionProps; type: string; };
+  valueSetter: Dispatch<SetStateAction<OptionProps>> | ((option: OptionProps)=>{ payload: OptionProps; type: string; });
   selectCustomStyle?: 'searchbar';
 }
 

@@ -87,12 +87,10 @@ const Film: NextPage<FilmProps> = ({ movies }) => {
     const body: BodyData = {};
     // 1 - Mutate the cache first, without revalidation
     // const mutatedData = await mutate(await reviewMutation(type, data), false);
-    // ------------------------------------------------ Les arguments passés ici sont insuffisants !!!!! -----------------------------
     const mutatedData = await mutate(
       await reviewMutation(type, baseInteractionsArray, data, radioInputValue, commentFormRef),
       false
     );
-    // -------------------------------------------------------------------------------------------------------------------------------
     // 2 - Do the API call
     body[type] = mutatedData![0].user_review![type];
     const res = await mutationRequestCSR('PUT', `/reviews/${movieId}`, body);
