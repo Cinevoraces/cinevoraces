@@ -88,6 +88,7 @@ const CommentsSection = forwardRef<HTMLTextAreaElement, CommentsSectionProps>(({
           <PostCard
             type="form"
             author_pseudo={pseudo!}
+            author_id={id!}
             author_avatar={avatar_url!}
             publishing_date={new Date().toISOString()}>
             <form
