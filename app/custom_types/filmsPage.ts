@@ -2,7 +2,7 @@ import type { CompleteMovie } from './movies';
 
 export interface SeasonOption{
   name: string;
-  value: string;
+  value: string | number;
 }
 
 export interface FilterOptions {

@@ -1,4 +1,4 @@
-import type { UserReview, Proposition, CompleteMovie, MovieWithPresentation } from './index';
+import type { UserReview, CompleteMovie, MovieWithPresentation } from './index';
 
 export default interface User {
   avatar_url: string;
