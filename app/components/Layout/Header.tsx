@@ -11,6 +11,7 @@ import Button from '@components/Input/Button';
 import { ConnectionForm } from '@components/Forms';
 import useSWR from 'swr';
 import { Roles } from '@custom_types/global';
+import useRecoverStateFromSessionStorage from '@hooks/useRecoverStateFromSessionStorage';
 
 const Header = () => {
   const { isBurgerMenuOpen, isUserMenuOpen, isConnectionModalOpen } = useAppSelector(global);
@@ -57,6 +58,9 @@ const Header = () => {
     ['Mon Profil', '/membres/moi'],
   ];
   (role === Roles.ADMIN) && userMenuLinks.push(['Administration', '/administration']);
+
+  // Due to lifecycle and store operations, keeping state operations have to be executed here :
+  useRecoverStateFromSessionStorage();
 
   return (
     <>
