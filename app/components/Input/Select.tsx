@@ -1,9 +1,9 @@
-import React, { useRef } from 'react';
 import type { Dispatch, SetStateAction } from 'react';
+import React, { useRef } from 'react';
 import { Button, RadioInput } from '@components/Input';
 import useCloseMenuOnOutsideClick from '@hooks/useCloseMenuOnOutsideClick';
 import useCloseMenuOnEnterKeyPress from '@hooks/useCloseOnEnterPress';
-import type { Season, SvgProps } from '@custom_types/index';
+import type { EpisodeOption, SvgProps } from '@custom_types/index';
 
 const ArrowSvg = ({ style }: SvgProps) => {
   return (
@@ -26,8 +26,7 @@ const ArrowSvg = ({ style }: SvgProps) => {
 
 export interface OptionProps {
   name: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  value: any;
+  value: string;
 }
 export interface SelectProps {
   name: string;
@@ -36,12 +35,12 @@ export interface SelectProps {
   displayOptionsSetter: ()=>void;
   stateValue: OptionProps;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  valueSetter: Dispatch<SetStateAction<OptionProps>> | ((season: Season)=>{ payload: Season; type: any; });
-  customStyle?: 'searchbar';
+  valueSetter: Dispatch<SetStateAction<OptionProps>> | ((option: OptionProps)=>{ payload: OptionProps; type: string; });
+  selectCustomStyle?: 'searchbar';
 }
 
 export default function Select(props: SelectProps) {
-  const { name, options, displayOptionsState, displayOptionsSetter, stateValue, valueSetter, customStyle } = props;
+  const { name, options, displayOptionsState, displayOptionsSetter, stateValue, valueSetter, selectCustomStyle } = props;
   const toggleSelectDisplay = () => displayOptionsSetter();
   const selectRef = useRef<HTMLDivElement>(null);
   useCloseMenuOnOutsideClick(selectRef, name, displayOptionsState, displayOptionsSetter);
@@ -52,7 +51,7 @@ export default function Select(props: SelectProps) {
       id="select-input"
       className={name + ' relative flex flex-col gap-2 items-center'}
       ref={selectRef}>
-      {!customStyle ? (
+      {!selectCustomStyle ? (
         <Button
           customStyle="select"
           onClick={toggleSelectDisplay}
@@ -92,7 +91,7 @@ export default function Select(props: SelectProps) {
               label={o.name}
               name="season"
               value={o.value}
-              onChange={() => valueSetter({ ...o })}
+              onChange={() => valueSetter(o)}
             />
           ))}
         </fieldset>

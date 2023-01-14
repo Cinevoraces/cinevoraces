@@ -5,7 +5,7 @@ import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '@store/store';
 import { global, toggleBurgerMenu, toggleUserMenu, toggleConnectionModal, toggleArePWVisible } from '@store/slices/global';
-
+import useRecoverStateFromSessionStorage from '@hooks/useRecoverStateFromSessionStorage';
 interface LayoutProps {
   children: React.ReactNode;
 }

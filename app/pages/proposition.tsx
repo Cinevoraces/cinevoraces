@@ -58,7 +58,7 @@ const Proposition: NextPage = () => {
   const [areOptionsDisplayed, setAreOptionsDisplayed] = useState(false);
   const [episode, setEpisode] = useState<EpisodeOption>({
     name: 'Date - Épisode...',
-    value: 0,
+    value: '0',
   });
   const { data: episodes, error: episodesError } = useSWR(() => (userId ? '/episodes' : ''));
   const episodesArray = useRef<EpisodeOption[]>([]);

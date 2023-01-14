@@ -54,7 +54,7 @@ const propositionSubmit = async (
       movie_languages: shrunkMovieDetails?.movie_languages,
       movie_countries: shrunkMovieDetails?.movie_countries,
       episode_id,
-    } as MovieBody;
+    };
     // Sending the proposition to backend
     return await mutationRequestCSR('POST', '/movies', completeMovieObject);
   }

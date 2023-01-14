@@ -134,7 +134,7 @@ const filteredMoviesSlice = createSlice({
           genres && genres.length > 0 ? m.genres.filter((g) => genres?.includes(g)).length > 0 : true,
         (m: CompleteMovie) =>
           countries && countries.length > 0 ? m.countries.filter((g) => countries?.includes(g)).length > 0 : true,
-        (m: CompleteMovie) => (runtime ? m.runtime < Number(runtime[0]) : true),
+        (m: CompleteMovie) => (runtime ? m.runtime <= Number(runtime[0]) : true),
         (m: CompleteMovie) =>
           releaseYear
             ? Number(releaseYear[0]) <= Number(m.release_date.slice(0, 4)) &&

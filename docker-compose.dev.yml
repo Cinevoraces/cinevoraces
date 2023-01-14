@@ -4,7 +4,7 @@ services:
   postgres:
     build:
       context: ./data
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.dev
     env_file:
       - .env.db
     ports:
@@ -29,7 +29,7 @@ services:
       - postgres
     build:
       context: ./api
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.dev
     ports:
       - 3005:3005
     restart: always
@@ -45,31 +45,9 @@ services:
       - api
     build:
       context: ./app
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.dev
     ports:
       - 3000:3000
     restart: always
     volumes:
       - ./app:/app
-  
-  nginx:
-    depends_on:
-      - app
-      - api
-    build:
-      context: ./nginx
-      dockerfile: Dockerfile
-    restart: unless-stopped
-    ports: 
-      - 80:80
-      - 443:443
-    volumes:
-      - ./nginx/conf/:/etc/nginx/conf.d/
-      - ./certbot/www:/var/www/certbot/
-      - ./certbot/conf/:/etc/nginx/ssl/
-
-  certbot:
-    image: certbot/certbot:latest
-    volumes:
-      - ./certbot/www/:/var/www/certbot/
-      - ./certbot/conf/:/etc/letsencrypt/

@@ -7,6 +7,7 @@ import Button from '@components/Input/Button';
 import { TextAreaRef } from '@components/Input';
 import SendLogo from '@public/icons/send-icon.svg';
 import cutText from '@utils/cutText';
+import { useTrail, animated } from '@react-spring/web';
 import type { Comment } from '@custom_types/movies';
 import type { FormEventHandler } from 'react';
 
@@ -55,6 +56,15 @@ const CommentsSection = forwardRef<HTMLTextAreaElement, CommentsSectionProps>(({
     setCommentsExpansionStates(newState);
   };
 
+  // Animation section
+  const trail = useTrail(
+    orderedComments.current.length, {
+      config: { mass: 1, tension: 300, friction: 36 },
+      from: { opacity:0, y:50 },
+      to: { opacity:100, y:0 }
+    }
+  );
+
   return (
     <section
       id="comments-section"
@@ -78,6 +88,7 @@ const CommentsSection = forwardRef<HTMLTextAreaElement, CommentsSectionProps>(({
           <PostCard
             type="form"
             author_pseudo={pseudo!}
+            author_id={id!}
             author_avatar={avatar_url!}
             publishing_date={new Date().toISOString()}>
             <form
@@ -121,83 +132,86 @@ const CommentsSection = forwardRef<HTMLTextAreaElement, CommentsSectionProps>(({
             <p className="text-center lg:col-span-2">Aucun commentaire pour ce film.</p>
           ) : (
             <>
-              {orderedComments.current.map((c, i) => (
-                <PostCard
-                  key={c.author_pseudo}
-                  type="comment"
-                  {...c}>
-                  {
-                    // Go into edition mode
-                    isEditionFormOpened && id === c.author_id ? (
-                      <form
-                        id="comment-form"
-                        action="submit"
-                        className="flex flex-col gap-4"
-                        onSubmit={(e) => {
-                          onSubmit(e);
-                          toggleEditionForm();
-                        }}>
-                        <TextAreaRef
-                          id="comment-form"
-                          ref={ref}
-                          defaultValue={c.comment}
-                        />
-                        <div
-                          id="comment-send-cancel"
-                          className="flex justify-end gap-4">
-                          <Button customStyle="rounded">
-                            <Image
-                              src={SendLogo}
-                              alt=""
-                              width={16}
-                              height={16}
+              {
+                trail.map((props, index) => (
+                  <animated.div style={props} key={index}>
+                    <PostCard
+                      type="comment"
+                      {...orderedComments.current[index]}>
+                      {
+                        // Go into edition mode
+                        isEditionFormOpened && id === orderedComments.current[index].author_id ? (
+                          <form
+                            id="comment-form"
+                            action="submit"
+                            className="flex flex-col gap-4"
+                            onSubmit={(e) => {
+                              onSubmit(e);
+                              toggleEditionForm();
+                            }}>
+                            <TextAreaRef
+                              id="comment-form"
+                              ref={ref}
+                              defaultValue={orderedComments.current[index].comment}
                             />
+                            <div
+                              id="comment-send-cancel"
+                              className="flex justify-end gap-4">
+                              <Button customStyle="rounded">
+                                <Image
+                                  src={SendLogo}
+                                  alt=""
+                                  width={16}
+                                  height={16}
+                                />
                             Confirmer
-                          </Button>
-                          <Button
-                            onClick={toggleEditionForm}
-                            customStyle="rounded">
+                              </Button>
+                              <Button
+                                onClick={toggleEditionForm}
+                                customStyle="rounded">
                             Annuler
-                          </Button>
-                        </div>
-                      </form>
-                    ) : (
-                      // If not, just display the comment, expanded or not
-                      <>
-                        <p>
-                          {
-                            // If the comment has a cut version & expanding state is true
-                            cutComments.current[i][1] && commentsExpansionStates[i]
-                              ? c.comment
-                              : cutComments.current[i][0]
-                          }
-                        </p>
-                        {
-                          // Adding button PostCard buttons
-                          (
-                            <div className="flex justify-end gap-4">
-                              {id === c.author_id && (
-                                <Button
-                                  onClick={toggleEditionForm}
-                                  customStyle="rounded">
-                                  Éditer
-                                </Button>
-                              )}
-                              {c.comment.length > 700 && (
-                                <Button
-                                  onClick={() => toggleCommentExpansion(i)}
-                                  customStyle="rounded">
-                                  {!commentsExpansionStates[i] ? 'Voir plus...' : 'Réduire'}
-                                </Button>
-                              )}
+                              </Button>
                             </div>
-                          )
-                        }
-                      </>
-                    )
-                  }
-                </PostCard>
-              ))}
+                          </form>
+                        ) : (
+                        // If not, just display the comment, expanded or not
+                          <>
+                            <p>
+                              {
+                                // If the comment has a cut version & expanding state is true
+                                cutComments.current[index][1] && commentsExpansionStates[index]
+                                  ? orderedComments.current[index].comment
+                                  : cutComments.current[index][0]
+                              }
+                            </p>
+                            {
+                              // Adding button PostCard buttons
+                              (
+                                <div className="flex justify-end gap-4">
+                                  {id === orderedComments.current[index].author_id && (
+                                    <Button
+                                      onClick={toggleEditionForm}
+                                      customStyle="rounded">
+                                  Éditer
+                                    </Button>
+                                  )}
+                                  {orderedComments.current[index].comment.length > 700 && (
+                                    <Button
+                                      onClick={() => toggleCommentExpansion(index)}
+                                      customStyle="rounded">
+                                      {!commentsExpansionStates[index] ? 'Voir plus...' : 'Réduire'}
+                                    </Button>
+                                  )}
+                                </div>
+                              )
+                            }
+                          </>
+                        )
+                      }
+                    </PostCard>
+                  </animated.div>
+                ))      
+              }
             </>
           )
         }

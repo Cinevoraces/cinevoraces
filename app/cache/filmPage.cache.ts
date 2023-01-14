@@ -1,16 +1,20 @@
-import type { CompleteMovie, Interaction } from '@custom_types/movies';
+import type { CompleteMovie, Interactions } from '@custom_types/index';
+import type { MutableRefObject } from 'react';
 
 export default async function reviewMutation (
   type: 'bookmarked' | 'viewed' | 'liked' | 'rating' | 'comment',
-  baseInteractionProps: Interaction[],
-  data: CompleteMovie[] | undefined
+  baseInteractionsArray: Interactions[],
+  data: CompleteMovie[],
+  radioInputValue: MutableRefObject<number | null>,
+  commentFormRef: React.RefObject<HTMLTextAreaElement>,
 ) {
   // Initial state for cache
   const defaultUserReview = { bookmarked: false, viewed: false, liked: false, rating: null, comment: null };
   // Determinate property label for user_review
   const metricProp = baseInteractionsArray.filter((i) => i.type === type)[0].counterName;
   // Deal both with user_review absence or presence in cache
-  const review = user_review ? user_review : defaultUserReview;
+  const movie = data[0];
+  const review = movie.user_review ? movie.user_review : defaultUserReview;
   switch (type){
     default:
       return [

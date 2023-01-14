@@ -9,6 +9,7 @@ import type User from './user';
 import type { Proposition } from './proposition';
 import type { HandleSubmitAction, HandleSubmitActions } from './administration';
 import type { TeamMember } from './teamMember';
+import type Interactions from './interactions';
 
 import { Roles } from './global';
 
@@ -24,6 +25,7 @@ export type{
   Proposition,
   HandleSubmitAction, HandleSubmitActions,
   TeamMember,
+  Interactions,
 };
 
 export { Roles };

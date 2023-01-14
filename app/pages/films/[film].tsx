@@ -14,10 +14,10 @@ import {
   Languages,
   Runtime,
   Casting,
-} from '@components/FilmPageComponents';
+} from 'pages_chunks/film/UI';
 import { Button, BaseInteraction, RatingInteraction } from '@components/Input';
 import PostCard from '@components/PostCard';
-import { CommentsSection } from '@components/FilmPageComponents';
+import { CommentsSection } from 'pages_chunks/film/UI';
 import { getDataFromEndpointSSR, mutationRequestCSR } from '@utils/fetchApi';
 import { useAppSelector } from '@store/store';
 import { user } from '@store/slices/user';
@@ -25,17 +25,13 @@ import { toast } from 'react-hot-toast';
 import cutText from '@utils/cutText';
 import type { NextPage, GetStaticProps } from 'next';
 import type { ParsedUrlQuery } from 'querystring';
-import type { MinimalMovie, CompleteMovie } from '@custom_types/movies';
+import type { MinimalMovie, CompleteMovie, Interactions } from '@custom_types/index';
 import type { BodyData } from '@utils/fetchApi';
 import { useRouter } from 'next/router';
 import Loader from '@components/Loader';
+import reviewMutation from 'cache/filmPage.cache';
 interface FilmProps {
   movies: CompleteMovie[];
-}
-interface Interactions {
-  type: 'bookmarked' | 'viewed' | 'liked' | 'rating';
-  counterName: 'watchlist_count' | 'views_count' | 'likes_count' | 'ratings_count';
-  counter: number;
 }
 
 // Data fetching global conf for both ISR and SWR cache
@@ -56,10 +52,10 @@ metadatas.forEach((dataName) => (selectQueryString += `&select[${dataName}]=true
 
 const Film: NextPage<FilmProps> = ({ movies }) => {
   const router = useRouter();
-  if (router.isFallback){
+  if (router.isFallback) {
     return (
-      <main className='custom-container'>
-        <Loader/>
+      <main className="custom-container">
+        <Loader />
       </main>
     );
   }
@@ -84,68 +80,17 @@ const Film: NextPage<FilmProps> = ({ movies }) => {
     { type: 'rating', counterName: 'ratings_count', counter: ratings_count },
   ];
 
-  // data isn't used here, just let for future improvements and manipulations
-  const reviewMutation = async (
-    type: 'bookmarked' | 'viewed' | 'liked' | 'rating' | 'comment',
-    data: CompleteMovie[] | undefined
-  ) => {
-    // Initial state for cache
-    const defaultUserReview = { bookmarked: false, viewed: false, liked: false, rating: null, comment: null };
-    // Determinate property label for user_review properties other than comment
-    let metricProp ='';
-    if (type !== 'comment'){
-      metricProp = baseInteractionsArray.filter((i) => i.type === type)[0].counterName;
-    }
-    // Deal both with user_review absence or presence in cache
-    const review = user_review ? user_review : defaultUserReview;
-    switch (type){
-      default:
-        return [
-          {
-            ...movie,
-            user_review: { ...review, [type]: !review[type] },
-            metrics: {
-              ...movie.metrics,
-              [metricProp]: !review[type] ? movie.metrics[metricProp] + 1 : movie.metrics[metricProp] - 1,
-            },
-          },
-        ];
-      case 'rating':
-        return [
-          {
-            ...movie,
-            user_review: { ...review, rating: radioInputValue.current },
-            metrics: {
-              ...movie.metrics,
-              ratings_count: !review.rating ? movie.metrics.ratings_count + 1 : movie.metrics.ratings_count,
-              avg_rating: !review.rating
-                ? (movie.metrics.avg_rating * movie.metrics.ratings_count + radioInputValue.current!) /
-                  (movie.metrics.ratings_count + 1)
-                : (movie.metrics.avg_rating * movie.metrics.ratings_count - review.rating + radioInputValue.current!) /
-                  movie.metrics.ratings_count,
-            },
-          },
-        ];
-      case 'comment':
-        if (!commentFormRef.current){
-          return;
-        }
-        return [
-          {
-            ...movie,
-            user_review: { ...review, comment: commentFormRef.current.value },
-          }
-        ];
-    }
-  };
-
   const handleInteraction = async (type: 'bookmarked' | 'viewed' | 'liked' | 'rating' | 'comment') => {
     if (!userId) {
       return toast.error('Connectez-vous d\'abord.');
     }
     const body: BodyData = {};
     // 1 - Mutate the cache first, without revalidation
-    const mutatedData = await mutate(await reviewMutation(type, data), false);
+    // const mutatedData = await mutate(await reviewMutation(type, data), false);
+    const mutatedData = await mutate(
+      await reviewMutation(type, baseInteractionsArray, data, radioInputValue, commentFormRef),
+      false
+    );
     // 2 - Do the API call
     body[type] = mutatedData![0].user_review![type];
     const res = await mutationRequestCSR('PUT', `/reviews/${movieId}`, body);
@@ -164,14 +109,14 @@ const Film: NextPage<FilmProps> = ({ movies }) => {
   };
 
   const commentFormRef = useRef<HTMLTextAreaElement>(null);
-  const handleCommentSubmit = (e: FormEvent<Element>) => { 
+  const handleCommentSubmit = (e: FormEvent<Element>) => {
     e.preventDefault();
     handleInteraction('comment');
   };
 
   // If user logs directly on this page after rendering, hydrate the page with its review
   useEffect(() => {
-    mutate(); 
+    mutate();
   }, [mutate, userId]);
 
   const [cutPresentationText, isPresentationCut] = cutText(movie.presentation.presentation, 700);
@@ -179,6 +124,13 @@ const Film: NextPage<FilmProps> = ({ movies }) => {
   const toggleExpandPresentation = () => {
     setIsPresentationExpanded(!isPresentationExpanded);
   };
+
+  // Tailwind bug forces to let this part, even commented...
+  // const dataTitleStyle = 'text-lg uppercase text-light-gray pr-4 ';
+  // const dataStyle = 'text-lg font-medium text-white ';
+  // const hListStyle = 'flex items-center flex-wrap';
+  // const hListTypeStyle = dataTitleStyle + 'flex-shrink-0 ';
+  // const hListDataStyle = 'text-orange-primary flex-1 flex gap-1 items-end flex-wrap ';
 
   return (
     <>
@@ -216,18 +168,25 @@ const Film: NextPage<FilmProps> = ({ movies }) => {
                     counter={ratings_count}
                     isClicked={!user_review || !user_review.rating ? false : true}
                     ratingHandler={ratingHandler}
-                    value={(user_review?.rating) ? user_review.rating : undefined}
+                    value={user_review?.rating ? user_review.rating : undefined}
                   />
                 </div>
               </div>
-              <div id='metadatas' className='flex flex-col gap-3 xl:col-span-3 xl:w-full'>
+              <div
+                id="metadatas"
+                className="flex flex-col gap-3 xl:col-span-3 xl:w-full">
                 <Title {...movie} />
                 <OriginalTitle {...movie} />
-                <Rating rate={avg_rating} type='global' />
-                {
-                  (user_review && typeof user_review.rating === 'number' && user_review.rating !== 0 ) &&
-                    <Rating rate={user_review.rating} type='user' />
-                }
+                <Rating
+                  rate={avg_rating}
+                  type="global"
+                />
+                {user_review && typeof user_review.rating === 'number' && user_review.rating !== 0 && (
+                  <Rating
+                    rate={user_review.rating}
+                    type="user"
+                  />
+                )}
                 <Directors {...movie} />
                 <Genres {...movie} />
                 <Countries {...movie} />
@@ -235,33 +194,35 @@ const Film: NextPage<FilmProps> = ({ movies }) => {
                 <Runtime {...movie} />
                 <Casting {...movie} />
               </div>
-              <div id='presentation' className='sm:col-span-2 lg:col-span-1 xl:col-span-3 '>
+              <div
+                id="presentation"
+                className="sm:col-span-2 lg:col-span-1 xl:col-span-3 ">
                 <PostCard
                   type="presentation"
                   {...movie.presentation}
-                  created_at={movie.publishing_date}
-                >
-                  <p className='text-ellipsis'>
-                    {
-                      (!isPresentationCut || isPresentationExpanded) ?
-                        movie.presentation.presentation
-                        : cutPresentationText
-                    }
+                  created_at={movie.publishing_date}>
+                  <p className="text-ellipsis">
+                    {!isPresentationCut || isPresentationExpanded
+                      ? movie.presentation.presentation
+                      : cutPresentationText}
                   </p>
-                  {
-                    (isPresentationCut) &&
-                    <div className='flex justify-end'>
-                      <Button onClick={toggleExpandPresentation} customStyle='rounded'>
-                        {
-                          (!isPresentationExpanded) ? 'Voir plus...' : 'Réduire'
-                        }
+                  {isPresentationCut && (
+                    <div className="flex justify-end">
+                      <Button
+                        onClick={toggleExpandPresentation}
+                        customStyle="rounded">
+                        {!isPresentationExpanded ? 'Voir plus...' : 'Réduire'}
                       </Button>
                     </div>
-                  }
+                  )}
                 </PostCard>
               </div>
             </section>
-            <CommentsSection {...movie} ref={commentFormRef} onSubmit={(e) => handleCommentSubmit(e)} />
+            <CommentsSection
+              {...movie}
+              ref={commentFormRef}
+              onSubmit={(e) => handleCommentSubmit(e)}
+            />
           </>
         )}
       </main>
@@ -276,7 +237,7 @@ interface Params extends ParsedUrlQuery {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const getStaticPaths: ()=>Promise<{ paths: { params: {} }[]; fallback: boolean | string; } | []> = async () => {
+export const getStaticPaths: ()=>Promise<{ paths: { params: {} }[]; fallback: boolean | string } | []> = async () => {
   try {
     const movies = await getDataFromEndpointSSR('/movies?where[is_published]=true');
     const paths = movies.map((movie: MinimalMovie) => ({ params: { film: '' + movie.id } }));
@@ -301,8 +262,7 @@ export const getStaticProps: GetStaticProps<FilmProps, Params> = async (context)
         revalidate: 60,
       },
     };
-  } catch (err){
+  } catch (err) {
     return { notFound: true };
   }
 };
-
