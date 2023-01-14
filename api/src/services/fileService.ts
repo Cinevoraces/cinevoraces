@@ -54,7 +54,14 @@ class FileService {
    * @param {Readable} stream Stream to save
    */
   public async saveFile(path: string, stream: Readable): Promise<void> {
-    stream.pipe(fs.createWriteStream(path));
+    const ws = fs.createWriteStream(path);
+    stream.pipe(ws);
+
+    return new Promise<void>((resolve, reject) => {
+      stream.on('error', reject);
+      stream.on('finish', resolve);
+      stream.on('close', resolve);
+    });
   };
 
   /**

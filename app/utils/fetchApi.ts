@@ -58,15 +58,15 @@ const mutationRequestCSR = async (method: 'POST' | 'PUT' | 'DELETE', endpoint: s
   console.log('typeof body is FormData: ', body instanceof FormData, 'body : ', body);
   const options: FetchOptions = {
     method,
-    headers: {
-      'Content-Type': (body instanceof FormData) ? 'multipart/form-data; boundary=???' : 'application/json',
-    },
+    headers: { },
     credentials: 'include',
     body: (body instanceof FormData) ? body : JSON.stringify(body),
   };
   if (localStorage.accessToken && options.headers) {
     options.headers['Authorization'] = 'Bearer ' + localStorage.accessToken;
   }
+  // Content-type have to be unspecified for multipart-formdata
+  if (!(body instanceof FormData)) options.headers['Content-type'] = 'application/json';
   const res = await fetch(baseUrlCSR + endpoint, options);
   return handleResponse(res);
 };

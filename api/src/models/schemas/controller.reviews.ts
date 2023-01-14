@@ -27,7 +27,7 @@ export const PUTReviews = {
     },
   },
   response: {
-    200: {
+    201: {
       type: 'object',
       properties: {
         message: { type: 'string' },

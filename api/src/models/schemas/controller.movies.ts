@@ -139,7 +139,7 @@ export const PUTMovies = {
     required: ['movie_id', 'presentation'],
   },
   response: {
-    200: { 
+    201: { 
       type: 'object',
       properties: {
         message: { type: 'string' },

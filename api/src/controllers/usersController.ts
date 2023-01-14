@@ -58,7 +58,7 @@ export default async (fastify: FastifyInstance) => {
       await _userService.updateUser(request.user.id, update_user);
 
       reply
-        .code(204)
+        .code(201)
         .send({ message: EResponseMessages.UPDATE_USER_SUCCESS });
     },
   });
@@ -93,24 +93,29 @@ export default async (fastify: FastifyInstance) => {
         _errorService.send(EErrorMessages.INVALID_FILE_SIZE, 413);
       });
 
-      // Save file to server (Cloudinary uploads supports only local files)
-      const filePath = `${process.env.STORAGE_TEMP}/${id}_${pseudo}.${avatar.mimetype.split('/')[1]}`;
-      await _fileService.saveFile(filePath, avatar.file);
+      try {
+        // Save file to server (Cloudinary uploads supports only local files)
+        const filePath = `${_fileService.paths.temp}/${id}_${pseudo}.${avatar.mimetype.split('/')[1]}`;
+        await _fileService.saveFile(filePath, avatar.file);
+  
+        // Upload file to Cloudinary
+        const cloudinaryRes = await _userService.cloudinaryUpload(`avatar_${id}_${pseudo}`, filePath);
+        
+        if (!cloudinaryRes)
+          _errorService.send(EErrorMessages.CLOUDINARY_FAILURE, 500);
+        // Delete file from server
+        _fileService.deleteFile(filePath);
+        // Update user avatar url
+        await _userService.updateUser(id, {
+          avatar_url: cloudinaryRes.secure_url,
+        });
+        reply
+          .code(201)
+          .send({ message: EResponseMessages.UPDATE_USER_PIC_SUCCESS });
 
-      // Upload file to Cloudinary
-      const cloudinaryRes = await _userService.cloudinaryUpload(`avatar_${id}_${pseudo}`, filePath);
-      if (!cloudinaryRes)
-        _errorService.send(EErrorMessages.CLOUDINARY_FAILURE, 500);
-      
-      // Delete file from server
-      _fileService.deleteFile(filePath);
-
-      // Update user avatar url
-      await _userService.updateUser(id, { cloudinaryRes });
-
-      reply
-        .code(204)
-        .send({ message: EResponseMessages.UPDATE_USER_PIC_SUCCESS });
+      } catch (err) {
+        _errorService.send(err.message, 500);
+      }
     },
   });
   
@@ -134,7 +139,7 @@ export default async (fastify: FastifyInstance) => {
       // Delete user
       await _userService.deleteUser(id);
       reply
-        .code(204)
+        .code(200)
         .send({ message: EResponseMessages.DELETE_USER_SUCCESS });
     },
   });

@@ -59,7 +59,7 @@ export default async (fastify: FastifyInstance) => {
       };
 
       reply
-        .code(200)
+        .code(201)
         .send(response);
     },
   });
@@ -99,7 +99,7 @@ export default async (fastify: FastifyInstance) => {
       const { movieId, userId } = request.params;
       await _reviewService.deleteCommentAsAdmin(movieId, userId);
       reply
-        .code(204)
+        .code(201)
         .send({ message: EResponseMessages.DELETE_COMMENT_SUCCESS });  
     },
   });

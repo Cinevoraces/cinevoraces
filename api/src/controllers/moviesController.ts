@@ -82,7 +82,7 @@ export default async (fastify: FastifyInstance) => {
       const { _movieService } = this;
       await _movieService.updateUnpublishedMovie(request.body as PPutMovie);
       reply
-        .code(200)
+        .code(201)
         .send({ message: EResponseMessages.PROPOSITION_UPDATE_SUCCESS });
     },
   });
@@ -101,7 +101,7 @@ export default async (fastify: FastifyInstance) => {
       const { _movieService } = this;
       await _movieService.publishMovie(request.params.id);
       reply
-        .code(204)
+        .code(201)
         .send({ message: EResponseMessages.PROPOSITION_PUBLICATION_SUCCESS });
     },
   });
@@ -120,7 +120,7 @@ export default async (fastify: FastifyInstance) => {
       const { _movieService } = this;
       await _movieService.deleteMovie(request.params.id);
       reply
-        .code(204)
+        .code(201)
         .send({ message: EResponseMessages.DELETE_MOVIE_SUCCESS });
     },
   });

@@ -21,7 +21,7 @@ export const PUTMoviesAsAdmin = {
     required: ['password'],
   },
   response: {
-    204: {
+    201: {
       type: 'object',
       properties: {
         message: { type: 'string' },
@@ -52,7 +52,7 @@ export const DELETEMoviesAsAdmin = {
     required: ['password'],
   },
   response: {
-    204: {
+    201: {
       type: 'object',
       properties: {
         message: { type: 'string' },
@@ -120,7 +120,7 @@ export const DELETEReviewsAsAdmin = {
     },
   },
   response: {
-    204: {
+    201: {
       type: 'object',
       properties: {
         message: { type: 'string' },
@@ -176,7 +176,7 @@ export const DELETEUsersAsAdmin = {
     required: ['id'],
   },
   response: {
-    204: {
+    201: {
       type: 'object',
       properties: {
         message: { type: 'string' },

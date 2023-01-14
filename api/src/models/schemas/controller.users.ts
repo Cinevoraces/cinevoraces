@@ -92,7 +92,7 @@ export const PUTUsers = {
     },
   },
   response: {
-    204: {
+    201: {
       properties: {
         message: { type: 'string' },
       },
@@ -111,7 +111,7 @@ export const PUTUsersAvatar = {
   `,
   tags: ['Users'],
   response: {
-    204: {
+    201: {
       properties: {
         message: { type: 'string' },
       },

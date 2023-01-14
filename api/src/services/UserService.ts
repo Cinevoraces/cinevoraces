@@ -1,6 +1,7 @@
 import type { PoolClient } from 'pg';
 import type { FastifyPluginCallback } from 'fastify';
 import type { PQuerystring, PUser } from '../models/types/_index';
+import type { UploadApiResponse } from 'cloudinary';
 import { v2 } from 'cloudinary';
 import DatabaseService from './databaseService';
 import plugin from 'fastify-plugin';
@@ -103,19 +104,23 @@ class UserService extends DatabaseService {
   public async cloudinaryUpload(
     userPseudo: string,
     filePath: string
-  ): Promise<string> {
+  ): Promise<UploadApiResponse> {
     v2.config({ cloudinary_url: process.env.CLOUDINARY_URL });
-    const { url } = await v2.uploader.upload(filePath, {
-      folder: 'cinevoraces',
-      tags: 'avatar',
-      width: 200,
-      height: 200,
-      crop: 'fill',
-      gravity: 'faces',
-      format: 'jpg',
-      public_id: userPseudo,
-    });
-    return url;
+    try {
+      const cloudinaryRes = await v2.uploader.upload(filePath, {
+        folder: 'cinevoraces',
+        tags: 'avatar',
+        width: 200,
+        height: 200,
+        crop: 'fill',
+        gravity: 'faces',
+        format: 'jpeg',
+        public_id: userPseudo,
+      });
+      return cloudinaryRes;
+    } catch (err) {
+      console.error(err);
+    }
   }
 };
 

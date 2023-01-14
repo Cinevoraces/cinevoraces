@@ -85,7 +85,9 @@ export const handleAvatarUpload = (e: React.FormEvent, avatar: File | undefined,
   const formData = new FormData();
   if (avatar) {
     formData.append('avatar', avatar, avatar.name);
-    console.log('formData : ', formData);
     tryCatchWrapper(mutationRequestCSR)('PUT', '/users/avatar', formData);
+    // Ajouter la récup des messages de succès avec les 201 (à la place des 204)
+    userMutation();
+    toast.success('Photo de profil mise à jour');
   }
 };
