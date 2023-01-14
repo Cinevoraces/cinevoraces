@@ -1,38 +1,26 @@
-import type { PoolClient, Pool } from 'pg';
+import type { PoolClient } from 'pg';
 
 /**
  * @description DatabaseService contains shared SQL query methods, meant to be extended by other services.
  * Any SQL/Querystring methods that are shared between services should be placed here.
  */
 export default class DatabaseService {
-
-  private _pool: Pool;
   private _client: PoolClient;
 
-  constructor(pool: Pool) {
-    this._pool = pool;
+  constructor(client: PoolClient) {
+    this._client = client;
   }
 
-  /**
-   * @description Terminate the pool.
-   */
-  public async disconnectClient(): Promise<void> {
-    await this._pool.end();
-  }
-  
   /**
    * @description Connect a client to the pool to execute a SQL query before releasing it.
    * @param {object} query SQL query to be executed.
    * @returns {object} Object containing the number of affected rows and the rows.
    */
   public async requestDatabase(
-    query: { text: string, values?: Array<unknown> }
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  ): Promise<{ rowCount: number, rows: Array<any> }> {
-    this._client = await this._pool.connect();
+    query: { text: string; values?: Array<unknown> }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  ): Promise<{ rowCount: number; rows: Array<any> }> {
     const { rowCount, rows } = await this._client.query(query);
-    this._client.release();
-
     return { rowCount, rows };
   }
 
@@ -48,19 +36,21 @@ export default class DatabaseService {
   ): string {
     const keys = Object.keys(columns);
     if (keys.length === 0) return undefined;
-    const query = keys.reduce((acc, key) => {
-      // Check if key exist in safeCheck
-      if (safeCheck.find((value) => value === key)) {
-        if (columns[key] === false) {
-          return [...acc];
+    const query = keys
+      .reduce((acc, key) => {
+        // Check if key exist in safeCheck
+        if (safeCheck.find((value) => value === key)) {
+          if (columns[key] === false) {
+            return [...acc];
+          } else {
+            return [...acc, `${key}`];
+          }
         } else {
-          return [...acc, `${key}`];
+          throw new Error(`Unauthorized query argument: "${key}"`);
         }
-      } else {
-        throw new Error(`Unauthorized query argument: "${key}"`);
-      }
-    }, []).join(', ');
-    
+      }, [])
+      .join(', ');
+
     return query.length > 0 ? query : undefined;
   }
 
@@ -77,21 +67,27 @@ export default class DatabaseService {
     join: 'AND' | 'OR' | ',',
     safeCheck: Array<string>,
     count?: number
-  ): { query: string, count: number, values: Array<unknown> } {
-    if (columns === undefined || columns === null) return { query: '', count: 0, values: []};
+  ): { query: string; count: number; values: Array<unknown> } {
+    if (columns === undefined || columns === null)
+      return { query: '', count: 0, values: []};
     const keys = Object.keys(columns);
     const values = Object.values(columns);
-    const query = keys.reduce((acc, key, index) => {
-      // Check if key exist in safeCheck
-      if (safeCheck.find((value) => value === key)) {
-        // Return the key and the value index according to *count* variable 
-        return [...acc, `${key}=$${Number(index+1) + (count || 0)}`];
-      } else {
-        throw new Error(`Unauthorized query argument: "${key}"`);
-      }
-    }, []).join(` ${join} `);
-  
-    return { 
-      query, count: (count || keys.length), values };
+    const query = keys
+      .reduce((acc, key, index) => {
+        // Check if key exist in safeCheck
+        if (safeCheck.find((value) => value === key)) {
+          // Return the key and the value index according to *count* variable
+          return [...acc, `${key}=$${Number(index + 1) + (count || 0)}`];
+        } else {
+          throw new Error(`Unauthorized query argument: "${key}"`);
+        }
+      }, [])
+      .join(` ${join} `);
+
+    return {
+      query,
+      count: count || keys.length,
+      values,
+    };
   }
 };

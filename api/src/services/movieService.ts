@@ -1,7 +1,6 @@
-import type { Pool } from 'pg';
+import type { PoolClient } from 'pg';
 import type { FastifyPluginCallback } from 'fastify';
 import type { PQuerystring, dbEpisode, PPostMovie, PPutMovie, PMovie, dbSeason } from '../models/types/_index';
-import pgPool from '../utils/postgresPool';
 import DatabaseService from './databaseService';
 import plugin from 'fastify-plugin';
 
@@ -10,21 +9,38 @@ import plugin from 'fastify-plugin';
  * related to movies routes.
  */
 class MovieService extends DatabaseService {
-  constructor(pool: Pool) {
-    super(pool);
+  constructor(client: PoolClient) {
+    super(client);
   }
-  
+
   /**
    * @description Get movies using query parameters.
    * @param {object} query object containing queries parameters
    * @returns Array of movies.
    */
-  public async getMoviesByQuery(query: PQuerystring): Promise<{ rowCount: number, rows: Array<PMovie> }> {
+  public async getMoviesByQuery(
+    query: PQuerystring
+  ): Promise<{ rowCount: number; rows: Array<PMovie> }> {
     const enums = {
-      where: [ 'id', 'author_id', 'season_number', 'is_published', 'french_title'],
+      where: [
+        'id',
+        'author_id',
+        'season_number',
+        'is_published',
+        'french_title',
+      ],
       select: [
-        'casting', 'directors', 'runtime', 'episode_number', 'release_date',
-        'genres', 'countries', 'languages', 'presentation', 'metrics', 'comments',
+        'casting',
+        'directors',
+        'runtime',
+        'episode_number',
+        'release_date',
+        'genres',
+        'countries',
+        'languages',
+        'presentation',
+        'metrics',
+        'comments',
       ],
     };
     const { select, where, limit, sort } = query;
@@ -65,7 +81,7 @@ class MovieService extends DatabaseService {
     });
 
     return { rowCount, rows };
-  };
+  }
 
   /**
    * @description Create a movie.
@@ -76,7 +92,7 @@ class MovieService extends DatabaseService {
       text: 'SELECT new_movie($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13)',
       values: Object.values(payload),
     });
-  };
+  }
 
   /**
    * @description Update movie.
@@ -87,7 +103,7 @@ class MovieService extends DatabaseService {
       text: 'UPDATE movie SET presentation = $1 WHERE id = $2;',
       values: [payload.presentation, payload.movie_id],
     });
-  };
+  }
 
   /**
    * @description Update is_publish movie state.
@@ -98,7 +114,7 @@ class MovieService extends DatabaseService {
       text: 'UPDATE movie SET is_published = true WHERE id = $1;',
       values: [id],
     });
-  };
+  }
 
   /**
    * @description Delete one movie.
@@ -109,19 +125,22 @@ class MovieService extends DatabaseService {
       text: 'DELETE FROM movie WHERE id = $1;',
       values: [id],
     });
-  };
+  }
 
   /**
    * @description Get all seasons objects.
    * @returns Array of seasons.
    */
-  public async getSeasons(): Promise<{ rowCount: number, rows: Array<unknown> }> {
+  public async getSeasons(): Promise<{
+    rowCount: number;
+    rows: Array<unknown>;
+  }> {
     const { rowCount, rows } = await this.requestDatabase({
       text: 'SELECT * FROM seasonView;',
       values: [],
     });
     return { rowCount, rows };
-  };
+  }
 
   /**
    * @description Get one season object by season number.
@@ -134,8 +153,8 @@ class MovieService extends DatabaseService {
       values: [seasonNumber],
     });
 
-    return rowCount? rows[0] : null;
-  };
+    return rowCount ? rows[0] : null;
+  }
 
   /**
    * @description Create a new season and it's episodes.
@@ -143,18 +162,25 @@ class MovieService extends DatabaseService {
    * @param {number} seasonNumber season's number
    * @param {Date} firstMondayOfTheYear season's first monday
    */
-  public async insertNewSeason(year: number, seasonNumber: number, firstMondayOfTheYear: Date): Promise<void> {
+  public async insertNewSeason(
+    year: number,
+    seasonNumber: number,
+    firstMondayOfTheYear: Date
+  ): Promise<void> {
     await this.requestDatabase({
       text: 'SELECT new_season($1, $2, $3);',
       values: [seasonNumber, year, firstMondayOfTheYear],
     });
-  };
+  }
 
   /**
    * @description Get the next 5 available episodes within 1 month.
-   * @returns 
+   * @returns
    */
-  public async getAvailableEpisodes(): Promise<{ rowCount: number, rows: dbEpisode[] }> {
+  public async getAvailableEpisodes(): Promise<{
+    rowCount: number;
+    rows: dbEpisode[];
+  }> {
     const { rowCount, rows } = await this.requestDatabase({
       text: ` SELECT ep.id, ep.season_number, ep.episode_number, ep.publishing_date
                 FROM "episode" ep
@@ -167,7 +193,7 @@ class MovieService extends DatabaseService {
               LIMIT 5;`,
     });
     return { rowCount, rows };
-  };
+  }
 
   /**
    * @description Check for one movie using id.
@@ -180,7 +206,7 @@ class MovieService extends DatabaseService {
       values: [id],
     });
     return rowCount ? true : false;
-  };
+  }
 
   /**
    * @description Find a movie using it's name
@@ -188,7 +214,10 @@ class MovieService extends DatabaseService {
    * @param {string} frenchTitle Movie's french title
    * @returns Boolean.
    */
-  public async checkMovieExistanceByName(originalTitle: string, frenchTitle: string): Promise<boolean> {
+  public async checkMovieExistanceByName(
+    originalTitle: string,
+    frenchTitle: string
+  ): Promise<boolean> {
     const { rowCount } = await this.requestDatabase({
       text: ` SELECT french_title, original_title,
               FROM movie
@@ -197,7 +226,7 @@ class MovieService extends DatabaseService {
       values: [originalTitle, frenchTitle],
     });
     return rowCount ? true : false;
-  };
+  }
 
   /**
    * @description Check if an episode is available.
@@ -212,7 +241,7 @@ class MovieService extends DatabaseService {
       values: [id],
     });
     return rowCount ? true : false;
-  };
+  }
 
   /**
    * @description Check if a movie is published.
@@ -220,7 +249,10 @@ class MovieService extends DatabaseService {
    * @param {number} userId user's id (optional)
    * @returns Boolean.
    */
-  public async isMoviePublished(movieId: number, userId?: number): Promise<boolean> {
+  public async isMoviePublished(
+    movieId: number,
+    userId?: number
+  ): Promise<boolean> {
     const { rowCount } = await this.requestDatabase({
       text: ` SELECT is_published FROM movie
               WHERE is_published = false
@@ -229,7 +261,7 @@ class MovieService extends DatabaseService {
       values: [movieId, userId],
     });
     return rowCount ? true : false;
-  };
+  }
 
   /**
    * @description Check if a user already has a pending proposition.
@@ -244,17 +276,17 @@ class MovieService extends DatabaseService {
       values: [id],
     });
     return rowCount ? true : false;
-  };
+  }
 };
 
 // Decorate FastifyInstance with MovieService
-export type TMovieService = typeof MovieServiceInstance;
-const MovieServiceInstance = new MovieService(pgPool);
+export type TMovieService = InstanceType<typeof MovieService>;
 export default plugin((async (fastify, opts, done) => {
   // Check if service is already registered
   if (fastify.hasDecorator('_movieService'))
     return fastify.log.warn('movieService already registered');
-
+  
+  const MovieServiceInstance = new MovieService(fastify._postgres.client);
   fastify.decorate('_movieService', { getter: () => MovieServiceInstance });
   done();
 }) as FastifyPluginCallback);

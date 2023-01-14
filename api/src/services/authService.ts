@@ -1,7 +1,6 @@
-import type { Pool } from 'pg';
+import type { PoolClient } from 'pg';
 import type { FastifyPluginCallback } from 'fastify';
 import type { ERoles } from '../models/enums/ERoles';
-import pgPool from '../utils/postgresPool';
 import DatabaseService from './databaseService';
 import bcrypt from 'bcryptjs';
 import plugin from 'fastify-plugin';
@@ -11,8 +10,8 @@ import plugin from 'fastify-plugin';
  * related to authentication routes.
  */
 class AuthService extends DatabaseService {
-  constructor(pool: Pool) {
-    super(pool);
+  constructor(client: PoolClient) {
+    super(client);
   }
 
   /**
@@ -23,7 +22,7 @@ class AuthService extends DatabaseService {
   public async hashString(string: string): Promise<string> {
     const salt = await bcrypt.genSalt(10);
     return await bcrypt.hash(string, salt);
-  };
+  }
 
   /**
    * @description Compare string with hashed one.
@@ -33,7 +32,7 @@ class AuthService extends DatabaseService {
    */
   public async compareStrings(s1: string, s2: string): Promise<boolean> {
     return await bcrypt.compare(s1, s2);
-  };
+  }
 
   /**
    * @description Get a user by pseudo or mail, returns only those fields.
@@ -42,9 +41,9 @@ class AuthService extends DatabaseService {
    * @returns Object containing *pseudo, mail*.
    */
   public async getUserByPseudoOrMail(
-    pseudo: string, 
+    pseudo: string,
     mail: string
-  ): Promise<{ pseudo: string, mail: string }> {
+  ): Promise<{ pseudo: string; mail: string }> {
     const { rows } = await this.requestDatabase({
       text: ` SELECT pseudo, mail
               FROM "user"
@@ -52,7 +51,7 @@ class AuthService extends DatabaseService {
       values: [pseudo, mail],
     });
     return rows[0];
-  };
+  }
 
   /**
    * @description Get token construction data of one user using id or pseudo.
@@ -60,23 +59,23 @@ class AuthService extends DatabaseService {
    * @returns Object containing token content.
    */
   public async getPrivateUser(
-    value: { id: number } | { pseudo: string } | { mail: string },
-  ): Promise<{ 
-      id: number,
-      pseudo: string,
-      mail: string,
-      role: ERoles,
-      avatar_url: string
+    value: { id: number } | { pseudo: string } | { mail: string }
+  ): Promise<{
+      id: number;
+      pseudo: string;
+      mail: string;
+      role: ERoles;
+      avatar_url: string;
     }> {
     const column: string = Object.keys(value)[0];
     const { rows } = await this.requestDatabase({
       text: ` SELECT id, pseudo, mail, password, role, avatar_url
               FROM "user"
               WHERE ${Object.keys(value)[0]} = $1;`,
-      values: [(value[column as keyof typeof value])],
+      values: [value[column as keyof typeof value]],
     });
     return rows[0];
-  };
+  }
 
   /**
    * @description Create a new user.
@@ -92,7 +91,7 @@ class AuthService extends DatabaseService {
               VALUES ($1, $2, $3);`,
       values: [pseudo, mail, password],
     });
-  };
+  }
 
   /**
    * @description Compare given string with user password from database.
@@ -100,7 +99,10 @@ class AuthService extends DatabaseService {
    * @param {string} password string to compare.
    * @returns boolean
    */
-  public async verifyPassword(userId: number, password: string): Promise<boolean> {
+  public async verifyPassword(
+    userId: number,
+    password: string
+  ): Promise<boolean> {
     const { rows } = await this.requestDatabase({
       text: ` SELECT password
               FROM "user"
@@ -112,13 +114,13 @@ class AuthService extends DatabaseService {
 };
 
 // Decorate FastifyInstance with AuthService
-export type TAuthService = typeof AuthServiceInstance;
-const AuthServiceInstance = new AuthService(pgPool);
+export type TAuthService = InstanceType<typeof AuthService>;
 export default plugin((async (fastify, opts, done) => {
   // Check if service is already registered
   if (fastify.hasDecorator('_authService'))
     return fastify.log.warn('authService already registered');
-
+  
+  const AuthServiceInstance = new AuthService(fastify._postgres.client);
   fastify.decorate('_authService', { getter: () => AuthServiceInstance });
   done();
 }) as FastifyPluginCallback);

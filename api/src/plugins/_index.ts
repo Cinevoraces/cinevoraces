@@ -5,6 +5,7 @@ import fastifySwagger from './fastifySwagger';
 import fastifyCookie from './fastifyCookie';
 import fastifyCors from './fastifyCors';
 import fastifyJwt from './fastifyJwt';
+import postgresPool from './postgresPool';
 
 /**
  * **Plugins Registration _index**
@@ -17,4 +18,5 @@ export default [
   fastifyCookie,
   fastifyCors,
   fastifyJwt,
+  postgresPool,
 ] as Array<FastifyPluginCallback>;

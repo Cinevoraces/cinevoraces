@@ -31,8 +31,8 @@ export default async function start() {
 
     // Register plugins, services, hooks and routes.
     schemas.forEach(s => server.addSchema(s));
-    services.forEach(s => server.register(s));
     plugins.forEach(p => server.register(p));
+    services.forEach(s => server.register(s));
     hooks.forEach(h => server.register(h));
     controllers.forEach(({ c, opts }) => server.register(c, opts));
 

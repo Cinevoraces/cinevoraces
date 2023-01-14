@@ -1,5 +1,5 @@
-import type { Pool, PoolClient } from 'pg';
-import pgPool from '../src/utils/postgresPool';
+import type { PoolClient } from 'pg';
+import { Pool } from 'pg';
 import Fastify from 'fastify';
 import qs from 'qs';
 import parseOptions from '../src/utils/parseOptions';
@@ -45,11 +45,18 @@ export default class TestServer {
     this.fastify = Fastify({
       querystringParser: (str) => qs.parse(str, parseOptions),
     });
-    this.pool = pgPool;
-    schemas.forEach(s => this.fastify.addSchema(s));
-    services.forEach(s => this.fastify.register(s));
-    plugins.forEach(p => this.fastify.register(p));
-    hooks.forEach(h => this.fastify.register(h));
+    this.pool = new Pool({
+      user: process.env.POSTGRES_USER,
+      database: process.env.POSTGRES_DB,
+      password: process.env.POSTGRES_PASSWORD,
+      host: process.env.POSTGRES_HOST,
+      port: Number(process.env.POSTGRES_PORT),
+    });
+
+    schemas.forEach((s) => this.fastify.addSchema(s));
+    plugins.forEach((p) => this.fastify.register(p));
+    services.forEach((s) => this.fastify.register(s));
+    hooks.forEach((h) => this.fastify.register(h));
     controllers.forEach(({ c, opts }) => this.fastify.register(c, opts));
   }
 
@@ -75,9 +82,11 @@ export default class TestServer {
   }
 
   // API CALLS METHODS
-  public async RequestRegister(
-    payload: { pseudo: string; mail: string; password: string }
-  ) {
+  public async RequestRegister(payload: {
+    pseudo: string;
+    mail: string;
+    password: string;
+  }) {
     const req = await this.fastify.inject({
       method: ECrudMethods.POST,
       url: EEndpoints.REGISTER,
@@ -87,9 +96,11 @@ export default class TestServer {
     const res = await req.json();
     return { res, statusCode };
   }
-  async RequestLogin(
-    payload: { pseudo?: string; mail?: string; password: string }
-  ) {
+  async RequestLogin(payload: {
+    pseudo?: string;
+    mail?: string;
+    password: string;
+  }) {
     const req = await this.fastify.inject({
       method: ECrudMethods.POST,
       url: EEndpoints.LOGIN,
@@ -100,7 +111,10 @@ export default class TestServer {
     const tokens = { refreshToken: '', accessToken: '' };
 
     if (statusCode === 200) {
-      tokens.refreshToken = (req.cookies[0] as Record<string, string>).name + '=' + (req.cookies[0] as Record<string, string>).value;
+      tokens.refreshToken =
+        (req.cookies[0] as Record<string, string>).name +
+        '=' +
+        (req.cookies[0] as Record<string, string>).value;
       tokens.accessToken = await res.token;
     }
 
@@ -130,9 +144,7 @@ export default class TestServer {
     return { res, statusCode };
   }
   public async RequestMovies(query = '', token?: string) {
-    const headers = token
-      ? { Authorization: `Bearer ${token}` }
-      : {};
+    const headers = token ? { Authorization: `Bearer ${token}` } : {};
 
     const req = await this.fastify.inject({
       headers,
@@ -146,7 +158,13 @@ export default class TestServer {
     return { res, statusCode };
   }
   public async RequestReviewMovie(
-    payload: { rating?: number; comment?: string, bookmarked?: boolean, viewed?: boolean, liked?: boolean },
+    payload: {
+      rating?: number;
+      comment?: string;
+      bookmarked?: boolean;
+      viewed?: boolean;
+      liked?: boolean;
+    },
     movieId: number,
     token: string
   ) {
@@ -174,7 +192,7 @@ export default class TestServer {
       presentation?: string;
       movie_genres?: string[];
       movie_languages?: string[];
-      movie_countries?: string[]
+      movie_countries?: string[];
       episode_id?: number;
     }
   ) {
@@ -215,7 +233,7 @@ export default class TestServer {
   //   }
   // ) {
   //   const movieId = await this.fastify.pgClient.query({
-  //     text: ` SELECT id FROM movie WHERE 
+  //     text: ` SELECT id FROM movie WHERE
   //             release_date = $1 AND french_title = $2 AND original_title = $3`,
   //     values: [SQLQuery.release_date, SQLQuery.french_title, SQLQuery.original_title],
   //   });
@@ -243,9 +261,7 @@ export default class TestServer {
     const statusCode = req.statusCode;
     return { res, statusCode };
   }
-  public async RequestEpisodes(
-    token: string,
-  ) {
+  public async RequestEpisodes(token: string) {
     const req = await this.fastify.inject({
       headers: { Authorization: `Bearer ${token}` },
       method: ECrudMethods.GET,
@@ -256,10 +272,7 @@ export default class TestServer {
     const statusCode = req.statusCode;
     return { res, statusCode };
   }
-  public async RequestBookEpisode(
-    token: string,
-    episodeId: number
-  ) {
+  public async RequestBookEpisode(token: string, episodeId: number) {
     const req = await this.fastify.inject({
       headers: { Authorization: `Bearer ${token}` },
       method: ECrudMethods.PUT,
@@ -301,12 +314,12 @@ export default class TestServer {
     token: string,
     payload: {
       update_user: {
-        pseudo?: string,
-        mail?: string,
-        password?: string,
-      },
-      password: string
-    },
+        pseudo?: string;
+        mail?: string;
+        password?: string;
+      };
+      password: string;
+    }
   ) {
     const req = await this.fastify.inject({
       method: ECrudMethods.PUT,
@@ -413,10 +426,7 @@ export default class TestServer {
     const statusCode = req.statusCode;
     return { res, statusCode };
   }
-  public async RequestAdminGetReviews(
-    token: string,
-    query: string
-  ) {
+  public async RequestAdminGetReviews(token: string, query: string) {
     const req = await this.fastify.inject({
       method: ECrudMethods.GET,
       url: EEndpoints.ADMIN_REVIEWS,
@@ -431,8 +441,8 @@ export default class TestServer {
   public async RequestAdminCreateSeason(
     token: string,
     payload: {
-      year: number,
-      season_number: number
+      year: number;
+      season_number: number;
     }
   ) {
     const req = await this.fastify.inject({

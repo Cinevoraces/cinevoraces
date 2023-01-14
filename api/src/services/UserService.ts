@@ -1,8 +1,7 @@
-import type { Pool } from 'pg';
+import type { PoolClient } from 'pg';
 import type { FastifyPluginCallback } from 'fastify';
 import type { PQuerystring, PUser } from '../models/types/_index';
 import { v2 } from 'cloudinary';
-import pgPool from '../utils/postgresPool';
 import DatabaseService from './databaseService';
 import plugin from 'fastify-plugin';
 
@@ -11,21 +10,23 @@ import plugin from 'fastify-plugin';
  * related to users routes.
  */
 class UserService extends DatabaseService {
-  constructor(pool: Pool) {
-    super(pool);
+  constructor(client: PoolClient) {
+    super(client);
   }
-  
+
   /**
    * @description Get users using query parameters.
    * @param {object} query object containing queries parameters
    * @returns Array of users.
    */
-  public async getUsersByQuery(query: PQuerystring): Promise<{ rowCount: number, rows: Array<PUser> }> {
+  public async getUsersByQuery(
+    query: PQuerystring
+  ): Promise<{ rowCount: number; rows: Array<PUser> }> {
     const enums = {
       where: ['id', 'pseudo', 'mail', 'role'],
       select: ['propositions', 'reviews', 'metrics', 'movies'],
     };
-    
+
     const { select, where, limit, sort } = query;
     let values = [] as Array<unknown>,
       SELECT: string = undefined,
@@ -62,14 +63,17 @@ class UserService extends DatabaseService {
     });
 
     return { rowCount, rows };
-  };
-  
+  }
+
   /**
    * @description Update one user.
    * @param {number} id user's id
    * @param {object} set object containing updated user's data
    */
-  public async updateUser(id: number, set: Record<string, unknown>): Promise<void> {
+  public async updateUser(
+    id: number,
+    set: Record<string, unknown>
+  ): Promise<void> {
     const enumerator = ['pseudo', 'mail', 'password', 'avatar_url'];
     const SET = this.reduceWhere(set, ',', enumerator, 1);
     await this.requestDatabase({
@@ -78,7 +82,7 @@ class UserService extends DatabaseService {
               WHERE id=$1;`,
       values: [id, ...SET.values],
     });
-  };
+  }
 
   /**
    * @description Delete one user.
@@ -89,14 +93,17 @@ class UserService extends DatabaseService {
       text: ' DELETE FROM "user" WHERE id=$1;',
       values: [id],
     });
-  };
+  }
 
   /**
    * @description Upload image to Cloudinary account.
    * @param {string} userPseudo - The user's pseudo that will prefix filename.
    * @param {string} filePath - The name of the file to upload.
-  */
-  public async cloudinaryUpload(userPseudo: string, filePath: string): Promise<string> {
+   */
+  public async cloudinaryUpload(
+    userPseudo: string,
+    filePath: string
+  ): Promise<string> {
     v2.config({ cloudinary_url: process.env.CLOUDINARY_URL });
     const { url } = await v2.uploader.upload(filePath, {
       folder: 'cinevoraces',
@@ -107,19 +114,19 @@ class UserService extends DatabaseService {
       gravity: 'faces',
       format: 'jpg',
       public_id: userPseudo,
-    });   
+    });
     return url;
-  };
+  }
 };
 
 // Decorate FastifyInstance with UserService
-export type TUserService = typeof UserServiceInstance;
-const UserServiceInstance = new UserService(pgPool);
+export type TUserService = InstanceType<typeof UserService>;
 export default plugin((async (fastify, opts, done) => {
   // Check if service is already registered
   if (fastify.hasDecorator('_userService'))
     return fastify.log.warn('userService already registered');
-
+  
+  const UserServiceInstance = new UserService(fastify._postgres.client);
   fastify.decorate('_userService', { getter: () => UserServiceInstance });
   done();
 }) as FastifyPluginCallback);

@@ -2,6 +2,7 @@ import type {
   FastifyRequest as Request,
   FastifyReply as Reply,
 } from 'fastify';
+import type { PoolClient, Pool } from 'pg';
 import type { TFileService } from '../../services/fileService';
 import type { TErrorService } from '../../services/errorService';
 import type { TDateService } from '../../services/dateService';
@@ -20,6 +21,7 @@ declare module 'fastify' {
     _movieService: TMovieService;
     _reviewService: TReviewService;
     _userService: TUserService;
+    _postgres: { pool: Pool; client: PoolClient };
     verifyAccessToken: (request: Request, reply: Reply) => void;
     verifyAccessTokenOptionnal: (request: Request, reply: Reply) => void;
     verifyRefreshToken: (request: Request, reply: Reply) => void;
