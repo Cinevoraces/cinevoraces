@@ -14,7 +14,6 @@ const useRefreshUserData = (
   useEffect(() => {
     if (userId && userData && userData.length > 0) {
       mutate();
-      console.log(userData[0]);
       setAskedUser(userData[0]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

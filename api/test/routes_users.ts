@@ -13,8 +13,6 @@ export async function ROUTES_USERS(server: TestServer) {
         'select[reviews]=true&select[metrics]=true&select[propositions]=true&select[movies]=true&limit=1'
       );
 
-      console.log(SUCCESSFULL_GET_USERS.res);
-
       expect(SUCCESSFULL_GET_USERS.res).toEqual(
         expect.arrayContaining([server.expected.userWithMoviesReviewsAndMetrics])
       );

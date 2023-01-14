@@ -110,10 +110,6 @@ export default function Films() {
 
   const moviesResults = useAppSelector(filteredMovies).filteredMovies;
 
-  useEffect(() => {
-    console.log('moviesResults has changed');
-  }, [moviesResults]);
-
   return (
     <>
       <CustomHead

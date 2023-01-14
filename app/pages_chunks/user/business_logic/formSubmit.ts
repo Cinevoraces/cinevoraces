@@ -48,7 +48,6 @@ export const handleSubmit = async (
     if (i.current) i.current.required = true;
   });
   // If no modification is asked, but pwd confirmation field filled, notify user
-  console.log('modifiers : ', modifiers);
   if (modifiers.length === 1 && modifiers.includes(allInputsRef['PWRef'])) {
     return toast.error('Vous n\'avez demandé aucune modification.');
   }

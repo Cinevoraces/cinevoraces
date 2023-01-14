@@ -13,7 +13,6 @@ const useUpdateNavigationLinks = (
     () => {
       if (lastMovie && lastMovie.length > 0) {
         // First, remove all older/initial links
-        console.log('Je vire les liens en trop');
         setNavLinks([
           ...navLinks.filter((l) => l[0] !== 'Le film de la semaine' && l[0] !== 'Proposer un film'),
           ['Le film de la semaine', `/films/${lastMovie[0].id}`],
@@ -27,7 +26,6 @@ const useUpdateNavigationLinks = (
         // For some obscure reason, sometimes the removal didn't trigger
         navLinks.filter((l) => l[0] === 'Proposer un film').length === 0
       ) {
-        console.log('Je rajoute la proposition');
         setNavLinks([...navLinks, ['Proposer un film', '/proposition']]);
       }
     },

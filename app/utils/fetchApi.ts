@@ -91,9 +91,7 @@ const externalGetRequest = async (baseUrl: string, endpoint: string, apiKey: str
 const handleResponse = async (res: Response) => {
   // No body comes with 204 status
   if (res.status === 204 ) return;
-  console.log(res);
   const responseBody = await res.json();
-  console.log(responseBody);
   if (!new RegExp(/[1-3]\d{2}/).test(res.status.toString())) {
     const { message } = responseBody;
     throw new Error(message);

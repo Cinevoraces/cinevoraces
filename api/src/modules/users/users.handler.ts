@@ -27,7 +27,6 @@ export const handleGetUsers = async (request: Request, reply: Reply) => {
     getUsers(query)
   );
 
-  console.log(users, rowCount);
   if (!rowCount)
     error.send(ApiError.NOT_FOUND, 404);
 

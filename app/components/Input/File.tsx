@@ -28,7 +28,6 @@ const File = ({ fileSetter }: FileProps) => {
         className={style}
         onChange={(e: HTMLInputEvent) => {
           if (e.target.files){
-            console.log(e.target.files);
             fileSetter(e.target.files[0]);
           }
         }}
