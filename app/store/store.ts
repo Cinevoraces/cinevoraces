@@ -2,6 +2,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import type { TypedUseSelectorHook } from 'react-redux';
 import { useSelector, useDispatch } from 'react-redux';
 import { globalSliceReducer, userSliceReducer, filteredMovies } from './slices';
+import { saveToSessionStorage } from '@utils/sessionStorageOperations';
 
 const store = configureStore({
   reducer: {
@@ -10,6 +11,8 @@ const store = configureStore({
     filteredMovies: filteredMovies,
   },
 });
+
+store.subscribe(() => saveToSessionStorage('user', store.getState().user));
 
 export default store;
 

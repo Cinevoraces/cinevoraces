@@ -11,6 +11,10 @@ import Button from '@components/Input/Button';
 import { ConnectionForm } from '@components/Forms';
 import useSWR from 'swr';
 import { Roles } from '@custom_types/global';
+import useUpdateNavigationLinks from '@hooks/useUpdateNavigationLinks';
+import useRecoverStateFromSessionStorage from '@hooks/useRecoverStateFromSessionStorage';
+import type { CompleteMovie } from '@custom_types/movies';
+import type { User } from '@custom_types/index';
 
 const Header = () => {
   const { isBurgerMenuOpen, isUserMenuOpen, isConnectionModalOpen } = useAppSelector(global);
@@ -33,30 +37,17 @@ const Header = () => {
     ['Le film de la semaine', '/films/1'], // Mandatory to avoid the apparition of the link after data fetching
   ]);
 
-  const { data: lastMovie } = useSWR('/movies?where[is_published]=true&limit=1');
-  const { data: usersData } = useSWR(() => (id ? `/users?select[propositions]=true&where[id]=${id}` : null));
-  useEffect(() => {
-    if (lastMovie && lastMovie.length > 0) {
-      // First, remove all older/initial links
-      setNavLinks([
-        ...navLinks
-          .filter((l) => (l[0] !== 'Le film de la semaine' && l[0] !== 'Proposer un film')), 
-        ['Le film de la semaine', `/films/${lastMovie[0].id}`]
-      ]);
-    }
-    // Adding proposition link for connected users that have no pending proposition
-    if (id && usersData && usersData[0].propositions.length === 0) {
-      console.log('modification des liens');
-      console.log('usersData dans le header : ', usersData[0]);
-      setNavLinks([...navLinks, ['Proposer un film', '/proposition']]);
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [lastMovie, id, usersData]);
+  const { data: lastMovie } = useSWR<CompleteMovie[]>('/movies?where[is_published]=true&limit=1');
+  const { data: usersData } = useSWR<User[]>(() => (id ? `/users?select[propositions]=true&where[id]=${id}` : null));
+  useUpdateNavigationLinks(lastMovie, setNavLinks, navLinks, id, usersData);
   
   const userMenuLinks = [
     ['Mon Profil', '/membres/moi'],
   ];
   (role === Roles.ADMIN) && userMenuLinks.push(['Administration', '/administration']);
+
+  // Due to lifecycle and store operations, keeping state operations have to be executed here :
+  useRecoverStateFromSessionStorage();
 
   return (
     <>
