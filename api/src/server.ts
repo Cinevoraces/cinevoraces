@@ -17,7 +17,6 @@ import hooks from './hooks/_index';
   // 'NODEMAILER_MAIL',
   // 'NODEMAILER_PASSWORD',
   'COOKIE_SECRET',
-  'PORT',
   'ROOT_PATH',
 ]).forEach(env => {
   if (!process.env[env]) throw new Error(`Missing environment variable: ${env}`);
@@ -47,7 +46,7 @@ export default async function start() {
 
     // Start server
     server.listen({ 
-      port: 3005,
+      port: Number(process.env.API_PORT) || 3005,
       host: '0.0.0.0',
     });
 
