@@ -16,7 +16,7 @@ import {
   setFilteredMovies,
   cleanUserInputs,
 } from '@store/slices/filteredMovies';
-import type { CompleteMovie, Season } from '@custom_types/index';
+import type { CompleteMovie, Season, SeasonOption } from '@custom_types/index';
 import type { ChangeEvent } from 'react';
 
 import filtersSync from '@utils/filterSyncer';
@@ -42,7 +42,7 @@ export default function Films() {
   //Searchbar state mechanics
   const { season, searchQuery, isSeasonSelectOpened } = useAppSelector(filteredMovies);
   const handleToggleSeasonSelect = () => dispatch(toggleSeasonSelect());
-  const handleSeasonChange = (season: Season) => dispatch(changeSeason(season));
+  const handleSeasonChange = (season: SeasonOption) => dispatch(changeSeason(season));
   const handleChangeSearchValue = (e: ChangeEvent) =>
     e.currentTarget instanceof HTMLInputElement && dispatch(changeSearchQuery(e.currentTarget.value));
   //Filter state mechanics
@@ -125,10 +125,10 @@ export default function Films() {
         <section className="w-full">
           <h1 className="hero-text text-start mb-4">Les films de la communauté</h1>
           <p>
-          Retrouvez saison par saison les films sélectionnés par les{' '}
+            Retrouvez saison par saison les films sélectionnés par les{' '}
             <span className="emphasis">membres de CinéVoraces</span>. Chaque saison correspond à une année calendaire.
             <br />
-          Bonnes découvertes !
+            Bonnes découvertes !
           </p>
         </section>
         <section className="w-full flex flex-col gap-6 align-start md:flex-row">
@@ -140,7 +140,7 @@ export default function Films() {
               displayOptionsSetter={handleToggleSeasonSelect}
               stateValue={season}
               valueSetter={handleSeasonChange}
-              customStyle="searchbar"
+              customStyle='searchbar'
               id="search"
               placeholder="🔍 Rechercher un film"
               value={searchQuery ? searchQuery : ''}

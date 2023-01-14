@@ -62,13 +62,13 @@ const WritePresentationAndSend = forwardRef<HTMLTextAreaElement, WritePresentati
         <div className='w-full flex flex-col gap-2 items-end'>
           <Button 
             customStyle='rounded' 
-            disabled={!(episode.value !== 0 && selectedMovieId !== 0) ? true : false}>
+            disabled={!(episode.value !== '0' && selectedMovieId !== 0) ? true : false}>
             <Image src={SendLogo} alt='' width={16} height={16}/>
               Publier
           </Button>
-          <p className={!(episode.value !== 0 && selectedMovieId !== 0) ? 'text-sm font-light text-red-500 text-right' : 'hidden'}>
+          <p className={!(episode.value !== '0' && selectedMovieId !== 0) ? 'text-sm font-light text-red-500 text-right' : 'hidden'}>
             {
-              (episode.value === 0) 
+              (episode.value === '0') 
                 ? 'Selectionnez un épisode.' 
                 : (selectedMovieId === 0) 
                     && 'Selectionnez un film'

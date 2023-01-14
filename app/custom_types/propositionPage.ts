@@ -1,6 +1,6 @@
 export interface EpisodeOption {
   name: string; 
-  value: number;
+  value: string;
 }
 
 export interface MovieBody {

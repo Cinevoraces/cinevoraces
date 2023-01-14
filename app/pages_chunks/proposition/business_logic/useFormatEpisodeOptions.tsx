@@ -18,7 +18,7 @@ const useFormatEpisodeOptions = (
       episodesArray.current = episodes.map(
         (e: Episode) => (
           { name: `${dateFormater(e.publishing_date)} - S${e.season_number}E${e.episode_number}`, 
-            value: e.id, 
+            value: '' + e.id, 
           })
       );
     } 
