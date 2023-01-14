@@ -16,7 +16,7 @@ const Credits = () => {
         <Button
           customStyle="empty"
           href="https://github.com/Cinevoraces/cinevoraces">
-              Consulter Repos GitHub du projet
+              Consulter le repos GitHub
         </Button>
       </div>
       <p><span className='emphasis'>Vous souhaitez prendre part au projet ?</span>{' N\'hésitez à nous rejoindre sur Discord, suivre le projet sur GitHub ou encore approcher un des membres de l\'équipe directement'}</p>

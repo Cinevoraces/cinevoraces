@@ -163,7 +163,7 @@ const Home: NextPage<HomeProps> = (props) => {
             <div className="flex-1">
               <h2 className={h2Style + 'mb-8'}>Partagez vos avis sur les films proposés</h2>
               <p>
-                CinéVoraces est une <span className={emStyle}>proposition communautaire</span>. <br />
+                Cinévoraces est une <span className={emStyle}>proposition communautaire</span>. <br />
                 Pour pleinement en profiter, rejoignez la communauté et <span className={emStyle}>
                   intéragissez
                 </span>{' '}
