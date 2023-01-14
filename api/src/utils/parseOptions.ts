@@ -1,21 +1,19 @@
 import type { defaultDecoder } from 'qs';
 
 /**
- * **parseOptions**
  * @description Parse options from querystring.
+ * TODO: 'unescape' is deprecated, update is needed.
  */
 const parseOptions = {
   ignoreQueryPrefix: true,
   decoder(str: string, decoder: defaultDecoder, charset: unknown) {
     const strWithoutPlus = str.replace(/\+/g, ' ');
-    if (charset === 'iso-8859-1') {
+    if (charset === 'iso-8859-1')
       // unescape never throws, no try...catch needed:
       return strWithoutPlus.replace(/%[0-9a-f]{2}/gi, unescape);
-    }
 
-    if (/^(\d+|\d*\.\d+)$/.test(str)) {
+    if (/^(\d+|\d*\.\d+)$/.test(str))
       return parseFloat(str);
-    }
 
     const keywords: Record<string, boolean> = {
       true: true,
@@ -23,9 +21,9 @@ const parseOptions = {
       null: null,
       undefined,
     };
-    if (str in keywords) {
+
+    if (str in keywords)
       return keywords[str];
-    }
 
     // utf-8
     try {

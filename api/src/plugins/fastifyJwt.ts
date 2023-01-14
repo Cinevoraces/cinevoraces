@@ -4,24 +4,23 @@ import FastifyJwt from '@fastify/jwt';
 import plugin from 'fastify-plugin';
 
 /**
- * **Fastify JWT**
- * @description
- * This plugin is used to generate and verify JWT tokens.
- * It also adds a user property to the request object.
+ * @package @fastify/jwt
+ * @description Fastify plugin for handling JWT strategy.
+ * @see https://github.com/fastify/fastify-jwt
  */
-const fastifyJwt: FastifyPluginCallback = async (fastify, opts, done) => {
-  if (fastify.jwt)  
-    return fastify.log.warn('Fastify/jwt already registered');
-
+export default plugin((async (fastify, opts: FastifyJWTOptions, done) => {
+  // Check if plugin is already registered
+  if (fastify.hasDecorator('jwt'))
+    return fastify.log.warn('@fastify/jwt already registered');
+  
   fastify.register(FastifyJwt, {
     secret: process.env.JWT_SECRET,
     cookie: {
       cookieName: 'refresh_token',
       signed: true,
     },
-  } as FastifyJWTOptions);
-
+    ...opts,
+  });
+  
   done();
-};
-
-export default plugin(fastifyJwt);
+}) as FastifyPluginCallback);
