@@ -157,39 +157,10 @@ export default function Films() {
             />
           )}
         </section>
-<<<<<<< HEAD
-        <section id="movie-grid">
-          {error && <p>Une erreur est survenue.</p>}
-          {!movieResults && !error && <p>Chargement des données.</p>}
-          {movieResults && (
-            <div className="flex flex-col gap-3 font-medium">
-              <p className="">{movieResults.length + ' films'}</p>
-              <ul className={gridStyle}>
-                {movieResults.map((movie: CompleteMovie) => (
-                  <li key={movie.french_title}>
-                    <Link href={`/films/${movie.id}`}>
-                      <Image
-                        src={movie.poster_url}
-                        alt={`${movie.french_title} movie poster`}
-                        width={200}
-                        height={(200 * 9) / 16}
-                        placeholder='blur'
-                        blurDataURL='/movie_posters/placeholder.jpg'
-                        className={posterStyles}
-                      />
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-        </section>
-=======
         <MoviesGrid
           error={error}
           moviesResults={moviesResults || []}
           isFilterMenuOpen={isFilterMenuOpen}/>
->>>>>>> 9d5b0ebd55da6c77174b0037e2fb48662c088c86
       </main>
     </>
   );

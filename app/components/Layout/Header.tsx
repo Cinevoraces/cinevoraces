@@ -37,29 +37,9 @@ const Header = () => {
     ['Le film de la semaine', '/films/1'], // Mandatory to avoid the apparition of the link after data fetching
   ]);
 
-<<<<<<< HEAD
-  const { data: lastMovie } = useSWR('/movies?where[is_published]=true&limit=1');
-  const { data: usersData } = useSWR(() => (id ? `/users?select[propositions]=true&where[id]=${id}` : null));
-  useEffect(() => {
-    if (lastMovie && lastMovie.length > 0) {
-      // First, remove all older/initial links
-      setNavLinks([
-        ...navLinks
-          .filter((l) => (l[0] !== 'Le film de la semaine' && l[0] !== 'Proposer un film')), 
-        ['Le film de la semaine', `/films/${lastMovie[0].id}`]
-      ]);
-    }
-    // Adding proposition link for connected users that have no pending proposition
-    if (id && usersData && usersData[0].propositions.length === 0) {
-      setNavLinks([...navLinks, ['Proposer un film', '/proposition']]);
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [lastMovie, id, usersData]);
-=======
   const { data: lastMovie } = useSWR<CompleteMovie[]>('/movies?where[is_published]=true&limit=1');
   const { data: usersData } = useSWR<User[]>(() => (id ? `/users?select[propositions]=true&where[id]=${id}` : null));
   useUpdateNavigationLinks(lastMovie, setNavLinks, navLinks, id, usersData);
->>>>>>> 9d5b0ebd55da6c77174b0037e2fb48662c088c86
   
   const userMenuLinks = [
     ['Mon Profil', '/membres/moi'],

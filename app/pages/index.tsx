@@ -82,26 +82,6 @@ const Home: NextPage<HomeProps> = (props) => {
             </div>
             <div className='w-full'>
               <h2 className={h2Style}>Les derniers ajouts de la communauté :</h2>
-<<<<<<< HEAD
-              <div className="mt-8 grid grid-cols-3 gap-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
-                {lastSixMoviesInfos.map((movie) => (
-                  <Link
-                    href={`/films/${movie.id}`}
-                    className="fourth-child:hidden fifth-child:hidden sixth-child:hidden md:fourth-child:block lg:fifth-child:block xl:sixth-child:block"
-                    key={movie.french_title}>
-                    <Image
-                      src={movie.poster_url}
-                      alt={`${movie.french_title} movie poster`}
-                      width={200}
-                      height={(200 * 9) / 16}
-                      placeholder='blur'
-                      blurDataURL='/movie_posters/placeholder.jpg'
-                      className={posterStyles}
-                    />
-                  </Link>
-                ))}
-              </div>
-=======
               <ul className="mt-8 grid grid-cols-3 gap-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 animated-caroussel">
                 {
                   trail.map((props, index) => (
@@ -118,7 +98,6 @@ const Home: NextPage<HomeProps> = (props) => {
                   ))
                 }
               </ul>
->>>>>>> 9d5b0ebd55da6c77174b0037e2fb48662c088c86
             </div>
           </div>
         </section>

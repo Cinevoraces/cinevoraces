@@ -20,17 +20,8 @@ const Poster = ({ poster_url, french_title }: PosterProps) => {
         before:content-[''] before:absolute before:-inset-0.5 before:bg-gradient-to-tr before:from-dark-gray before:to-orange-primary before:rounded-xl">
       <PosterImage
         src={poster_url}
-<<<<<<< HEAD:app/components/FilmPageComponents/PresentationSection.tsx
-        alt={`Affiche de ${french_title}`}
-        width={2*240}
-        height={(2*240 * 9) / 16}
-        placeholder='blur'
-        blurDataURL='/movie_posters/placeholder.jpg'
-        className="relative z-10 rounded-xl self-center w-full "
-=======
         title={french_title}
         type='film'
->>>>>>> 9d5b0ebd55da6c77174b0037e2fb48662c088c86:app/pages_chunks/film/UI/PresentationSection.tsx
       />
     </div>
   );
