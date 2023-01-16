@@ -14,7 +14,11 @@ export default plugin((async (fastify, opts, done) => {
    */// eslint-disable-next-line @typescript-eslint/no-unused-vars
   fastify.decorate('verifyAccessToken', async (request: Request, reply: Reply) => {
     try {
-      await request.jwtVerify();
+      // await request.jwtVerify();
+      console.log('----------------------- On test le token -----------------------');
+      const result = await request.jwtVerify() as { id: number; pseudo: string; role: number; expiresIn: number; iat: number; exp: number };
+      console.log('Contenu du token : ', result);
+      console.log('----------------------- Le token est testé -----------------------');
     } catch {
       fastify._errorService.send(EErrorMessages.INVALID_TOKEN, 401);
     }

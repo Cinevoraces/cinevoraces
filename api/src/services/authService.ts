@@ -5,6 +5,8 @@ import DatabaseService from './databaseService';
 import bcrypt from 'bcryptjs';
 import plugin from 'fastify-plugin';
 
+import type { FastifyReply as Reply } from 'fastify';
+
 /**
  * @description AuthService contains auth and SQL query methods 
  * related to authentication routes.
@@ -13,6 +15,8 @@ class AuthService extends DatabaseService {
   constructor(client: PoolClient) {
     super(client);
   }
+  public aTokenOptions = { expiresIn: 60 };
+  public rTokenOptions = { expiresIn: '1m' };
 
   /**
    * @description Hash string with a salt set to 10.
@@ -111,6 +115,14 @@ class AuthService extends DatabaseService {
     });
     return await this.compareStrings(password, rows[0].password);
   }
+  public async generateTokens(
+    userObject: { id: number, pseudo: string, role: ERoles },
+    reply: Reply
+  ): Promise<{ accessToken: string, refreshToken: string }> {
+    const accessToken = await reply.jwtSign(userObject, this.aTokenOptions);
+    const refreshToken = await reply.jwtSign(userObject, this.rTokenOptions);
+    return { accessToken, refreshToken };
+  };
 };
 
 // Decorate FastifyInstance with AuthService

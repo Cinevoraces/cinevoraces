@@ -75,20 +75,15 @@ export default async (fastify: FastifyInstance) => {
       if (!isPasswordCorrect)
         _errorService.send(EErrorMessages.INVALID_PASSWORD, 401);
 
-      const userObject = { 
+      const tokensContent = { 
         id: privateUser.id,
         pseudo: privateUser.pseudo,
         role: privateUser.role,
-        avatar_url: privateUser.avatar_url,
       };
+      const userObject = { ...tokensContent, avatar_url: privateUser.avatar_url };
 
       // Generate tokens
-      const accessToken = await reply.jwtSign(
-        { id: privateUser.id, pseudo: privateUser.pseudo, role: privateUser.role, expiresIn: '1m' }
-      );
-      const refreshToken = await reply.jwtSign(
-        { id: privateUser.id, expiresIn: '1d' }
-      );
+      const { accessToken, refreshToken } = await _authService.generateTokens(tokensContent, reply);
 
       reply
         .code(200)
@@ -120,12 +115,14 @@ export default async (fastify: FastifyInstance) => {
         _errorService.send(EErrorMessages.INVALID_TOKEN, 401);
       
       // Generate new tokens
-      const accessToken = await reply.jwtSign(
-        { id: privateUser.id, pseudo: privateUser.pseudo, role: privateUser.role, expiresIn: '1m' }
-      );
-      const refreshToken = await reply.jwtSign(
-        { id: privateUser.id, expiresIn: '1d' }
-      );
+      const tokensContent = { 
+        id: privateUser.id,
+        pseudo: privateUser.pseudo,
+        role: privateUser.role,
+      };
+
+      // Generate tokens
+      const { accessToken, refreshToken } = await _authService.generateTokens(tokensContent, reply);
 
       reply
         .code(200)
