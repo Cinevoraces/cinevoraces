@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import cutText from '@utils/cutText';
-import type { TMDBMovie } from '@custom_types/index';
+import type { TMDBMovie } from 'models/custom_types/index';
 
 interface TmdbMovieCardProps {
   resultCardStyle: string;

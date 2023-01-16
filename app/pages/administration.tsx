@@ -5,11 +5,11 @@ import { useState, useRef } from 'react';
 import useSWR from 'swr';
 import { mutationRequestCSR } from '@utils/fetchApi';
 import { user } from '@store/slices/user';
-import { Roles } from '@custom_types/index';
-import type { AdminActions } from 'enums';
+import { Roles } from 'models/custom_types/index';
+import type { AdminActions } from 'models/enums';
 import { useAppDispatch, useAppSelector } from '@store/store';
 import { toggleConfirmationModal, global } from '@store/slices/global';
-import type { User, MovieWithPresentation } from '@custom_types/index';
+import type { User, MovieWithPresentation } from 'models/custom_types/index';
 
 import PropositionsSection from 'pages_chunks/administration/UI/PropositionsSection';
 import UsersSection from 'pages_chunks/administration/UI/UsersSection';
@@ -20,7 +20,7 @@ import ConfirmationForm from 'pages_chunks/administration/UI/ConfirmationForm';
 import tryCatchWrapper from '@utils/tryCatchWrapper';
 import { toast } from 'react-hot-toast';
 
-import type { HandleSubmitAction, HandleSubmitActions } from '@custom_types/index';
+import type { HandleSubmitAction, HandleSubmitActions } from 'models/custom_types/index';
 
 const Administration: NextPage = () => {
   // User role check

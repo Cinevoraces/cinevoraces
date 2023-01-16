@@ -1,8 +1,8 @@
 import Avatar from '@components/Avatar';
 import dateFormater from '@utils/dateFormater';
 
-import type { User } from '@custom_types/index';
-import { Roles } from '@custom_types/index';
+import type { User } from 'models/custom_types/index';
+import { Roles } from 'models/custom_types/index';
 
 interface UserCardProps {
   user: User;

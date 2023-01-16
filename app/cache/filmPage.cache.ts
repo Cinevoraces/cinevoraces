@@ -1,4 +1,4 @@
-import type { CompleteMovie, Interactions } from '@custom_types/index';
+import type { CompleteMovie, Interactions } from 'models/custom_types/index';
 import type { MutableRefObject } from 'react';
 
 export default async function reviewMutation (

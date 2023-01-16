@@ -112,7 +112,7 @@ export default async (fastify: FastifyInstance) => {
       const privateUser = await _authService.getPrivateUser({ id: user.id });
 
       if (!privateUser)
-        _errorService.send(EErrorMessages.INVALID_TOKEN, 401);
+        _errorService.send(EErrorMessages.COMPROMISED_SESSION, 401);
       
       // Generate new tokens
       const tokensContent = { 

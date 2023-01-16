@@ -3,7 +3,7 @@ import objectFilter from '@utils/objectFilter';
 import creditsFormater from '@utils/crewFormater';
 import tmdbMovieFormater from '@utils/tmdbMovieFormater';
 
-import type { TMDBDetailedMovie, EpisodeOption, MovieBody } from '@custom_types/index';
+import type { TMDBDetailedMovie, EpisodeOption, MovieBody } from 'models/custom_types/index';
 import type { RefObject } from 'react';
 
 const wantedMovieProperties = [

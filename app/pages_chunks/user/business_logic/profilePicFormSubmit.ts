@@ -7,7 +7,7 @@ import type { RefObject, SetStateAction } from 'react';
 import type { KeyedMutator } from 'swr';
 import type { AnyAction, ThunkDispatch } from '@reduxjs/toolkit';
 import type { BodyData } from '@utils/fetchApi';
-import type { User } from '@custom_types/index';
+import type { User } from 'models/custom_types/index';
 import type { UserProps } from '@store/slices/user';
 
 const submitSuccess = async (

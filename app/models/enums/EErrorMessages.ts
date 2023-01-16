@@ -12,7 +12,6 @@ export enum EErrorMessages {
   INVALID_PROPOSAL = 'Ce film a déjà été proposé.',
   EXPIRED_ACCESS_TOKEN = 'Token d\'accès périmé.',
   EXPIRED_SESSION = 'Session expirée. Veuillez vous reconnecter.',
-  COMPROMISED_SESSION = 'Session compromise. Veuillez vous reconnecter.',
   INVALID_USER = 'Utilisateur introuvable.',
   MISSING_PASSWORD = 'Mot de passe requis.',
   NO_EPISODE_AVAILABLE = 'Aucun créneau disponible.',

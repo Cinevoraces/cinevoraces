@@ -4,7 +4,7 @@ import cutText from '@utils/cutText';
 import dateFormater from '@utils/dateFormater';
 import useCloseMenuOnOutsideClick from '@hooks/useCloseMenuOnOutsideClick';
 import Modal from '@components/Modal';
-import type { MovieWithPresentation, Presentation } from '@custom_types/index';
+import type { MovieWithPresentation, Presentation } from 'models/custom_types/index';
 
 interface PropositionMovieCardProps {
   movie: MovieWithPresentation;

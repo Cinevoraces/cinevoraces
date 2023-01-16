@@ -1,7 +1,7 @@
 import { forwardRef } from 'react';
 import MoviePicker from '@components/MoviePicker';
 import type { FormEventHandler } from 'react';
-import type { TMDBMovie } from '@custom_types/index';
+import type { TMDBMovie } from 'models/custom_types/index';
 
 interface PickMovieProps {
   movies: TMDBMovie[];

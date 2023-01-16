@@ -12,15 +12,11 @@ export default plugin((async (fastify, opts, done) => {
    * @description Access token verification
    * This hook verifies the access token then populate request.user with decoded informations.
    */// eslint-disable-next-line @typescript-eslint/no-unused-vars
-  fastify.decorate('verifyAccessToken', async (request: Request, reply: Reply) => {
+  fastify.decorate('verifyAccessToken', async (request: Request) => {
     try {
-      // await request.jwtVerify();
-      console.log('----------------------- On test le token -----------------------');
-      const result = await request.jwtVerify() as { id: number; pseudo: string; role: number; expiresIn: number; iat: number; exp: number };
-      console.log('Contenu du token : ', result);
-      console.log('----------------------- Le token est testé -----------------------');
+      await request.jwtVerify();
     } catch {
-      fastify._errorService.send(EErrorMessages.INVALID_TOKEN, 401);
+      fastify._errorService.send(EErrorMessages.EXPIRED_ACCESS_TOKEN, 401);
     }
   });
 
@@ -36,7 +32,7 @@ export default plugin((async (fastify, opts, done) => {
       try {
         await request.jwtVerify();
       } catch {
-        fastify._errorService.send(EErrorMessages.INVALID_TOKEN, 401);
+        fastify._errorService.send(EErrorMessages.EXPIRED_ACCESS_TOKEN, 401);
       }
     }
   });
@@ -48,9 +44,14 @@ export default plugin((async (fastify, opts, done) => {
   */// eslint-disable-next-line @typescript-eslint/no-unused-vars
   fastify.decorate('verifyRefreshToken', async (request: Request, reply: Reply) => {
     try {
-      await request.jwtVerify({ onlyCookie: true });
-    } catch {
-      fastify._errorService.send(EErrorMessages.INVALID_TOKEN, 401);
+      console.log('----------------------- On test le refresh token -----------------------');
+      // console.log(request.cookies);
+      const result = await request.jwtVerify({ onlyCookie: true });
+      console.log('Contenu du token : ', result);
+      console.log('----------------------- Le token est testé -----------------------');
+    } catch (err) {
+      console.error(err);
+      fastify._errorService.send(EErrorMessages.EXPIRED_SESSION, 401);
     }
   });
 

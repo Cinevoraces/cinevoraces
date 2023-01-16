@@ -25,7 +25,7 @@ import { toast } from 'react-hot-toast';
 import cutText from '@utils/cutText';
 import type { NextPage, GetStaticProps } from 'next';
 import type { ParsedUrlQuery } from 'querystring';
-import type { MinimalMovie, CompleteMovie, Interactions } from '@custom_types/index';
+import type { MinimalMovie, CompleteMovie, Interactions } from 'models/custom_types/index';
 import type { BodyData } from '@utils/fetchApi';
 import { useRouter } from 'next/router';
 import Loader from '@components/Loader';

@@ -10,11 +10,11 @@ import Modal from '@components/Modal';
 import Button from '@components/Input/Button';
 import { ConnectionForm } from '@components/Forms';
 import useSWR from 'swr';
-import { Roles } from '@custom_types/global';
+import { Roles } from 'models/custom_types/global';
 import useUpdateNavigationLinks from '@hooks/useUpdateNavigationLinks';
 import useRecoverStateFromSessionStorage from '@hooks/useRecoverStateFromSessionStorage';
-import type { CompleteMovie } from '@custom_types/movies';
-import type { User } from '@custom_types/index';
+import type { CompleteMovie } from 'models/custom_types/movies';
+import type { User } from 'models/custom_types/index';
 
 const Header = () => {
   const { isBurgerMenuOpen, isUserMenuOpen, isConnectionModalOpen } = useAppSelector(global);

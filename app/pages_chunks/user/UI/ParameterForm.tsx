@@ -10,7 +10,7 @@ import { File } from '@components/Input';
 import { matchingErrorMessage, handleTextSubmit } from '../business_logic/textFormSubmit';
 import { handleAvatarUpload } from '../business_logic/profilePicFormSubmit'; 
 import type { KeyedMutator } from 'swr';
-import type { User } from '@custom_types/index';
+import type { User } from 'models/custom_types/index';
 
 interface ParameterFormInterface {
   mutate: KeyedMutator<User[]>;

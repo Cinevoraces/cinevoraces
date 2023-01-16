@@ -1,4 +1,4 @@
-import type { TeamMember } from '@custom_types/teamMember';
+import type { TeamMember } from 'models/custom_types/teamMember';
 import TeamMemberCard from '@components/TeamMemberCard';
 interface TeamProps {
   teamMembers: TeamMember[]

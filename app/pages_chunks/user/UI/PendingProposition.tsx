@@ -1,7 +1,7 @@
 import React from 'react';
 import { PropositionMovieCard } from '@components/MovieCards';
 import { Button } from '@components/Input';
-import type { MovieWithPresentation } from '@custom_types/index';
+import type { MovieWithPresentation } from 'models/custom_types/index';
 
 interface PendingPropositionProps {
   propositions?: MovieWithPresentation[];
