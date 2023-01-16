@@ -11,6 +11,10 @@ import Button from '@components/Input/Button';
 import { ConnectionForm } from '@components/Forms';
 import useSWR from 'swr';
 import { Roles } from '@custom_types/global';
+import useUpdateNavigationLinks from '@hooks/useUpdateNavigationLinks';
+import useRecoverStateFromSessionStorage from '@hooks/useRecoverStateFromSessionStorage';
+import type { CompleteMovie } from '@custom_types/movies';
+import type { User } from '@custom_types/index';
 
 const Header = () => {
   const { isBurgerMenuOpen, isUserMenuOpen, isConnectionModalOpen } = useAppSelector(global);
@@ -33,6 +37,7 @@ const Header = () => {
     ['Le film de la semaine', '/films/1'], // Mandatory to avoid the apparition of the link after data fetching
   ]);
 
+<<<<<<< HEAD
   const { data: lastMovie } = useSWR('/movies?where[is_published]=true&limit=1');
   const { data: usersData } = useSWR(() => (id ? `/users?select[propositions]=true&where[id]=${id}` : null));
   useEffect(() => {
@@ -50,11 +55,19 @@ const Header = () => {
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lastMovie, id, usersData]);
+=======
+  const { data: lastMovie } = useSWR<CompleteMovie[]>('/movies?where[is_published]=true&limit=1');
+  const { data: usersData } = useSWR<User[]>(() => (id ? `/users?select[propositions]=true&where[id]=${id}` : null));
+  useUpdateNavigationLinks(lastMovie, setNavLinks, navLinks, id, usersData);
+>>>>>>> 9d5b0ebd55da6c77174b0037e2fb48662c088c86
   
   const userMenuLinks = [
     ['Mon Profil', '/membres/moi'],
   ];
   (role === Roles.ADMIN) && userMenuLinks.push(['Administration', '/administration']);
+
+  // Due to lifecycle and store operations, keeping state operations have to be executed here :
+  useRecoverStateFromSessionStorage();
 
   return (
     <>

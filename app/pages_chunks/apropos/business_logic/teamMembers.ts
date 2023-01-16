@@ -16,7 +16,6 @@ const teamMembers = [
     contacts: [
       { medium: 'linkedin', url: 'https://www.linkedin.com/in/gregory-michalak' },
       { medium: 'github', url: 'https://github.com/BenoitSafari' },
-      { medium: 'website', url: 'https://benoitsafari.com/' },
       { medium: 'discord', url: process.env.NEXT_PUBLIC_DISCORD_INVITE_URL || '' },
     ],
   },

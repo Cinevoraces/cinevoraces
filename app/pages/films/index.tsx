@@ -1,7 +1,5 @@
 import { useRef, useEffect } from 'react';
 import CustomHead from '@components/Head';
-import Image from 'next/image';
-import Link from 'next/link';
 import { Filter, SearchBar } from '@components/Input';
 import useSWR from 'swr';
 import { useAppSelector, useAppDispatch } from '@store/store';
@@ -18,17 +16,11 @@ import {
   setFilteredMovies,
   cleanUserInputs,
 } from '@store/slices/filteredMovies';
-import type { CompleteMovie, Season } from '@custom_types/index';
+import type { CompleteMovie, Season, SeasonOption } from '@custom_types/index';
 import type { ChangeEvent } from 'react';
 
 import filtersSync from '@utils/filterSyncer';
-
-const posterStyles = `rounded-lg w-full h-full object-cover shadow-lg max-w-[250px] 
-    hover:scale-105 
-    transition duration-150 hover:ease-out `;
-const gridStyle = `w-full grid gap-2 grid-cols-2 
-  sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6
-  `;
+import { MoviesGrid } from 'pages_chunks/film/UI';
 
 const metadatas = [
   'casting',
@@ -50,7 +42,7 @@ export default function Films() {
   //Searchbar state mechanics
   const { season, searchQuery, isSeasonSelectOpened } = useAppSelector(filteredMovies);
   const handleToggleSeasonSelect = () => dispatch(toggleSeasonSelect());
-  const handleSeasonChange = (season: Season) => dispatch(changeSeason(season));
+  const handleSeasonChange = (season: SeasonOption) => dispatch(changeSeason(season));
   const handleChangeSearchValue = (e: ChangeEvent) =>
     e.currentTarget instanceof HTMLInputElement && dispatch(changeSearchQuery(e.currentTarget.value));
   //Filter state mechanics
@@ -89,7 +81,7 @@ export default function Films() {
     data: movies,
     error,
     mutate,
-  } = useSWR(
+  } = useSWR<CompleteMovie[], Error>(
     () =>
       season &&
       '/movies?where[is_published]=true' +
@@ -116,7 +108,7 @@ export default function Films() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [movies, searchQuery, userFilterInputs, isUserConnected.current]);
 
-  const movieResults = useAppSelector(filteredMovies).filteredMovies;
+  const moviesResults = useAppSelector(filteredMovies).filteredMovies;
 
   return (
     <>
@@ -129,10 +121,10 @@ export default function Films() {
         <section className="w-full">
           <h1 className="hero-text text-start mb-4">Les films de la communauté</h1>
           <p>
-          Retrouvez saison par saison les films sélectionnés par les{' '}
+            Retrouvez saison par saison les films sélectionnés par les{' '}
             <span className="emphasis">membres de CinéVoraces</span>. Chaque saison correspond à une année calendaire.
             <br />
-          Bonnes découvertes !
+            Bonnes découvertes !
           </p>
         </section>
         <section className="w-full flex flex-col gap-6 align-start md:flex-row">
@@ -144,14 +136,14 @@ export default function Films() {
               displayOptionsSetter={handleToggleSeasonSelect}
               stateValue={season}
               valueSetter={handleSeasonChange}
-              customStyle="searchbar"
+              customStyle='searchbar'
               id="search"
               placeholder="🔍 Rechercher un film"
               value={searchQuery ? searchQuery : ''}
               onChange={handleChangeSearchValue}
             />
           )}
-          {availableFilters && movieResults && (
+          {availableFilters && moviesResults && (
             <Filter
               isMenuOpened={isFilterMenuOpen}
               displayMenuSetter={handleToggleFilterMenu}
@@ -160,11 +152,12 @@ export default function Films() {
               userFilterInputsSetter={handleSetFilters}
               userFilterReset={handleFilterReset}
               filtersCounter={Number(userFilterInputs.filtersCounter[0])}
-              resultsCount={movieResults.length}
+              resultsCount={moviesResults.length}
               isUserConnected={isUserConnected.current}
             />
           )}
         </section>
+<<<<<<< HEAD
         <section id="movie-grid">
           {error && <p>Une erreur est survenue.</p>}
           {!movieResults && !error && <p>Chargement des données.</p>}
@@ -191,6 +184,12 @@ export default function Films() {
             </div>
           )}
         </section>
+=======
+        <MoviesGrid
+          error={error}
+          moviesResults={moviesResults || []}
+          isFilterMenuOpen={isFilterMenuOpen}/>
+>>>>>>> 9d5b0ebd55da6c77174b0037e2fb48662c088c86
       </main>
     </>
   );

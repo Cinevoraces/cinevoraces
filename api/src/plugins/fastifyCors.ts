@@ -1,19 +1,19 @@
 import type { FastifyPluginCallback } from 'fastify';
-import cors from '@fastify/cors';
+import FastifyCors from '@fastify/cors';
 import plugin from 'fastify-plugin';
 
 /**
- * **Fastify CORS**
- * @description
- * This plugin registers the CORS plugin used for Cross Origin Requests authorization
+ * @package @fastify/cors
+ * @description Fastify cors configuration.
+ * @see https://github.com/fastify/fastify-cors
  */
-const fastifyCors: FastifyPluginCallback = async (fastify, opts, done) => {
-  fastify.register(cors, {
+export default plugin((async (fastify, opts, done) => {
+  fastify.register(FastifyCors, {
     origin: ['http://localhost:3000'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true,
+    ...opts,
   });
+  
   done();
-};
-
-export default plugin(fastifyCors);
+}) as FastifyPluginCallback);

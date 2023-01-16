@@ -34,11 +34,4 @@ NEXT_PUBLIC_TMDB_KEY=
 NEXT_PUBLIC_API_BASE_URL_CSR=
 NEXT_PUBLIC_API_BASE_URL_SSR=
 NEXT_PUBLIC_DISCORD_INVITE_URL=
-
 ```
-
-## :satellite: API Documentation
-Swagger documentation is accessible on `/dev-docs` endpoint.
-- [Data Dictionnary](./doc/API-data_dictionnary.md)
-- [Endpoints description](./doc/API-Endpoints.md)
-- [MCD/MLD](./doc/API-MCD-MLD.md)

@@ -63,8 +63,24 @@ const getRequestCSR = async (endpoint: string) => {
  * @param body facultative payload
  * @returns 
  */
+<<<<<<< HEAD
 const mutationRequestCSR = async (method: 'POST' | 'PUT' | 'DELETE', endpoint: string, body?: BodyData) => {
   const options = writeOptionsCSR(method, body);
+=======
+const mutationRequestCSR = async (method: 'POST' | 'PUT' | 'DELETE', endpoint: string, body?: BodyData | FormData) => {
+  console.log('typeof body is FormData: ', body instanceof FormData, 'body : ', body);
+  const options: FetchOptions = {
+    method,
+    headers: { },
+    credentials: 'include',
+    body: (body instanceof FormData) ? body : JSON.stringify(body),
+  };
+  if (localStorage.accessToken && options.headers) {
+    options.headers['Authorization'] = 'Bearer ' + localStorage.accessToken;
+  }
+  // Content-type have to be unspecified for multipart-formdata
+  if (!(body instanceof FormData)) options.headers['Content-type'] = 'application/json';
+>>>>>>> 9d5b0ebd55da6c77174b0037e2fb48662c088c86
   const res = await fetch(baseUrlCSR + endpoint, options);
   return handleResponse(res, endpoint, method, body);
 };
@@ -90,6 +106,7 @@ const handleResponse = async (res: Response, endpoint: string, method?: 'POST' |
   let response = res;
   // No body comes with 204 status
   if (res.status === 204 ) return;
+<<<<<<< HEAD
   // If accessToken expired
   // Needed adataption to make this condition more restrictive and not triggered for other 401 errors -------------------------------------------------
   if (res.status === 401) {
@@ -106,6 +123,10 @@ const handleResponse = async (res: Response, endpoint: string, method?: 'POST' |
   }
   const responseBody = await response.json();
   if (!new RegExp(/[1-3]\d{2}/).test(response.status.toString())) {
+=======
+  const responseBody = await res.json();
+  if (!new RegExp(/[1-3]\d{2}/).test(res.status.toString())) {
+>>>>>>> 9d5b0ebd55da6c77174b0037e2fb48662c088c86
     const { message } = responseBody;
     throw new Error(message);
   }

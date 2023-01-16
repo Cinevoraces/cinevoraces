@@ -4,7 +4,7 @@ import CustomHead from '@components/Head';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Button } from '@components/Input';
-import PosterComponent from '@components/PostersComponent';
+import PosterComponent from '@components/MultiplePosters';
 import discordLogo from '@public/icons/discord.svg';
 import discordInvite from '@public/discord_invite.png';
 import commentsSample from '@public/comments_sample.jpg';
@@ -14,6 +14,10 @@ import type { MinimalMovie } from '@custom_types/movies';
 import { getDataFromEndpointSSR } from '@utils/fetchApi';
 import { useAppSelector } from '@store/store';
 import { user } from '@store/slices/user';
+
+import { useTrail, useSpringRef, animated } from '@react-spring/web';
+
+import Poster from '@components/Poster';
 interface HomeProps {
   metrics: MetricsProps;
   lastSixMovies: MinimalMovie[];
@@ -31,13 +35,17 @@ const Home: NextPage<HomeProps> = (props) => {
   // Prepared Tailwind Styles
   const sectionStyle = 'even:bg-medium-gray even:md:text-end ';
   const sectionContentStyle = 'custom-container md:flex-row ';
-  const posterStyles = `rounded-lg w-full h-full object-cover shadow-lg max-w-[250px] 
-    fourth-child:hidden fifth-child:hidden sixth-child:hidden
-    md:fourth-child:block lg:fifth-child:block xl:sixth-child:block
-    hover:scale-105 
-    transition duration-150 hover:ease-out`;
   const h2Style = 'title-section ';
   const emStyle = 'emphasis ';
+
+  // Animation section
+  const trail = useTrail(
+    lastSixMoviesInfos.length, {
+      config: { mass: 1, tension: 300, friction: 36 },
+      from: { opacity:0, x:25 },
+      to: { opacity:100, x:0 }
+    }
+  );
 
   return (
     <>
@@ -51,7 +59,7 @@ const Home: NextPage<HomeProps> = (props) => {
           id="hero"
           className={sectionStyle}>
           <div className={sectionContentStyle + 'md:flex-col'}>
-            <div className="w-full flex justify-between">
+            <div className="w-full flex justify-between items-center">
               <div className="flex flex-col gap-8 flex-1">
                 <h1 className="hero-text ">
                   Bienvenue dans votre <span className="text-orange-primary">ciné-club</span> virtuel !
@@ -72,8 +80,9 @@ const Home: NextPage<HomeProps> = (props) => {
                 <PosterComponent number={8} />
               </div>
             </div>
-            <div>
+            <div className='w-full'>
               <h2 className={h2Style}>Les derniers ajouts de la communauté :</h2>
+<<<<<<< HEAD
               <div className="mt-8 grid grid-cols-3 gap-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
                 {lastSixMoviesInfos.map((movie) => (
                   <Link
@@ -92,6 +101,24 @@ const Home: NextPage<HomeProps> = (props) => {
                   </Link>
                 ))}
               </div>
+=======
+              <ul className="mt-8 grid grid-cols-3 gap-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 animated-caroussel">
+                {
+                  trail.map((props, index) => (
+                    <animated.li style={props} key={index}>
+                      <Link
+                        href={`/films/${lastSixMovies[index].id}`}>
+                        <Poster
+                          src={lastSixMovies[index].poster_url}
+                          title={lastSixMovies[index].french_title}
+                          type='caroussel'
+                        />
+                      </Link>
+                    </animated.li>
+                  ))
+                }
+              </ul>
+>>>>>>> 9d5b0ebd55da6c77174b0037e2fb48662c088c86
             </div>
           </div>
         </section>
@@ -157,7 +184,7 @@ const Home: NextPage<HomeProps> = (props) => {
             <div className="flex-1">
               <h2 className={h2Style + 'mb-8'}>Partagez vos avis sur les films proposés</h2>
               <p>
-                CinéVoraces est une <span className={emStyle}>proposition communautaire</span>. <br />
+                Cinévoraces est une <span className={emStyle}>proposition communautaire</span>. <br />
                 Pour pleinement en profiter, rejoignez la communauté et <span className={emStyle}>
                   intéragissez
                 </span>{' '}

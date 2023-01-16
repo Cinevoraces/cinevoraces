@@ -1,23 +1,18 @@
-import { verifyTokensHooks } from './verifyTokens';
-import { verifyRolesHooks } from './verifyRoles';
-import { verifyMoviesHooks } from './verifyMovies';
-import { verifyPasswordHooks } from './verifyPassword';
-import { findOrCreateReviewHooks } from './findOrCreateReview';
-import { sanitizePayloadHooks } from './sanitizePayload';
-import { fileManagerHooks } from './fileManager';
+import type { FastifyPluginCallback } from 'fastify';
+import verifyPassword from './verifyPassword';
+import verifyTokens from './verifyTokens';
+import preHandlerSanitizePayload from './preHandlerSanitizePayload';
+import preHandlerMovies from './preHandlerMovies';
+import preHandlerReview from './preHandlerReview';
 
 /**
- * **Hooks _index**
- * @description
- * Hooks are functions to call before a route handler.
+ * **Hooks Registration _index**
  * Add any new hook to this array.
  */
-export const hooks = [
-  findOrCreateReviewHooks,
-  sanitizePayloadHooks,
-  verifyTokensHooks,
-  verifyRolesHooks,
-  verifyMoviesHooks,
-  verifyPasswordHooks,
-  fileManagerHooks,
-];
+export default [
+  preHandlerSanitizePayload,
+  verifyPassword,
+  verifyTokens,
+  preHandlerMovies,
+  preHandlerReview,
+] as Array<FastifyPluginCallback>;

@@ -45,7 +45,7 @@ const User: NextPage = () => {
             ? 'Mon profil privé'
             : connectedUserId && Number(connectedUserId) === askedUser?.id
               ? 'Mon profil public'
-              : 'Profil'}
+              : `Profil de ${askedUser?.pseudo}`}
         </h1>
         {
         //Asked for private page without being logged

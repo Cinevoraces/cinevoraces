@@ -3,7 +3,7 @@ import Select from './Select';
 import type { SelectProps } from './Select';
 import type { ControlledTextProps } from './Text';
 
-interface SearchBarProps extends SelectProps, ControlledTextProps<HTMLInputElement> {};
+interface SearchBarProps extends ControlledTextProps<HTMLInputElement>, SelectProps{};
 
 export default function SearchBar(props: SearchBarProps) {
   const searchBarStyle = `flex w-full pr-1 max-w-[450px] 
@@ -15,11 +15,11 @@ export default function SearchBar(props: SearchBarProps) {
   text-sm 
   rounded-xl bg-transparent border-none 
   focus:border-transparent focus:ring-transparent focus:outline-none `;
-  const { id, placeholder, value, onChange, ...selectProps } = props; 
+  const { id, placeholder, value, onChange, customStyle, ...selectProps } = props; 
   const textProps = { id, placeholder, value, onChange };
   return (
     <div className={searchBarStyle}>
-      <Select {...selectProps}/>
+      <Select {...selectProps} selectCustomStyle={customStyle ? 'searchbar' : undefined}/>
       <input type='text' 
         className={textInputStyle}
         {...textProps}/>

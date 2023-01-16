@@ -3,19 +3,14 @@ import FastifyCookie from '@fastify/cookie';
 import plugin from 'fastify-plugin';
 
 /**
- * **Fastify cookie**
- * @description
- * This plugin registers the cookie plugin used to store the refresh token.
+ * @package @fastify/cookie
+ * @description Fastify plugin for cookie configuration.
+ * @see https://github.com/fastify/fastify-cookie
  */
-const fastifyCookie: FastifyPluginCallback = async (fastify, opts, done) => {
-  if (fastify.signCookie)
-    return fastify.log.warn('Fastify/cookie already registered');
-
+export default plugin((async (fastify, opts, done) => {
   fastify.register(FastifyCookie, {
     secret: process.env.COOKIE_SECRET,
   });
-
+  
   done();
-};
-
-export default plugin(fastifyCookie);
+}) as FastifyPluginCallback);
