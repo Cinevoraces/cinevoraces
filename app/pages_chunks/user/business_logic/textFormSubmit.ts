@@ -17,7 +17,7 @@ const submitSuccess = async (
   dispatch: ThunkDispatch<{ user: UserProps }, undefined, AnyAction>,
   data?: BodyData
 ) => {
-  await mutationRequestCSR(method, endpoint, data);
+  const responseBody = await mutationRequestCSR(method, endpoint, data);
   // Clean input values before sending
   Object.values(allInputRefs).forEach((i) => {
     if (i.current) {
@@ -27,12 +27,12 @@ const submitSuccess = async (
   });
   const user = await userMutation();
   if (user && user.length > 0) dispatch(setUserModification({ pseudo: user[0].pseudo }));
-  toast.success('Vos changements ont bien été pris en compte.');
+  toast.success(responseBody.message);
 };
 
 export const matchingErrorMessage = 'Les deux saisies ne correspondent pas.';
 
-export const handleSubmit = async (
+export const handleTextSubmit = async (
   e: React.FormEvent<HTMLFormElement>,
   allInputsRef: {[key: string]: RefObject<HTMLInputElement> },
   arePWMatching: boolean,
@@ -80,14 +80,3 @@ export const handleSubmit = async (
   }
 };
 
-export const handleAvatarUpload = (e: React.FormEvent, avatar: File | undefined, userMutation: KeyedMutator<User[]>) => {
-  e.preventDefault();
-  const formData = new FormData();
-  if (avatar) {
-    formData.append('avatar', avatar, avatar.name);
-    tryCatchWrapper(mutationRequestCSR)('PUT', '/users/avatar', formData);
-    // Ajouter la récup des messages de succès avec les 201 (à la place des 204)
-    userMutation();
-    toast.success('Photo de profil mise à jour');
-  }
-};

@@ -7,7 +7,8 @@ import { toggleArePWVisible, global } from '@store/slices/global';
 import Button from '@components/Input/Button';
 import SendLogo from '@public/icons/send-icon.svg';
 import { File } from '@components/Input';
-import { matchingErrorMessage, handleSubmit, handleAvatarUpload } from '../business_logic/formSubmit';
+import { matchingErrorMessage, handleTextSubmit } from '../business_logic/textFormSubmit';
+import { handleAvatarUpload } from '../business_logic/profilePicFormSubmit'; 
 import type { KeyedMutator } from 'swr';
 import type { User } from '@custom_types/index';
 
@@ -45,7 +46,7 @@ const ParameterForm = ({ mutate, mail }: ParameterFormInterface) => {
       <form 
         action="submit"
         className="flex flex-col gap-6 w-full max-w-xl border border-transparent px-6 py-4"
-        onSubmit={(e) => handleAvatarUpload(e, avatar, mutate)}>
+        onSubmit={(e) => handleAvatarUpload(e, avatar, mutate, dispatch)}>
         <File fileSetter={setAvatar}/>
         <div className="flex justify-end">
           <Button customStyle="rounded">
@@ -63,7 +64,7 @@ const ParameterForm = ({ mutate, mail }: ParameterFormInterface) => {
         action="submit"
         // onSubmit={async (e) => handleSubmit(e, allInputsRef)}
         onSubmit={async (e) =>
-          handleSubmit(
+          handleTextSubmit(
             e,
             allInputsRef,
             arePWMatching,
