@@ -6,7 +6,7 @@ services:
       context: ./data
       dockerfile: Dockerfile.dev
     env_file:
-      - .env.db
+      - .env
     ports:
       - 5432:5432
     restart: always
@@ -16,15 +16,14 @@ services:
     ports:
       - 5431:80
     env_file:
-      - .env.db
+      - .env
     depends_on:
       - postgres
 
   api:
     hostname: cinevoraces_api
     env_file:
-      - .env.db
-      - .env.api
+      - .env
     depends_on:
       - postgres
     build:
@@ -35,12 +34,11 @@ services:
     restart: always
     volumes:
       - ./api:/api
-      - ./storage:/storage
 
   app:
     hostname: cinevoraces_app
     env_file:
-      - .env.app
+      - .env
     depends_on:
       - api
     build:

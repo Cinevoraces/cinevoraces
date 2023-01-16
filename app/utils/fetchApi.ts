@@ -54,18 +54,19 @@ const getRequestCSR = async (endpoint: string) => {
  * @param data facultative request payload
  * @returns 
  */
-const mutationRequestCSR = async (method: 'POST' | 'PUT' | 'DELETE', endpoint: string, body?: BodyData) => {
+const mutationRequestCSR = async (method: 'POST' | 'PUT' | 'DELETE', endpoint: string, body?: BodyData | FormData) => {
+  console.log('typeof body is FormData: ', body instanceof FormData, 'body : ', body);
   const options: FetchOptions = {
     method,
-    headers: {
-      'Content-Type': 'application/json',
-    },
+    headers: { },
     credentials: 'include',
-    body: JSON.stringify(body),
+    body: (body instanceof FormData) ? body : JSON.stringify(body),
   };
   if (localStorage.accessToken && options.headers) {
     options.headers['Authorization'] = 'Bearer ' + localStorage.accessToken;
   }
+  // Content-type have to be unspecified for multipart-formdata
+  if (!(body instanceof FormData)) options.headers['Content-type'] = 'application/json';
   const res = await fetch(baseUrlCSR + endpoint, options);
   return handleResponse(res);
 };
@@ -90,9 +91,7 @@ const externalGetRequest = async (baseUrl: string, endpoint: string, apiKey: str
 const handleResponse = async (res: Response) => {
   // No body comes with 204 status
   if (res.status === 204 ) return;
-  console.log(res);
   const responseBody = await res.json();
-  console.log(responseBody);
   if (!new RegExp(/[1-3]\d{2}/).test(res.status.toString())) {
     const { message } = responseBody;
     throw new Error(message);

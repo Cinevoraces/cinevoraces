@@ -1,28 +1,22 @@
-import bcryptPlugin from './bcrypt';
-import cookie from './fastifyCookie';
-import cors from './fastifyCors';
-import envCheck from './envCheck';
-import jwt from './fastifyJwt';
-import pgClient from './pgClient';
-import serverError from './serverError';
-import swagger from './swagger';
-import cloudinaryService from './cloudinary';
+import type { FastifyPluginCallback } from 'fastify';
 import fastifyMultipart from './fastifyMultipart';
+import fastifyStatic from './fastifyStatic';
+import fastifySwagger from './fastifySwagger';
+import fastifyCookie from './fastifyCookie';
+import fastifyCors from './fastifyCors';
+import fastifyJwt from './fastifyJwt';
+import postgresPool from './postgresPool';
+
 /**
- * **Plugins _index**
- * @description
- * Plugins are functions that are binded to the Fastify instance.
- * Add any new plugin to this array (order matters!).
+ * **Plugins Registration _index**
+ * Add any new plugin to this array.
  */
-export const plugins = [
-  envCheck, // Should always be loaded first
-  pgClient,
-  cookie,
-  cors,
-  jwt,
-  serverError,
-  swagger,
-  bcryptPlugin,
+export default [
   fastifyMultipart,
-  cloudinaryService,
-];
+  fastifyStatic,
+  fastifySwagger,
+  fastifyCookie,
+  fastifyCors,
+  fastifyJwt,
+  postgresPool,
+] as Array<FastifyPluginCallback>;
