@@ -41,7 +41,6 @@ const Administration: NextPage = () => {
   const handleOpenConfirmationModal = () => dispatch(toggleConfirmationModal());
   const submitSuccess = async (method: 'POST' | 'PUT' | 'DELETE', endpoint: string, data: { password: string }) => {
     const response = await mutationRequestCSR(method, endpoint, data);
-    console.log('response: ', response);
     // No response data as it is a 204 success Status
     toast.success(
       `${method === 'PUT' ? 'Publication' : 'Supression'} ${

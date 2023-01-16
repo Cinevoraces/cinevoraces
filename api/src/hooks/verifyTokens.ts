@@ -44,11 +44,7 @@ export default plugin((async (fastify, opts, done) => {
   */// eslint-disable-next-line @typescript-eslint/no-unused-vars
   fastify.decorate('verifyRefreshToken', async (request: Request, reply: Reply) => {
     try {
-      console.log('----------------------- On test le refresh token -----------------------');
-      // console.log(request.cookies);
-      const result = await request.jwtVerify({ onlyCookie: true });
-      console.log('Contenu du token : ', result);
-      console.log('----------------------- Le token est testé -----------------------');
+      await request.jwtVerify({ onlyCookie: true });
     } catch (err) {
       console.error(err);
       fastify._errorService.send(EErrorMessages.EXPIRED_SESSION, 401);
