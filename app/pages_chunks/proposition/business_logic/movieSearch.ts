@@ -1,4 +1,4 @@
-import { externalGetRequest } from '@utils/fetchApi';
+import { externalGetRequest } from 'binders/fetchApi';
 import type { RefObject, SetStateAction, Dispatch } from 'react';
 import type { TMDBMovie } from 'models/custom_types/tmdbMovie';
 

@@ -10,7 +10,7 @@ import Modal from '@components/Modal';
 import Button from '@components/Input/Button';
 import { ConnectionForm } from '@components/Forms';
 import useSWR from 'swr';
-import { Roles } from 'models/custom_types/global';
+import { Roles } from 'models/enums';
 import useUpdateNavigationLinks from '@hooks/useUpdateNavigationLinks';
 import useRecoverStateFromSessionStorage from '@hooks/useRecoverStateFromSessionStorage';
 import type { CompleteMovie } from 'models/custom_types/movies';

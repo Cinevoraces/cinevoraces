@@ -1,4 +1,5 @@
 import { EErrorMessages } from 'models/enums';
+import type { BodyData, FetchOptions } from 'models/custom_types';
 
 const baseUrlSSR = process.env.NEXT_PUBLIC_API_BASE_URL_SSR,
   baseUrlCSR = process.env.NEXT_PUBLIC_API_BASE_URL_CSR;
@@ -14,17 +15,6 @@ const getDataFromEndpointSSR = async (endpoint: string) => {
     return handleResponse(res, endpoint);
   }
 };
-
-interface BodyData {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  [key: string]: any;
-}
-
-interface FetchOptions extends RequestInit {
-  headers: {
-    [key: string]: string;
-  }
-}
 
 const writeOptionsCSR = (method?: 'POST' | 'PUT' | 'DELETE', body?: BodyData, cookie?: boolean) => {
   const options: FetchOptions = {

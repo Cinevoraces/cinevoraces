@@ -1,5 +1,5 @@
-import { mutationRequestCSR } from '@utils/fetchApi';
-import type { BodyData } from '@utils/fetchApi';
+import { mutationRequestCSR } from 'binders/fetchApi';
+import type { BodyData } from 'binders/fetchApi';
 import type { RefObject, SetStateAction } from 'react';
 import type { KeyedMutator } from 'swr';
 import type { User } from 'models/custom_types/index';

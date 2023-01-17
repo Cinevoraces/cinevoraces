@@ -10,10 +10,9 @@ import type { Proposition } from './proposition';
 import type { HandleSubmitAction, HandleSubmitActions } from './administration';
 import type { TeamMember } from './teamMember';
 import type Interactions from './interactions';
+import type { BodyData, FetchOptions } from './binders';
 
-import { Roles } from './global';
-
-export type{
+export type {
   MinimalMovie, Presentation, Metrics, Comment, UserReview, MovieWithPresentation, CompleteMovie,
   Season,
   SeasonOption, FilterOptions, FilterUserInputs, FilteredMoviesStateInterface,
@@ -26,6 +25,5 @@ export type{
   HandleSubmitAction, HandleSubmitActions,
   TeamMember,
   Interactions,
+  BodyData, FetchOptions,
 };
-
-export { Roles };

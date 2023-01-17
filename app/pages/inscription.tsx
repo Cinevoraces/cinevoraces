@@ -4,7 +4,7 @@ import { InscriptionForm } from '@components/Forms';
 import PosterComponent from '@components/MultiplePosters';
 import Metrics from '@components/Metrics';
 import type { MetricsProps } from '@components/Metrics';
-import { getDataFromEndpointSSR } from '@utils/fetchApi';
+import { getDataFromEndpointSSR } from 'binders/fetchApi';
 
 interface InscriptonProps {
   metrics: MetricsProps;

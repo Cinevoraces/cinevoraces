@@ -18,7 +18,7 @@ import {
 import { Button, BaseInteraction, RatingInteraction } from '@components/Input';
 import PostCard from '@components/PostCard';
 import { CommentsSection } from 'pages_chunks/film/UI';
-import { getDataFromEndpointSSR, mutationRequestCSR } from '@utils/fetchApi';
+import { getDataFromEndpointSSR, mutationRequestCSR } from 'binders/fetchApi';
 import { useAppSelector } from '@store/store';
 import { user } from '@store/slices/user';
 import { toast } from 'react-hot-toast';
@@ -26,7 +26,7 @@ import cutText from '@utils/cutText';
 import type { NextPage, GetStaticProps } from 'next';
 import type { ParsedUrlQuery } from 'querystring';
 import type { MinimalMovie, CompleteMovie, Interactions } from 'models/custom_types/index';
-import type { BodyData } from '@utils/fetchApi';
+import type { BodyData } from 'binders/fetchApi';
 import { useRouter } from 'next/router';
 import Loader from '@components/Loader';
 import reviewMutation from 'cache/filmPage.cache';

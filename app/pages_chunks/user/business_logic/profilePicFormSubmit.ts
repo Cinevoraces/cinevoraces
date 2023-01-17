@@ -1,12 +1,12 @@
 import tryCatchWrapper from '@utils/tryCatchWrapper';
-import { mutationRequestCSR } from '@utils/fetchApi';
+import { mutationRequestCSR } from 'binders/fetchApi';
 import { toast } from 'react-hot-toast';
 import { setUserModification } from '@store/slices/user';
 
 import type { RefObject, SetStateAction } from 'react';
 import type { KeyedMutator } from 'swr';
 import type { AnyAction, ThunkDispatch } from '@reduxjs/toolkit';
-import type { BodyData } from '@utils/fetchApi';
+import type { BodyData } from 'binders/fetchApi';
 import type { User } from 'models/custom_types/index';
 import type { UserProps } from '@store/slices/user';
 
