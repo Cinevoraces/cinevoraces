@@ -1,13 +1,17 @@
 import React from 'react';
 import Image from 'next/image';
 
+/** Generates an array of number * poster paths, based on the current date
+ * @returns Array of movie posters url
+ * @param {String} path to ressources
+ * @param {String} extension of image files
+ * @param {number} number of posters to display
+ */
 const generatePosterArray = (path: string, extension: string, number: number) => {
-  const posterArray = [] as number[];
-  while (posterArray.length < number) {
-    const randNum = Math.floor(Math.random() * 15 + 1); // 15 posters for the static component
-    !posterArray.includes(randNum) && posterArray.push(randNum);
-  }
-  return posterArray.map((randNum) => path + randNum + extension);
+  // 15 posters for the static component
+  const dateSeed = new Date().getDate();
+  console.log(dateSeed);
+  return Array.from(Array(number).keys()).map((n) => `${path + '' + (number + n + dateSeed)%15 + extension}`);
 };
 
 interface PostersComponentProps {
