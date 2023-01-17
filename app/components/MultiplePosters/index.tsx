@@ -1,7 +1,7 @@
 import React from 'react';
 import Image from 'next/image';
 
-/** Generates an array of number * poster paths, based on the current date
+/** Generates an array of number * poster paths, based on the current day of Year
  * @returns Array of movie posters url
  * @param {String} path to ressources
  * @param {String} extension of image files
@@ -9,9 +9,9 @@ import Image from 'next/image';
  */
 const generatePosterArray = (path: string, extension: string, number: number) => {
   // 15 posters for the static component
-  const dateSeed = new Date().getDate();
-  console.log(dateSeed);
-  return Array.from(Array(number).keys()).map((n) => `${path + '' + (number + n + dateSeed)%15 + extension}`);
+  const now = new Date(), start = new Date(now.getFullYear(), 0, 0).getTime();
+  const dayOfYear = Math.floor((now.getTime() - start)/(1000 * 60 * 60 * 24));
+  return Array.from(Array(number).keys()).map((n) => `${path + '' + (number + n + dayOfYear)%15 + extension}`);
 };
 
 interface PostersComponentProps {
