@@ -8,10 +8,10 @@ import Image from 'next/image';
  * @param {number} number of posters to display
  */
 const generatePosterArray = (path: string, extension: string, number: number) => {
-  // 15 posters for the static component
+  // 15 posters for the static component -> modulo 15 -1
   const now = new Date(), start = new Date(now.getFullYear(), 0, 0).getTime();
   const dayOfYear = Math.floor((now.getTime() - start)/(1000 * 60 * 60 * 24));
-  return Array.from(Array(number).keys()).map((n) => `${path + '' + (number + n + dayOfYear)%15 + extension}`);
+  return Array.from(Array(number).keys()).map((n) => `${path + '' + (number + n + dayOfYear)%14 + extension}`);
 };
 
 interface PostersComponentProps {
