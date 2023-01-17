@@ -11,11 +11,11 @@ import commentsSample from '@public/comments_sample.jpg';
 import Metrics from '@components/Metrics';
 import type { MetricsProps } from '@components/Metrics';
 import type { MinimalMovie } from 'models/custom_types/movies';
-import { getDataFromEndpointSSR } from 'binders/fetchApi';
+import { getRequestSSR } from 'binders';
 import { useAppSelector } from '@store/store';
 import { user } from '@store/slices/user';
 
-import { useTrail, useSpringRef, animated } from '@react-spring/web';
+import { useTrail, animated } from '@react-spring/web';
 
 import Poster from '@components/Poster';
 interface HomeProps {
@@ -229,8 +229,8 @@ const Home: NextPage<HomeProps> = (props) => {
 
 export async function getServerSideProps() {
   try {
-    const metrics = await getDataFromEndpointSSR('/metrics');
-    const lastSixMovies = await getDataFromEndpointSSR('/movies?where[is_published]=true&limit=6');
+    const metrics = await getRequestSSR('/metrics');
+    const lastSixMovies = await getRequestSSR('/movies?where[is_published]=true&limit=6');
     return {
       props: {
         metrics,

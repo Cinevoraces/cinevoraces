@@ -18,7 +18,7 @@ import {
 import { Button, BaseInteraction, RatingInteraction } from '@components/Input';
 import PostCard from '@components/PostCard';
 import { CommentsSection } from 'pages_chunks/film/UI';
-import { getDataFromEndpointSSR, mutationRequestCSR } from 'binders/fetchApi';
+import { getRequestSSR, mutationRequestCSR } from 'binders';
 import { useAppSelector } from '@store/store';
 import { user } from '@store/slices/user';
 import { toast } from 'react-hot-toast';
@@ -26,7 +26,7 @@ import cutText from '@utils/cutText';
 import type { NextPage, GetStaticProps } from 'next';
 import type { ParsedUrlQuery } from 'querystring';
 import type { MinimalMovie, CompleteMovie, Interactions } from 'models/custom_types/index';
-import type { BodyData } from 'binders/fetchApi';
+import type { BodyData } from 'models/custom_types';
 import { useRouter } from 'next/router';
 import Loader from '@components/Loader';
 import reviewMutation from 'cache/filmPage.cache';
@@ -239,7 +239,7 @@ interface Params extends ParsedUrlQuery {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const getStaticPaths: ()=>Promise<{ paths: { params: {} }[]; fallback: boolean | string } | []> = async () => {
   try {
-    const movies = await getDataFromEndpointSSR('/movies?where[is_published]=true');
+    const movies = await getRequestSSR('/movies?where[is_published]=true');
     const paths = movies.map((movie: MinimalMovie) => ({ params: { film: '' + movie.id } }));
     return {
       paths,
@@ -254,7 +254,7 @@ export const getStaticPaths: ()=>Promise<{ paths: { params: {} }[]; fallback: bo
 export const getStaticProps: GetStaticProps<FilmProps, Params> = async (context) => {
   const { film: id } = context.params!;
   try {
-    const result = await getDataFromEndpointSSR(`/movies?where[id]=${id}` + selectQueryString);
+    const result = await getRequestSSR(`/movies?where[id]=${id}` + selectQueryString);
     if (result.message === 'Aucun film trouvé') throw new Error(result.message);
     return {
       props: {

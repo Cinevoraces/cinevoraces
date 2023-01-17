@@ -1,4 +1,4 @@
-import { externalGetRequest, mutationRequestCSR } from 'binders/fetchApi';
+import { externalGetRequest, mutationRequestCSR } from 'binders';
 import objectFilter from '@utils/objectFilter';
 import creditsFormater from '@utils/crewFormater';
 import tmdbMovieFormater from '@utils/tmdbMovieFormater';

@@ -3,7 +3,7 @@ import CustomHead from '@components/Head';
 import type { FormEvent } from 'react';
 import { useState, useRef } from 'react';
 import useSWR from 'swr';
-import { mutationRequestCSR } from 'binders/fetchApi';
+import { mutationRequestCSR } from 'binders';
 import { user } from '@store/slices/user';
 import { Roles } from 'models/enums';
 import type { AdminActions } from 'models/enums';

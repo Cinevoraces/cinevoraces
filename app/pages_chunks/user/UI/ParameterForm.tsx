@@ -1,4 +1,3 @@
-import type { ChangeEvent, FormEvent, RefObject } from 'react';
 import { useRef, useState } from 'react';
 import Image from 'next/image';
 import { useAppSelector, useAppDispatch } from '@store/store';
@@ -9,6 +8,7 @@ import SendLogo from '@public/icons/send-icon.svg';
 import { File } from '@components/Input';
 import { matchingErrorMessage, handleTextSubmit } from '../business_logic/textFormSubmit';
 import { handleAvatarUpload } from '../business_logic/profilePicFormSubmit'; 
+import type { RefObject } from 'react';
 import type { KeyedMutator } from 'swr';
 import type { User } from 'models/custom_types/index';
 
@@ -21,13 +21,11 @@ const ParameterForm = ({ mutate, mail }: ParameterFormInterface) => {
   const isPWVisible = useAppSelector(global).arePWVisible;
   const dispatch = useAppDispatch();
 
-  const profilePicRef = useRef<HTMLInputElement>(null);
   const emailRef = useRef<HTMLInputElement>(null);
   const usernameRef = useRef<HTMLInputElement>(null);
   const PWRef = useRef<HTMLInputElement>(null);
   const newPWRef = useRef<HTMLInputElement>(null);
   const confirmNewPWRef = useRef<HTMLInputElement>(null);
-  // const allInputsRef = [emailRef, usernameRef, PWRef, newPWRef, confirmNewPWRef];
   const allInputsRef: {[key: string]: RefObject<HTMLInputElement> } = {
     'emailRef': emailRef, 
     'usernameRef': usernameRef, 
@@ -62,7 +60,6 @@ const ParameterForm = ({ mutate, mail }: ParameterFormInterface) => {
       </form>
       <form
         action="submit"
-        // onSubmit={async (e) => handleSubmit(e, allInputsRef)}
         onSubmit={async (e) =>
           handleTextSubmit(
             e,

@@ -2,7 +2,7 @@
 import UserCard from '@components/UserCard';
 import type { NextPage } from 'next';
 import dateFormater from '@utils/dateFormater';
-import { Roles } from 'models/custom_types/global';
+import { Roles } from 'models/enums';
 import { Button } from '@components/Input';
 import type { User } from 'models/custom_types/index';
 import { AdminActions } from 'models/enums';
