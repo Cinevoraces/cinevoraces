@@ -86,7 +86,6 @@ const Film: NextPage<FilmProps> = ({ movies }) => {
     }
     const body: BodyData = {};
     // 1 - Mutate the cache first, without revalidation
-    // const mutatedData = await mutate(await reviewMutation(type, data), false);
     const mutatedData = await mutate(
       await reviewMutation(type, baseInteractionsArray, data, radioInputValue, commentFormRef),
       false
