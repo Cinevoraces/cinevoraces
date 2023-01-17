@@ -4,11 +4,11 @@ import Button from '@components/Input/Button';
 import { TextInputRef, Toggle } from '@components/Input';
 import { toggleConnectionModal } from '@store/slices/global';
 import { toggleArePWVisible, global } from '@store/slices/global';
-import { mutationRequestCSR } from 'binders/fetchApi';
+import { mutationRequestCSR } from 'binders';
 import { login } from '@store/slices/user';
 import { toast } from 'react-hot-toast';
 import tryCatchWrapper from '@utils/tryCatchWrapper';
-import type { BodyData } from 'binders/fetchApi';
+import type { BodyData } from 'models/custom_types';
 
 const ConnectionForm = () => {
   const isPWVisible = useAppSelector(global).arePWVisible;

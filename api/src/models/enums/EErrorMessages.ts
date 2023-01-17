@@ -18,6 +18,7 @@ export enum EErrorMessages {
   NO_EPISODE_AVAILABLE = 'Aucun créneau disponible.',
   NOT_FOUND = 'Aucun résultat.',
   NOT_FOUND_MOVIE = 'Aucun film trouvé',
+  ALREADY_POSTED_MOVIE = 'Le film sélectionné a déjà été proposé.',
   NOT_FOUND_MOVIE_ID = 'Le film demandé n\'a pas été trouvé dans la base de données.',
   NOT_FOUND_PROPOSAL = 'Le film demandé n\'a pas été trouvé parmis les proposition en cours.',
   UNAVAILABLE_EPISODE = 'Ce créneau est déjà réservé.',

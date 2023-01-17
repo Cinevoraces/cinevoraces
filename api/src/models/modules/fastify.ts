@@ -28,6 +28,7 @@ declare module 'fastify' {
     verifyPassword: (request: Request, reply: Reply) => void;
     findOrCreateReview: (request: Request, reply: Reply) => void;
     throwIfMovieNotFound: (request: Request, reply: Reply) => void;
+    throwIfMovieFound: (request: Request, reply: Reply) => void;
     throwIfMovieIsPublished: (request: Request, reply: Reply) => void;
     throwIfProposalChecksFails: (request: Request, reply: Reply) => void;
     adminThrowIfMovieIsPublished: (request: Request, reply: Reply) => void;
