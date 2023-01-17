@@ -19,12 +19,16 @@ services:
       - .env
     depends_on:
       - postgres
+    links:
+      - postgres
 
   api:
     hostname: cinevoraces_api
     env_file:
       - .env
     depends_on:
+      - postgres
+    links:
       - postgres
     build:
       context: ./api
@@ -34,12 +38,12 @@ services:
     restart: always
     volumes:
       - ./api:/api
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:3005/movies", "||", "exit", "1"]
-      interval: 1m30s
-      timeout: 10s
-      retries: 10
-      start_period: 40s
+    # healthcheck:
+    #   test: ["CMD", "curl", "-f", "http://localhost:3005/movies", "||", "exit", "1"]
+    #   interval: 1m30s
+    #   timeout: 10s
+    #   retries: 10
+    #   start_period: 40s
 
   app:
     hostname: cinevoraces_app
@@ -55,11 +59,12 @@ services:
     volumes:
       - ./app:/app
     depends_on:
-    - api
+      - api
       # api :
       #   condition: service_healthy
     links:
       - api
+    # command: ['./wait-for-it.sh', 'api:3005', '--' , 'npm', 'run', 'build']
   
   # nginx:
   #   depends_on:
