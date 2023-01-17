@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+import { useState, useRef } from 'react';
 import Link from 'next/link';
 import { useAppSelector, useAppDispatch } from '@store/store';
 import { toggleBurgerMenu, toggleUserMenu, toggleConnectionModal, global } from '@store/slices/global';
@@ -24,12 +24,8 @@ const Header = () => {
   //Toggle menu display when clicking outside them
   const burgerMenuRef = useRef<HTMLElement>(null);
   const userMenuRef = useRef<HTMLElement>(null);
-  const connexionModalRef = useRef<HTMLElement>(null);
   useCloseMenuOnOutsideClick(burgerMenuRef, 'burger', isBurgerMenuOpen, () => dispatch(toggleBurgerMenu()));
   useCloseMenuOnOutsideClick(userMenuRef, 'user', isUserMenuOpen, () => dispatch(toggleUserMenu()));
-  useCloseMenuOnOutsideClick(connexionModalRef, 'modal', isConnectionModalOpen, () =>
-    dispatch(toggleConnectionModal())
-  );
 
   const [navLinks, setNavLinks] = useState([
     ['Accueil', '/'],
@@ -96,7 +92,7 @@ const Header = () => {
         <Modal
           stateValue={isConnectionModalOpen}
           setter={() => dispatch(toggleConnectionModal())}
-          ref={connexionModalRef}>
+        >
           <ConnectionForm />
         </Modal>
       )}
