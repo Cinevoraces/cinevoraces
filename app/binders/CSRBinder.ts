@@ -12,6 +12,7 @@ const baseUrlCSR = process.env.NEXT_PUBLIC_API_BASE_URL_CSR;
  */
 export const getRequestCSR = async (endpoint: string) => {
   const options: FetchOptions = writeOptionsCSR();
+  console.log('getCSR : ', baseUrlCSR + endpoint);
   const res = await fetch(baseUrlCSR + endpoint, options);
   return handleResponse(res, endpoint);
 };
@@ -26,6 +27,7 @@ export const getRequestCSR = async (endpoint: string) => {
  */
 export const mutationRequestCSR = async (method: 'POST' | 'PUT' | 'DELETE', endpoint: string, body?: BodyData) => {
   const options = writeOptionsCSR(method, body);
+  console.log('mutationCSR : ', baseUrlCSR + endpoint);
   const res = await fetch(baseUrlCSR + endpoint, options);
   return handleResponse(res, endpoint, method, body);
 };

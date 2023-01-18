@@ -1,6 +1,6 @@
 import handleResponse from './handleResponse';
 
-const baseUrlSSR = process.env.NEXT_PUBLIC_API_BASE_URL_SSR || 'http://cinevoraces_api:3005' ;
+const baseUrlSSR = process.env.NEXT_PUBLIC_API_BASE_URL_SSR;
 
 /**
  * Generic function for SSR & ISR data fetching
