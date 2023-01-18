@@ -9,7 +9,7 @@ const movieSearch = async (
   const data = await externalGetRequest(
     'https://api.themoviedb.org/3',
     '/search/movie',
-    process.env.NEXT_PUBLIC_TMDB_KEY || '',
+    process.env.TMDB_KEY || '',
     `language=fr-FR&include_adult=false&query=${searchRef.current?.value}`
   );
   // Remove results that have no poster and no release date

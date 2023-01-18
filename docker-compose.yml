@@ -38,12 +38,6 @@ services:
     restart: always
     volumes:
       - ./api:/api
-    # healthcheck:
-    #   test: ["CMD", "curl", "-f", "http://localhost:3005/movies", "||", "exit", "1"]
-    #   interval: 1m30s
-    #   timeout: 10s
-    #   retries: 10
-    #   start_period: 40s
 
   app:
     hostname: cinevoraces_app
@@ -60,8 +54,6 @@ services:
       - ./app:/app
     depends_on:
       - api
-      # api :
-      #   condition: service_healthy
     links:
       - api
   
