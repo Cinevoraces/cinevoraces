@@ -64,7 +64,6 @@ services:
       #   condition: service_healthy
     links:
       - api
-    # command: ['./wait-for-it.sh', 'api:3005', '--' , 'npm', 'run', 'build']
   
   # nginx:
   #   depends_on:
