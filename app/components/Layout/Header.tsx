@@ -50,7 +50,7 @@ const Header = () => {
       <header
         className="py-2 px-2 flex items-center justify-between
         lg:container max-w-8xl lg:mx-auto relative">
-        <div className="flex gap-2">
+        <div className="flex gap-2 md:gap-6">
           <HeaderMenu
             type="burger"
             stateValue={isBurgerMenuOpen}

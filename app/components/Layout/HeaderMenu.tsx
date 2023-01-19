@@ -91,10 +91,13 @@ const HeaderMenu = forwardRef<HTMLElement, HeaderMenuProps>((props, ref) => {
       <HeaderMenuButton {...props} />
       <nav
         ref={ref}
-        className={stateValue ? menuStyle : 'hidden'}>
+        className={stateValue ? (menuStyle + `${(type !== 'user') ? ' pt-12' : ''}`) : 'hidden' }>
         {
           (type === 'user' && pseudo) && (<p className='absolute top-4 left-4 text-orange-primary'>{pseudo}</p>)
         }
+        {/* { // adding
+          type !== 'user' && <div className='w-full h-2'/>
+        } */}
         {links.map((link) => (
           <Link
             href={link[1]}
