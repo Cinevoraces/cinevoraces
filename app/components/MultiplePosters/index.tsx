@@ -1,5 +1,6 @@
 import React from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 
 /** Generates an array of number * poster paths, based on the current day of Year
  * @returns Array of movie posters url
@@ -38,6 +39,7 @@ export default function MultiplePosters({ number }: PostersComponentProps) {
   return (
     <div className="relative w-full aspect-square max-w-md">
       {posters.map((poster, i) => (
+        // <Link href={`films/${i + 1}`} key={'poster_' + i}> // to uncomment later, when all posters will ve stored
         <Image
           src={poster}
           alt="movie poster"
@@ -46,6 +48,7 @@ export default function MultiplePosters({ number }: PostersComponentProps) {
           className={posterStyles + ' ' + indivStyles[i]}
           key={poster}
         />
+        // </Link>
       ))}
     </div>
   );
