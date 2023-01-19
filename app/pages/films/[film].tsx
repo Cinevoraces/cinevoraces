@@ -235,13 +235,9 @@ interface Params extends ParsedUrlQuery {
   article: string;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const getStaticPaths: ()=>Promise<{ paths: { params: {} }[]; fallback: boolean | string } | []> = async () => {
-  console.log('---------- On récupère les paths ----------');
   try {
-    console.log('---------- url de fetch ---------- : ', process.env.NEXT_PUBLIC_API_BASE_URL_SSR);
     const movies = await getRequestSSR('/movies?where[is_published]=true');
-    console.log('---------- movies ---------- : ', movies);
     const paths = movies.map((movie: MinimalMovie) => ({ params: { film: '' + movie.id } }));
     return {
       paths,
@@ -252,7 +248,7 @@ export const getStaticPaths: ()=>Promise<{ paths: { params: {} }[]; fallback: bo
     return {
       paths: [],
       fallback: true,
-    };;
+    };
   }
 };
 
