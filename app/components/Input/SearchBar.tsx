@@ -1,6 +1,6 @@
 import Select from './Select';
 import type { SelectProps } from './Select';
-import type { ControlledTextProps } from './Text/Text';
+import type { ControlledTextProps } from 'models/custom_types';
 
 interface SearchBarProps extends ControlledTextProps<HTMLInputElement>, SelectProps{};
 

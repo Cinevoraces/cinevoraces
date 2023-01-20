@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 
 /**
+ * Custom hook made to add an extra keyboard interactivity for some custom menu elements
  * @param state boolean - containing opened status
  * @param setter status mutator
  */

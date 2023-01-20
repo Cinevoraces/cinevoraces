@@ -2,6 +2,14 @@ import type { User, CompleteMovie } from 'models/custom_types/index';
 import type { SetStateAction } from 'react';
 import { useEffect } from 'react';
 
+/**
+ * Custom Hook to handle Le film de la semaine and Proposer un film options
+ * @param lastMovie
+ * @param setNavLinks state setter for nav links
+ * @param navLinks links to be displayed
+ * @param id user id, retrieved from redux user state to check a connected user
+ * @param usersData user object from backend, used to check a pending proposition
+ */
 const useUpdateNavigationLinks = (
   lastMovie: CompleteMovie[] | undefined,
   setNavLinks: (value: SetStateAction<string[][]>)=>void,

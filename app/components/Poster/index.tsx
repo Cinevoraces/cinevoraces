@@ -20,11 +20,6 @@ enum PosterStyles {
  * @returns A unified movie poster component, using Next Image tool as much as possible
  */
 const Poster = ({ src, title, type }: PosterProps) => {
-  // const basicStyle = 'rounded-xl w-full h-full object-cover shadow-lg max-w-[240px] max-h-[360px] ';
-  // const filmStyle = 'relative z-10 max-w-[336px] max-h-[504px] object-cover';
-  // const interactiveStyle = 'hover:scale-105 transition duration-150 hover:ease-out ';
-  // const carousselStyle = 'fourth-child:hidden fifth-child:hidden sixth-child:hidden md:fourth-child:block lg:fifth-child:block xl:sixth-child:block';
-  // const cardStyle = 'rounded-lg max-w-[125px]';
 
   const styleResolver = (type?: 'caroussel' | 'grid' | 'film' | 'card') => {
     if (type) return PosterStyles[type];
