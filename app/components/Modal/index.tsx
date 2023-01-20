@@ -1,6 +1,5 @@
 import ReactDOM from 'react-dom';
 import { forwardRef } from 'react';
-import type { SpringValue } from '@react-spring/web';
 import { animated, useTransition } from '@react-spring/web';
 interface ModalProps {
   stateValue: boolean;

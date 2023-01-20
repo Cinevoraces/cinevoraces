@@ -1,4 +1,3 @@
-import React from 'react';
 import { PropositionMovieCard } from '@components/MovieCards';
 import { Button } from '@components/Input';
 import type { MovieWithPresentation } from '@custom_types/index';

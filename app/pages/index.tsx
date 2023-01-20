@@ -1,4 +1,3 @@
-import React from 'react';
 import type { NextPage } from 'next';
 import CustomHead from '@components/Head';
 import Image from 'next/image';
@@ -15,7 +14,7 @@ import { getDataFromEndpointSSR } from '@utils/fetchApi';
 import { useAppSelector } from '@store/store';
 import { user } from '@store/slices/user';
 
-import { useTrail, useSpringRef, animated } from '@react-spring/web';
+import { useTrail, animated } from '@react-spring/web';
 
 import Poster from '@components/Poster';
 interface HomeProps {

@@ -1,4 +1,3 @@
-import React from 'react';
 import Image from 'next/image';
 
 const generatePosterArray = (path: string, extension: string, number: number) => {
