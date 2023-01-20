@@ -61,9 +61,6 @@ services:
       - api
     networks:
       - app_network
-
-networks:
-  app_network:
   
   nginx:
     depends_on:
@@ -86,3 +83,6 @@ networks:
     volumes:
       - ./certbot/www/:/var/www/certbot/
       - ./certbot/conf/:/etc/letsencrypt/
+
+networks:
+  app_network:
