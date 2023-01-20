@@ -6,4 +6,6 @@ RUN apt update && apt install -y openssl && apt install -y curl
 
 WORKDIR /api
 COPY . .
-CMD ["npm", "run", "dev"]
+
+RUN npm run build
+CMD ["npm", "run", "start"]

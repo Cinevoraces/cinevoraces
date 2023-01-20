@@ -36,3 +36,6 @@ storage/*/*.bmp
 storage/*/*.webp
 storage/*/*.svg
 storage/*/*.ico
+
+# prod db data
+data/migration_v2.sql
