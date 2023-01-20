@@ -1,8 +1,8 @@
-import { mutationRequestCSR } from '@utils/fetchApi';
-import type { BodyData } from '@utils/fetchApi';
+import { mutationRequestCSR } from 'binders';
+import type { BodyData } from 'models/custom_types';
 import type { RefObject, SetStateAction } from 'react';
 import type { KeyedMutator } from 'swr';
-import type { User } from '@custom_types/index';
+import type { User } from 'models/custom_types/index';
 import type { AnyAction, ThunkDispatch } from '@reduxjs/toolkit';
 import type { UserProps } from '@store/slices/user';
 import { setUserModification } from '@store/slices/user';

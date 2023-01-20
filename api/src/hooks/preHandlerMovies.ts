@@ -21,6 +21,17 @@ export default plugin((async (fastify, opts, done) => {
   });
 
   /**
+   * @preValidation 
+   * @description Movie existence verification
+   */// eslint-disable-next-line @typescript-eslint/no-unused-vars
+  fastify.decorate('throwIfMovieFound', async (request: Request<{ Params?: { id: number }; }>, reply: Reply) => {
+    const { _errorService, _movieService } = fastify;
+    const isMovie = await _movieService.checkMovieExistanceById(request.params.id);
+    if (isMovie)
+      _errorService.send(EErrorMessages.ALREADY_POSTED_MOVIE, 404);
+  });
+
+  /**
    * @preValidation
    * @description This hook verifies if a movie has been published.
    */// eslint-disable-next-line @typescript-eslint/no-unused-vars

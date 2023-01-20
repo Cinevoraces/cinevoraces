@@ -1,6 +1,6 @@
 import type { Dispatch, SetStateAction } from 'react';
 import { useEffect } from 'react';
-import type { User } from '@custom_types/index';
+import type { User } from 'models/custom_types/index';
 import type { KeyedMutator } from 'swr';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

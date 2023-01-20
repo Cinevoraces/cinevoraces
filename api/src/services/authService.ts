@@ -111,6 +111,7 @@ class AuthService extends DatabaseService {
     });
     return await this.compareStrings(password, rows[0].password);
   }
+
 };
 
 // Decorate FastifyInstance with AuthService

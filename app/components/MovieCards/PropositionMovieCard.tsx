@@ -4,7 +4,7 @@ import cutText from '@utils/cutText';
 import dateFormater from '@utils/dateFormater';
 import useCloseMenuOnOutsideClick from '@hooks/useCloseMenuOnOutsideClick';
 import Modal from '@components/Modal';
-import type { MovieWithPresentation, Presentation } from '@custom_types/index';
+import type { MovieWithPresentation, Presentation } from 'models/custom_types/index';
 
 interface PropositionMovieCardProps {
   movie: MovieWithPresentation;
@@ -34,6 +34,8 @@ const PropositionMovieCard = ({ movie, propositionCardStyle, posterStyle }: Prop
           alt={`${french_title} movie poster`}
           width={150}
           height={(150 * 9) / 16}
+          placeholder='blur'
+          blurDataURL='/movie_posters/placeholder.jpg'
           className={posterStyle}
         />
         <div className="w-full h-fill px-3 py-1 flex flex-col justify-between gap-1">

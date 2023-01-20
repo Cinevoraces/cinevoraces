@@ -1,4 +1,4 @@
-import type { TMDBMovieCredits } from '@custom_types/index';
+import type { TMDBMovieCredits } from 'models/custom_types/index';
 
 const creditsFormater = (credits: TMDBMovieCredits) => {
   return Object.keys(credits)

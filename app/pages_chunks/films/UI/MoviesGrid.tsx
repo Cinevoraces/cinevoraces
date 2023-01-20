@@ -1,4 +1,4 @@
-import type { CompleteMovie } from '@custom_types/index';
+import type { CompleteMovie } from 'models/custom_types/index';
 import { useTrail, useSpringRef, animated } from '@react-spring/web';
 import Link from 'next/link';
 import Poster from '@components/Poster';

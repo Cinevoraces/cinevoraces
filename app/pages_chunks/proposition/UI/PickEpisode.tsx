@@ -1,6 +1,6 @@
 import { Select } from '@components/Input';
 import type { Dispatch, SetStateAction } from 'react';
-import type { EpisodeOption } from '@custom_types/propositionPage';
+import type { EpisodeOption } from 'models/custom_types/propositionPage';
 
 interface PickEpisodeProps {
   episodesArray: EpisodeOption [];

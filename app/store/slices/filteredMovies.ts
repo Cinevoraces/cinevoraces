@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { RootState } from '../store';
 import type { PayloadAction } from '@reduxjs/toolkit';
-import type { CompleteMovie, FilteredMoviesStateInterface, FilterOptions, FilterUserInputs } from '@custom_types/index';
+import type { CompleteMovie, FilteredMoviesStateInterface, FilterOptions, FilterUserInputs } from 'models/custom_types/index';
 
 const initialState: FilteredMoviesStateInterface = {
   isSeasonSelectOpened: false,

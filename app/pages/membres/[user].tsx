@@ -3,7 +3,7 @@ import { useState } from 'react';
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import useSWR from 'swr';
-import { User } from '@custom_types/index';
+import { User } from 'models/custom_types/index';
 import { useAppSelector } from '@store/store';
 import { user } from 'store/slices/user';
 import Loader from '@components/Loader';

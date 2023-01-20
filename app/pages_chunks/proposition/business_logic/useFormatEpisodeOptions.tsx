@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import type { MutableRefObject } from 'react';
-import type { Episode, EpisodeOption } from '@custom_types/index';
+import type { Episode, EpisodeOption } from 'models/custom_types/index';
 import dateFormater from '@utils/dateFormater';
 
 /** Hook that checks if a connected user has a pending proposition

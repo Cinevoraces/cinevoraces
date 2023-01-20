@@ -16,7 +16,7 @@ import {
   setFilteredMovies,
   cleanUserInputs,
 } from '@store/slices/filteredMovies';
-import type { CompleteMovie, Season, SeasonOption } from '@custom_types/index';
+import type { CompleteMovie, Season, SeasonOption } from 'models/custom_types/index';
 import type { ChangeEvent } from 'react';
 
 import filtersSync from '@utils/filterSyncer';
