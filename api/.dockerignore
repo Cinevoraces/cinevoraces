@@ -1,5 +1,0 @@
-**/.dockerignore
-**/.next
-**/node_modules
-**/npm-debug.log
-**/.eslintrc.json
