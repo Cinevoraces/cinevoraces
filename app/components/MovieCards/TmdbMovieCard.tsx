@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import cutText from '@utils/cutText';
+import Poster from '@components/Poster';
 import type { TMDBMovie } from 'models/custom_types/index';
 
 interface TmdbMovieCardProps {
@@ -8,24 +9,19 @@ interface TmdbMovieCardProps {
   movie: TMDBMovie;
 }
 
-const TmdbMovieCard = ({ resultCardStyle, posterStyle, movie }: TmdbMovieCardProps) => {
+const TmdbMovieCard = ({ resultCardStyle, movie }: TmdbMovieCardProps) => {
   return (
     <div
       id="tmdb-result-card"
       className={resultCardStyle}>
-      <Image
+      <Poster 
         src={
           movie.poster_path
             ? `https://image.tmdb.org/t/p/original${movie.poster_path}`
             : '/movie_posters/placeholder.jpg'
         }
-        alt={`${movie.title} movie poster`}
-        width={150}
-        height={(150 * 9) / 16}
-        placeholder='blur'
-        blurDataURL='/movie_posters/placeholder.jpg'
-        className={posterStyle}
-      />
+        title={movie.title}
+        type='card'/>
       <div className="w-full h-fill px-3 py-1 flex flex-col justify-between gap-1">
         <div>
           <p className="text-lg">

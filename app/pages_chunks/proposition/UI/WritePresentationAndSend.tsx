@@ -1,6 +1,6 @@
 import { forwardRef } from 'react';
 import Image from 'next/image';
-import { TextAreaRef, Button } from '@components/Input';
+import { RefTextArea, Button } from '@components/Input';
 import SendLogo from '@public/icons/send-icon.svg';
 import type { FormEvent } from 'react';
 import type { TMDBMovie } from 'models/custom_types/index';
@@ -42,7 +42,7 @@ const WritePresentationAndSend = forwardRef<HTMLTextAreaElement, WritePresentati
         action='submit'
         onSubmit={handlePropositionSubmit}
         className='w-full flex flex-col gap-2'>
-        <TextAreaRef
+        <RefTextArea
           id='presentation'
           customStyle='light'
           ref={ref}

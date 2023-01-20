@@ -8,7 +8,11 @@ import { global, toggleBurgerMenu, toggleUserMenu, toggleConnectionModal, toggle
 interface LayoutProps {
   children: React.ReactNode;
 }
-
+/**
+ * 
+ * @param children ReactNodes 
+ * @returns global <div> layout component to wrap every common part of it and the toaster mechanic.
+ */
 const Layout = ({ children }: LayoutProps) => {
   // Page redirection closes opened menus and reset PW visibility
   const dispatch = useAppDispatch();

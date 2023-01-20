@@ -4,6 +4,11 @@ interface FormProps{
   children: React.ReactNode;
 }
 
+/**
+ * 
+ * @param children  ReactNodes
+ * @returns generic <form> to wrapp an input group
+ */
 const Form = ({ children }: FormProps) => {
   const [isRequired, setIsRequired] = useState(false);
   return (

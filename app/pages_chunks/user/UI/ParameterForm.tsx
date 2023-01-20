@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react';
 import Image from 'next/image';
 import { useAppSelector, useAppDispatch } from '@store/store';
-import { TextInputRef, Toggle } from '@components/Input';
+import { RefTextInput, Toggle } from '@components/Input';
 import { toggleArePWVisible, global } from '@store/slices/global';
 import Button from '@components/Input/Button';
 import SendLogo from '@public/icons/send-icon.svg';
@@ -72,7 +72,7 @@ const ParameterForm = ({ mutate, mail }: ParameterFormInterface) => {
         }
         className="flex flex-col w-full gap-6 max-w-xl border px-6 py-4 border-orange-primary rounded-xl">
         <div className="flex flex-col gap-1">
-          <TextInputRef
+          <RefTextInput
             type="email"
             id="email"
             label="Modifier votre email"
@@ -84,7 +84,7 @@ const ParameterForm = ({ mutate, mail }: ParameterFormInterface) => {
             Mon addresse actuelle : <span className="emphasis">{mail}</span>
           </p>
         </div>
-        <TextInputRef
+        <RefTextInput
           id="username"
           label="Modifier mon nom d'utilisateur"
           placeholder="Votre nouveau nom d'utilisateur..."
@@ -94,14 +94,14 @@ const ParameterForm = ({ mutate, mail }: ParameterFormInterface) => {
         />
         <p className={helpingTextStyle}>{'Doit comporter au moins 3 caractères, espaces autorisés.'}</p>
         <div className="flex flex-col gap-3">
-          <TextInputRef
+          <RefTextInput
             type={!isPWVisible ? 'password' : undefined}
             id="password"
             label="Modifier votre mot de passe"
             placeholder="Nouveau mot de passe..."
             ref={newPWRef}
           />
-          <TextInputRef
+          <RefTextInput
             type={!isPWVisible ? 'password' : undefined}
             id="password"
             placeholder="Confirmez votre nouveau mot de passe..."
@@ -114,7 +114,7 @@ const ParameterForm = ({ mutate, mail }: ParameterFormInterface) => {
             <br />
             Doit comprendre au moins une majuscule, une minuscule, un chiffre et un symbole parmi ! # $ % * + = ? | -
           </p>
-          <TextInputRef
+          <RefTextInput
             type={!isPWVisible ? 'password' : undefined}
             id="password"
             label="Confirmez les modifications avec votre mot de passe actuel"

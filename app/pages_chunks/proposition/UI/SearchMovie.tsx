@@ -1,5 +1,5 @@
 import { forwardRef } from 'react';
-import { TextInputRef, Button } from '@components/Input';
+import { RefTextInput, Button } from '@components/Input';
 import { MagnifyingGlassSvg } from '@components/SvgComponents';
 import type { FormEvent } from 'react';
 
@@ -24,7 +24,7 @@ const SearchMovie = forwardRef<HTMLInputElement, SearchMovieProps>((props, ref) 
           action="submit"
           onSubmit={handleMovieSearch}
           className='w-full flex gap-4 items-center flex-wrap'>
-          <TextInputRef
+          <RefTextInput
             type='search'
             id='movieSearch'
             placeholder='Rechercher un titre de film...'

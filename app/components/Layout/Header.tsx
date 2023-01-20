@@ -16,6 +16,10 @@ import useRecoverStateFromSessionStorage from '@hooks/useRecoverStateFromSession
 import type { CompleteMovie } from 'models/custom_types/movies';
 import type { User } from 'models/custom_types/index';
 
+/**
+ * 
+ * @returns adaptive header with dynamic parts such as navigation /user menus and dynamic links
+ */
 const Header = () => {
   const { isBurgerMenuOpen, isUserMenuOpen, isConnectionModalOpen } = useAppSelector(global);
   const { id, role } = useAppSelector(user);

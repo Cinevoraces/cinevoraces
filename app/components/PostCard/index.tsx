@@ -19,6 +19,18 @@ const commentStyle =
   'threeModulusZero-child:bg-card-bg-two threeModulusOne-child:bg-card-bg-three threeModulusTwo-child:bg-card-bg-one';
 const formStyle = basicStyle + 'bg-card-bg-one';
 
+/**
+ * 
+ * @param type 
+ * @param author_avatar 
+ * @param author_id 
+ * @param author_pseudo 
+ * @param publishing_date 
+ * @param children 
+ * @param rating 
+ * @param created_at 
+ * @returns <div> versatile cards to be used as wrapper for presentation and comments tiles
+ */
 const PostCard = ({
   type,
   author_avatar,

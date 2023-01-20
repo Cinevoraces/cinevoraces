@@ -1,6 +1,6 @@
 import type { FormEvent } from 'react';
 import { useRef } from 'react';
-import { Button, TextInputRef, Toggle } from '@components/Input';
+import { Button, RefTextInput, Toggle } from '@components/Input';
 import { global, toggleArePWVisible } from '@store/slices/global';
 import { useAppDispatch, useAppSelector } from '@store/store';
 
@@ -24,7 +24,7 @@ const ConfirmationForm = ({ handlingAction: { description, handlingFunction }, i
         className="flex flex-col w-full gap-3"
         action="submit"
         onSubmit={(e: FormEvent) => handleSubmit(e)}>
-        <TextInputRef
+        <RefTextInput
           type={!isPWVisible ? 'password' : undefined}
           id="password"
           label="Entrez votre mot de passe"

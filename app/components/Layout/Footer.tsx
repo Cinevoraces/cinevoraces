@@ -1,6 +1,10 @@
 import Link from 'next/link';
 import CompleteLogo from './CompleteLogo';
 
+/**
+ * 
+ * @returns <footer> to be called in Layout wrapper
+ */
 const Footer = () => {
   return (
     <footer className='bg-medium-gray'>

@@ -9,6 +9,13 @@ interface MoviePickerProps {
   styles: {[key: string]: string };
 }
 
+/**
+ * 
+ * @param movies movie list from TMDB or backend
+ * @param handleSelectMovie State setter for movie selection
+ * @param styles custom style object
+ * @returns generic Movie Picker component, compatible with TMDB movies or API pending propositions
+ */
 const MoviePicker = ({ movies, handleSelectMovie, styles }: MoviePickerProps) => {
   const { posterStyle, radioStyle, resultCardStyle, gridStyle } = styles;
   const router = useRouter();

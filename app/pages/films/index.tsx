@@ -1,6 +1,6 @@
 import { useRef, useEffect } from 'react';
 import CustomHead from '@components/Head';
-import { Filter, SearchBar } from '@components/Input';
+import { Filters, SearchBar } from '@components/Input';
 import useSWR from 'swr';
 import { useAppSelector, useAppDispatch } from '@store/store';
 import { user } from 'store/slices/user';
@@ -146,7 +146,7 @@ const Films: NextPage = () => {
             />
           )}
           {availableFilters && moviesResults && (
-            <Filter
+            <Filters
               isMenuOpened={isFilterMenuOpen}
               displayMenuSetter={handleToggleFilterMenu}
               filterOptions={availableFilters}

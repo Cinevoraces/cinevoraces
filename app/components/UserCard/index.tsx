@@ -10,6 +10,13 @@ interface UserCardProps {
   children?: React.ReactNode;
 }
 
+/**
+ * 
+ * @param user 
+ * @param type 
+ * @param children 
+ * @returns <div> wrapper for a user tile that can be filled with extra elements
+ */
 const UserCard = ({ user, type, children }: UserCardProps) => {
   return (
     <div

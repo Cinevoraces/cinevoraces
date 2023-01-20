@@ -1,13 +1,23 @@
 import type { CompleteMovie, Interactions } from 'models/custom_types/index';
 import type { MutableRefObject } from 'react';
 
-export default async function reviewMutation (
+/**
+ * Handles complex cache mutations due to interaction manipulations
+ * Very similar to state management
+ * @param type 
+ * @param baseInteractionsArray 
+ * @param data 
+ * @param radioInputValue 
+ * @param commentFormRef 
+ * @returns mutated data
+ */
+const reviewMutation = (
   type: 'bookmarked' | 'viewed' | 'liked' | 'rating' | 'comment',
   baseInteractionsArray: Interactions[],
   data: CompleteMovie[],
   radioInputValue: MutableRefObject<number | null>,
   commentFormRef: React.RefObject<HTMLTextAreaElement>,
-) {
+)=> {
   // Initial state for cache
   const defaultUserReview = { bookmarked: false, viewed: false, liked: false, rating: null, comment: null };
   // Deal both with user_review absence or presence in cache
@@ -55,3 +65,5 @@ export default async function reviewMutation (
       ];
   }
 };
+
+export default reviewMutation;

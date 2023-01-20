@@ -16,6 +16,14 @@ const socialMediaComponents: SocialMediaComponents= {
 
 interface TeamMemberCardProps extends TeamMember{}
 
+/**
+ * 
+ * @param pictureUrl 
+ * @param completeName 
+ * @param roles 
+ * @param contacts 
+ * @returns <div> contact card tile for contact page
+ */
 const TeamMemberCard = ({ pictureUrl, completeName, roles, contacts }: TeamMemberCardProps) => {
   return (
     <div className="relative w-[300px] px-2 py-4 mt-12 mb-6 bg-medium-gray rounded-xl shadow-lg">

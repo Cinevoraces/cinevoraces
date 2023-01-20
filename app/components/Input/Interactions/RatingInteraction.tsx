@@ -1,15 +1,8 @@
 import type { FormEvent } from 'react';
 import { useRef } from 'react';
-import { BookmarkSvg, LikeSvg, StarSvg, ViewSvg } from '@components/SvgComponents/InteractionsSVG';
-import StarRadio from './StarRadio';
+import { StarSvg } from '@components/SvgComponents/InteractionsSVG';
+import StarRadio from '../StarRadio';
 import useCloseMenuOnOutsideClick from '@hooks/useCloseMenuOnOutsideClick';
-
-interface BaseInteractionProps {
-  type: 'bookmarked' | 'liked' | 'viewed' | 'rating';
-  counter: number;
-  isClicked: boolean;
-  onClick: ()=>void;
-}
 
 const buttonStyle = `w-14 h-14 lg:w-16 lg:h-16 
 bg-medium-gray pt-1 rounded-xl interaction outline-none 
@@ -30,18 +23,6 @@ bg-medium-gray outline-none `;
 const ratingMenuContainer = 'rating relative z-0 h-full w-52 -top-1 lg:top-0';
 const svgStyle = 'h-6 w-14 fill-none lg:h-8 lg:w-16 ';
 
-export const BaseInteraction = ({ type, counter, isClicked, onClick }: BaseInteractionProps) => {
-  const SvgComponent = (type === 'bookmarked') ? BookmarkSvg : (type === 'liked') ? LikeSvg : ViewSvg;
-  return (
-    <button
-      onClick={onClick}
-      className={isClicked ? buttonStyle + 'interaction--clicked translate-y-[2px]' : buttonStyle}>
-      <SvgComponent style={isClicked ? svgStyle.replace('fill-none', 'fill-white') : svgStyle} />
-      <p className="text-sm mt-1">{counter}</p>
-    </button>
-  );
-};
-
 interface RatingInteractionProps {
   counter: number;
   isClicked: boolean;
@@ -49,7 +30,15 @@ interface RatingInteractionProps {
   value?: number | undefined;
 }
 
-export const RatingInteraction = ({ isClicked, counter, ratingHandler, value }: RatingInteractionProps) => {
+/**
+ * 
+ * @param isCLicked user input, used to visually represent the button mode
+ * @param counter overall interactions for this type on this movie
+ * @param ratingHandler rating mutation setter
+ * @param value corresponding value issued from the radio input
+ * @returns Rating button that expands to contain a custom radio inputfor rating mutation
+ */
+const RatingInteraction = ({ isClicked, counter, ratingHandler, value }: RatingInteractionProps) => {
   // Reference to control Rating Menu states and width
   const ratingMenuRef = useRef<HTMLDivElement>(null);
   const isMenuOpened = ratingMenuRef.current?.classList.contains('w-14') || ratingMenuRef.current?.classList.contains('w-16') || false;
@@ -101,3 +90,5 @@ export const RatingInteraction = ({ isClicked, counter, ratingHandler, value }: 
     </div>
   );
 };
+
+export default RatingInteraction;

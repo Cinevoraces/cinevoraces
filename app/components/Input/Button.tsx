@@ -20,7 +20,7 @@ interface ButtonProps {
  * @param href for external links only
  * @param name for special closing mechanics as in select and searchbar
  * @param disabled whether the button is disabled or not
- */
+*/
 const Button = ({
   children,
   customStyle,
@@ -30,6 +30,7 @@ const Button = ({
   name,
   disabled,
 }: ButtonProps) => {
+
   const [baseStyle, classic, empty, rounded, white, select] = [
     `peer 
       group 

@@ -4,7 +4,7 @@ import { useAppSelector } from '@store/store';
 import { user } from '@store/slices/user';
 import PostCard from '@components/PostCard';
 import Button from '@components/Input/Button';
-import { TextAreaRef } from '@components/Input';
+import { RefTextArea } from '@components/Input';
 import SendLogo from '@public/icons/send-icon.svg';
 import cutText from '@utils/cutText';
 import { useTrail, animated } from '@react-spring/web';
@@ -99,7 +99,7 @@ const CommentsSection = forwardRef<HTMLTextAreaElement, CommentsSectionProps>(({
                 onSubmit(e);
                 toggleCommentForm();
               }}>
-              <TextAreaRef
+              <RefTextArea
                 id="comment-form"
                 ref={ref}
               />
@@ -149,7 +149,7 @@ const CommentsSection = forwardRef<HTMLTextAreaElement, CommentsSectionProps>(({
                               onSubmit(e);
                               toggleEditionForm();
                             }}>
-                            <TextAreaRef
+                            <RefTextArea
                               id="comment-form"
                               ref={ref}
                               defaultValue={orderedComments.current[index].comment}

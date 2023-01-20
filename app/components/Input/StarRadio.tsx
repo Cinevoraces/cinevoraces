@@ -6,6 +6,12 @@ interface StarRadioProps {
   value?: number;
 }
 
+/**
+ * 
+ * @param onChange state setter for controlled input
+ * @param value state value
+ * @returns <fieldset> dedicated to a custom radio input for rating purposes
+ */
 const StarRadio = (props: StarRadioProps) => {
   const radioStyle = ` radio-input absolute z-20 cursor-pointer 
   peer w-6 h-6 border-none 
