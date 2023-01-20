@@ -1,4 +1,3 @@
-import React from 'react';
 import type { NextPage } from 'next';
 import CustomHead from '@components/Head';
 import Image from 'next/image';
