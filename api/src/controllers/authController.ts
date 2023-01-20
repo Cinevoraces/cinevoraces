@@ -3,18 +3,22 @@ import type {
   FastifyRequest as Request,
   FastifyReply as Reply,
 } from 'fastify';
+
 import {
   ESchemasIds,
   EErrorMessages,
   EResponseMessages,
 } from '../models/enums/_index';
 
+const aTokenOptions = { expiresIn: 60 };
+const rTokenOptions = { expiresIn: '1d' };
+
 /**
  * @description Auth API.
  * @prefix /
  */
 export default async (fastify: FastifyInstance) => {
-
+  
   /**
    * @description Register a new user.
    * @route POST /register
@@ -83,7 +87,8 @@ export default async (fastify: FastifyInstance) => {
       const userObject = { ...tokensContent, avatar_url: privateUser.avatar_url };
 
       // Generate tokens
-      const { accessToken, refreshToken } = await _authService.generateTokens(tokensContent, reply);
+      const accessToken = await reply.jwtSign(userObject, aTokenOptions);
+      const refreshToken = await reply.jwtSign(userObject, rTokenOptions);
 
       reply
         .code(200)
@@ -122,7 +127,8 @@ export default async (fastify: FastifyInstance) => {
       };
 
       // Generate tokens
-      const { accessToken, refreshToken } = await _authService.generateTokens(tokensContent, reply);
+      const accessToken = await reply.jwtSign(tokensContent, aTokenOptions);
+      const refreshToken = await reply.jwtSign(tokensContent, rTokenOptions);
 
       reply
         .code(200)
