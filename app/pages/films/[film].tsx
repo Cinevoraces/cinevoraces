@@ -23,13 +23,15 @@ import { useAppSelector } from '@store/store';
 import { user } from '@store/slices/user';
 import { toast } from 'react-hot-toast';
 import cutText from '@utils/cutText';
+import { useRouter } from 'next/router';
+import Loader from '@components/Loader';
+import reviewMutation from 'cache/filmPage.cache';
+import RichText from '@components/RichText';
+
 import type { NextPage, GetStaticProps } from 'next';
 import type { ParsedUrlQuery } from 'querystring';
 import type { MinimalMovie, CompleteMovie, Interactions } from 'models/custom_types/index';
 import type { BodyData } from 'models/custom_types';
-import { useRouter } from 'next/router';
-import Loader from '@components/Loader';
-import reviewMutation from 'cache/filmPage.cache';
 interface FilmProps {
   movies: CompleteMovie[];
 }
@@ -201,11 +203,13 @@ const Film: NextPage<FilmProps> = ({ movies }) => {
                   type="presentation"
                   {...movie.presentation}
                   created_at={movie.publishing_date}>
-                  <p className="text-ellipsis">
-                    {!isPresentationCut || isPresentationExpanded
-                      ? movie.presentation.presentation
-                      : cutPresentationText}
-                  </p>
+                  <RichText>
+                    {
+                      !isPresentationCut || isPresentationExpanded
+                        ? movie.presentation.presentation as string
+                        : cutPresentationText as string
+                    }
+                  </RichText>
                   {isPresentationCut && (
                     <div className="flex justify-end">
                       <Button

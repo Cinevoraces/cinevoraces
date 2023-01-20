@@ -8,6 +8,7 @@ import { RefTextArea } from '@components/Input';
 import SendLogo from '@public/icons/send-icon.svg';
 import cutText from '@utils/cutText';
 import { useTrail, animated } from '@react-spring/web';
+import RichText from '@components/RichText';
 import type { Comment } from 'models/custom_types/movies';
 import type { FormEventHandler } from 'react';
 
@@ -176,14 +177,14 @@ const CommentsSection = forwardRef<HTMLTextAreaElement, CommentsSectionProps>(({
                         ) : (
                         // If not, just display the comment, expanded or not
                           <>
-                            <p>
+                            <RichText>
                               {
                                 // If the comment has a cut version & expanding state is true
                                 cutComments.current[index][1] && commentsExpansionStates[index]
-                                  ? orderedComments.current[index].comment
-                                  : cutComments.current[index][0]
+                                  ? orderedComments.current[index].comment as string
+                                  : cutComments.current[index][0] as string
                               }
-                            </p>
+                            </RichText>
                             {
                               // Adding button PostCard buttons
                               (

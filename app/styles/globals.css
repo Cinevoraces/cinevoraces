@@ -95,6 +95,15 @@ input[type='file']::file-selector-button {
   .animated-caroussel > li:nth-child(6){
     @apply hidden xl:block;
   }
+  .rich-text > ul > li {
+    @apply list-disc ml-4
+  }
+  .rich-text > ol > li {
+    @apply list-decimal ml-5
+  }
+  .rich-text > p > a {
+    @apply underline text-orange-primary font-medium
+  }
 }
 
 /*

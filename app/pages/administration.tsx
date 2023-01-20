@@ -1,7 +1,7 @@
 import type { NextPage } from 'next';
 import CustomHead from '@components/Head';
 import type { FormEvent } from 'react';
-import { useState, useRef } from 'react';
+import { useState } from 'react';
 import useSWR from 'swr';
 import { mutationRequestCSR } from 'binders';
 import { user } from '@store/slices/user';
@@ -14,7 +14,6 @@ import type { User, MovieWithPresentation } from 'models/custom_types/index';
 import PropositionsSection from 'pages_chunks/administration/UI/PropositionsSection';
 import UsersSection from 'pages_chunks/administration/UI/UsersSection';
 import Modal from '@components/Modal';
-import useCloseMenuOnOutsideClick from '@hooks/useCloseMenuOnOutsideClick';
 import ConfirmationForm from 'pages_chunks/administration/UI/ConfirmationForm';
 
 import tryCatchWrapper from '@utils/tryCatchWrapper';
