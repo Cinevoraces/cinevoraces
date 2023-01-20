@@ -1,6 +1,6 @@
 import { bindActionCreators, createSlice } from '@reduxjs/toolkit';
 import type { RootState } from '../store';
-import type { Roles } from 'models/custom_types/global';
+import type { Roles } from 'models/enums';
 
 export interface UserProps {
   id?: number;

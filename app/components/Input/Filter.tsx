@@ -111,7 +111,7 @@ export default function Filter({
         </Button>
         {
           (isMenuOpened) &&
-          <p className='w-full text-right self-center md:hidden'>
+          <p className='w-full text-right self-center text-xl font-semibold md:hidden'>
             {resultsCount + ' films'}
           </p>
         }

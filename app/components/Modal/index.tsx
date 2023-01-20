@@ -38,7 +38,6 @@ const Modal = (props: ModalProps) => {
           trail.map((props, index) =>
             (
               <animated.section
-              // style={style}
                 style={props}
                 key={index}
                 className="relative z-50 w-5/6 max-w-lg mt-[25vh] mx-auto p-8 pt-10 rounded-xl bg-dark-gray"

@@ -235,7 +235,6 @@ interface Params extends ParsedUrlQuery {
   article: string;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const getStaticPaths: ()=>Promise<{ paths: { params: {} }[]; fallback: boolean | string } | []> = async () => {
   try {
     const movies = await getRequestSSR('/movies?where[is_published]=true');
@@ -246,7 +245,10 @@ export const getStaticPaths: ()=>Promise<{ paths: { params: {} }[]; fallback: bo
     };
   } catch (err) {
     console.error(err);
-    return [];
+    return {
+      paths: [],
+      fallback: true,
+    };
   }
 };
 

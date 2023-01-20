@@ -1,6 +1,6 @@
 import handleResponse from './handleResponse';
 
-const baseUrlSSR = process.env.NEXT_PUBLIC_API_BASE_URL_SSR ;
+const baseUrlSSR = process.env.NEXT_PUBLIC_API_BASE_URL_SSR;
 
 /**
  * Generic function for SSR & ISR data fetching

@@ -82,8 +82,6 @@ const Administration: NextPage = () => {
     setConfirmationAction({ handlingAction: handleSubmitActions[action], id });
     handleOpenConfirmationModal();
   };
-  const pwModalRef = useRef<HTMLElement>(null);
-  useCloseMenuOnOutsideClick(pwModalRef, 'modal', isConfirmationModalOpen, handleOpenConfirmationModal);
 
   return (
     <>
@@ -114,8 +112,7 @@ const Administration: NextPage = () => {
       {isConfirmationModalOpen && (
         <Modal
           stateValue={isConfirmationModalOpen}
-          setter={handleOpenConfirmationModal}
-          ref={pwModalRef}>
+          setter={handleOpenConfirmationModal}>
           {confirmationAction && <ConfirmationForm {...confirmationAction} />}
         </Modal>
       )}

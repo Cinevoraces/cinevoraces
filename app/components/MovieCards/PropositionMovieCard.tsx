@@ -1,8 +1,7 @@
-import { useState, useRef } from 'react';
+import { useState } from 'react';
 import Image from 'next/image';
 import cutText from '@utils/cutText';
 import dateFormater from '@utils/dateFormater';
-import useCloseMenuOnOutsideClick from '@hooks/useCloseMenuOnOutsideClick';
 import Modal from '@components/Modal';
 import type { MovieWithPresentation, Presentation } from 'models/custom_types/index';
 
@@ -22,8 +21,6 @@ const PropositionMovieCard = ({ movie, propositionCardStyle, posterStyle }: Prop
   const handleOpenPresentationModal = () => {
     setIsPresentationModalOpened(!isPresentationModalOpened);
   };
-  const modalRef = useRef<HTMLElement>(null);
-  useCloseMenuOnOutsideClick(modalRef, 'modal', isPresentationModalOpened, handleOpenPresentationModal);
   return (
     <>
       <div
@@ -59,8 +56,7 @@ const PropositionMovieCard = ({ movie, propositionCardStyle, posterStyle }: Prop
         isPresentationModalOpened && (
           <Modal
             stateValue={isPresentationModalOpened}
-            setter={setIsPresentationModalOpened}
-            ref={modalRef}>
+            setter={setIsPresentationModalOpened}>
             <p>{presentationObject.presentation}</p>
           </Modal>
         )
