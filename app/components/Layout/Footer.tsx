@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import CompleteLogo from './CompleteLogo';
 
-export default function Footer() {
+const Footer = () => {
   return (
     <footer className='bg-medium-gray'>
       <div className='container mx-auto mb-0 px-4 py-4 flex flex-col items-center justify-between gap-3'>
@@ -13,4 +13,6 @@ export default function Footer() {
       </div>
     </footer>
   );
-}
+};
+
+export default Footer;

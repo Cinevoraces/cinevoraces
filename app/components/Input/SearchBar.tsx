@@ -4,7 +4,7 @@ import type { ControlledTextProps } from './Text';
 
 interface SearchBarProps extends ControlledTextProps<HTMLInputElement>, SelectProps{};
 
-export default function SearchBar(props: SearchBarProps) {
+const SearchBar = (props: SearchBarProps) => {
   const searchBarStyle = `flex w-full pr-1 max-w-[450px] 
   border border-orange-primary rounded-xl 
   focus-within:outline-none focus-within:ring-4 focus-within:ring-offset-0 focus-within:ring-white/5 
@@ -24,4 +24,6 @@ export default function SearchBar(props: SearchBarProps) {
         {...textProps}/>
     </div>
   );
-}
+};
+
+export default SearchBar;

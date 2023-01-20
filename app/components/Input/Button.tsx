@@ -21,7 +21,7 @@ interface ButtonProps {
  * @param name for special closing mechanics as in select and searchbar
  * @param disabled whether the button is disabled or not
  */
-export default function Button({
+const Button = ({
   children,
   customStyle,
   onClick,
@@ -29,7 +29,7 @@ export default function Button({
   href,
   name,
   disabled,
-}: ButtonProps) {
+}: ButtonProps) => {
   const [baseStyle, classic, empty, rounded, white, select] = [
     `peer 
       group 
@@ -91,4 +91,6 @@ export default function Button({
       )}
     </>
   );
-}
+};
+
+export default Button;

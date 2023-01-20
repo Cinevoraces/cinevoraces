@@ -6,7 +6,7 @@ interface StarRadioProps {
   value?: number;
 }
 
-export default function StarRadio(props: StarRadioProps) {
+const StarRadio = (props: StarRadioProps) => {
   const radioStyle = ` radio-input absolute z-20 cursor-pointer 
   peer w-6 h-6 border-none 
   bg-transparent text-transparent 
@@ -47,4 +47,6 @@ export default function StarRadio(props: StarRadioProps) {
       ))}
     </fieldset>
   );
-}
+};
+
+export default StarRadio;

@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import RawLogo from '@public/icons/logo_complete.svg';
 
-export default function CompleteLogo() {
+const CompleteLogo = () => {
   return (
     <Image 
       src={RawLogo}
@@ -10,4 +10,6 @@ export default function CompleteLogo() {
       height={40}
       className="h-[35px] w-auto lg:h-[45px]"/>
   );
-}
+};
+
+export default CompleteLogo;

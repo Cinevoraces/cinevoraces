@@ -16,11 +16,13 @@ import {
   setFilteredMovies,
   cleanUserInputs,
 } from '@store/slices/filteredMovies';
-import type { CompleteMovie, Season, SeasonOption } from 'models/custom_types/index';
-import type { ChangeEvent } from 'react';
 
 import filtersSync from '@utils/filterSyncer';
 import { MoviesGrid } from 'pages_chunks/film/UI';
+
+import type { CompleteMovie, Season, SeasonOption } from '@custom_types/index';
+import type { ChangeEvent } from 'react';
+import type { NextPage } from 'next';
 
 const metadatas = [
   'casting',
@@ -37,7 +39,7 @@ const metadatas = [
 let selectQueryString: string = '';
 metadatas.forEach((dataName) => (selectQueryString += `&select[${dataName}]=true`));
 
-export default function Films() {
+const Films: NextPage = () => {
   const dispatch = useAppDispatch();
   //Searchbar state mechanics
   const { season, searchQuery, isSeasonSelectOpened } = useAppSelector(filteredMovies);
@@ -164,4 +166,6 @@ export default function Films() {
       </main>
     </>
   );
-}
+};
+
+export default Films;

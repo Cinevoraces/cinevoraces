@@ -2,7 +2,7 @@ interface SvgProps {
   style: string;
 }
 
-export default function SimpleLogo({ style }: SvgProps) {
+const SimpleLogo = ({ style }: SvgProps) => {
   return (
     <svg 
       width="512" 
@@ -44,4 +44,6 @@ export default function SimpleLogo({ style }: SvgProps) {
         strokeLinejoin="round"/>
     </svg>
   );
-}
+};
+
+export default SimpleLogo;

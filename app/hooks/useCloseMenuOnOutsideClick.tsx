@@ -6,12 +6,12 @@ import { useEffect } from 'react';
  * @param state boolean - containing opened status
  * @param setter status mutator
  */
-export default function useCloseMenuOnOutsideClick(
+const useCloseMenuOnOutsideClick = (
   ref: React.RefObject<HTMLElement>,
   name: string,
   state: boolean,
   setter: (value: boolean)=>void
-) {
+) => {
   useEffect(() => {
     const handleClickOutside = (e: Event) => {
       if (e.target instanceof HTMLElement && ref.current) {
@@ -25,5 +25,7 @@ export default function useCloseMenuOnOutsideClick(
       document.removeEventListener('mousedown', handleClickOutside);
     };
   });
-}
+};
+
+export default useCloseMenuOnOutsideClick;
 

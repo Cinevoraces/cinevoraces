@@ -4,7 +4,7 @@ interface FormProps{
   children: React.ReactNode;
 }
 
-export default function Form({ children }: FormProps) {
+const Form = ({ children }: FormProps) => {
   const [isRequired, setIsRequired] = useState(false);
   return (
     <form
@@ -16,4 +16,6 @@ export default function Form({ children }: FormProps) {
       className="flex flex-col w-full gap-3">
       {children}
     </form>);
-}
+};
+
+export default Form;

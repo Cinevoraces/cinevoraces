@@ -7,7 +7,7 @@ import Layout from '@components/Layout';
 import { SWRConfig } from 'swr';
 import { getRequestCSR } from 'binders';
 
-function MyApp({ Component, pageProps }: AppProps) {
+const MyApp = ({ Component, pageProps }: AppProps) => {
   return (
     <>
       <Head>
@@ -22,6 +22,6 @@ function MyApp({ Component, pageProps }: AppProps) {
       </Provider>
     </>
   );
-}
+};
 
 export default MyApp;

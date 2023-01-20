@@ -5,12 +5,11 @@ import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '@store/store';
 import { global, toggleBurgerMenu, toggleUserMenu, toggleConnectionModal, toggleArePWVisible } from '@store/slices/global';
-import useRecoverStateFromSessionStorage from '@hooks/useRecoverStateFromSessionStorage';
 interface LayoutProps {
   children: React.ReactNode;
 }
 
-export default function Layout({ children }: LayoutProps) {
+const Layout = ({ children }: LayoutProps) => {
   // Page redirection closes opened menus and reset PW visibility
   const dispatch = useAppDispatch();
   const path = useRouter().asPath;
@@ -44,4 +43,6 @@ export default function Layout({ children }: LayoutProps) {
       <Footer />
     </div>
   );
-}
+};
+
+export default Layout;

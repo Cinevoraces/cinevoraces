@@ -16,7 +16,7 @@ interface RadioProps {
  * @param isChecked     define if default checked
  * @param handler       state setter
  */
-export default function Radio(props: RadioProps) {
+const Radio = (props: RadioProps) => {
   const { style, label, ...nativeProps } = props;
   const name = nativeProps.name;
   const basicLabelStyle = 'relative flex justify-between items-center text-lg font-thin hover:text-orange-primary';
@@ -48,4 +48,6 @@ export default function Radio(props: RadioProps) {
       />
     </label>
   );
-}
+};
+
+export default Radio;

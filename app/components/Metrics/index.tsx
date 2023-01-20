@@ -11,7 +11,7 @@ export interface MetricsProps {
  * @param movies_count
  * @param countries_count
  */
-export default function Metrics(props: MetricsProps) {
+const Metrics = (props: MetricsProps) => {
   const metrics = Object.values(props);
   const metricsLabel = ['Saisons', 'Films', 'Pays'];
   const metricsColors = ['text-purple', 'text-yellow', 'text-green'];
@@ -32,4 +32,6 @@ export default function Metrics(props: MetricsProps) {
       </div>
     </section>
   );
-}
+};
+
+export default Metrics;

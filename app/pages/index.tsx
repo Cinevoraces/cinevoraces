@@ -226,7 +226,7 @@ const Home: NextPage<HomeProps> = (props) => {
   );
 };
 
-export async function getServerSideProps() {
+export const getServerSideProps = async () => {
   try {
     const metrics = await getRequestSSR('/metrics');
     const lastSixMovies = await getRequestSSR('/movies?where[is_published]=true&limit=6');
@@ -239,6 +239,6 @@ export async function getServerSideProps() {
   } catch (err) {
     console.error(err);
   }
-}
+};
 
 export default Home;

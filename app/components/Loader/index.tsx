@@ -1,6 +1,6 @@
 import { SimpleLogo } from '../SvgComponents';
 
-export default function Loader() {
+const Loader = () => {
   return (
     <div className='relative flex items-center justify-center 
         animate-bounce before:absolute 
@@ -9,4 +9,6 @@ export default function Loader() {
         style="relative z-10 w-16 h-16"/>
     </div>
   );
-}
+};
+
+export default Loader;
