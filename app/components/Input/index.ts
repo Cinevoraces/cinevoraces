@@ -11,7 +11,7 @@ import { TextRef as TextInputRef, Text as TextInput, TextAreaRef, TextArea } fro
 import { BaseInteraction, RatingInteraction } from './Interactions';
 import Select from './Select';
 import SearchBar from './SearchBar';
-import Filter from './Filters/Filter';
+import Filters from './Filters';
 import StarRadio from './StarRadio';
 import File from './File';
 
@@ -31,7 +31,7 @@ export {
   RatingInteraction,
   Select,
   SearchBar,
-  Filter,
+  Filters,
   StarRadio,
   File,
 };

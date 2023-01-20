@@ -155,6 +155,7 @@ const Film: NextPage<FilmProps> = ({ movies }) => {
                   id="interactions"
                   className="flex flex-col h-full justify-around self-center sm:justify-between sm:flex-row sm:gap-3 lg:w-full ">
                   {baseInteractionsArray.slice(0, 3).map((i) => (
+                    (i.type !== 'rating') &&
                     <BaseInteraction
                       type={i.type}
                       counter={i.counter}
