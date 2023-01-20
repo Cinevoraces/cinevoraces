@@ -1,6 +1,7 @@
 import Form from './Form';
 import Button from './Button';
-import { CheckBox, Toggle } from './CheckBox';
+import CheckBox from './CheckBox';
+import Toggle from './Toggle';
 import RadioInput from './Radio';
 import {
   Range as RangeInput,
@@ -10,7 +11,7 @@ import { TextRef as TextInputRef, Text as TextInput, TextAreaRef, TextArea } fro
 import { BaseInteraction, RatingInteraction } from './Interactions';
 import Select from './Select';
 import SearchBar from './SearchBar';
-import Filter from './Filter';
+import Filter from './Filters/Filter';
 import StarRadio from './StarRadio';
 import File from './File';
 

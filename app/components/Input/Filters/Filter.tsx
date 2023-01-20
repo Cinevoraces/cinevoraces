@@ -1,12 +1,13 @@
 import { useRef } from 'react';
 import type { FormEvent } from 'react';
-import Button from './Button';
-import { CheckBox, RangeInput, DoubleRangeInput, StarRadio } from './index';
+import Button from '../Button';
+import { CheckBox, RangeInput, DoubleRangeInput, StarRadio } from '../index';
 import useCloseMenuOnOutsideClick from '@hooks/useCloseMenuOnOutsideClick';
 import useCloseOnEnterPress from '@hooks/useCloseOnEnterPress';
 import { FilterSvg, ResetSvg } from '@components/SvgComponents/Filter';
 import { BookmarkSvg, LikeSvg } from '@components/SvgComponents/InteractionsSVG';
 import UnwatchedSvg from '@components/SvgComponents/Unwatched';
+import userFilterResetHandling from './handleSetRangeInput';
 
 import type { FilterOptions, FilterUserInputs } from 'models/custom_types/index';
 export interface FilterProps {
@@ -62,18 +63,20 @@ const Filter = ({
     userFilterInputsSetter(category, e);
   };
 
-  const handleUserFilterReset = () => {
-    userFilterReset();
-    const filterNodeList = filterRef.current?.firstChild?.childNodes
-      ? ([...filterRef.current?.firstChild?.childNodes] as HTMLElement[])
-      : [];
-    const resetButtonSVGNode = filterNodeList.filter((node) => node.innerText === '')[0].firstChild as HTMLElement;
-    const toggleRotateClass = () => {
-      resetButtonSVGNode?.classList.toggle('animate-reverse-spin');
-    };
-    toggleRotateClass();
-    setTimeout(toggleRotateClass, 1000);
-  };
+  // const handleUserFilterReset = () => {
+  //   userFilterReset();
+  //   const filterNodeList = filterRef.current?.firstChild?.childNodes
+  //     ? ([...filterRef.current?.firstChild?.childNodes] as HTMLElement[])
+  //     : [];
+  //   const resetButtonSVGNode = filterNodeList.filter((node) => node.innerText === '')[0].firstChild as HTMLElement;
+  //   const toggleRotateClass = () => {
+  //     resetButtonSVGNode?.classList.toggle('animate-reverse-spin');
+  //   };
+  //   toggleRotateClass();
+  //   setTimeout(toggleRotateClass, 1000);
+  // };
+
+  const handleUserFilterReset = () => userFilterResetHandling(userFilterReset, filterRef);
 
   return (
     <div
