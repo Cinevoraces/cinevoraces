@@ -1,37 +1,9 @@
 # :clapper: Cinévoraces - Dev Branch
+*This the development branch of Cinévoraces WebApp.*
 
-## :key: Setup environment variables
-
-_Ask a project admin for sensitive informations._
-
-### .env.api:
-
-```
-CLOUDINARY_URL=
-COOKIE_SECRET=
-JWT_SECRET=
-PASS_REGEXP='^(?=.*[A-Za-z])(?=.*\d)[!#$&%*+=?|\-A-Za-z\d]{8,}$'
-PORT=
-STORAGE_TEMP = '/storage/temp'
-STORAGE_POSTER = '/storage/poster'
-STORAGE_AVATAR = '/storage/avatar'
-```
-### .env.db:
-
-```
-POSTGRES_PASSWORD=
-POSTGRES_USER=
-POSTGRES_DB=
-POSTGRES_URL=
-PGADMIN_DEFAULT_EMAIL=
-PGADMIN_DEFAULT_PASSWORD=
-```
-
-### .env.app:
-```
-NEXT_PUBLIC_PASS_REGEXP=
-NEXT_PUBLIC_TMDB_KEY=
-NEXT_PUBLIC_API_BASE_URL_CSR=
-NEXT_PUBLIC_API_BASE_URL_SSR=
-NEXT_PUBLIC_DISCORD_INVITE_URL=
-```
+### Project administrators
+- **Lead Front:** [Julien-Goletto](https://github.com/Julien-Goletto)
+- **Lead Back:** [BenoitSafari](https://github.com/BenoitSafari)
+### Links
+- *Go to the [project Wiki](https://github.com/Cinevoraces/cinevoraces/wiki/%5BSETUP-PROJECT%5D) to get started!*
+- *Look out our [deployed app](https://cinevoraces.fr/)!*
