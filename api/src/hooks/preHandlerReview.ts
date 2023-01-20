@@ -17,7 +17,7 @@ export default plugin((async (fastify, opts, done) => {
   ) => {
     const { _reviewService } = fastify;
     const { params, user } = request;
-    const review = await _reviewService.getOrCreateMovieReview(params.movieId, user.id);
+    const review = await _reviewService.getOrCreateMovieReview(user.id, params.movieId);
     request.user = {
       ...user,
       previous_review: { ...review },

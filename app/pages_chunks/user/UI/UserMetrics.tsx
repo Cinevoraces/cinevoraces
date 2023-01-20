@@ -1,4 +1,4 @@
-import type { User } from '@custom_types/index';
+import type { User } from 'models/custom_types/index';
 
 const metrics = [
   { name: 'propositions_count', title: 'proposé', color: ' text-orange-primary' },

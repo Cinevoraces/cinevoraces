@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import type { Dispatch, SetStateAction } from 'react';
 import type { KeyedMutator } from 'swr';
-import type { User } from '@custom_types/index';
+import type { User } from 'models/custom_types/index';
 
 /** Hook that checks if a connected user has a pending proposition
  * @param userId number | undefined

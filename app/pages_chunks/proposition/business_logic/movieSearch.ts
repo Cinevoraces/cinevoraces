@@ -1,6 +1,6 @@
-import { externalGetRequest } from '@utils/fetchApi';
+import { externalGetRequest } from 'binders';
 import type { RefObject, SetStateAction, Dispatch } from 'react';
-import type { TMDBMovie } from '@custom_types/tmdbMovie';
+import type { TMDBMovie } from 'models/custom_types/tmdbMovie';
 
 const movieSearch = async (
   searchRef: RefObject<HTMLInputElement>,

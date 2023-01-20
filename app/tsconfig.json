@@ -18,8 +18,8 @@
     "paths": {
       "@public/*" : ["public/*"],
       "@components/*" : ["components/*"],
-      "@custom_types/*" : ["custom_types/*"],
-      "@enums" : ["enums/*"],
+      "@custom_types/*" : ["models/custom_types/*"],
+      "@enums" : ["models/enums/*"],
       "@hooks/*" : ["hooks/*"],
       "@pages/*" : ["pages/*"],
       "@store/*" : ["store/*"],

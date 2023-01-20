@@ -1,4 +1,4 @@
-import type { TMDBDetailedMovie } from '@custom_types/index';
+import type { TMDBDetailedMovie } from 'models/custom_types/index';
 
 const detailledMovieShrunker = (detailledMovie: TMDBDetailedMovie) => {
   return Object.keys(detailledMovie)

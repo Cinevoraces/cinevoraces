@@ -1,14 +1,12 @@
-FROM node:18-alpine
+FROM node:19-alpine AS deps
+RUN apk add --no-cache libc6-compat
+WORKDIR /usr/src/app
 
-WORKDIR /app
+COPY . ./
 
-COPY package.json .
-COPY package-lock.json .
-
+# building the app
 RUN npm i
-
-COPY . .
-
 RUN npm run build
 
-CMD ["npm", "run", "start"]
+# Running the app
+CMD [ "npm", "start" ]

@@ -6,10 +6,10 @@ import { TextInputRef, Toggle } from '@components/Input';
 import { toggleArePWVisible, global } from '@store/slices/global';
 import Button from '@components/Input/Button';
 import SendLogo from '@public/icons/send-icon.svg';
-import { mutationRequestCSR } from '@utils/fetchApi';
+import { mutationRequestCSR } from 'binders';
 import { toast } from 'react-hot-toast';
 import tryCatchWrapper from '@utils/tryCatchWrapper';
-import type { BodyData } from '@utils/fetchApi';
+import type { BodyData } from 'models/custom_types';
 
 export default function InscriptionForm() {
   const isPWVisible = useAppSelector(global).arePWVisible;

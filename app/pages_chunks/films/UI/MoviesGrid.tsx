@@ -1,4 +1,4 @@
-import type { CompleteMovie } from '@custom_types/index';
+import type { CompleteMovie } from 'models/custom_types/index';
 import { useTrail, useSpringRef, animated } from '@react-spring/web';
 import Link from 'next/link';
 import Poster from '@components/Poster';
@@ -36,7 +36,7 @@ const MoviesGrid = ({ error, moviesResults, isFilterMenuOpen }: MovieGridProps) 
       {!moviesResults && !error && <p>Chargement des données.</p>}
       {moviesResults && (
         <div className="w-full flex flex-col gap-3 font-medium">
-          <p className="text-xl font-semibold text-center mb-4">{(moviesResults.length > 0) ? moviesResults.length + ' films trouvés' : 'Aucun résultat...'}</p>
+          <p className="text-xl font-semibold mb-4">{(moviesResults.length > 0) ? moviesResults.length + ' films trouvés' : 'Aucun résultat...'}</p>
           <ul className={gridStyle}>
             {
               trail.map((props, index) => (

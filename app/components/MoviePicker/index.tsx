@@ -1,6 +1,6 @@
 import { TmdbMovieCard, PropositionMovieCard } from '@components/MovieCards/index';
 import type { FormEventHandler } from 'react';
-import type { TMDBMovie, MovieWithPresentation } from '@custom_types/index';
+import type { TMDBMovie, MovieWithPresentation } from 'models/custom_types/index';
 import { useRouter } from 'next/router';
 
 interface MoviePickerProps {

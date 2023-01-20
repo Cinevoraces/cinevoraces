@@ -56,7 +56,7 @@ export default async (fastify: FastifyInstance) => {
     url: '/movies',
     schema: fastify.getSchema(ESchemasIds.POSTMovies),
     onRequest: [fastify.verifyAccessToken],
-    preValidation: [fastify.throwIfMovieNotFound],
+    preValidation: [fastify.throwIfMovieFound],
     handler: async function (request: Request, reply: Reply) {
       const { _movieService } = this;
       const { body, user } = request;

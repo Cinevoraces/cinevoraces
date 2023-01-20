@@ -3,8 +3,8 @@ import Image from 'next/image';
 import { TextAreaRef, Button } from '@components/Input';
 import SendLogo from '@public/icons/send-icon.svg';
 import type { FormEvent } from 'react';
-import type { TMDBMovie } from '@custom_types/index';
-import type { EpisodeOption } from '@custom_types/index';
+import type { TMDBMovie } from 'models/custom_types/index';
+import type { EpisodeOption } from 'models/custom_types/index';
 
 interface WritePresentationAndSendProps {
   searchResults: TMDBMovie[];

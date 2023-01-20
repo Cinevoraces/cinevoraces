@@ -8,7 +8,7 @@ import { TextAreaRef } from '@components/Input';
 import SendLogo from '@public/icons/send-icon.svg';
 import cutText from '@utils/cutText';
 import { useTrail, animated } from '@react-spring/web';
-import type { Comment } from '@custom_types/movies';
+import type { Comment } from 'models/custom_types/movies';
 import type { FormEventHandler } from 'react';
 
 interface CommentsSectionProps {

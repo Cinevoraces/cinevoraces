@@ -10,6 +10,8 @@ services:
     ports:
       - 5432:5432
     restart: always
+    networks:
+      - app_network
 
   pgadmin:
     image: dpage/pgadmin4
@@ -19,6 +21,10 @@ services:
       - .env
     depends_on:
       - postgres
+    links:
+      - postgres
+    networks:
+      - app_network
 
   api:
     hostname: cinevoraces_api
@@ -26,6 +32,8 @@ services:
       - .env
     depends_on:
       - postgres
+    # links:
+    #   - postgres
     build:
       context: ./api
       dockerfile: Dockerfile.dev
@@ -34,13 +42,13 @@ services:
     restart: always
     volumes:
       - ./api:/api
+    networks:
+      - app_network
 
   app:
     hostname: cinevoraces_app
     env_file:
       - .env
-    depends_on:
-      - api
     build:
       context: ./app
       dockerfile: Dockerfile
@@ -49,25 +57,32 @@ services:
     restart: always
     volumes:
       - ./app:/app
-  
-  nginx:
     depends_on:
-      - app
       - api
-    build:
-      context: ./nginx
-      dockerfile: Dockerfile
-    restart: unless-stopped
-    ports: 
-      - 80:80
-      - 443:443
-    volumes:
-      - ./nginx/conf/:/etc/nginx/conf.d/
-      - ./certbot/www:/var/www/certbot/
-      - ./certbot/conf/:/etc/nginx/ssl/
+    networks:
+      - app_network
 
-  certbot:
-    image: certbot/certbot:latest
-    volumes:
-      - ./certbot/www/:/var/www/certbot/
-      - ./certbot/conf/:/etc/letsencrypt/
+networks:
+  app_network:
+  
+  # nginx:
+  #   depends_on:
+  #     - app
+  #     - api
+  #   build:
+  #     context: ./nginx
+  #     dockerfile: Dockerfile
+  #   restart: unless-stopped
+  #   ports: 
+  #     - 80:80
+  #     - 443:443
+  #   volumes:
+  #     - ./nginx/conf/:/etc/nginx/conf.d/
+  #     - ./certbot/www:/var/www/certbot/
+  #     - ./certbot/conf/:/etc/nginx/ssl/
+
+  # certbot:
+  #   image: certbot/certbot:latest
+  #   volumes:
+  #     - ./certbot/www/:/var/www/certbot/
+  #     - ./certbot/conf/:/etc/letsencrypt/

@@ -3,7 +3,7 @@ import { useRef } from 'react';
 import { Button, RadioInput } from '@components/Input';
 import useCloseMenuOnOutsideClick from '@hooks/useCloseMenuOnOutsideClick';
 import useCloseMenuOnEnterKeyPress from '@hooks/useCloseOnEnterPress';
-import type { SvgProps } from '@custom_types/index';
+import type { EpisodeOption, SvgProps } from 'models/custom_types/index';
 
 const ArrowSvg = ({ style }: SvgProps) => {
   return (
