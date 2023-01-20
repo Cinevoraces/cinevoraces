@@ -1,0 +1,6 @@
+FROM postgres:15.1
+
+WORKDIR /data
+
+COPY . .
+COPY V*.sql /docker-entrypoint-initdb.d/

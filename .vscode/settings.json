@@ -1,0 +1,11 @@
+{
+  "eslint.format.enable": true,
+  "editor.codeActionsOnSave": {
+      "source.fixAll": true
+      },
+  "eslint.workingDirectories": [
+    "./app",
+    "./api"
+  ],
+  "css.lint.unknownAtRules": "ignore"
+}
