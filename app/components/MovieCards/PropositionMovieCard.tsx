@@ -1,9 +1,9 @@
 import { useState } from 'react';
-import Image from 'next/image';
 import cutText from '@utils/cutText';
 import dateFormater from '@utils/dateFormater';
 import Modal from '@components/Modal';
 import Poster from '@components/Poster';
+import RichText from '@components/RichText';
 import type { MovieWithPresentation, Presentation } from 'models/custom_types/index';
 
 interface PropositionMovieCardProps {
@@ -61,7 +61,7 @@ const PropositionMovieCard = ({ movie, propositionCardStyle, posterStyle }: Prop
           <Modal
             stateValue={isPresentationModalOpened}
             setter={setIsPresentationModalOpened}>
-            <p>{presentationObject.presentation}</p>
+            <RichText>{presentationObject.presentation}</RichText>
           </Modal>
         )
       }
