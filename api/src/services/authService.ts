@@ -5,8 +5,6 @@ import DatabaseService from './databaseService';
 import bcrypt from 'bcryptjs';
 import plugin from 'fastify-plugin';
 
-import type { FastifyReply as Reply } from 'fastify';
-
 /**
  * @description AuthService contains auth and SQL query methods 
  * related to authentication routes.
@@ -114,22 +112,6 @@ class AuthService extends DatabaseService {
     return await this.compareStrings(password, rows[0].password);
   }
 
-  public aTokenOptions = { expiresIn: 60 };
-  public rTokenOptions = { expiresIn: '1d' };
-  /**
-   * @description Return both access and refreshToken
-   * @param {{payload}} userObject tokens payload content
-   * @param {Reply} reply fastify instance's reply, for the use of regitered jwt plugin
-   * @returns object that contains both emitted tokens
-   */
-  public async generateTokens(
-    userObject: { id: number, pseudo: string, role: ERoles },
-    reply: Reply
-  ): Promise<{ accessToken: string, refreshToken: string }> {
-    const accessToken = await reply.jwtSign(userObject, this.aTokenOptions);
-    const refreshToken = await reply.jwtSign(userObject, this.rTokenOptions);
-    return { accessToken, refreshToken };
-  };
 };
 
 // Decorate FastifyInstance with AuthService
