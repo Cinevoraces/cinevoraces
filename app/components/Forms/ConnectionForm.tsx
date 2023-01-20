@@ -1,7 +1,7 @@
 import { useRef } from 'react';
 import { useAppSelector, useAppDispatch } from '@store/store';
 import Button from '@components/Input/Button';
-import { TextInputRef, Toggle } from '@components/Input';
+import { RefTextInput, Toggle } from '@components/Input';
 import { toggleConnectionModal } from '@store/slices/global';
 import { toggleArePWVisible, global } from '@store/slices/global';
 import { mutationRequestCSR } from 'binders';
@@ -58,7 +58,7 @@ const ConnectionForm = () => {
       action="submit"
       onSubmit={ async (e) => handleSubmit(e, allInputsRef)}
       className="flex flex-col w-full gap-3">
-      <TextInputRef
+      <RefTextInput
         id="identifier"
         label="Email ou nom d'utilisateur"
         placeholder="Votre identifiant..."
@@ -66,7 +66,7 @@ const ConnectionForm = () => {
         errorMessage="Saisissez un identifiant"
         ref={identifierRef}
       />
-      <TextInputRef
+      <RefTextInput
         type={!isPWVisible ? 'password' : undefined}
         id="password"
         label="Entrez votre mot de passe"

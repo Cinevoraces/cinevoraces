@@ -5,6 +5,7 @@ import SimpleLogo from './SimpleLogo';
 import UnwatchedSvg from './Unwatched';
 import MagnifyingGlassSvg from './MagnifyingGlassSvg';
 import { GitHub, Linkedin, Website, Discord } from './Social';
+import ArrowSvg from './Arrow';
 
 export { 
   ErrorSvg,
@@ -14,4 +15,5 @@ export {
   UnwatchedSvg,
   MagnifyingGlassSvg,
   GitHub, Linkedin, Website, Discord,
+  ArrowSvg,
 };

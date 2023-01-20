@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import defaultUserPic from '@public/icons/user_default.svg';
+import { Url } from 'url';
 
 interface AvatarProps {
   url: string;
@@ -8,6 +9,13 @@ interface AvatarProps {
   pseudo: string;
 }
 
+/**
+ * 
+ * @param url
+ * @param id
+ * @param pseudo
+ * @returns <Link> encapsulating the avatar picture of the concerned user
+ */
 const Avatar = ({ url, id, pseudo }: AvatarProps) => {
   return (
     <Link href={`/membres/${id}`}>

@@ -30,6 +30,14 @@ interface RatingInteractionProps {
   value?: number | undefined;
 }
 
+/**
+ * 
+ * @param isCLicked user input, used to visually represent the button mode
+ * @param counter overall interactions for this type on this movie
+ * @param ratingHandler rating mutation setter
+ * @param value corresponding value issued from the radio input
+ * @returns Rating button that expands to contain a custom radio inputfor rating mutation
+ */
 const RatingInteraction = ({ isClicked, counter, ratingHandler, value }: RatingInteractionProps) => {
   // Reference to control Rating Menu states and width
   const ratingMenuRef = useRef<HTMLDivElement>(null);

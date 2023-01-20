@@ -7,7 +7,7 @@ import {
   Range as RangeInput,
   DoubleRange as DoubleRangeInput,
 } from './Range';
-import { TextRef as TextInputRef, Text as TextInput, TextAreaRef, TextArea } from './Text';
+import { ControlledTextInput, RefTextInput, ControlledTextArea, RefTextArea } from './Text';
 import { BaseInteraction, RatingInteraction } from './Interactions';
 import Select from './Select';
 import SearchBar from './SearchBar';
@@ -23,12 +23,8 @@ export {
   RadioInput,
   RangeInput,
   DoubleRangeInput,
-  TextInputRef,
-  TextInput,
-  TextAreaRef,
-  TextArea,
-  BaseInteraction,
-  RatingInteraction,
+  ControlledTextInput, RefTextInput, ControlledTextArea, RefTextArea,
+  BaseInteraction, RatingInteraction,
   Select,
   SearchBar,
   Filters,

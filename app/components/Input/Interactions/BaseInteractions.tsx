@@ -14,6 +14,13 @@ focus:scale-105 hover:scale-105
 transition ease-out duration-200 `;
 const svgStyle = 'h-6 w-14 fill-none lg:h-8 lg:w-16 ';
 
+/**
+ * Base interactions are bookmark - like - viewed
+ * @param type interaction type
+ * @param counter overall interactions for this type on this movie
+ * @param isCLicked user input, used to visually represent the button mode
+ * @returns <button> to be used for basic review mutations
+ */
 const BaseInteraction = ({ type, counter, isClicked, onClick }: BaseInteractionProps) => {
   const SvgComponent = (type === 'bookmarked') ? BookmarkSvg : (type === 'liked') ? LikeSvg : ViewSvg;
   return (

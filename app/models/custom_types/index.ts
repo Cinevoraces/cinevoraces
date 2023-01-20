@@ -12,6 +12,7 @@ import type { TeamMember } from './teamMember';
 import type Interactions from './interactions';
 import type { BodyData, FetchOptions } from './binders';
 import type { RangeProps, DoubleRangeProps } from './range';
+import type { BaseTextProps, ControlledTextProps } from './textInputs';
 
 export type {
   MinimalMovie, Presentation, Metrics, Comment, UserReview, MovieWithPresentation, CompleteMovie,
@@ -28,4 +29,5 @@ export type {
   Interactions,
   BodyData, FetchOptions,
   RangeProps, DoubleRangeProps,
+  BaseTextProps, ControlledTextProps,
 };

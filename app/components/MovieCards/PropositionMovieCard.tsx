@@ -3,6 +3,7 @@ import Image from 'next/image';
 import cutText from '@utils/cutText';
 import dateFormater from '@utils/dateFormater';
 import Modal from '@components/Modal';
+import Poster from '@components/Poster';
 import type { MovieWithPresentation, Presentation } from 'models/custom_types/index';
 
 interface PropositionMovieCardProps {
@@ -11,6 +12,13 @@ interface PropositionMovieCardProps {
   posterStyle: string;
 }
 
+/**
+ * 
+ * @param movie movie object
+ * @param propositionCardStyle 
+ * @param posterStyle 
+ * @returns a wrapper with a movie presentation card and a specific modal to display the complete presentation
+ */
 const PropositionMovieCard = ({ movie, propositionCardStyle, posterStyle }: PropositionMovieCardProps) => {
   const { poster_url, french_title, presentation: presentationObject, publishing_date, release_date } = movie;
   const presentationCaster = (presentationObject: string | Presentation) => {
@@ -26,14 +34,10 @@ const PropositionMovieCard = ({ movie, propositionCardStyle, posterStyle }: Prop
       <div
         id="proposition_result_card"
         className={propositionCardStyle}>
-        <Image
+        <Poster 
           src={poster_url ? poster_url : '/movie_posters/placeholder.jpg'}
-          alt={`${french_title} movie poster`}
-          width={150}
-          height={(150 * 9) / 16}
-          placeholder='blur'
-          blurDataURL='/movie_posters/placeholder.jpg'
-          className={posterStyle}
+          title={french_title || 'placeholder'}
+          type='card'
         />
         <div className="w-full h-fill px-3 py-1 flex flex-col justify-between gap-1">
           <div className="flex flex-col gap-1">

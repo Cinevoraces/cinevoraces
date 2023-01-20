@@ -1,5 +1,9 @@
 import { SimpleLogo } from '../SvgComponents';
 
+/**
+ * 
+ * @returns animated <div> with the main logo bouncing + effects
+ */
 const Loader = () => {
   return (
     <div className='relative flex items-center justify-center 

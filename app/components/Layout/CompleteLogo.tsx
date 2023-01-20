@@ -1,6 +1,10 @@
 import Image from 'next/image';
 import RawLogo from '@public/icons/logo_complete.svg';
 
+/**
+ * 
+ * @returns <Image> main logo from svg source
+ */
 const CompleteLogo = () => {
   return (
     <Image 

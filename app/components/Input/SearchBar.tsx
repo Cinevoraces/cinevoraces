@@ -1,9 +1,24 @@
 import Select from './Select';
 import type { SelectProps } from './Select';
-import type { ControlledTextProps } from './Text';
+import type { ControlledTextProps } from './Text/Text';
 
 interface SearchBarProps extends ControlledTextProps<HTMLInputElement>, SelectProps{};
 
+/**
+ * 
+ * @param value state for controlled text input dedicated to search query
+ * @param onChange event handler for controlled text input
+ * @param placeholder for text input
+ * @param id setting text input id
+ * @param customStyle for textinput
+ * @param valueSetter changing season selection
+ * @param stateValue selected season
+ * @param displayOptionsSetter displaying select options state setter
+ * @param displayOptionsState displaying options state
+ * @param options select options
+ * @param name sets name param of the custom select input
+ * @returns <div> containing a custom select input and a controlled text input
+ */
 const SearchBar = (props: SearchBarProps) => {
   const searchBarStyle = `flex w-full pr-1 max-w-[450px] 
   border border-orange-primary rounded-xl 

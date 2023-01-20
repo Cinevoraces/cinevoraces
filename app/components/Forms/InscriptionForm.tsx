@@ -2,7 +2,7 @@ import { useRef, useState } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useAppSelector, useAppDispatch } from '@store/store';
-import { TextInputRef, Toggle } from '@components/Input';
+import { RefTextInput, Toggle } from '@components/Input';
 import { toggleArePWVisible, global } from '@store/slices/global';
 import Button from '@components/Input/Button';
 import SendLogo from '@public/icons/send-icon.svg';
@@ -66,7 +66,7 @@ export default function InscriptionForm() {
       action="submit"
       onSubmit={async (e) => handleSubmit(e, allInputsRef)}
       className="flex flex-col w-full gap-6">
-      <TextInputRef
+      <RefTextInput
         type="email"
         id="email"
         label="Email"
@@ -75,7 +75,7 @@ export default function InscriptionForm() {
         ref={emailRef}
       />
       <p className={helpingTextStyle}>{'Votre email sera utilisé pour la récupération de votre mot de passe.'}</p>
-      <TextInputRef
+      <RefTextInput
         id="username"
         label="Nom d'utilisateur"
         placeholder="Votre nom d'utilisateur..."
@@ -85,7 +85,7 @@ export default function InscriptionForm() {
       />
       <p className={helpingTextStyle}>{'Doit comporter au moins 3 caractères, espaces autorisés.'}</p>
       <div className="flex flex-col gap-3">
-        <TextInputRef
+        <RefTextInput
           type={!isPWVisible ? 'password' : undefined}
           id="password"
           label="Entrez votre mot de passe"
@@ -94,7 +94,7 @@ export default function InscriptionForm() {
           errorMessage="La saisie ne réponds pas aux exigences de sécurité."
           ref={PWRef}
         />
-        <TextInputRef
+        <RefTextInput
           type={!isPWVisible ? 'password' : undefined}
           id="password"
           placeholder="Confirmer votre mot de passe..."

@@ -9,12 +9,14 @@ interface CheckBoxProps {
 }
 
 /**
- * @return                  \<input\> type checkbox
  * @param customStyle       custom style for label - checkbox flex-justify
- * @param name              set \<label\> and 'name' param
+ * @param label             set \<label\> param
+ * @param name              set 'name' param
  * @param id                set 'id' param content
+ * @param value             set value param
  * @param checked           set 'checked' boolean value
  * @param onChange          state setter
+ * @return                  \<input\> type checkbox
  */
 const CheckBox = (props: CheckBoxProps) => {
   const labelBasicStyle = 'flex flex-row-reverse justify-end gap-4 items-top';

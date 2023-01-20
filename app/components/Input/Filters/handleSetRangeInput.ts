@@ -1,3 +1,8 @@
+/**
+ * Handle the clearing of all filters options and animation
+ * @param userFilterReset state mutation to clear 
+ * @param filterRef Ref object to handle the search value reset
+ */
 const userFilterResetHandling = ( userFilterReset: ()=>void, filterRef: React.RefObject<HTMLDivElement>) => {
   userFilterReset();
   const filterNodeList = filterRef.current?.firstChild?.childNodes

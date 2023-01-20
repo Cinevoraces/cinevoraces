@@ -8,6 +8,11 @@ interface FileProps{
   fileSetter: Dispatch<SetStateAction<File | undefined>>;
 }
 
+/**
+ * 
+ * @param fileSetter state setter for selected file 
+ * @returns <label> with file <input> inside it
+ */
 const File = ({ fileSetter }: FileProps) => {
   const style = `block w-full px-3 py-2 flex 
     bg-medium-gray border border-transparent ring ring-transparent rounded-lg 

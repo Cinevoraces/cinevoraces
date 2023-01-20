@@ -7,6 +7,14 @@ interface HeadProps {
   imageUrl?: string;
 }
 
+/**
+ * 
+ * @param title title page
+ * @param description short page description
+ * @param slug page slug
+ * @param imageUrl chosen url to represent the page
+ * @returns <Head> custom component to be used on each page
+ */
 const CustomHead = ({ title, description, slug, imageUrl }: HeadProps) => {
   return (
     <Head>

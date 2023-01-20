@@ -1,5 +1,14 @@
 import type { BodyData, FetchOptions } from 'models/custom_types';
 
+/**
+ * Options preparation
+ * Handles Multipart FormData / regular json  payloads
+ * Handles access or refresh token with cookie arg
+ * @param method no arg means GET method
+ * @param body
+ * @param cookie set true to pass refreshToken instead of accessToken
+ * @returns options configuration object
+ */
 const writeOptionsCSR = (method?: 'POST' | 'PUT' | 'DELETE', body?: BodyData | FormData, cookie?: boolean) => {
   const options: FetchOptions = {
     method: !method ? 'GET' : method,
