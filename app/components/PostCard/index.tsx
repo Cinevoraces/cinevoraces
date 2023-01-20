@@ -33,10 +33,15 @@ const PostCard = ({
     <div
       id={type === 'presentation' ? 'presentation-card' : type === 'comment' ? 'comment-card' : 'comment-form'}
       className={type === 'presentation' ? presentationStyle : type === 'comment' ? commentStyle : formStyle}>
-      <div className="flex flex-col gap-2" id="card-header">
-        <div
-          className="flex items-center gap-2">
-          <Avatar url={author_avatar} id={author_id} pseudo={author_pseudo}/>
+      <div
+        className="flex flex-col gap-2"
+        id="card-header">
+        <div className="flex items-center gap-2">
+          <Avatar
+            url={author_avatar}
+            id={author_id}
+            pseudo={author_pseudo}
+          />
           <div
             id="post-infos"
             className="flex flex-col justify-between">
@@ -57,7 +62,14 @@ const PostCard = ({
             </p>
           </div>
         </div>
-        {(rating && rating !== 0) ? <Rate rate={rating} type='user' /> : false}
+        {rating && rating !== 0 ? (
+          <Rate
+            rate={rating}
+            type="user"
+          />
+        ) : (
+          false
+        )}
       </div>
       {children}
     </div>

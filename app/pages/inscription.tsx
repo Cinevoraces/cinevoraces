@@ -4,7 +4,7 @@ import { InscriptionForm } from '@components/Forms';
 import PosterComponent from '@components/MultiplePosters';
 import Metrics from '@components/Metrics';
 import type { MetricsProps } from '@components/Metrics';
-import { getDataFromEndpointSSR } from '@utils/fetchApi';
+import { getRequestSSR } from 'binders';
 
 interface InscriptonProps {
   metrics: MetricsProps;
@@ -38,7 +38,7 @@ export default Inscription;
 
 export const getServerSideProps = async () => {
   try {
-    const metrics = await getDataFromEndpointSSR('/metrics');
+    const metrics = await getRequestSSR('/metrics');
     return {
       props: {
         metrics,

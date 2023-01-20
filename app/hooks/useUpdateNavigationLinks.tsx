@@ -1,4 +1,4 @@
-import type { User, CompleteMovie } from '@custom_types/index';
+import type { User, CompleteMovie } from 'models/custom_types/index';
 import type { SetStateAction } from 'react';
 import { useEffect } from 'react';
 

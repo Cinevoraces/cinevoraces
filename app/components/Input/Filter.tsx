@@ -8,7 +8,7 @@ import { FilterSvg, ResetSvg } from '@components/SvgComponents/Filter';
 import { BookmarkSvg, LikeSvg } from '@components/SvgComponents/InteractionsSVG';
 import UnwatchedSvg from '@components/SvgComponents/Unwatched';
 
-import type { FilterOptions, FilterUserInputs } from '@custom_types/index';
+import type { FilterOptions, FilterUserInputs } from 'models/custom_types/index';
 export interface FilterProps {
   filterOptions: FilterOptions;
   isMenuOpened: boolean;
@@ -111,7 +111,7 @@ const Filter = ({
         </Button>
         {
           (isMenuOpened) &&
-          <p className='w-full text-right self-center md:hidden'>
+          <p className='w-full text-right self-center text-xl font-semibold md:hidden'>
             {resultsCount + ' films'}
           </p>
         }

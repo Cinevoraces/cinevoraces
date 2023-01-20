@@ -1,4 +1,3 @@
-import React from 'react';
 import Select from './Select';
 import type { SelectProps } from './Select';
 import type { ControlledTextProps } from './Text';

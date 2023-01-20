@@ -1,13 +1,17 @@
-import React from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 
+/** Generates an array of number * poster paths, based on the current day of Year
+ * @returns Array of movie posters url
+ * @param {String} path to ressources
+ * @param {String} extension of image files
+ * @param {number} number of posters to display
+ */
 const generatePosterArray = (path: string, extension: string, number: number) => {
-  const posterArray = [] as number[];
-  while (posterArray.length < number) {
-    const randNum = Math.floor(Math.random() * 15 + 1); // 15 posters for the static component
-    !posterArray.includes(randNum) && posterArray.push(randNum);
-  }
-  return posterArray.map((randNum) => path + randNum + extension);
+  // 15 posters for the static component -> modulo 15 -1
+  const now = new Date(), start = new Date(now.getFullYear(), 0, 0).getTime();
+  const dayOfYear = Math.floor((now.getTime() - start)/(1000 * 60 * 60 * 24));
+  return Array.from(Array(number).keys()).map((n) => `${path + '' + (number + n + dayOfYear)%14 + extension}`);
 };
 
 interface PostersComponentProps {
@@ -34,6 +38,7 @@ const MultiplePosters = ({ number }: PostersComponentProps) => {
   return (
     <div className="relative w-full aspect-square max-w-md">
       {posters.map((poster, i) => (
+        // <Link href={`films/${i + 1}`} key={'poster_' + i}> // to uncomment later, when all posters will ve stored
         <Image
           src={poster}
           alt="movie poster"
@@ -42,6 +47,7 @@ const MultiplePosters = ({ number }: PostersComponentProps) => {
           className={posterStyles + ' ' + indivStyles[i]}
           key={poster}
         />
+        // </Link>
       ))}
     </div>
   );

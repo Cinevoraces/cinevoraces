@@ -3,18 +3,22 @@ import type {
   FastifyRequest as Request,
   FastifyReply as Reply,
 } from 'fastify';
+
 import {
   ESchemasIds,
   EErrorMessages,
   EResponseMessages,
 } from '../models/enums/_index';
 
+const aTokenOptions = { expiresIn: 60 };
+const rTokenOptions = { expiresIn: '1d' };
+
 /**
  * @description Auth API.
  * @prefix /
  */
 export default async (fastify: FastifyInstance) => {
-
+  
   /**
    * @description Register a new user.
    * @route POST /register
@@ -75,20 +79,16 @@ export default async (fastify: FastifyInstance) => {
       if (!isPasswordCorrect)
         _errorService.send(EErrorMessages.INVALID_PASSWORD, 401);
 
-      const userObject = { 
+      const tokensContent = { 
         id: privateUser.id,
         pseudo: privateUser.pseudo,
         role: privateUser.role,
-        avatar_url: privateUser.avatar_url,
       };
+      const userObject = { ...tokensContent, avatar_url: privateUser.avatar_url };
 
       // Generate tokens
-      const accessToken = await reply.jwtSign(
-        { id: privateUser.id, pseudo: privateUser.pseudo, role: privateUser.role, expiresIn: '1m' }
-      );
-      const refreshToken = await reply.jwtSign(
-        { id: privateUser.id, expiresIn: '1d' }
-      );
+      const accessToken = await reply.jwtSign(userObject, aTokenOptions);
+      const refreshToken = await reply.jwtSign(userObject, rTokenOptions);
 
       reply
         .code(200)
@@ -117,15 +117,18 @@ export default async (fastify: FastifyInstance) => {
       const privateUser = await _authService.getPrivateUser({ id: user.id });
 
       if (!privateUser)
-        _errorService.send(EErrorMessages.INVALID_TOKEN, 401);
+        _errorService.send(EErrorMessages.COMPROMISED_SESSION, 401);
       
       // Generate new tokens
-      const accessToken = await reply.jwtSign(
-        { id: privateUser.id, pseudo: privateUser.pseudo, role: privateUser.role, expiresIn: '1m' }
-      );
-      const refreshToken = await reply.jwtSign(
-        { id: privateUser.id, expiresIn: '1d' }
-      );
+      const tokensContent = { 
+        id: privateUser.id,
+        pseudo: privateUser.pseudo,
+        role: privateUser.role,
+      };
+
+      // Generate tokens
+      const accessToken = await reply.jwtSign(tokensContent, aTokenOptions);
+      const refreshToken = await reply.jwtSign(tokensContent, rTokenOptions);
 
       reply
         .code(200)

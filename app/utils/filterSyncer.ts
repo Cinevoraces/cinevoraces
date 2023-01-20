@@ -1,4 +1,4 @@
-import type { CompleteMovie } from '@custom_types/index';
+import type { CompleteMovie } from 'models/custom_types/index';
 
 const arrayCategoryAggregate = (movies: CompleteMovie [], category: 'genres' | 'countries') => {
   const filtersArray = movies.reduce(

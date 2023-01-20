@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import cutText from '@utils/cutText';
-import type { TMDBMovie } from '@custom_types/index';
+import type { TMDBMovie } from 'models/custom_types/index';
 
 interface TmdbMovieCardProps {
   resultCardStyle: string;
@@ -22,6 +22,8 @@ const TmdbMovieCard = ({ resultCardStyle, posterStyle, movie }: TmdbMovieCardPro
         alt={`${movie.title} movie poster`}
         width={150}
         height={(150 * 9) / 16}
+        placeholder='blur'
+        blurDataURL='/movie_posters/placeholder.jpg'
         className={posterStyle}
       />
       <div className="w-full h-fill px-3 py-1 flex flex-col justify-between gap-1">

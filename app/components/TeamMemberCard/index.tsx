@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { GitHub, Linkedin, Discord, Website } from '@components/SvgComponents/Social';
-import type { TeamMember } from '@custom_types/teamMember';
+import type { TeamMember } from 'models/custom_types/teamMember';
 
 interface SocialMediaComponents {
   [key: string]: React.ReactNode;

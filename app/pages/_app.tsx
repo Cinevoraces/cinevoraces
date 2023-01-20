@@ -5,7 +5,7 @@ import store from '@store/store';
 import { Provider } from 'react-redux';
 import Layout from '@components/Layout';
 import { SWRConfig } from 'swr';
-import { getRequestCSR } from '@utils/fetchApi';
+import { getRequestCSR } from 'binders';
 
 const MyApp = ({ Component, pageProps }: AppProps) => {
   return (

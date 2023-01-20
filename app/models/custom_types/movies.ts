@@ -1,5 +1,4 @@
-import type { Roles } from './global';
-
+import type { Roles } from 'models/enums';
 export interface MinimalMovie {
   id: number;
   author_id: number;

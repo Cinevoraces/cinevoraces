@@ -12,11 +12,11 @@ export default plugin((async (fastify, opts, done) => {
    * @description Access token verification
    * This hook verifies the access token then populate request.user with decoded informations.
    */// eslint-disable-next-line @typescript-eslint/no-unused-vars
-  fastify.decorate('verifyAccessToken', async (request: Request, reply: Reply) => {
+  fastify.decorate('verifyAccessToken', async (request: Request) => {
     try {
       await request.jwtVerify();
     } catch {
-      fastify._errorService.send(EErrorMessages.INVALID_TOKEN, 401);
+      fastify._errorService.send(EErrorMessages.EXPIRED_ACCESS_TOKEN, 401);
     }
   });
 
@@ -32,7 +32,7 @@ export default plugin((async (fastify, opts, done) => {
       try {
         await request.jwtVerify();
       } catch {
-        fastify._errorService.send(EErrorMessages.INVALID_TOKEN, 401);
+        fastify._errorService.send(EErrorMessages.EXPIRED_ACCESS_TOKEN, 401);
       }
     }
   });
@@ -45,8 +45,9 @@ export default plugin((async (fastify, opts, done) => {
   fastify.decorate('verifyRefreshToken', async (request: Request, reply: Reply) => {
     try {
       await request.jwtVerify({ onlyCookie: true });
-    } catch {
-      fastify._errorService.send(EErrorMessages.INVALID_TOKEN, 401);
+    } catch (err) {
+      console.error(err);
+      fastify._errorService.send(EErrorMessages.EXPIRED_SESSION, 401);
     }
   });
 

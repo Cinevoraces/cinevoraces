@@ -39,6 +39,8 @@ services:
     hostname: cinevoraces_app
     env_file:
       - .env
+    environment:
+      - NEXT_PUBLIC_API_BASE_URL_CSR=http://localhost:3005
     depends_on:
       - api
     build:

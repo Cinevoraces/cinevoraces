@@ -3,9 +3,11 @@
   "scripts": {
     "unix-install": "(cd api && npm install); (cd app && npm install)",
     "win-install": "(cd api && npm i) && (cd ../app && npm i)",
-    "dev-build": "docker compose -f docker-compose.dev.yml up --build",
-    "dev": "docker compose -f docker-compose.dev.yml up",
-    "build": "docker compose up --build"
+    "dev-build": "docker-compose -f docker-compose.dev.yml up --build -d",
+    "dev": "docker-compose -f docker-compose.dev.yml up",
+    "build": "docker-compose up --build -d",
+    "build-app": "docker exec cinevoraces-v2-app-1 npm run build", 
+    "start": "docker-compose up"
   },
   "dependencies": {
     "app": "file:app",

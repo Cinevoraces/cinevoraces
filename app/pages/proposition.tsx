@@ -8,7 +8,7 @@ import { PickEpisode, SearchMovie, PickMovie, WritePresentationAndSend } from 'p
 
 import type { NextPage } from 'next';
 import type { FormEvent, RefObject } from 'react';
-import type { TMDBMovie, EpisodeOption } from '@custom_types/index';
+import type { TMDBMovie, EpisodeOption } from 'models/custom_types/index';
 
 import useRefreshPendingProposition from 'pages_chunks/proposition/business_logic/useRefreshPendingProposition';
 import useFormatEpisodeOptions from 'pages_chunks/proposition/business_logic/useFormatEpisodeOptions';

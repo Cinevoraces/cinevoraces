@@ -1,9 +1,9 @@
-import type { MovieWithPresentation } from '@custom_types/index';
+import type { MovieWithPresentation } from 'models/custom_types/index';
 import MoviePicker from '@components/MoviePicker';
 import type { FormEvent } from 'react';
 import { useState } from 'react';
 import { Button } from '@components/Input';
-import { AdminActions } from 'enums';
+import { AdminActions } from 'models/enums';
 
 interface PropositionsSectionProps {
   propositions?: MovieWithPresentation[];

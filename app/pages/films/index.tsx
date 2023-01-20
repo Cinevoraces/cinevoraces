@@ -16,6 +16,7 @@ import {
   setFilteredMovies,
   cleanUserInputs,
 } from '@store/slices/filteredMovies';
+
 import filtersSync from '@utils/filterSyncer';
 import { MoviesGrid } from 'pages_chunks/film/UI';
 

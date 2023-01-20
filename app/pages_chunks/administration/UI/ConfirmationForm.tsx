@@ -4,7 +4,7 @@ import { Button, TextInputRef, Toggle } from '@components/Input';
 import { global, toggleArePWVisible } from '@store/slices/global';
 import { useAppDispatch, useAppSelector } from '@store/store';
 
-import type { HandleSubmitAction } from '@custom_types/index';
+import type { HandleSubmitAction } from 'models/custom_types/index';
 
 interface ConfirmationFormProps {
   handlingAction: HandleSubmitAction;

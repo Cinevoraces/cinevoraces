@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+import { useState, useRef } from 'react';
 import Link from 'next/link';
 import { useAppSelector, useAppDispatch } from '@store/store';
 import { toggleBurgerMenu, toggleUserMenu, toggleConnectionModal, global } from '@store/slices/global';
@@ -10,11 +10,11 @@ import Modal from '@components/Modal';
 import Button from '@components/Input/Button';
 import { ConnectionForm } from '@components/Forms';
 import useSWR from 'swr';
-import { Roles } from '@custom_types/global';
+import { Roles } from 'models/enums';
 import useUpdateNavigationLinks from '@hooks/useUpdateNavigationLinks';
 import useRecoverStateFromSessionStorage from '@hooks/useRecoverStateFromSessionStorage';
-import type { CompleteMovie } from '@custom_types/movies';
-import type { User } from '@custom_types/index';
+import type { CompleteMovie } from 'models/custom_types/movies';
+import type { User } from 'models/custom_types/index';
 
 const Header = () => {
   const { isBurgerMenuOpen, isUserMenuOpen, isConnectionModalOpen } = useAppSelector(global);
@@ -24,12 +24,8 @@ const Header = () => {
   //Toggle menu display when clicking outside them
   const burgerMenuRef = useRef<HTMLElement>(null);
   const userMenuRef = useRef<HTMLElement>(null);
-  const connexionModalRef = useRef<HTMLElement>(null);
   useCloseMenuOnOutsideClick(burgerMenuRef, 'burger', isBurgerMenuOpen, () => dispatch(toggleBurgerMenu()));
   useCloseMenuOnOutsideClick(userMenuRef, 'user', isUserMenuOpen, () => dispatch(toggleUserMenu()));
-  useCloseMenuOnOutsideClick(connexionModalRef, 'modal', isConnectionModalOpen, () =>
-    dispatch(toggleConnectionModal())
-  );
 
   const [navLinks, setNavLinks] = useState([
     ['Accueil', '/'],
@@ -54,7 +50,7 @@ const Header = () => {
       <header
         className="py-2 px-2 flex items-center justify-between
         lg:container max-w-8xl lg:mx-auto relative">
-        <div className="flex gap-2">
+        <div className="flex gap-2 md:gap-6">
           <HeaderMenu
             type="burger"
             stateValue={isBurgerMenuOpen}
@@ -96,7 +92,7 @@ const Header = () => {
         <Modal
           stateValue={isConnectionModalOpen}
           setter={() => dispatch(toggleConnectionModal())}
-          ref={connexionModalRef}>
+        >
           <ConnectionForm />
         </Modal>
       )}

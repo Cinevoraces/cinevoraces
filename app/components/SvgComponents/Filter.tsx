@@ -1,4 +1,4 @@
-import type { SvgProps } from '@custom_types/index';
+import type { SvgProps } from 'models/custom_types/index';
 
 const FilterSvg = ({ style }: SvgProps) => {
   return (

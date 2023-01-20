@@ -37,6 +37,9 @@ const StarRadio = (props: StarRadioProps) => {
             name="rating"
             className={radioStyle}
             checked={(props.value === 5 - i)}
+            onChange={() => { // To by pass error due to checked use instead of defaultChecked
+              return;
+            }}
             autoComplete="off"/>
           <StarSvg style={'star-icon ' + starStyle} />
           <StarSvg style={starEffectStyle} />

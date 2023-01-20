@@ -254,11 +254,11 @@ class MovieService extends DatabaseService {
     userId?: number
   ): Promise<boolean> {
     const { rowCount } = await this.requestDatabase({
-      text: ` SELECT is_published FROM movie
+      text: ` SELECT * FROM movie
               WHERE is_published = false
               AND id = $1
               ${userId ? 'AND user_id = $2' : ''};`,
-      values: [movieId, userId],
+      values: userId ? [movieId, userId] : [movieId],
     });
     return rowCount ? true : false;
   }
