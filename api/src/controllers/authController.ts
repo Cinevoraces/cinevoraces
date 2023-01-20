@@ -3,8 +3,7 @@ import type {
   FastifyRequest as Request,
   FastifyReply as Reply,
 } from 'fastify';
-import type {
-  ERoles } from '../models/enums/_index';
+
 import {
   ESchemasIds,
   EErrorMessages,
@@ -13,20 +12,6 @@ import {
 
 const aTokenOptions = { expiresIn: 60 };
 const rTokenOptions = { expiresIn: '1d' };
-/**
- * @description Return both access and refreshToken
- * @param {{payload}} userObject tokens payload content
- * @param {Reply} reply fastify instance's reply, for the use of regitered jwt plugin
- * @returns object that contains both emitted tokens
- */
-const generateTokens = async (
-  userObject: { id: number, pseudo: string, role: ERoles },
-  reply: Reply
-): Promise<{ accessToken: string, refreshToken: string }> => {
-  const accessToken = await reply.jwtSign(userObject, aTokenOptions);
-  const refreshToken = await reply.jwtSign(userObject, rTokenOptions);
-  return { accessToken, refreshToken };
-};
 
 /**
  * @description Auth API.
@@ -102,7 +87,8 @@ export default async (fastify: FastifyInstance) => {
       const userObject = { ...tokensContent, avatar_url: privateUser.avatar_url };
 
       // Generate tokens
-      const { accessToken, refreshToken } = await generateTokens(tokensContent, reply);
+      const accessToken = await reply.jwtSign(userObject, aTokenOptions);
+      const refreshToken = await reply.jwtSign(userObject, rTokenOptions);
 
       reply
         .code(200)
@@ -141,7 +127,8 @@ export default async (fastify: FastifyInstance) => {
       };
 
       // Generate tokens
-      const { accessToken, refreshToken } = await generateTokens(tokensContent, reply);
+      const accessToken = await reply.jwtSign(tokensContent, aTokenOptions);
+      const refreshToken = await reply.jwtSign(tokensContent, rTokenOptions);
 
       reply
         .code(200)
