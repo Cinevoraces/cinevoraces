@@ -36,7 +36,7 @@ const Inscription: NextPage<InscriptonProps> = ({ metrics }) => {
 
 export default Inscription;
 
-export async function getServerSideProps() {
+export const getServerSideProps = async () => {
   try {
     const metrics = await getDataFromEndpointSSR('/metrics');
     return {
@@ -47,4 +47,4 @@ export async function getServerSideProps() {
   } catch (err){
     console.error(err);
   }
-}
+};

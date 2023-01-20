@@ -39,7 +39,7 @@ export interface SelectProps {
   selectCustomStyle?: 'searchbar';
 }
 
-export default function Select(props: SelectProps) {
+const Select = (props: SelectProps) => {
   const { name, options, displayOptionsState, displayOptionsSetter, stateValue, valueSetter, selectCustomStyle } = props;
   const toggleSelectDisplay = () => displayOptionsSetter();
   const selectRef = useRef<HTMLDivElement>(null);
@@ -98,4 +98,6 @@ export default function Select(props: SelectProps) {
       )}
     </div>
   );
-}
+};
+
+export default Select;

@@ -4,7 +4,7 @@ import CustomHead from '@components/Head';
 import teamMembers from 'pages_chunks/apropos/business_logic/teamMembers';
 import { Presentation, Team, Credits, Origin, Contact } from 'pages_chunks/apropos/UI';
 
-const ComponentName: NextPage = () => {
+const Head: NextPage = () => {
   return (
     <>
       <CustomHead
@@ -26,4 +26,4 @@ const ComponentName: NextPage = () => {
   );
 };
 
-export default ComponentName;
+export default Head;

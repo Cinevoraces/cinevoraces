@@ -8,7 +8,7 @@ interface RateProps {
  * @param rate number 
  * @param type essencially to display the number or not 
  */
-export default function Rate({ rate, type }: RateProps) {
+const Rate = ({ rate, type }: RateProps) => {
   const floredRate = Math.floor(rate * 10)/10;
   const ratePercentage = Math.floor((rate / 5) * 100);
   const container = 'relative w-[100px] h-[100px] text-md clip-stars ';
@@ -41,4 +41,6 @@ export default function Rate({ rate, type }: RateProps) {
       </div>
     </div>
   );
-}
+};
+
+export default Rate;

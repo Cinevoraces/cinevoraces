@@ -4,10 +4,10 @@ import { useEffect } from 'react';
  * @param state boolean - containing opened status
  * @param setter status mutator
  */
-export default function useCloseMenuOnEnterKeyPress(
+const useCloseMenuOnEnterKeyPress = (
   state: boolean,
   setter: (value: boolean)=>void
-) {
+) => {
   useEffect(() => {
     const handleEnterPress = (e: KeyboardEvent) => {
       if (e.key === 'Enter' && state) {
@@ -19,4 +19,6 @@ export default function useCloseMenuOnEnterKeyPress(
       document.removeEventListener('keypress', handleEnterPress);
     };
   });
-}
+};
+
+export default useCloseMenuOnEnterKeyPress;

@@ -19,7 +19,7 @@ const commentStyle =
   'threeModulusZero-child:bg-card-bg-two threeModulusOne-child:bg-card-bg-three threeModulusTwo-child:bg-card-bg-one';
 const formStyle = basicStyle + 'bg-card-bg-one';
 
-export default function PostCardProps({
+const PostCard = ({
   type,
   author_avatar,
   author_id,
@@ -28,7 +28,7 @@ export default function PostCardProps({
   children,
   rating,
   created_at,
-}: PostCardProps) {
+}: PostCardProps) => {
   return (
     <div
       id={type === 'presentation' ? 'presentation-card' : type === 'comment' ? 'comment-card' : 'comment-form'}
@@ -62,4 +62,6 @@ export default function PostCardProps({
       {children}
     </div>
   );
-}
+};
+
+export default PostCard;
