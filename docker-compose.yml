@@ -11,8 +11,6 @@ services:
     ports:
       - 5432:5432
     restart: always
-    networks:
-      - app_network
 
   pgadmin:
     container_name: pgadmin
@@ -45,8 +43,6 @@ services:
     restart: always
     volumes:
       - fastify:/usr/src/api/dist
-    networks:
-      - app_network
 
   app:
     container_name: app
@@ -63,8 +59,6 @@ services:
       - next:/usr/src/app/.next
     depends_on:
       - api
-    networks:
-      - app_network
   
   nginx:
     container_name: nginx
