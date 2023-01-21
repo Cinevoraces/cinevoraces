@@ -36,7 +36,7 @@ services:
       - 3005:3005
     restart: always
     volumes:
-      - ./api:/api
+      - ./api/dist:/api/dist
 
   app:
     container_name: app
@@ -54,4 +54,4 @@ services:
       - 3000:3000
     restart: always
     volumes:
-      - ./app:/app
+      - ./app/.next:/app/.next

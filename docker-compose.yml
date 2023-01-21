@@ -44,7 +44,7 @@ services:
       - 3005:3005
     restart: always
     volumes:
-      - ./api:/api
+      - fastify:/usr/src/api/dist
     networks:
       - app_network
 
@@ -60,7 +60,7 @@ services:
       - 3000:3000
     restart: always
     volumes:
-      - ./app:/app
+      - next:/usr/src/app/.next
     depends_on:
       - api
     networks:
@@ -90,5 +90,6 @@ services:
       - ./certbot/www/:/var/www/certbot/
       - ./certbot/conf/:/etc/letsencrypt/
 
-networks:
-  app_network:
+volumes:
+  next:
+  fastify:

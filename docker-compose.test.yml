@@ -38,7 +38,7 @@ services:
       - 3005:3005
     restart: always
     volumes:
-      - ./api:/api
+      - fastify:/usr/src/api/dist
 
   app:
     container_name: app
@@ -52,6 +52,10 @@ services:
       - 3000:3000
     restart: always
     volumes:
-      - ./app:/app
+      - next:/usr/src/app/.next
     depends_on:
       - api
+
+volumes:
+  next:
+  fastify:
