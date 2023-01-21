@@ -2,6 +2,7 @@ version: "3"
 
 services:
   postgres:
+    container_name: postgres
     build:
       context: ./data
       dockerfile: Dockerfile.dev
@@ -12,6 +13,7 @@ services:
     restart: always
 
   pgadmin:
+    container_name: pgadmin
     image: dpage/pgadmin4
     ports:
       - 5431:80
@@ -21,6 +23,7 @@ services:
       - postgres
 
   api:
+    container_name: api
     hostname: cinevoraces_api
     env_file:
       - .env
@@ -36,6 +39,7 @@ services:
       - ./api:/api
 
   app:
+    container_name: app
     hostname: cinevoraces_app
     env_file:
       - .env

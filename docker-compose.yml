@@ -2,6 +2,7 @@ version: "3"
 
 services:
   postgres:
+    container_name: postgres
     build:
       context: ./data
       dockerfile: Dockerfile
@@ -14,6 +15,7 @@ services:
       - app_network
 
   pgadmin:
+    container_name: pgadmin
     image: dpage/pgadmin4
     ports:
       - 5431:80
@@ -27,6 +29,7 @@ services:
       - app_network
 
   api:
+    container_name: api
     hostname: cinevoraces_api
     env_file:
       - .env
@@ -46,6 +49,7 @@ services:
       - app_network
 
   app:
+    container_name: app
     hostname: cinevoraces_app
     env_file:
       - .env
@@ -63,6 +67,7 @@ services:
       - app_network
   
   nginx:
+    container_name: nginx
     depends_on:
       - app
       - api
@@ -79,6 +84,7 @@ services:
       - ./certbot/conf/:/etc/nginx/ssl/
 
   certbot:
+    container_name: certbot
     image: certbot/certbot:latest
     volumes:
       - ./certbot/www/:/var/www/certbot/
