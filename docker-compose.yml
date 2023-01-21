@@ -23,8 +23,6 @@ services:
       - postgres
     links:
       - postgres
-    networks:
-      - app_network
 
   api:
     container_name: api
