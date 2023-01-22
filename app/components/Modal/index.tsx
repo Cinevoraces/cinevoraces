@@ -18,7 +18,6 @@ const Modal = (props: ModalProps) => {
   const portal = document.getElementById('portal') as HTMLElement;
   const { children, stateValue, setter } = props;
   const handleCloseModal = (e: React.MouseEvent) => {
-    console.log(e);
     setter(!stateValue);
   };
   const lineStyle = 'modal h-0.5 w-5 rounded-full bg-orange-primary';
