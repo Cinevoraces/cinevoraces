@@ -31,8 +31,8 @@ const Modal = (props: ModalProps) => {
     }
   );
   return ReactDOM.createPortal(
-    <div className="fixed z-0 top-0 w-screen h-screen">
-      <div className='fixed z-10 top-0 w-screen h-screen bg-black/50' onClick={handleCloseModal}/>
+    <div className="fixed z-50 top-0 w-screen h-screen">
+      <div className='fixed z-40 top-0 w-screen h-screen bg-black/50' onClick={handleCloseModal}/>
       <>
         {
           trail.map((props, index) =>

@@ -8,7 +8,7 @@ interface PosterProps{
 
 enum PosterStyles {
   grid = 'rounded-xl w-full h-full object-cover shadow-lg max-w-[240px] max-h-[360px] hover:scale-105 transition duration-150 hover:ease-out',
-  film = 'rounded-xl w-full h-full object-cover shadow-lg relative z-10 max-w-[336px] max-h-[504px] object-cover',
+  film = 'rounded-xl w-full h-full object-cover shadow-lg relative max-w-[336px] max-h-[504px] object-cover',
   caroussel = 'rounded-xl w-full h-full object-cover shadow-lg max-w-[240px] max-h-[360px] hover:scale-105 transition duration-150 hover:ease-out fourth-child:hidden fifth-child:hidden sixth-child:hidden md:fourth-child:block lg:fifth-child:block xl:sixth-child:block',
   card = 'rounded-xl w-full h-full object-cover shadow-lg rounded-lg max-w-[125px]',
 }
