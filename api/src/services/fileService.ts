@@ -18,11 +18,11 @@ class FileService {
     stream?: Readable;
   }>;
   public paths = {
-    root: `${process.env.ROOT_PATH='/api'}`,
-    avatar: `${process.env.ROOT_PATH='/api'}/public/avatar`,
-    poster: `${process.env.ROOT_PATH='/api'}/public/poster`,
-    temp: `${process.env.ROOT_PATH='/api'}/temp`,
-    log: `${process.env.ROOT_PATH='/api'}/logs`,
+    root: '/',
+    avatar: '/public/avatar',
+    poster: '/public/poster',
+    temp: '/temp',
+    log: '/logs',
   };
 
   /**

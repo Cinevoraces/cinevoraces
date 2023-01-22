@@ -7,7 +7,7 @@ import fs from 'fs';
  * Any error related operations should be done through this service.
  */
 class ErrorService {
-  private readonly path = `${process.env.ROOT_PATH='/api'}/logs`;
+  private readonly path = '/logs';
 
   public send(message: string, statusCode: number): void {
     throw { message, statusCode };

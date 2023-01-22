@@ -39,3 +39,4 @@ storage/*/*.ico
 
 # prod db data
 data/migration_v2.sql
+data/bak.sql
