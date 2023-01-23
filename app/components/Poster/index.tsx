@@ -34,7 +34,7 @@ const Poster = ({ src, title, type }: PosterProps) => {
       height={(type === 'card') ? 187.5 : (type === 'grid') ? 360 : 504}
       className={styleResolver(type)}
       placeholder='blur'
-      blurDataURL='/movie_posters/placeholder.jpg'
+      blurDataURL='/poster_placeholder.jpg'
     />
   );
 };

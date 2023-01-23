@@ -24,6 +24,10 @@ class FileService {
     temp: '/temp',
     log: '/logs',
   };
+  public nextPaths = {
+    avatar: '/avatar',
+    poster: '/poster',
+  };
 
   /**
    * @description Generate a GUID string

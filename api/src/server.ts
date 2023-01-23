@@ -17,7 +17,6 @@ import hooks from './hooks/_index';
   // 'NODEMAILER_MAIL',
   // 'NODEMAILER_PASSWORD',
   'COOKIE_SECRET',
-  'ROOT_PATH',
 ]).forEach(env => {
   if (!process.env[env]) throw new Error(`Missing environment variable: ${env}`);
 });

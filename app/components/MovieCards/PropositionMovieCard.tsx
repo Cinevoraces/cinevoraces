@@ -35,7 +35,7 @@ const PropositionMovieCard = ({ movie, propositionCardStyle, posterStyle }: Prop
         id="proposition_result_card"
         className={propositionCardStyle}>
         <Poster 
-          src={poster_url ? poster_url : '/movie_posters/placeholder.jpg'}
+          src={poster_url ? poster_url : '/poster_placeholder.jpg'}
           title={french_title || 'placeholder'}
           type='card'
         />

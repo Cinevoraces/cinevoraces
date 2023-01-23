@@ -18,7 +18,7 @@ const TmdbMovieCard = ({ resultCardStyle, movie }: TmdbMovieCardProps) => {
         src={
           movie.poster_path
             ? `https://image.tmdb.org/t/p/original${movie.poster_path}`
-            : '/movie_posters/placeholder.jpg'
+            : '/poster_placeholder.jpg'
         }
         title={movie.title}
         type='card'/>

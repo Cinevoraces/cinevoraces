@@ -23,7 +23,8 @@ interface PostersComponentProps {
  * @param number number of posters to display
  */
 const MultiplePosters = ({ number }: PostersComponentProps) => {
-  const posters = generatePosterArray('/movie_posters/', '.jpg', number);
+  // TODO: TMDB only uses .jpeg, but we should find a safer way to do this anyway
+  const posters = generatePosterArray('/poster/', '.jpeg', number);
   const posterStyles = 'absolute w-[1/2] rounded-lg object-cover shadow-lg';
   const indivStyles = [
     'left-0 top-0', //Style for 2 - 3 - 8 configurations

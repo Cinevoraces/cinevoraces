@@ -58,9 +58,20 @@ export default async (fastify: FastifyInstance) => {
     onRequest: [fastify.verifyAccessToken],
     preValidation: [fastify.throwIfMovieFound],
     handler: async function (request: Request, reply: Reply) {
-      const { _movieService } = this;
-      const { body, user } = request;
-      const payload = { ...body as PPostMovie, user_id: user.id };
+      const { _movieService, _fileService } = this;
+      const movie = request.body as PPostMovie;
+
+      // Download movie poster
+      const poster = await _fileService.downloadFile(movie.poster_url);
+      const fileName = `${movie.episode_id}-${_fileService.generateGuid()}.${poster.ext}`;
+      await _fileService.saveFile(`${_fileService.paths.poster}/${fileName}`, poster.stream);
+
+      // Insert movie in database
+      const payload = {
+        ...movie,
+        poster_url: `${_fileService.nextPaths.poster}/${fileName}`,
+        user_id: request.user.id,
+      };
       await _movieService.insertNewMovie(payload);
       reply
         .code(200)
