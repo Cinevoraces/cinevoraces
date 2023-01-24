@@ -149,6 +149,7 @@ export default async (fastify: FastifyInstance) => {
   fastify.route({
     method: 'PUT',
     url: '/admin/movies/update-posters',
+    schema: fastify.getSchema(ESchemasIds.PUTMoviesPosterAsAdmin),
     onRequest: [fastify.isAdmin],
     preValidation: [fastify.verifyPassword],
     handler: async function (request: Request, reply: Reply) {

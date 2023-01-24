@@ -185,3 +185,29 @@ export const DELETEUsersAsAdmin = {
     },
   },
 };
+
+export const PUTMoviesPosterAsAdmin = {
+  $id: ESchemasIds.PUTMoviesPosterAsAdmin,
+  summary: '(TOKEN REQUIRED)',
+  description: `
+  **Update movies posters that point to a TMDB url.
+    Downloads the poster and update the url in database.**.
+  `,
+  tags: ['Admin'],
+  response: {
+    201: { 
+      type: 'object',
+      properties: {
+        message: { type: 'string' },
+      },
+      required: ['message'],
+    },
+  },
+  200: { 
+    type: 'object',
+    properties: {
+      message: { type: 'string' },
+    },
+    required: ['message'],
+  },
+};

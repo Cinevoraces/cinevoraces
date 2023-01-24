@@ -7,6 +7,7 @@ import {
   DELETEReviewsAsAdmin,
   POSTSeasonsAsAdmin,
   DELETEUsersAsAdmin,
+  PUTMoviesPosterAsAdmin,
 } from './controller.Admin';
 import { POSTLogin, POSTRegister, GETRefresh } from './controller.auth';
 import { GETEpisodes } from './controller.episodes';
@@ -37,6 +38,7 @@ export default [
   DELETEReviewsAsAdmin,
   POSTSeasonsAsAdmin,
   DELETEUsersAsAdmin,
+  PUTMoviesPosterAsAdmin,
   GETPosterImage,
   POSTLogin,
   POSTRegister,

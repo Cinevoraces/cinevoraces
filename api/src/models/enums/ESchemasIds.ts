@@ -2,6 +2,7 @@ export enum ESchemasIds {
   // Admin API schemas
   PUTMoviesAsAdmin = 'PUT/admin/movies/publish/:id',
   DELETEMoviesAsAdmin = 'DELETE/admin/movies/:id',
+  PUTMoviesPosterAsAdmin = 'PUT/admin/movies/update-posters',
   GETReviewsAsAdmin = 'GET/admin/reviews',
   DELETEReviewsAsAdmin = 'DELETE/admin/reviews/:movieId/:userId',
   POSTSeasonsAsAdmin = 'POST/seasons',
