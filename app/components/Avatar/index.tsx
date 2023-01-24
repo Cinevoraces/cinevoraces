@@ -1,7 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import defaultUserPic from '@public/icons/user_default.svg';
-import { Url } from 'url';
 
 interface AvatarProps {
   url: string;

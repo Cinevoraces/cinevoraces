@@ -1,5 +1,4 @@
 import Image from 'next/image';
-import Link from 'next/link';
 
 /** Generates an array of number * poster paths, based on the current day of Year
  * @returns Array of movie posters url
