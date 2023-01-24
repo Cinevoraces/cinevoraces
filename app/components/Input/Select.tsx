@@ -33,7 +33,6 @@ const Select = (props: SelectProps) => {
     <div
       id="select-input"
       className={name + ' relative flex flex-col gap-2 items-center'}
-      // ref={selectRef}
     >
       {!selectCustomStyle ? (
         <Button
@@ -62,7 +61,7 @@ const Select = (props: SelectProps) => {
       {displayOptionsState && (
         <>
           <div
-            className="fixed top-0 left-0 z-0 w-screen h-screen bg-lime-800/10"
+            className="fixed top-0 left-0 z-0 w-screen h-screen"
             onClick={handleCloseOptions}
           />
           <fieldset
