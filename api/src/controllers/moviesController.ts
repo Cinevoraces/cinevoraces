@@ -119,7 +119,7 @@ export default async (fastify: FastifyInstance) => {
   
   /**
    * @description Delete one movie.
-   * @route DELETE /movies
+   * @route DELETE /admin/movies
    */
   fastify.route({
     method: 'DELETE',
@@ -128,11 +128,46 @@ export default async (fastify: FastifyInstance) => {
     onRequest: [fastify.isAdmin],
     preValidation: [fastify.verifyPassword, fastify.throwIfMovieNotFound],
     handler: async function (request: Request<{ Params: { id: number } }>, reply: Reply) {
-      const { _movieService } = this;
-      await _movieService.deleteMovie(request.params.id);
+      const { _movieService, _fileService } = this;
+      const moviePoster = await _movieService.deleteMovie(request.params.id);
+
+      // Delete movie poster
+      if (moviePoster)
+        await _fileService.deleteFile(`${_fileService.paths.poster}/${moviePoster}`);
+
       reply
         .code(201)
         .send({ message: EResponseMessages.DELETE_MOVIE_SUCCESS });
+    },
+  });
+
+  /**
+   * @description Update movies posters that point to a TMDB url.
+   * Downloads the poster and update the url in database.
+   * @route PUT /admin/movies/update-posters
+   */
+  fastify.route({
+    method: 'PUT',
+    url: '/admin/movies/update-posters',
+    onRequest: [fastify.isAdmin],
+    preValidation: [fastify.verifyPassword],
+    handler: async function (request: Request, reply: Reply) {
+      const { _movieService, _fileService } = this;
+      const { rows: moviePosters, rowCount } = await _movieService.getAllMoviesWithTMDBPoster();
+
+      if (!rowCount)
+        reply.code(200).send({ message: EResponseMessages.NO_MOVIE_POSTER_TO_UPDATE });
+      
+      for (const movie of moviePosters) {
+        const poster = await _fileService.downloadFile(movie.poster_url);
+        const fileName = `${movie.episode_id}-${_fileService.generateGuid()}.${poster.ext}`;
+        await _fileService.saveFile(`${_fileService.paths.poster}/${fileName}`, poster.stream);
+        await _movieService.updateMoviePosterUrl(movie.id, `${_fileService.nextPaths.poster}/${fileName}`);
+      }
+
+      reply
+        .code(201)
+        .send({ message: EResponseMessages.UPDATE_MOVIES_POSTERS_SUCCESS });
     },
   });
   

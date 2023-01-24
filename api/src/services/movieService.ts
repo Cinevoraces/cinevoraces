@@ -120,11 +120,18 @@ class MovieService extends DatabaseService {
    * @description Delete one movie.
    * @param {number} id movie's id
    */
-  public async deleteMovie(id: number): Promise<void> {
+  public async deleteMovie(id: number): Promise<string | null> {
+    const { rows, rowCount } = await this.requestDatabase({
+      text: 'SELECT poster_url FROM movie WHERE id = $1;',
+      values: [id],
+    });
+
     await this.requestDatabase({
       text: 'DELETE FROM movie WHERE id = $1;',
       values: [id],
     });
+
+    return rowCount ? rows[0].poster_url : null;
   }
 
   /**
@@ -175,7 +182,7 @@ class MovieService extends DatabaseService {
 
   /**
    * @description Get the next 5 available episodes within 1 month.
-   * @returns
+   * @returns Array of episodes.
    */
   public async getAvailableEpisodes(): Promise<{
     rowCount: number;
@@ -193,6 +200,37 @@ class MovieService extends DatabaseService {
               LIMIT 5;`,
     });
     return { rowCount, rows };
+  }
+
+  /**
+   * @description Get all movies that use an external TMDB url to serve the poster.
+   * @returns Array of movie posters.
+   */
+  public async getAllMoviesWithTMDBPoster(): Promise<{
+    rowCount: number;
+    rows: Array<{ id: number, episode_id: number, poster_url: string }>;
+  }> {
+    const { rowCount, rows } = await this.requestDatabase({
+      text: ` SELECT id, episode_id, poster_url FROM movie 
+              WHERE poster_url
+              LIKE '%' || 'https://image.tmdb.org/t/p/original/' || '%';`,
+    });
+    return { rowCount, rows };
+  }
+
+  /**
+   * @description Update movie's poster url.
+   * @param {number} id movie's id
+   * @param {string} posterUrl movie's poster url
+   */
+  public async updateMoviePosterUrl(
+    id: number,
+    posterUrl: string
+  ): Promise<void> {
+    await this.requestDatabase({
+      text: 'UPDATE movie SET poster_url = $1 WHERE id = $2;',
+      values: [posterUrl, id],
+    });
   }
 
   /**
