@@ -3,7 +3,6 @@ import { EErrorMessages } from 'models/enums';
 import { toast } from 'react-hot-toast';
 import type { BodyData } from 'models/custom_types';
 
-import store from '@store/store';
 import logoutUser from '@utils/logoutUser';
 
 const baseUrlCSR = process.env.NEXT_PUBLIC_API_BASE_URL_CSR;

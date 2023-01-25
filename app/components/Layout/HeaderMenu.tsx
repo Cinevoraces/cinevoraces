@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { useAppSelector, useAppDispatch } from '@store/store';
-import { logout, user } from '@store/slices/user';
+import { user } from '@store/slices/user';
 import logoutUser from '@utils/logoutUser';
 import { toggleUserMenu } from '@store/slices/global';
 import { toast } from 'react-hot-toast';
@@ -44,14 +44,6 @@ const HeaderMenu = (props: HeaderMenuProps) => {
 
   const logoutHandler = () => {
     logoutUser();
-    // // State clearing
-    // dispatch(logout());
-    // // localStorage cleaning
-    // window.localStorage.clear();
-    // // sessionStorage cleaning
-    // window.sessionStorage.clear();
-    // // refresh_token cleaning
-    // document.cookie = 'refresh_token=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
     dispatch(toggleUserMenu());
     toast.success('À bientôt !');
   };
