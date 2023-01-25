@@ -17,6 +17,7 @@ export enum ESchemasIds {
   GETMetrics = 'GET/metrics',
   // Movies API schemas
   GETMovies = 'GET/movies',
+  GETRandomMoviePosters = 'GET/movies/random-posters/:count',
   POSTMovies = 'POST/movies',
   PUTMovies = 'PUT/movies',
   // Public API schemas

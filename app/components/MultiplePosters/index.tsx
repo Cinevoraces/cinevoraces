@@ -8,6 +8,7 @@ import Link from 'next/link';
  * @param {number} number of posters to display
  */
 const generatePosterArray = (path: string, extension: string, number: number) => {
+  // TODO: Get posters from API **GET /movies/random-posters/:count** endpoint
   // 15 posters for the static component -> modulo 15 -1
   const now = new Date(), start = new Date(now.getFullYear(), 0, 0).getTime();
   const dayOfYear = Math.floor((now.getTime() - start)/(1000 * 60 * 60 * 24));

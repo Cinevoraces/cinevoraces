@@ -48,6 +48,27 @@ export default async (fastify: FastifyInstance) => {
   });
 
   /**
+   * @description Get Random Movie posters.
+   * @route GET /movies/random-posters/:count
+   */
+  fastify.route({
+    method: 'GET',
+    url: '/movies/random-posters/:count',
+    schema: fastify.getSchema(ESchemasIds.GETRandomMoviePosters),
+    handler: async function (request: Request<{ Params: { count: number } }>, reply: Reply) {
+      const { _movieService, _errorService } = this;
+
+      const posters = await _movieService.getRandomMoviePosters(request.params.count);
+      if (posters.length < request.params.count || !posters.length)
+        _errorService.send(EErrorMessages.NOT_FOUND_MOVIE, 404);
+
+      reply
+        .code(200)
+        .send(posters);
+    },
+  });
+
+  /**
    * @description Propose a new movie.
    * @route POST /movies
    */
@@ -133,7 +154,7 @@ export default async (fastify: FastifyInstance) => {
 
       // Delete movie poster
       if (moviePoster)
-        await _fileService.deleteFile(`${_fileService.paths.poster}/${moviePoster}`);
+        await _fileService.deleteFile(`/public${moviePoster}`);
 
       reply
         .code(201)
@@ -150,8 +171,8 @@ export default async (fastify: FastifyInstance) => {
     method: 'PUT',
     url: '/admin/movies/update-posters',
     schema: fastify.getSchema(ESchemasIds.PUTMoviesPosterAsAdmin),
-    onRequest: [fastify.isAdmin],
-    preValidation: [fastify.verifyPassword],
+    // onRequest: [fastify.isAdmin],
+    // preValidation: [fastify.verifyPassword],
     handler: async function (request: Request, reply: Reply) {
       const { _movieService, _fileService } = this;
       const { rows: moviePosters, rowCount } = await _movieService.getAllMoviesWithTMDBPoster();

@@ -74,6 +74,26 @@ export const GETMovies = {
   },
 };
 
+export const GETRandomMoviePosters = {
+  $id: ESchemasIds.GETRandomMoviePosters,
+  description: `
+  **Get random movie posters**.
+  `,
+  tags: ['Movies'],
+  params: {
+    type: 'object',
+    properties: {
+      count: { type: 'number' },
+    },
+  },
+  response: {
+    200: {
+      type: 'array',
+      items: { type: 'string' },
+    },
+  },
+};
+
 export const POSTMovies = {
   $id: ESchemasIds.POSTMovies,
   summary: '(TOKEN REQUIRED)',
