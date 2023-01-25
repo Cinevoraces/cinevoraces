@@ -73,8 +73,6 @@ const Filter = ({
   const handleCloseOnKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === 'Escape') displayMenuSetter();
   };
-  // useCloseMenuOnOutsideClick(filterRef, 'filter', isMenuOpened, toggleDisplay);
-  // useCloseOnEnterPress(isMenuOpened, toggleDisplay);
 
   const handleSetRangeInput = (category: string) => (e: string) => {
     userFilterInputsSetter(category, e);
@@ -88,7 +86,7 @@ const Filter = ({
       className="relative w-full flex justify-between md:justify-end"
       ref={filterRef}
       onKeyUp={handleCloseOnKeyPress}>
-      <div className="flex gap-6 w-full md:w-fit">
+      <div className="flex gap-6 w-full z-20 md:w-fit">
         <Button
           name="filter"
           customStyle="empty"
@@ -127,7 +125,7 @@ const Filter = ({
       {isMenuOpened && (
         <>
           <div
-            className="fixed top-0 left-0 z-0 w-screen h-screen"
+            className="fixed top-0 left-0 z-10 w-screen h-screen"
             onClick={handleCloseFilters}/>
           <div
             id="filter-categories"
