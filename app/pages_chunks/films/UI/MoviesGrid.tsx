@@ -2,7 +2,7 @@ import type { CompleteMovie } from 'models/custom_types/index';
 import { useTrail, useSpringRef, animated } from '@react-spring/web';
 import Link from 'next/link';
 import Poster from '@components/Poster';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 
 interface MovieGridProps{
   error?: Error;
@@ -15,20 +15,24 @@ const gridStyle = `w-full grid gap-4 grid-cols-2
 
 const MoviesGrid = ({ error, moviesResults, isFilterMenuOpen }: MovieGridProps) => {
   // Animation Section
+  const previousMoviesResultsLength = useRef<number>(0);
   const api = useSpringRef();
   const trail = useTrail(
     moviesResults.length, {
       ref: api,
       config: { mass: 1, tension: 300, friction: 36 },
-      // reset: true,
+      reset: !isFilterMenuOpen && previousMoviesResultsLength.current > moviesResults.length,
       from: { opacity:0, y:25 },
-      to: { opacity:100, y:0 }
+      to: { opacity:100, y:0 },
     }
   );
+
   useEffect(() => {
+    previousMoviesResultsLength.current = moviesResults.length;
+    if (isFilterMenuOpen) api.stop();
     api.start();
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [moviesResults]);
+  }, [moviesResults, isFilterMenuOpen]);
 
   return (
     <section id="movie-grid" className='w-full'>
@@ -40,7 +44,7 @@ const MoviesGrid = ({ error, moviesResults, isFilterMenuOpen }: MovieGridProps) 
           <ul className={gridStyle}>
             {
               trail.map((props, index) => (
-                <animated.li style={props} className='relative' key={index}>
+                <animated.li style={props} className='relative' key={moviesResults[index].french_title}>
                   <Link href={`/films/${moviesResults[index].id}`}>
                     <Poster
                       src={moviesResults[index].poster_url}
