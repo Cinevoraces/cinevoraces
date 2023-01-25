@@ -92,7 +92,7 @@ export default async (fastify: FastifyInstance) => {
 
       reply
         .code(200)
-        .setCookie('refresh_token', refreshToken, { signed: true })
+        .setCookie('refresh_token', refreshToken, { signed: true, httpOnly: true, secure: true, sameSite: 'strict', expires: new Date((new Date().setDate(new Date().getDate() + 1))) })
         .send({
           user: userObject,
           token: accessToken,
@@ -132,7 +132,7 @@ export default async (fastify: FastifyInstance) => {
 
       reply
         .code(200)
-        .setCookie('refresh_token', refreshToken, { signed: true })
+        .setCookie('refresh_token', refreshToken, { signed: true, httpOnly: true, secure: true, sameSite: 'strict', expires: new Date((new Date().setDate(new Date().getDate() + 1))) })
         .send({
           user: { ...privateUser },
           token: accessToken,
