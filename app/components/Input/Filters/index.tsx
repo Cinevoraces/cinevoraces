@@ -2,8 +2,6 @@ import { useRef } from 'react';
 import type { FormEvent } from 'react';
 import Button from '../Button';
 import { CheckBox, RangeInput, DoubleRangeInput, StarRadio } from '../index';
-import useCloseMenuOnOutsideClick from '@hooks/useCloseMenuOnOutsideClick';
-import useCloseOnEnterPress from '@hooks/useCloseOnEnterPress';
 import { FilterSvg, ResetSvg } from '@components/SvgComponents/Filter';
 import { BookmarkSvg, LikeSvg } from '@components/SvgComponents/InteractionsSVG';
 import UnwatchedSvg from '@components/SvgComponents/Unwatched';
@@ -69,8 +67,14 @@ const Filter = ({
 
   const toggleDisplay = () => displayMenuSetter();
   const filterRef = useRef<HTMLDivElement>(null);
-  useCloseMenuOnOutsideClick(filterRef, 'filter', isMenuOpened, toggleDisplay);
-  useCloseOnEnterPress(isMenuOpened, toggleDisplay);
+  const handleCloseFilters = (e: React.MouseEvent) => {
+    displayMenuSetter();
+  };
+  const handleCloseOnKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === 'Escape') displayMenuSetter();
+  };
+  // useCloseMenuOnOutsideClick(filterRef, 'filter', isMenuOpened, toggleDisplay);
+  // useCloseOnEnterPress(isMenuOpened, toggleDisplay);
 
   const handleSetRangeInput = (category: string) => (e: string) => {
     userFilterInputsSetter(category, e);
@@ -82,7 +86,8 @@ const Filter = ({
     <div
       id="filter-input"
       className="relative w-full flex justify-between md:justify-end"
-      ref={filterRef}>
+      ref={filterRef}
+      onKeyUp={handleCloseOnKeyPress}>
       <div className="flex gap-6 w-full md:w-fit">
         <Button
           name="filter"
@@ -120,104 +125,109 @@ const Filter = ({
         }
       </div>
       {isMenuOpened && (
-        <div
-          id="filter-categories"
-          className="filter absolute z-10 top-14 w-full 
+        <>
+          <div
+            className="fixed top-0 left-0 z-0 w-screen h-screen"
+            onClick={handleCloseFilters}/>
+          <div
+            id="filter-categories"
+            className="filter absolute z-10 top-14 w-full 
             px-4 py-3 
             grid grid-cols-1 gap-6 lg:grid-cols-2 lg:gap-8 xl:grid-cols-3 xl:gap-10 
           bg-medium-gray border border-orange-primary rounded-xl ">
-          {categories.map((c) => (
-            <div
-              id="filters-categories__category"
-              key={c.stateName}
-              className={(c.stateName === 'genres' || c.stateName === 'countries' || c.stateName === 'review') ? 'lg:col-span-2 xl:col-span-3' : ''}>
-              <h2 className="mb-2">{c.title}</h2>
-              {(c.stateName === 'genres' || (c.stateName === 'countries' && filterOptions[c.stateName])) && (
-                <ul className="grid grid-cols-2 gap-y-3 gap-x-6 lg:grid-cols-3 xl:grid-cols-5">
-                  {filterOptions[c.stateName]?.map((f: string) => (
-                    <li
-                      key={f}
-                      className="col-span-1 ">
-                      <CheckBox
-                        name={f}
-                        id={f}
-                        customStyle="filter"
-                        checked={userFilterInputs[c.stateName]?.includes(f) || false}
-                        onChange={() => {
-                          userFilterInputsSetter(c.stateName, f);
-                        }}
-                      />
-                    </li>
-                  ))}
-                </ul>
-              )}
-              {c.stateName === 'runtime' && (
-                <RangeInput
-                  id="runtime"
-                  min={Number(filterOptions.runtime[0])}
-                  max={Number(filterOptions.runtime[1])}
-                  value={
-                    !userFilterInputs.runtime ? Number(filterOptions.runtime[1]) : Number(userFilterInputs.runtime[0])
-                  }
-                  setter={handleSetRangeInput(c.stateName)}
-                />
-              )}
-              {c.stateName === 'releaseYear' && (
-                <DoubleRangeInput
-                  id="runtime"
-                  min={Number(filterOptions.releaseYear[0])}
-                  max={Number(filterOptions.releaseYear[1])}
-                  minValue={
-                    !(userFilterInputs.releaseYear && userFilterInputs.releaseYear[0])
-                      ? Number(filterOptions.releaseYear[0])
-                      : Number(userFilterInputs.releaseYear[0])
-                  }
-                  maxValue={
-                    !(userFilterInputs.releaseYear && userFilterInputs.releaseYear[1])
-                      ? Number(filterOptions.releaseYear[1])
-                      : Number(userFilterInputs.releaseYear[1])
-                  }
-                  minSetter={handleSetRangeInput('minReleaseYear')}
-                  maxSetter={handleSetRangeInput('maxReleaseYear')}
-                />
-              )}
-              {c.stateName === 'avgRate' && (
-                <div className="-ml-12 w-full -mb-6">
-                  <StarRadio
-                    value={userFilterInputs.avgRate ? Number(userFilterInputs.avgRate[0]) : 0}
-                    onChange={(e: FormEvent) => {
-                      if (e.target instanceof HTMLInputElement) {
-                        userFilterInputsSetter(c.stateName, e.target.value);
-                      }
-                    }}
-                  />
-                </div>
-              )}
-              { (c.stateName === 'review' && isUserConnected) && (
-                <ul className='grid grid-cols-1 gap-y-3 gap-x-6 lg:grid-cols-3 xl:grid-cols-5'>
-                  {
-                    reviewActions.map((a) => (
+            {categories.map((c) => (
+              <div
+                id="filters-categories__category"
+                key={c.stateName}
+                className={(c.stateName === 'genres' || c.stateName === 'countries' || c.stateName === 'review') ? 'lg:col-span-2 xl:col-span-3' : ''}>
+                <h2 className="mb-2">{c.title}</h2>
+                {(c.stateName === 'genres' || (c.stateName === 'countries' && filterOptions[c.stateName])) && (
+                  <ul className="grid grid-cols-2 gap-y-3 gap-x-6 lg:grid-cols-3 xl:grid-cols-5">
+                    {filterOptions[c.stateName]?.map((f: string) => (
                       <li
-                        key={a.stateName}
-                        className="col-span-1 relative">
-                        {a.svg}
+                        key={f}
+                        className="col-span-1 ">
                         <CheckBox
-                          name={a.title}
-                          id={a.stateName}
+                          name={f}
+                          id={f}
                           customStyle="filter"
-                          checked={userFilterInputs[c.stateName]?.includes(a.stateName) || false}
+                          checked={userFilterInputs[c.stateName]?.includes(f) || false}
                           onChange={() => {
-                            userFilterInputsSetter(c.stateName, a.stateName);
+                            userFilterInputsSetter(c.stateName, f);
                           }}
                         />
                       </li>
-                    ))
-                  }
-                </ul>)
-              }
-            </div>
-          ))}
-        </div>
+                    ))}
+                  </ul>
+                )}
+                {c.stateName === 'runtime' && (
+                  <RangeInput
+                    id="runtime"
+                    min={Number(filterOptions.runtime[0])}
+                    max={Number(filterOptions.runtime[1])}
+                    value={
+                      !userFilterInputs.runtime ? Number(filterOptions.runtime[1]) : Number(userFilterInputs.runtime[0])
+                    }
+                    setter={handleSetRangeInput(c.stateName)}
+                  />
+                )}
+                {c.stateName === 'releaseYear' && (
+                  <DoubleRangeInput
+                    id="runtime"
+                    min={Number(filterOptions.releaseYear[0])}
+                    max={Number(filterOptions.releaseYear[1])}
+                    minValue={
+                      !(userFilterInputs.releaseYear && userFilterInputs.releaseYear[0])
+                        ? Number(filterOptions.releaseYear[0])
+                        : Number(userFilterInputs.releaseYear[0])
+                    }
+                    maxValue={
+                      !(userFilterInputs.releaseYear && userFilterInputs.releaseYear[1])
+                        ? Number(filterOptions.releaseYear[1])
+                        : Number(userFilterInputs.releaseYear[1])
+                    }
+                    minSetter={handleSetRangeInput('minReleaseYear')}
+                    maxSetter={handleSetRangeInput('maxReleaseYear')}
+                  />
+                )}
+                {c.stateName === 'avgRate' && (
+                  <div className="-ml-12 w-full -mb-6">
+                    <StarRadio
+                      value={userFilterInputs.avgRate ? Number(userFilterInputs.avgRate[0]) : 0}
+                      onChange={(e: FormEvent) => {
+                        if (e.target instanceof HTMLInputElement) {
+                          userFilterInputsSetter(c.stateName, e.target.value);
+                        }
+                      }}
+                    />
+                  </div>
+                )}
+                { (c.stateName === 'review' && isUserConnected) && (
+                  <ul className='grid grid-cols-1 gap-y-3 gap-x-6 lg:grid-cols-3 xl:grid-cols-5'>
+                    {
+                      reviewActions.map((a) => (
+                        <li
+                          key={a.stateName}
+                          className="col-span-1 relative">
+                          {a.svg}
+                          <CheckBox
+                            name={a.title}
+                            id={a.stateName}
+                            customStyle="filter"
+                            checked={userFilterInputs[c.stateName]?.includes(a.stateName) || false}
+                            onChange={() => {
+                              userFilterInputsSetter(c.stateName, a.stateName);
+                            }}
+                          />
+                        </li>
+                      ))
+                    }
+                  </ul>)
+                }
+              </div>
+            ))}
+          </div>
+        </>
       )}
     </div>
   );

@@ -35,6 +35,8 @@ services:
     ports:
       - 3005:3005
     restart: always
+    volumes:
+      - ./api:/api
 
   app:
     container_name: app
@@ -51,3 +53,5 @@ services:
     ports:
       - 3000:3000
     restart: always
+    volumes: 
+      - ./app:/app

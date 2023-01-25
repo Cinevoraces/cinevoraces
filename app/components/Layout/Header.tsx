@@ -1,9 +1,8 @@
-import { useState, useRef } from 'react';
+import { useState } from 'react';
 import Link from 'next/link';
 import { useAppSelector, useAppDispatch } from '@store/store';
 import { toggleBurgerMenu, toggleUserMenu, toggleConnectionModal, global } from '@store/slices/global';
 import { user } from '@store/slices/user';
-import useCloseMenuOnOutsideClick from '@hooks/useCloseMenuOnOutsideClick';
 import HeaderMenu from './HeaderMenu';
 import CompleteLogo from './CompleteLogo';
 import Modal from '@components/Modal';
@@ -24,12 +23,6 @@ const Header = () => {
   const { isBurgerMenuOpen, isUserMenuOpen, isConnectionModalOpen } = useAppSelector(global);
   const { id, role } = useAppSelector(user);
   const dispatch = useAppDispatch();
-
-  //Toggle menu display when clicking outside them
-  const burgerMenuRef = useRef<HTMLElement>(null);
-  const userMenuRef = useRef<HTMLElement>(null);
-  useCloseMenuOnOutsideClick(burgerMenuRef, 'burger', isBurgerMenuOpen, () => dispatch(toggleBurgerMenu()));
-  useCloseMenuOnOutsideClick(userMenuRef, 'user', isUserMenuOpen, () => dispatch(toggleUserMenu()));
 
   const [navLinks, setNavLinks] = useState([
     ['Accueil', '/'],
@@ -60,7 +53,6 @@ const Header = () => {
             stateValue={isBurgerMenuOpen}
             setter={() => dispatch(toggleBurgerMenu())}
             links={navLinks}
-            ref={burgerMenuRef}
           />
           <Link
             href={'/'}
@@ -69,8 +61,9 @@ const Header = () => {
           </Link>
         </div>
         <nav className="hidden justify-between lg:flex">
-          {navLinks.map((link) => (
+          {navLinks.map((link, i) => (
             <Link
+              tabIndex={i}
               href={link[1]}
               key={link[0]}
               className="hover:text-orange-primary 
@@ -87,9 +80,7 @@ const Header = () => {
               type="user"
               stateValue={isUserMenuOpen}
               setter={() => dispatch(toggleUserMenu())}
-              links={userMenuLinks}
-              ref={userMenuRef}
-            />
+              links={userMenuLinks} />
         }
       </header>
       {isConnectionModalOpen && (
