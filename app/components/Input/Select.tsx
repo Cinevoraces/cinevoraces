@@ -61,7 +61,7 @@ const Select = (props: SelectProps) => {
       {displayOptionsState && (
         <>
           <div
-            className="fixed top-0 left-0 z-0 w-screen h-screen"
+            className="fixed top-0 left-0 z-10 w-screen h-screen"
             onClick={handleCloseOptions}
           />
           <fieldset
