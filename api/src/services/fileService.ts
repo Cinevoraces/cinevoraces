@@ -116,7 +116,7 @@ class FileService {
 
     // Remove current avatar
     const currentAvatar = await this.findFileById(this.paths.avatar, `${user.id}-`);
-    currentAvatar && this.deleteFile(currentAvatar);
+    currentAvatar && await this.deleteFile(currentAvatar);
 
     // Upload avatar to Cloudinary for compression
     const cloudinaryRes = await this.cloudinaryUpload(tempFilePath, {
@@ -137,7 +137,7 @@ class FileService {
     const { stream, ext } = await this.downloadFile(cloudinaryRes.url);
     await this.saveFile(`${this.paths.avatar}/${public_id}.${ext}`, stream);
     // Delete temp files
-    this.deleteFile(tempFilePath);
+    await this.deleteFile(tempFilePath);
     await this.cloudinaryDelete(tempFile);
         
     return { avatar_url: `${this.nextPaths.avatar}/${public_id}.${ext}` };
