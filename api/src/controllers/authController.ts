@@ -54,7 +54,9 @@ export default async (fastify: FastifyInstance) => {
       // Create user
       await _authService.createUser(body);
 
-      reply.code(200).send({ message: EResponseMessages.CREATE_USER_SUCCESS });
+      reply
+        .code(200)
+        .send({ message: EResponseMessages.CREATE_USER_SUCCESS });
     },
   });
 
