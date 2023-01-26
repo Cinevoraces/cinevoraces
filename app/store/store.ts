@@ -1,8 +1,9 @@
 import { configureStore } from '@reduxjs/toolkit';
-import type { TypedUseSelectorHook } from 'react-redux';
 import { useSelector, useDispatch } from 'react-redux';
 import { globalSliceReducer, userSliceReducer, filteredMovies } from './slices';
-import { saveToSessionStorage } from '@utils/sessionStorageOperations';
+import { saveToLocalStorage } from '@utils/localStorageOperations';
+import { logoutMiddleware } from './middlewares';
+import type { TypedUseSelectorHook } from 'react-redux';
 
 const store = configureStore({
   reducer: {
@@ -10,9 +11,10 @@ const store = configureStore({
     user: userSliceReducer,
     filteredMovies: filteredMovies,
   },
+  middleware: [logoutMiddleware],
 });
 
-store.subscribe(() => saveToSessionStorage('user', store.getState().user));
+store.subscribe(() => saveToLocalStorage('user', store.getState().user));
 
 export default store;
 

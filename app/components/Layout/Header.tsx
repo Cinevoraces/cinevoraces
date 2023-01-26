@@ -11,7 +11,7 @@ import { ConnectionForm } from '@components/Forms';
 import useSWR from 'swr';
 import { Roles } from 'models/enums';
 import useUpdateNavigationLinks from '@hooks/useUpdateNavigationLinks';
-import useRecoverStateFromSessionStorage from '@hooks/useRecoverStateFromSessionStorage';
+import useRecoverStateFromLocalStorage from '@hooks/useRecoverStateFromLocalStorage';
 import type { CompleteMovie } from 'models/custom_types/movies';
 import type { User } from 'models/custom_types/index';
 
@@ -40,7 +40,7 @@ const Header = () => {
   (role === Roles.ADMIN) && userMenuLinks.push(['Administration', '/administration']);
 
   // Due to lifecycle and store operations, keeping state operations have to be executed here :
-  useRecoverStateFromSessionStorage();
+  useRecoverStateFromLocalStorage();
 
   return (
     <>

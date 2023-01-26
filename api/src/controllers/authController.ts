@@ -18,7 +18,6 @@ const rTokenOptions = { expiresIn: '1d' };
  * @prefix /
  */
 export default async (fastify: FastifyInstance) => {
-  
   /**
    * @description Register a new user.
    * @route POST /register
@@ -28,7 +27,7 @@ export default async (fastify: FastifyInstance) => {
     url: '/register',
     schema: fastify.getSchema(ESchemasIds.POSTRegister),
     handler: async function (
-      request: Request<{ Body: { pseudo: string, mail: string, password: string } }>,
+      request: Request<{ Body: { pseudo: string; mail: string; password: string } }>,
       reply: Reply
     ) {
       const { _errorService, _authService } = this;
@@ -40,11 +39,11 @@ export default async (fastify: FastifyInstance) => {
         _errorService.send(EErrorMessages.DUPLICATE_MAIL, 409);
       if (user && body.pseudo === user.pseudo)
         _errorService.send(EErrorMessages.DUPLICATE_PSEUDO, 409);
-      
+
       // Test and Hash password
       if (!body.password.match(process.env.PASS_REGEXP))
         _errorService.send(EErrorMessages.INVALID_PASSWORD_FORMAT, 422);
-      
+
       body.password = await _authService.hashString(body.password);
 
       // Create user
@@ -55,7 +54,7 @@ export default async (fastify: FastifyInstance) => {
         .send({ message: EResponseMessages.CREATE_USER_SUCCESS });
     },
   });
-  
+
   /**
    * @description Log a user.
    * @route POST /login
@@ -65,7 +64,7 @@ export default async (fastify: FastifyInstance) => {
     url: '/login',
     schema: fastify.getSchema(ESchemasIds.POSTLogin),
     handler: async function (
-      request: Request<{ Body: { pseudo?: string, mail?: string, password: string } }>,
+      request: Request<{ Body: { pseudo?: string; mail?: string; password: string } }>,
       reply: Reply
     ) {
       const { _errorService, _authService } = this;
@@ -79,7 +78,7 @@ export default async (fastify: FastifyInstance) => {
       if (!isPasswordCorrect)
         _errorService.send(EErrorMessages.INVALID_PASSWORD, 401);
 
-      const tokensContent = { 
+      const tokensContent = {
         id: privateUser.id,
         pseudo: privateUser.pseudo,
         role: privateUser.role,
@@ -92,7 +91,13 @@ export default async (fastify: FastifyInstance) => {
 
       reply
         .code(200)
-        .setCookie('refresh_token', refreshToken, { signed: true })
+        .setCookie('refresh_token', refreshToken, {
+          signed: true,
+          httpOnly: false,
+          secure: true,
+          sameSite: 'strict',
+          expires: new Date(new Date().setDate(new Date().getDate() + 1)),
+        })
         .send({
           user: userObject,
           token: accessToken,
@@ -118,9 +123,9 @@ export default async (fastify: FastifyInstance) => {
 
       if (!privateUser)
         _errorService.send(EErrorMessages.COMPROMISED_SESSION, 401);
-      
+
       // Generate new tokens
-      const tokensContent = { 
+      const tokensContent = {
         id: privateUser.id,
         pseudo: privateUser.pseudo,
         role: privateUser.role,
@@ -132,7 +137,13 @@ export default async (fastify: FastifyInstance) => {
 
       reply
         .code(200)
-        .setCookie('refresh_token', refreshToken, { signed: true })
+        .setCookie('refresh_token', refreshToken, {
+          signed: true,
+          httpOnly: false,
+          secure: true,
+          sameSite: 'strict',
+          expires: new Date(new Date().setDate(new Date().getDate() + 1)),
+        })
         .send({
           user: { ...privateUser },
           token: accessToken,
