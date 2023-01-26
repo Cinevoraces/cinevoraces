@@ -64,9 +64,7 @@ export default async (fastify: FastifyInstance) => {
     url: '/login',
     schema: fastify.getSchema(ESchemasIds.POSTLogin),
     handler: async function (
-      request: Request<{
-        Body: { pseudo?: string; mail?: string; password: string };
-      }>,
+      request: Request<{ Body: { pseudo?: string; mail?: string; password: string } }>,
       reply: Reply
     ) {
       const { _errorService, _authService } = this;
