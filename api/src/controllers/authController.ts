@@ -90,10 +90,7 @@ export default async (fastify: FastifyInstance) => {
         pseudo: privateUser.pseudo,
         role: privateUser.role,
       };
-      const userObject = {
-        ...tokensContent,
-        avatar_url: privateUser.avatar_url,
-      };
+      const userObject = { ...tokensContent, avatar_url: privateUser.avatar_url };
 
       // Generate tokens
       const accessToken = await reply.jwtSign(userObject, aTokenOptions);
