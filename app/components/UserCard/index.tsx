@@ -27,6 +27,7 @@ const UserCard = ({ user, type, children }: UserCardProps) => {
           id={user.id}
           url={user.avatar_url}
           pseudo={user.pseudo}
+          interactive={false}
         />
         <h2 className="title-section">{user.pseudo}</h2>
       </div>

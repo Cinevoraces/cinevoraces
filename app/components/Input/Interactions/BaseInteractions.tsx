@@ -7,12 +7,12 @@ interface BaseInteractionProps {
   onClick: ()=>void;
 }
 
-const buttonStyle = `w-14 h-14 lg:w-16 lg:h-16 
+const buttonStyle = `w-14 h-14 md:w-16 md:h-16 xl:w-14 xl:h-14 2xl:w-16 2xl:h-16
 bg-medium-gray pt-1 rounded-xl interaction outline-none 
 origin-right sm:origin-left 
 focus:scale-105 hover:scale-105 
 transition ease-out duration-200 `;
-const svgStyle = 'h-6 w-14 fill-none lg:h-8 lg:w-16 ';
+const svgStyle = 'h-6 w-14 fill-none md:h-8 md:w-16 xl:h-6 xl:w-14 2xl:h-8 2xl:w-16 ';
 
 /**
  * Base interactions are bookmark - like - viewed
