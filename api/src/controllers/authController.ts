@@ -27,9 +27,7 @@ export default async (fastify: FastifyInstance) => {
     url: '/register',
     schema: fastify.getSchema(ESchemasIds.POSTRegister),
     handler: async function (
-      request: Request<{
-        Body: { pseudo: string; mail: string; password: string };
-      }>,
+      request: Request<{ Body: { pseudo: string; mail: string; password: string } }>,
       reply: Reply
     ) {
       const { _errorService, _authService } = this;
