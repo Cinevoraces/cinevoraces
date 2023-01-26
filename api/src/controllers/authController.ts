@@ -36,10 +36,7 @@ export default async (fastify: FastifyInstance) => {
       const { body } = request;
 
       // Duplicate check
-      const user = await _authService.getUserByPseudoOrMail(
-        body.pseudo,
-        body.mail
-      );
+      const user = await _authService.getUserByPseudoOrMail(body.pseudo, body.mail);
       if (user && body.mail === user.mail)
         _errorService.send(EErrorMessages.DUPLICATE_MAIL, 409);
       if (user && body.pseudo === user.pseudo)
