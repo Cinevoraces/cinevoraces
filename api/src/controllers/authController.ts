@@ -77,11 +77,8 @@ export default async (fastify: FastifyInstance) => {
       const { _errorService, _authService } = this;
       const { mail, pseudo, password } = request.body;
 
-      const privateUser = await _authService.getPrivateUser(
-        pseudo ? { pseudo } : { mail }
-      );
-      if (!privateUser)
-        // Check if user exists
+      const privateUser = await _authService.getPrivateUser(pseudo ? { pseudo } : { mail });
+      if (!privateUser) // Check if user exists
         _errorService.send(EErrorMessages.INVALID_USER, 404);
       // Check if password match
       const isPasswordCorrect = await _authService.verifyPassword(
