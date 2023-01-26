@@ -81,10 +81,7 @@ export default async (fastify: FastifyInstance) => {
       if (!privateUser) // Check if user exists
         _errorService.send(EErrorMessages.INVALID_USER, 404);
       // Check if password match
-      const isPasswordCorrect = await _authService.verifyPassword(
-        privateUser.id,
-        password
-      );
+      const isPasswordCorrect = await _authService.verifyPassword(privateUser.id, password);
       if (!isPasswordCorrect)
         _errorService.send(EErrorMessages.INVALID_PASSWORD, 401);
 
