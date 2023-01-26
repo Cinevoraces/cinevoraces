@@ -77,7 +77,7 @@ class FileService {
    * @param {string} path Path to delete file from
    */
   public async deleteFile(path: string): Promise<void> {
-    fs.unlinkSync(path);
+    await fs.promises.unlink(path);
   };
 
   /**
