@@ -1,4 +1,3 @@
-import Image from 'next/image';
 import cutText from '@utils/cutText';
 import Poster from '@components/Poster';
 import type { TMDBMovie } from 'models/custom_types/index';

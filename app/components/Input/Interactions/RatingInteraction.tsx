@@ -1,10 +1,10 @@
 import type { FormEvent } from 'react';
+import { useState } from 'react';
 import { useRef } from 'react';
 import { StarSvg } from '@components/SvgComponents/InteractionsSVG';
 import StarRadio from '../StarRadio';
-import useCloseMenuOnOutsideClick from '@hooks/useCloseMenuOnOutsideClick';
 
-const buttonStyle = `w-14 h-14 lg:w-16 lg:h-16 
+const buttonStyle = `w-14 h-14 md:w-16 md:h-16 xl:w-14 xl:h-14 2xl:w-16 2xl:h-16 
 bg-medium-gray pt-1 rounded-xl interaction outline-none 
 origin-right sm:origin-left 
 focus:scale-105 hover:scale-105 
@@ -21,7 +21,7 @@ rating `;
 const customStarButtonStyle = `rating relative z-10 w-14 h-18 lg:w-16 
 bg-medium-gray outline-none `;
 const ratingMenuContainer = 'rating relative z-0 h-full w-52 -top-1 lg:top-0';
-const svgStyle = 'h-6 w-14 fill-none lg:h-8 lg:w-16 ';
+const svgStyle = 'h-6 w-14 fill-none md:h-8 md:w-16 xl:h-6 xl:w-14 2xl:h-8 2xl:w-16 ';
 
 interface RatingInteractionProps {
   counter: number;
@@ -41,7 +41,7 @@ interface RatingInteractionProps {
 const RatingInteraction = ({ isClicked, counter, ratingHandler, value }: RatingInteractionProps) => {
   // Reference to control Rating Menu states and width
   const ratingMenuRef = useRef<HTMLDivElement>(null);
-  const isMenuOpened = ratingMenuRef.current?.classList.contains('w-14') || ratingMenuRef.current?.classList.contains('w-16') || false;
+  const [isMenuOpened, setIsMenuOpened] = useState(false);
   // Handling button expansion throught ref
   const toggleRatingMenu = () => {
     if (ratingMenuRef && ratingMenuRef.current) {
@@ -49,6 +49,8 @@ const RatingInteraction = ({ isClicked, counter, ratingHandler, value }: RatingI
       ratingMenuRef.current.classList.toggle('lg:w-72');
       ratingMenuRef.current.classList.toggle('w-14');
       ratingMenuRef.current.classList.toggle('lg:w-16');
+      if (ratingMenuRef.current.classList.contains('w-72')) setIsMenuOpened(true);
+      else setIsMenuOpened(false);
     }
   };
   const closeRatingMenu = () => {
@@ -56,12 +58,6 @@ const RatingInteraction = ({ isClicked, counter, ratingHandler, value }: RatingI
       toggleRatingMenu();
     }
   };
-  useCloseMenuOnOutsideClick(
-    ratingMenuRef, 
-    'rating', 
-    isMenuOpened, 
-    closeRatingMenu,
-  );
 
   return (
     <div className='w-14 h-14 relative lg:w-16 lg:h-16 '>
@@ -87,6 +83,12 @@ const RatingInteraction = ({ isClicked, counter, ratingHandler, value }: RatingI
           </div>
         </div>
       </div>
+      {
+        isMenuOpened &&
+        <div
+          className="fixed top-0 left-0 z-0 w-screen h-screen"
+          onClick={closeRatingMenu}/>
+      }
     </div>
   );
 };
