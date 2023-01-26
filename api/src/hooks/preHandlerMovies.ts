@@ -24,11 +24,12 @@ export default plugin((async (fastify, opts, done) => {
    * @preValidation 
    * @description Movie existence verification
    */// eslint-disable-next-line @typescript-eslint/no-unused-vars
-  fastify.decorate('throwIfMovieFound', async (request: Request<{ Params?: { id: number }; }>, reply: Reply) => {
+  fastify.decorate('throwIfMovieFound', async (request: Request<{ Body: { original_title: string, french_title: string } }>, reply: Reply) => {
     const { _errorService, _movieService } = fastify;
-    const isMovie = await _movieService.checkMovieExistanceById(request.params.id);
+    const { original_title, french_title } = request.body;
+    const isMovie = await _movieService.checkMovieExistanceByName(original_title, french_title);
     if (isMovie)
-      _errorService.send(EErrorMessages.ALREADY_POSTED_MOVIE, 404);
+      _errorService.send(EErrorMessages.ALREADY_POSTED_MOVIE, 401);
   });
 
   /**
