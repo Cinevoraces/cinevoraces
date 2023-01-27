@@ -31,8 +31,6 @@ services:
       - .env
     depends_on:
       - postgres
-    # links:
-    #   - postgres
     build:
       context: ./api
       dockerfile: Dockerfile

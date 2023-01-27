@@ -21,8 +21,6 @@ services:
       - .env
     depends_on:
       - postgres
-    links:
-      - postgres
 
   api:
     container_name: api
