@@ -37,11 +37,7 @@ const Administration: NextPage = () => {
   const submitSuccess = async (method: 'POST' | 'PUT' | 'DELETE', endpoint: string, data: { password: string }) => {
     const response = await mutationRequestCSR(method, endpoint, data);
     // No response data as it is a 204 success Status
-    toast.success(
-      `${method === 'PUT' ? 'Publication' : 'Supression'} ${
-        endpoint.includes('users') ? 'du membre' : 'de la proposition'
-      } réussie`
-    );
+    toast.success(response.message);
     endpoint.includes('users') ? usersMutate() : propositionsMutate();
     userMutate();
     return handleOpenConfirmationModal();
