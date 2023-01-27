@@ -23,14 +23,14 @@ class FileService {
   }>;
   public paths = {
     root: '/',
-    avatar: '/public/avatar',
-    poster: '/public/poster',
+    avatar: '/public/avatars',
+    poster: '/public/posters',
     temp: '/temp',
     log: '/logs',
   };
   public nextPaths = {
-    avatar: '/avatar',
-    poster: '/poster',
+    avatar: '/avatars',
+    poster: '/posters',
   };
   public cloudinaryConfig = { cloudinary_url: process.env.CLOUDINARY_URL };
 

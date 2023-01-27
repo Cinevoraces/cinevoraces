@@ -37,7 +37,8 @@ services:
     restart: always
     volumes:
       - fastify:/usr/src/api/dist
-      - ./public:/public
+      - posters:/public/posters
+      - avatars:/public/avatars
       - ./logs:/logs
       - ./temp:/temp
 
@@ -54,11 +55,13 @@ services:
     restart: always
     volumes:
       - next:/usr/src/app/.next
-      - ./public/poster:/app/public/poster
-      - ./public/avatar:/app/public/avatar
+      - posters:/app/public/posters
+      - avatars:/app/public/avatars
     depends_on:
       - api
 
 volumes:
   next:
   fastify:
+  posters:
+  avatars:

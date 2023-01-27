@@ -38,7 +38,8 @@ services:
     restart: always
     volumes:
       - ./api:/api
-      - ./public:/public
+      - posters:/public/posters
+      - avatars:/public/avatars
       - ./logs:/logs
       - ./temp:/temp
 
@@ -59,5 +60,9 @@ services:
     restart: always
     volumes:
       - ./app:/app
-      - ./public/poster:/app/public/poster
-      - ./public/avatar:/app/public/avatar
+      - posters:/app/public/posters
+      - avatars:/app/public/avatars
+
+volumes:
+  posters:
+  avatars:
