@@ -16,7 +16,7 @@ interface UsersSectionProps {
 const userTableColumns = ['Id', 'Pseudo', 'Mail', 'Rôle', 'Date d\'inscription', 'Modification'];
 const cellStyle = 'px-4 py-2';
 
-const UsersSection: NextPage<UsersSectionProps> = ({ users, error, handleConfirmationModal }) => {
+const UsersSection = ({ users, error, handleConfirmationModal }: UsersSectionProps) => {
   // Actions logic
   const handleUserDeletionConfirmation = (id: number) => {
     handleConfirmationModal(AdminActions.DELETEUSER, id);

@@ -1,7 +1,7 @@
 import type { FormEvent } from 'react';
 
 export interface HandleSubmitAction {
-  description: string, handlingFunction: (e: FormEvent, id: number, data: { password: string })=>void 
+  description: string, handlingFunction: (e: FormEvent, data: { password: string }, id?: number)=>void 
 }
 export interface HandleSubmitActions {
   [key: number]: HandleSubmitAction

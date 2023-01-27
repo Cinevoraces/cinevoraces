@@ -8,7 +8,7 @@ import type { HandleSubmitAction } from 'models/custom_types/index';
 
 interface ConfirmationFormProps {
   handlingAction: HandleSubmitAction;
-  id: number;
+  id?: number;
 }
 
 const ConfirmationForm = ({ handlingAction: { description, handlingFunction }, id }: ConfirmationFormProps) => {
@@ -16,7 +16,7 @@ const ConfirmationForm = ({ handlingAction: { description, handlingFunction }, i
   const isPWVisible = useAppSelector(global).arePWVisible;
   const passwordRef = useRef<HTMLInputElement>(null);
   const handleSubmit = (e: FormEvent) =>
-    handlingFunction(e, id, { password: passwordRef.current ? passwordRef.current?.value : '' });
+    handlingFunction(e, { password: passwordRef.current ? passwordRef.current?.value : '' }, id);
   return (
     <>
       <h2 className="title-section mb-4">{`Confirmez ${description}`}</h2>

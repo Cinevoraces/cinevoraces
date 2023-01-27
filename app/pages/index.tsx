@@ -17,6 +17,8 @@ import { user } from '@store/slices/user';
 import { useTrail, animated } from '@react-spring/web';
 
 import Poster from '@components/Poster';
+import useSWR from 'swr';
+import { useEffect } from 'react';
 interface HomeProps {
   metrics: MetricsProps;
   lastSixMovies: MinimalMovie[];
@@ -45,6 +47,11 @@ const Home: NextPage<HomeProps> = (props) => {
       to: { opacity:100, x:0 }
     }
   );
+
+  const { data: posters } = useSWR<{ id: number; french_title: string; poster_url: string }[]>(`/movies/random-posters/${8}`);
+  useEffect(() => {
+    posters && console.log('posters :', posters);
+  }, [posters]);
 
   return (
     <>

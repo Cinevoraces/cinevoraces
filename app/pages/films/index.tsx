@@ -112,6 +112,11 @@ const Films: NextPage = () => {
 
   const moviesResults = useAppSelector(filteredMovies).filteredMovies;
 
+  const { data: posters } = useSWR<{ id: number; french_title: string; poster_url: string }[]>(`/movies/random-posters/${8}`);
+  useEffect(() => {
+    posters && console.log('posters :', posters);
+  }, [posters]);
+
   return (
     <>
       <CustomHead

@@ -88,12 +88,13 @@ class MovieService extends DatabaseService {
    * @param {number} count Count of requested posters.
    * @returns Array of movie posters.
    */
-  public async getRandomMoviePosters(count: number): Promise<Array<string>> {
+  public async getRandomMoviePosters(count: number): Promise<Array<{ id: number; french_title: string; poster_url: string }>> {
+
     const { rowCount, rows } = await this.requestDatabase({
-      text: 'SELECT poster_url FROM movie ORDER BY random() LIMIT $1;',
+      text: 'SELECT id, french_title, poster_url FROM movie WHERE is_published = true ORDER BY random() LIMIT $1;',
       values: [count],
     });
-    return rowCount ? rows.map((row) => row.poster_url) : [];
+    return rowCount ? rows : [];
   }
 
   /**

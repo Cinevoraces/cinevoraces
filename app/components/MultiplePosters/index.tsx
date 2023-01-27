@@ -1,5 +1,8 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import Poster from '@components/Poster';
+import useSWR from 'swr';
+import { useEffect } from 'react';
 
 /** Generates an array of number * poster paths, based on the current day of Year
  * @returns Array of movie posters url
@@ -24,8 +27,11 @@ interface PostersComponentProps {
  * @param number number of posters to display
  */
 const MultiplePosters = ({ number }: PostersComponentProps) => {
-  // TODO: TMDB only uses .jpeg, but we should find a safer way to do this anyway
-  const posters = generatePosterArray('/poster/', '.jpeg', number);
+  const { data: posters } = useSWR<{ id: number; french_title: string; poster_url: string }[]>(`/movies/random-posters/${number}`);
+  useEffect(() => {
+    posters && console.log('posters :', JSON.stringify(posters));
+  }, [posters]);
+
   const posterStyles = 'absolute w-[1/2] rounded-lg object-cover shadow-lg';
   const indivStyles = [
     'left-0 top-0', //Style for 2 - 3 - 8 configurations
@@ -39,18 +45,15 @@ const MultiplePosters = ({ number }: PostersComponentProps) => {
   ];
   return (
     <div className="relative w-full aspect-square max-w-md">
-      {posters.map((poster, i) => (
-        // <Link href={`films/${i + 1}`} key={'poster_' + i}> // to uncomment later, when all posters will ve stored
-        <Image
-          src={poster}
-          alt="movie poster"
-          width={200}
-          height={(200 * 9) / 16}
-          className={posterStyles + ' ' + indivStyles[i]}
-          key={poster}
-        />
-        // </Link>
-      ))}
+      {(posters && posters?.length > 0) && 
+        posters.map((p, i) => (
+          <Link href={`/films/${p.id}`} key={i+ '-' + p.french_title} className={posterStyles + ' ' + indivStyles[i]}>
+            <Poster
+              src={p.poster_url}
+              title={p.french_title}
+            />
+          </Link>
+        ))}
     </div>
   );
 };
