@@ -2,6 +2,7 @@ import Link from 'next/link';
 import Poster from '@components/Poster';
 import useSWR from 'swr';
 import { useEffect } from 'react';
+import { useTrail, useSpringRef, animated } from '@react-spring/web';
 
 /** Generates an array of number * poster paths, based on the current day of Year
  * @returns Array of movie posters url
@@ -27,9 +28,15 @@ interface PostersComponentProps {
  */
 const MultiplePosters = ({ number }: PostersComponentProps) => {
   const { data: posters } = useSWR<{ id: number; french_title: string; poster_url: string }[]>(`/movies/random-posters/${number}`);
-  useEffect(() => {
-    posters && console.log('posters :', JSON.stringify(posters));
-  }, [posters]);
+
+  const trail = useTrail(
+    posters?.length || 0, {
+      config: { mass: 10, tension: 100, friction: 60 },
+      // reset: true,
+      from: { opacity:0 },
+      to: { opacity:100 },
+    }
+  );
 
   const posterStyles = 'absolute w-[1/2] rounded-lg object-cover shadow-lg';
   const indivStyles = [
@@ -43,17 +50,20 @@ const MultiplePosters = ({ number }: PostersComponentProps) => {
     'left-[25%] bottom-[13%]',
   ];
   return (
-    <div className="relative w-full aspect-square max-w-md">
-      {(posters && posters?.length > 0) && 
-        posters.map((p, i) => (
-          <Link href={`/films/${p.id}`} key={i+ '-' + p.french_title} className={posterStyles + ' ' + indivStyles[i]}>
-            <Poster
-              src={p.poster_url}
-              title={p.french_title}
-            />
-          </Link>
+    <ul className="relative w-full aspect-square max-w-md">
+      {
+        (posters && posters?.length > 0) && 
+        trail.map((props, index) => (
+          <animated.li style={props} key={index+ '-' + posters[index].french_title}>
+            <Link href={`/films/${posters[index].id}`} className={posterStyles + ' ' + indivStyles[index]}>
+              <Poster
+                src={posters[index].poster_url}
+                title={posters[index].french_title}
+              />
+            </Link>
+          </animated.li>
         ))}
-    </div>
+    </ul>
   );
 };
 
