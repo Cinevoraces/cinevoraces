@@ -171,8 +171,8 @@ export default async (fastify: FastifyInstance) => {
     method: 'PUT',
     url: '/admin/movies/update-posters',
     schema: fastify.getSchema(ESchemasIds.PUTMoviesPosterAsAdmin),
-    // onRequest: [fastify.isAdmin],
-    // preValidation: [fastify.verifyPassword],
+    onRequest: [fastify.isAdmin],
+    preValidation: [fastify.verifyPassword],
     handler: async function (request: Request, reply: Reply) {
       const { _movieService, _fileService } = this;
       const { rows: moviePosters, rowCount } = await _movieService.getAllMoviesWithTMDBPoster();

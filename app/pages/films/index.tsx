@@ -56,11 +56,11 @@ const Films: NextPage = () => {
   const { data: seasonsArray } = useSWR('/seasons');
   const seasons = useRef<{ name: string; value: string }[]>([]);
 
-  const isUserConnected = useRef<boolean>(false);
+  // const isUserConnected = useRef<boolean>(false);
   const id = useAppSelector(user).id;
-  useEffect(() => {
-    if (id) isUserConnected.current = true;
-  }, [id]);
+  // useEffect(() => {
+  //   if (id) isUserConnected.current = true;
+  // }, [id]);
 
   // Initialise the default value for select button and first movies fetching
   useEffect(() => {
@@ -106,9 +106,9 @@ const Films: NextPage = () => {
   }, [movies]);
 
   useEffect(() => {
-    movies && dispatch(setFilteredMovies({ moviesToFilter: movies, isUserConnected: isUserConnected.current }));
+    movies && dispatch(setFilteredMovies({ moviesToFilter: movies, isUserConnected: id ? true : false }));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [movies, searchQuery, userFilterInputs, isUserConnected.current]);
+  }, [movies, searchQuery, userFilterInputs, id]);
 
   const moviesResults = useAppSelector(filteredMovies).filteredMovies;
 
@@ -160,7 +160,7 @@ const Films: NextPage = () => {
               userFilterReset={handleFilterReset}
               filtersCounter={Number(userFilterInputs.filtersCounter[0])}
               resultsCount={moviesResults.length}
-              isUserConnected={isUserConnected.current}
+              isUserConnected={id ? true : false}
             />
           )}
         </section>

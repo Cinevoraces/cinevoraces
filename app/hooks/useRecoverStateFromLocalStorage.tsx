@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useAppDispatch } from '@store/store';
 import { setUserModification } from '@store/slices/user';
-import { getStateFromSessionStorage } from '@utils/sessionStorageOperations';
+import { getStateFromLocalStorage } from '@utils/localStorageOperations';
 
 /**
  * Custom hook which purpose is to retrieve user state from sessionStorage when user hard refreshes
@@ -9,7 +9,7 @@ import { getStateFromSessionStorage } from '@utils/sessionStorageOperations';
 const useRecoverStateFromSessionStorage = () => {
   const dispatch = useAppDispatch();
   useEffect(()=>{
-    dispatch(setUserModification(getStateFromSessionStorage('user')));
+    dispatch(setUserModification(getStateFromLocalStorage('user')));
   }, [dispatch]);
 };
 

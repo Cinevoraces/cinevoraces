@@ -1,8 +1,6 @@
 import type { PoolClient } from 'pg';
 import type { FastifyPluginCallback } from 'fastify';
 import type { PQuerystring, PUser } from '../models/types/_index';
-import type { UploadApiResponse } from 'cloudinary';
-import { v2 } from 'cloudinary';
 import DatabaseService from './databaseService';
 import plugin from 'fastify-plugin';
 
@@ -94,33 +92,6 @@ class UserService extends DatabaseService {
       text: ' DELETE FROM "user" WHERE id=$1;',
       values: [id],
     });
-  }
-
-  /**
-   * @description Upload image to Cloudinary account.
-   * @param {string} userPseudo - The user's pseudo that will prefix filename.
-   * @param {string} filePath - The name of the file to upload.
-   */
-  public async cloudinaryUpload(
-    userPseudo: string,
-    filePath: string
-  ): Promise<UploadApiResponse> {
-    v2.config({ cloudinary_url: process.env.CLOUDINARY_URL });
-    try {
-      const cloudinaryRes = await v2.uploader.upload(filePath, {
-        folder: 'cinevoraces',
-        tags: 'avatar',
-        width: 200,
-        height: 200,
-        crop: 'fill',
-        gravity: 'faces',
-        format: 'jpeg',
-        public_id: userPseudo,
-      });
-      return cloudinaryRes;
-    } catch (err) {
-      console.error(err);
-    }
   }
 };
 

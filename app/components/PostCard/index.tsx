@@ -46,7 +46,7 @@ const PostCard = ({
       id={type === 'presentation' ? 'presentation-card' : type === 'comment' ? 'comment-card' : 'comment-form'}
       className={type === 'presentation' ? presentationStyle : type === 'comment' ? commentStyle : formStyle}>
       <div
-        className="flex flex-col gap-2"
+        className="flex flex-col gap-2 sm:items-center sm:flex-row sm:justify-between"
         id="card-header">
         <div className="flex items-center gap-2">
           <Avatar

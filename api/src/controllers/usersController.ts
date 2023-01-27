@@ -76,6 +76,8 @@ export default async (fastify: FastifyInstance) => {
       const { _errorService, _fileService, _userService } = this;
       const { id, pseudo } = request.user;
       const avatar = await request.file();
+      
+      // File validation checks
       const allowedMimeTypes = [
         EMimeType.PNG,
         EMimeType.GIF,
@@ -83,8 +85,6 @@ export default async (fastify: FastifyInstance) => {
         EMimeType.JPG,
         EMimeType.WEBP,
       ];
-
-      // File validation checks
       if (!avatar)
         _errorService.send(EErrorMessages.INVALID_FILE, 400);
       if (!allowedMimeTypes.includes(avatar.mimetype as EMimeType))
@@ -94,21 +94,8 @@ export default async (fastify: FastifyInstance) => {
       });
 
       try {
-        // Save file to server (Cloudinary uploads supports only local files)
-        const filePath = `${_fileService.paths.temp}/${id}_${pseudo}.${avatar.mimetype.split('/')[1]}`;
-        await _fileService.saveFile(filePath, avatar.file);
-  
-        // Upload file to Cloudinary
-        const cloudinaryRes = await _userService.cloudinaryUpload(`avatar_${id}_${pseudo}`, filePath);
-        
-        if (!cloudinaryRes)
-          _errorService.send(EErrorMessages.CLOUDINARY_FAILURE, 500);
-        // Delete file from server
-        _fileService.deleteFile(filePath);
-        // Update user avatar url
-        await _userService.updateUser(id, {
-          avatar_url: cloudinaryRes.secure_url,
-        });
+        const avatarFilePath = await _fileService.UploadAvatar({ id, pseudo }, avatar);
+        await _userService.updateUser(id, avatarFilePath);
         reply
           .code(201)
           .send({ message: EResponseMessages.UPDATE_USER_PIC_SUCCESS });

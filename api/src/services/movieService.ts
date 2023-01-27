@@ -271,7 +271,7 @@ class MovieService extends DatabaseService {
     frenchTitle: string
   ): Promise<boolean> {
     const { rowCount } = await this.requestDatabase({
-      text: ` SELECT french_title, original_title,
+      text: ` SELECT french_title, original_title
               FROM movie
               WHERE original_title = $1
               AND french_title = $2;`,

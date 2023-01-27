@@ -1,4 +1,3 @@
-import Image from 'next/image';
 import Link from 'next/link';
 import Poster from '@components/Poster';
 import useSWR from 'swr';
