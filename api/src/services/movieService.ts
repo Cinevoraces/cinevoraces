@@ -174,7 +174,7 @@ class MovieService extends DatabaseService {
   }
 
   /**
-   * @description Get the next 5 available episodes within 1 month.
+   * @description Get the next 5 available episodes within 1 month. Consider current episode if available too.
    * @returns
    */
   public async getAvailableEpisodes(): Promise<{
@@ -187,7 +187,7 @@ class MovieService extends DatabaseService {
                   LEFT JOIN (SELECT "movie".id, "movie".episode_id FROM movie) mv 
                     ON mv.episode_id = ep.id
                   WHERE mv.id IS NULL
-                AND ep.publishing_date >= NOW()
+                AND ep.publishing_date >= (NOW() - interval '6 days')
                 AND ep.publishing_date < (NOW() + interval '1 month')
               ORDER BY ep.publishing_date ASC
               LIMIT 5;`,
