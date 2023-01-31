@@ -37,6 +37,7 @@ services:
       dockerfile: Dockerfile.dev
     ports:
       - 3005:3005
+      - 9229:9229
     restart: always
     volumes:
       - ./api:/api
