@@ -152,6 +152,7 @@ const Films: NextPage = () => {
               filtersCounter={Number(userFilterInputs.filtersCounter[0])}
               resultsCount={moviesResults.length}
               isUserConnected={id ? true : false}
+              season={season ? season : undefined}
             />
           )}
         </section>

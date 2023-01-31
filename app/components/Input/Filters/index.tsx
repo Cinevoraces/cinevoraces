@@ -9,7 +9,7 @@ import userFilterResetHandling from './handleSetRangeInput';
 
 import { toast } from 'react-hot-toast';
 
-import type { FilterOptions, FilterUserInputs } from 'models/custom_types/index';
+import type { FilterOptions, FilterUserInputs, SeasonOption } from 'models/custom_types/index';
 export interface FilterProps {
   filterOptions: FilterOptions;
   isMenuOpened: boolean;
@@ -20,6 +20,7 @@ export interface FilterProps {
   filtersCounter: number;
   resultsCount?: number;
   isUserConnected?: boolean;
+  season?: SeasonOption;
 }
 
 const counterFilterStyle = `absolute z-10 -top-5 -right-6 w-[22px] h-[22px] 
@@ -39,6 +40,7 @@ const counterFilterStyle = `absolute z-10 -top-5 -right-6 w-[22px] h-[22px]
  * @param filtersCounter - filterCounter state
  * @param resultsCount - length from selected movie array
  * @param isUserConnected - taken from user state
+ * @param season - from state
  * @returns <div> Interactive filtering component for movie grids
  */
 const Filter = ({
@@ -51,6 +53,7 @@ const Filter = ({
   filtersCounter,
   resultsCount,
   isUserConnected,
+  season,
 }: FilterProps) => {
   const categories = [
     { title: 'Genres', stateName: 'genres' },
@@ -83,9 +86,24 @@ const Filter = ({
   const handleUserFilterReset = () => userFilterResetHandling(userFilterReset, filterRef);
 
   const filtersCounterRef = useRef<number>(0);
+  const seasonRef = useRef<SeasonOption | undefined>(undefined);
+
+  // Notification system when changing season delete some unapplied filters
+  // Two specific steps as the mechanism firstly change the season state, then change available filters
+  // First update the counter ref on each season modification
   useEffect(() => {
-    if (filtersCounterRef.current > filtersCounter) toast('Certains filtres ne s\'appliquent pas à la saison en cours. Ils ont été supprimés.');
     filtersCounterRef.current = filtersCounter;
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [season]);
+  // Then compare it to the former value in case of season switch
+  useEffect(() => {
+    if (season?.value !== seasonRef.current?.value){
+      if (filtersCounterRef.current > filtersCounter) {
+        toast('Certains filtres ne s\'appliquent pas à la saison en cours. Ils ont été supprimés.');
+      }
+    }
+    seasonRef.current = season;
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filtersCounter]);
 
   return (
