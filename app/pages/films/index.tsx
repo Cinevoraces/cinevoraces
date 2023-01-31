@@ -56,11 +56,7 @@ const Films: NextPage = () => {
   const { data: seasonsArray } = useSWR('/seasons');
   const seasons = useRef<{ name: string; value: string }[]>([]);
 
-  // const isUserConnected = useRef<boolean>(false);
   const id = useAppSelector(user).id;
-  // useEffect(() => {
-  //   if (id) isUserConnected.current = true;
-  // }, [id]);
 
   // Initialise the default value for select button and first movies fetching
   useEffect(() => {
