@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import type { FormEvent } from 'react';
 import Button from '../Button';
 import { CheckBox, RangeInput, DoubleRangeInput, StarRadio } from '../index';
@@ -6,6 +6,8 @@ import { FilterSvg, ResetSvg } from '@components/SvgComponents/Filter';
 import { BookmarkSvg, LikeSvg } from '@components/SvgComponents/InteractionsSVG';
 import UnwatchedSvg from '@components/SvgComponents/Unwatched';
 import userFilterResetHandling from './handleSetRangeInput';
+
+import { toast } from 'react-hot-toast';
 
 import type { FilterOptions, FilterUserInputs } from 'models/custom_types/index';
 export interface FilterProps {
@@ -20,8 +22,8 @@ export interface FilterProps {
   isUserConnected?: boolean;
 }
 
-const counterFilterStyle = `absolute z-10 -top-4 -right-5 w-[20px] h-[20px] 
-  flex items-center justify-center 
+const counterFilterStyle = `absolute z-10 -top-5 -right-6 w-[22px] h-[22px] 
+  flex items-center justify-center
   text-dark-gray text-xs 
   rounded-full bg-orange-primary 
   after:absolute after:-z-10 after:w-4 after:h-4 after:bg-orange-primary/50 after:rounded-full after:animate-ping`;
@@ -79,6 +81,12 @@ const Filter = ({
   };
 
   const handleUserFilterReset = () => userFilterResetHandling(userFilterReset, filterRef);
+
+  const filtersCounterRef = useRef<number>(0);
+  useEffect(() => {
+    if (filtersCounterRef.current > filtersCounter) toast('Certains filtres ne s\'appliquent pas à la saison en cours. Ils ont été supprimés.');
+    filtersCounterRef.current = filtersCounter;
+  }, [filtersCounter]);
 
   return (
     <div
