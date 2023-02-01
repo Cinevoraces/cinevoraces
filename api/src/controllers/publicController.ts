@@ -12,17 +12,34 @@ import { ESchemasIds } from '../models/enums/_index';
 export default async (fastify: FastifyInstance) => {
 
   /**
-   * @description Get poster image's public URL.
-   * @route GET /poster/:fileName
-   * @param {string} fileName - File name.
-   * @returns {string} - Public URL.
+   * @description Get movie's poster file.
+   * @route GET /poster/:movieId
+   * @param {number} movieId - Movie's id.
+   * @returns Poster image.
    */
   fastify.route({
     method: 'GET',
-    url: '/poster/:fileName',
-    schema: fastify.getSchema(ESchemasIds.GETPosterByFileName),
-    handler: async function (request: Request<{ Params: { fileName: string } }>, reply: Reply) {
-      reply.sendFile(`${this._fileService.paths.poster}/${request.params.fileName}`);
+    url: '/poster/:movieId',
+    schema: fastify.getSchema(ESchemasIds.GETPosterById),
+    handler: async function (request: Request<{ Params: { movieId: number } }>, reply: Reply) {
+      // TODO: Build file from data
+      // reply.sendFile();
+    },
+  });
+
+  /**
+   * @description Get file avatar.
+   * @route GET /avatar/:userId
+   * @param {number} userId - User's id.
+   * @returns User avatar.
+   */
+  fastify.route({
+    method: 'GET',
+    url: '/avatar/:userId',
+    schema: fastify.getSchema(ESchemasIds.GETAvatarById),
+    handler: async function (request: Request<{ Params: { userId: number } }>, reply: Reply) {
+      // TODO: Build file from data
+      // reply.sendFile();
     },
   });
 

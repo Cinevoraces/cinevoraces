@@ -38,10 +38,6 @@ services:
     restart: always
     volumes:
       - ./api:/api
-      - posters:/public/posters
-      - avatars:/public/avatars
-      - ./logs:/logs
-      - ./temp:/temp
 
   app:
     container_name: app
@@ -60,8 +56,6 @@ services:
     restart: always
     volumes:
       - ./app:/app
-      - posters:/app/public/posters
-      - avatars:/app/public/avatars
 
 volumes:
   posters:

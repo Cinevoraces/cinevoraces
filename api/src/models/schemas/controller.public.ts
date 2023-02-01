@@ -1,13 +1,25 @@
 import { ESchemasIds } from '../enums/_index';
 
 export const GETPosterImage = {
-  $id: ESchemasIds.GETPosterByFileName,
-  description: 'Get poster image\'s public URL.',
+  $id: ESchemasIds.GETPosterById,
+  description: 'Get movie poster file.',
   tags: ['Public'],
   params: {
     type: 'object',
     properties: {
-      fileName: { type: 'string' },
+      movieId: { type: 'number' },
+    },
+  },
+};
+
+export const GETAvatarImage = {
+  $id: ESchemasIds.GETAvatarById,
+  description: 'Get user avatar.',
+  tags: ['Public'],
+  params: {
+    type: 'object',
+    properties: {
+      userId: { type: 'number' },
     },
   },
 };

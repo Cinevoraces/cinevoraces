@@ -23,14 +23,8 @@ class FileService {
   }>;
   public paths = {
     root: '/',
-    avatar: '/public/avatars',
-    poster: '/public/posters',
-    temp: '/temp',
-    log: '/logs',
-  };
-  public nextPaths = {
-    avatar: '/avatars',
-    poster: '/posters',
+    temp: '/api/temp',
+    log: '/api/logs',
   };
   public cloudinaryConfig = { cloudinary_url: process.env.CLOUDINARY_URL };
 
@@ -114,9 +108,11 @@ class FileService {
     const tempFilePath = `${this.paths.temp}/${tempFile}`;
     await this.saveFile(tempFilePath, avatar.file);
 
+    // TODO: Do not save image to server, but convert it to base64 and save it in DB
+
     // Remove current avatar
-    const currentAvatar = await this.findFileById(this.paths.avatar, `${user.id}-`);
-    currentAvatar && await this.deleteFile(currentAvatar);
+    // const currentAvatar = await this.findFileById(this.paths.avatar, `${user.id}-`);
+    // currentAvatar && await this.deleteFile(currentAvatar);
 
     // Upload avatar to Cloudinary for compression
     const cloudinaryRes = await this.cloudinaryUpload(tempFilePath, {
@@ -135,12 +131,12 @@ class FileService {
 
     // Download compressed file from Cloudinary
     const { stream, ext } = await this.downloadFile(cloudinaryRes.url);
-    await this.saveFile(`${this.paths.avatar}/${public_id}.${ext}`, stream);
+    //await this.saveFile(`${this.paths.avatar}/${public_id}.${ext}`, stream);
     // Delete temp files
     await this.deleteFile(tempFilePath);
     await this.cloudinaryDelete(tempFile);
         
-    return { avatar_url: `${this.nextPaths.avatar}/${public_id}.${ext}` };
+    return { avatar_url: '' };
   }
 
   /**
