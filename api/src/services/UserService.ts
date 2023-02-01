@@ -97,6 +97,20 @@ class UserService extends DatabaseService {
   }
 
   /**
+   * @description Update one user role
+   * @param {number} id Users's id
+   * @param {number} role Role's user
+   */
+  public async putUserRole(id: number, role: number): Promise<void> {
+    await this.requestDatabase({
+      text: ` UDPATE "user"
+              SET "role"=$1
+              WHERE id=$2`,
+      values: [role, id],
+    });
+  }
+
+  /**
    * @description Upload image to Cloudinary account.
    * @param {string} userPseudo - The user's pseudo that will prefix filename.
    * @param {string} filePath - The name of the file to upload.

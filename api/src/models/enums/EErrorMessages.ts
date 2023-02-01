@@ -24,4 +24,5 @@ export enum EErrorMessages {
   UNAVAILABLE_EPISODE = 'Ce créneau est déjà réservé.',
   UNBOOKED_EPISODE = 'Ce créneau n\'est pas réservé.',
   USER_HAS_PROPOSAL = 'Vous avez déjà une proposition en attente. Vous pourrez réserver un nouveau créneau une fois votre proposition publiée.',
+  USER_ROLE_ALREADY_CONFIGURED = 'Ce rôle est déjà configuré pour cet utilisateur.',
 }

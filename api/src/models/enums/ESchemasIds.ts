@@ -6,6 +6,7 @@ export enum ESchemasIds {
   DELETEReviewsAsAdmin = 'DELETE/admin/reviews/:movieId/:userId',
   POSTSeasonsAsAdmin = 'POST/seasons',
   DELETEUsersAsAdmin = 'DELETE/admin/users/:id',
+  PUTUsersRoleAsAdmin = 'PUT/admin/users/:id/:role',
   // Auth API schemas
   POSTRegister = 'POST/register',
   POSTLogin = 'POST/login',

@@ -11,4 +11,5 @@ export enum EResponseMessages {
   UPDATE_USER_SUCCESS = 'Votre profil a bien été mis à jour.',
   UPDATE_USER_PIC_SUCCESS = 'Votre avatar a bien été mis à jour.',
   SEASON_CREATED_SUCCESS = 'Nouvelle saison créée.',
+  USER_ROLE_UPDATED_SUCCESS = 'Rôle mis à jour.',
 }

@@ -143,4 +143,30 @@ export default async (fastify: FastifyInstance) => {
         .send({ message: EResponseMessages.DELETE_USER_SUCCESS });
     },
   });
+
+  /**
+   * @description Put user role by id.
+   * @route PUT/admin/users/:id/:role
+   */
+  fastify.route({
+    method: 'PUT',
+    url: '/admin/users/:id/:role',
+    schema: fastify.getSchema(ESchemasIds.PUTUsersRoleAsAdmin),
+    onRequest: [fastify.isAdmin],
+    preValidation: [fastify.verifyPassword],
+    handler: async function (request: Request<{ Params: { id: number, role: number } }>, reply: Reply) {
+      const { _errorService, _userService } = this;
+      const { id, role } = request.params;
+      // Check if user exists and his role
+      const { rowCount, rows } = await _userService.getUsersByQuery({ where: { id } });
+      if (!rowCount)
+        _errorService.send(EErrorMessages.INVALID_USER, 404);
+      if (rows[0].role === role)
+        _errorService.send(EErrorMessages.USER_ROLE_ALREADY_CONFIGURED, 409);
+      await _userService.putUserRole(id, role);
+      reply
+        .code(200)
+        .send({ message: EResponseMessages.USER_ROLE_UPDATED_SUCCESS });
+    },
+  });
 };
