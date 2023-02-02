@@ -95,6 +95,21 @@ class UserService extends DatabaseService {
       values: [id],
     });
   }
+  
+  /**
+   * @description Check if one user exists
+   * @param {number} id User's id to search
+   * @returns {boolean} User exists or not
+   */
+  public async doesUserExist(
+    userId: number,
+  ): Promise<boolean> {
+    const { rowCount } = await this.requestDatabase({
+      text: ' SELECT "id" FROM "user" WHERE "id" = $1;',
+      values: [userId],
+    });
+    return rowCount ? true : false;
+  }
 
   /**
    * @description Update one user role

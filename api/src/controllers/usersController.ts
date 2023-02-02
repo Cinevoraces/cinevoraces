@@ -133,9 +133,9 @@ export default async (fastify: FastifyInstance) => {
       const { _errorService, _userService } = this;
       const { id } = request.params;
       // Check if user exists
-      const { rowCount } = await _userService.getUsersByQuery({ where: { id } });
-      if (!rowCount)
-        _errorService.send(EErrorMessages.NOT_FOUND, 404);
+      const userExists: boolean = await _userService.doesUserExist(id);
+      if (!userExists)
+        _errorService.send(EErrorMessages.INVALID_USER, 404);
       // Delete user
       await _userService.deleteUser(id);
       reply
@@ -158,9 +158,10 @@ export default async (fastify: FastifyInstance) => {
       const { _errorService, _userService } = this;
       const { id, role } = request.params;
       // Check if user exists and his role
-      const { rowCount, rows } = await _userService.getUsersByQuery({ where: { id } });
-      if (!rowCount)
+      const userExists: boolean = await _userService.doesUserExist(id);
+      if (!userExists)
         _errorService.send(EErrorMessages.INVALID_USER, 404);
+      // User role update
       await _userService.putUserRole(id, role);
       reply
         .code(200)
