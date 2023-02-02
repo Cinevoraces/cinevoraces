@@ -161,8 +161,6 @@ export default async (fastify: FastifyInstance) => {
       const { rowCount, rows } = await _userService.getUsersByQuery({ where: { id } });
       if (!rowCount)
         _errorService.send(EErrorMessages.INVALID_USER, 404);
-      if (rows[0].role === role)
-        _errorService.send(EErrorMessages.USER_ROLE_ALREADY_CONFIGURED, 409);
       await _userService.putUserRole(id, role);
       reply
         .code(200)
