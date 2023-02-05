@@ -1,5 +1,7 @@
 BEGIN;
 
+-- Updated on V18 -> Document implementation
+
 CREATE OR REPLACE FUNCTION new_movie(
 	title TEXT,
 	original_title TEXT,

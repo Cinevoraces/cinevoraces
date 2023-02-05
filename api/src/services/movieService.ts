@@ -103,7 +103,7 @@ class MovieService extends DatabaseService {
    */
   public async insertNewMovie(payload: PPostMovie): Promise<void> {
     await this.requestDatabase({
-      text: 'SELECT new_movie($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13)',
+      text: 'SELECT new_movie($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12)',
       values: Object.values(payload),
     });
   }

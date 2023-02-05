@@ -6,3 +6,4 @@ export { ERoles } from './ERoles';
 export { EReview } from './EReview';
 export { EAddReview } from './EReview';
 export { EUpdateReview } from './EReview';
+export { EDocType } from './EDocType';

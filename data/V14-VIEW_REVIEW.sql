@@ -1,5 +1,7 @@
 BEGIN;
 
+-- Updated on V18 -> Document implementation
+
 -- ADMIN ONLY
 DROP VIEW IF EXISTS reviewView;
 CREATE VIEW reviewView AS

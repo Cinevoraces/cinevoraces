@@ -1,5 +1,7 @@
 BEGIN;
 
+-- Updated on V18 -> Document implementation
+
 DROP VIEW IF EXISTS movieView;
 CREATE VIEW movieView AS
 	

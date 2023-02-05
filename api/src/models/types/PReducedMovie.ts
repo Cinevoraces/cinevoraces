@@ -3,13 +3,12 @@ export interface PReducedMovie {
   season_number: number,
   french_title: string,
   original_title: string,
-  poster_url: string,
+  document_group_id: number,
   publishing_date: string,
   release_date: string,
   presentation: {
     author_id: number,
     author_pseudo: string,
-    author_avatar: string,
     author_role: number,
     presentation: string,
   }

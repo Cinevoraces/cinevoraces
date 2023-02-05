@@ -1,5 +1,7 @@
 BEGIN;
 
+-- Updated on V18 -> Document implementation
+
 DROP VIEW IF EXISTS userView;
 CREATE VIEW userView AS
 
