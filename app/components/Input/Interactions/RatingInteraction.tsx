@@ -18,7 +18,7 @@ flex-row-reverse sm:flex-row
 transition-width ease-in duration-400 
 focus-within:scale-105 
 rating `;
-const customStarButtonStyle = `rating relative z-10 w-14 h-18 lg:w-16 
+const customStarButtonStyle = `rating relative z-10 w-14 h-18 md:w-16 xl:w-14 2xl:w-16 
 bg-medium-gray outline-none `;
 const ratingMenuContainer = 'rating relative z-0 h-full w-52 -top-1 lg:top-0';
 const svgStyle = 'h-6 w-14 fill-none md:h-8 md:w-16 xl:h-6 xl:w-14 2xl:h-8 2xl:w-16 ';
@@ -45,12 +45,18 @@ const RatingInteraction = ({ isClicked, counter, ratingHandler, value }: RatingI
   // Handling button expansion throught ref
   const toggleRatingMenu = () => {
     if (ratingMenuRef && ratingMenuRef.current) {
+      // Closed rating container
+      ratingMenuRef.current.classList.toggle('w-14');
+      ratingMenuRef.current.classList.toggle('md:w-16');
+      ratingMenuRef.current.classList.toggle('xl:w-14');
+      ratingMenuRef.current.classList.toggle('2xl:w-16');
+      //Opened rating container
       ratingMenuRef.current.classList.toggle('w-72');
       ratingMenuRef.current.classList.toggle('lg:w-72');
-      ratingMenuRef.current.classList.toggle('w-14');
-      ratingMenuRef.current.classList.toggle('lg:w-16');
-      if (ratingMenuRef.current.classList.contains('w-72')) setIsMenuOpened(true);
-      else setIsMenuOpened(false);
+      // Changing opening state
+      (ratingMenuRef.current.classList.contains('w-72')) 
+        ? setIsMenuOpened(true)
+        : setIsMenuOpened(false);
     }
   };
   const closeRatingMenu = () => {
@@ -70,7 +76,7 @@ const RatingInteraction = ({ isClicked, counter, ratingHandler, value }: RatingI
           onClick={toggleRatingMenu}
           className={customStarButtonStyle}>
           <StarSvg style={value && (Number(value) !== 0) ? (svgStyle + 'stroke-white').replace('fill-none', 'fill-white') : svgStyle + 'stroke-white' } />
-          <p className="text-sm mt-1">{counter}</p>
+          <p className="w-full text-sm mt-1">{counter}</p>
         </button>
         <div className={ratingMenuContainer}>
           <div className='absolute inset-y-4 right-8 '>

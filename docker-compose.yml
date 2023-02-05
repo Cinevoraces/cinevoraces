@@ -11,6 +11,9 @@ services:
     ports:
       - 5432:5432
     restart: always
+    volumes:
+      - database:/var/lib/postgresql/data
+      - ./data:/data
 
   pgadmin:
     container_name: pgadmin
@@ -20,8 +23,6 @@ services:
     env_file:
       - .env
     depends_on:
-      - postgres
-    links:
       - postgres
 
   api:
@@ -83,3 +84,4 @@ services:
 volumes:
   next:
   fastify:
+  database:

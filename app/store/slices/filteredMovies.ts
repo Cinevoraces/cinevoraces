@@ -71,18 +71,8 @@ const filteredMoviesSlice = createSlice({
           ).toString(),
         ];
       }
-      // if (newState.userFilterInputs.releaseYear){
-      //   newState.userFilterInputs.releaseYear = [
-      //     Math.max(
-      //       Math.min(Number(newState.userFilterInputs.releaseYear[0]), Number(newState.availableFilters.releaseYear[1])),
-      //       Number(Number(newState.availableFilters.releaseYear[0])),
-      //     ).toString(),
-      //     Math.min(
-      //       Math.max(Number(newState.userFilterInputs.releaseYear[1]), Number(newState.availableFilters.releaseYear[0])),
-      //       Number(Number(newState.availableFilters.releaseYear[1]))
-      //     ).toString()];
-      // }
       newState.userFilterInputs.releaseYear = state.availableFilters.releaseYear;
+      newState.userFilterInputs.filtersCounter = [countFilters(state.userFilterInputs, state.availableFilters).toString()];
       return newState;
     },
     setFilter(state: FilteredMoviesStateInterface, action) {

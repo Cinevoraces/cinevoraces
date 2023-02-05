@@ -20,7 +20,7 @@ interface SearchBarProps extends ControlledTextProps<HTMLInputElement>, SelectPr
  * @returns <div> containing a custom select input and a controlled text input
  */
 const SearchBar = (props: SearchBarProps) => {
-  const searchBarStyle = `flex w-full pr-1 max-w-[450px] 
+  const searchBarStyle = `flex w-full pr-1 max-w-[450px] z-30 
   border border-orange-primary rounded-xl 
   focus-within:outline-none focus-within:ring-4 focus-within:ring-offset-0 focus-within:ring-white/5 
   hover:outline-none hover:ring-4 hover:ring-offset-0 hover:ring-white/5

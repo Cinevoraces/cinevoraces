@@ -11,6 +11,9 @@ services:
     ports:
       - 5432:5432
     restart: always
+    volumes:
+      - database:/var/lib/postgresql/data
+      - ./data:/data
 
   pgadmin:
     container_name: pgadmin
@@ -57,5 +60,4 @@ services:
 volumes:
   next:
   fastify:
-  posters:
-  avatars:
+  database:
