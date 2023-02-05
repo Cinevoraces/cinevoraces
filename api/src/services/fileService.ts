@@ -3,6 +3,7 @@ import type { FastifyPluginCallback } from 'fastify';
 import type { Readable } from 'stream';
 import type { UploadApiOptions, UploadApiResponse } from 'cloudinary';
 import type { MultipartFile } from '@fastify/multipart';
+import { EDocType } from '../models/enums/_index';
 import { EErrorMessages } from '../models/enums/_index';
 import DatabaseService from './databaseService';
 import plugin from 'fastify-plugin';
@@ -82,12 +83,26 @@ class FileService extends DatabaseService {
   };
 
   /**
+   * @description Get blob from a buffer
+   * @param {Buffer} buffer Stream to get blob from
+   * @param {string} contentType Content type of the blob
+   */
+  public async bufferToBlob(buffer: Buffer, contentType: string): Promise<Blob> {
+    // NOTE: Currently unused, but might be useful in the future
+    return new Promise((resolve) => {
+      const blob = new Blob([buffer], { type: contentType });
+      resolve(blob);
+    });
+  };
+
+  /**
    * @description Find the first file starting with a given string
    * @param {string} path Path to search in
    * @param {string} startsWith String to search for
    * @returns Promise: string containing the path to the file
    */
   public async findFileById(path: string, startsWith: string): Promise<string> {
+    // NOTE: Currently unused, but might be useful in the future
     return new Promise((resolve, reject) => {
       fs.readdir(path, (err, files) => {
         if (err) reject(err);
@@ -100,14 +115,63 @@ class FileService extends DatabaseService {
       });
     });
   };
+
+  /**
+   * @description Get document using entity id and document type
+   * @param {EDocType} type Document type id
+   * @param {number} entityId Entity's id
+   * @returns Promise: Object containing a blob data string of the document and its content type
+   */
+  public async getDocumentByEntityId(type: EDocType, entityId: number): Promise<Array<{ blob: string, contentType: string }>> {
+    let entitySelection: string;
+    if (type === EDocType.AVATAR)
+      entitySelection = '"user"';
+    else if (type === EDocType.POSTER || type === EDocType.SCREENSHOT)
+      entitySelection = '"movie"';
+    else
+      return [];
     
+    const { rows } = await this.requestDatabase({
+      text: ` SELECT data as blob, content_type as contentType FROM document WHERE type = $1 
+              AND document_group_id = (SELECT document_group_id FROM ${entitySelection} WHERE id = $2);`,
+      values: [type, entityId],
+    }) as { rows: Array<{ blob: string, contentType: string }> };
+
+    return rows;
+  };
+  
+  /**
+   * @description Upload a movie poster using an external url.
+   * @param {object} movieId - movie's id.
+   * @param {object} url - The file to upload.
+   */
+  public async UploadMoviePoster(
+    movieId: number,
+    url: string,
+  ): Promise<void> {
+    // NOTE: It is currently possible for a movie to have multiple posters.
+    // This is not a used feature for now, but might be useful in the future.
+    const { blob, contentType } = await this.downloadFile(url);
+
+    // Add file to the movie's documents
+    await this.requestDatabase({
+      text: ` DECLARE l_document_group_id INTEGER;
+              BEGIN
+                SELECT document_group_id INTO l_document_group_id FROM movie WHERE movie_id = $1;
+                INSERT INTO "document" ("document_group_id", "data", "content_type", "type")
+                  VALUES (l_document_group_id, $2, $3, $4);
+              END;`,
+      values: [movieId, blob, contentType, EDocType.POSTER],
+    });
+  }
+
   /**
    * @description Compress and save new user avatar using Cloudinary.
-   * @param {object} user_id - User's id.
+   * @param {object} userId - User's id.
    * @param {object} avatar - The file to upload.
    */
   public async UploadAvatar(
-    user_id: number,
+    userId: number,
     avatar: MultipartFile
   ): Promise<void> {
     const public_id = this.generateGuid();
@@ -133,7 +197,7 @@ class FileService extends DatabaseService {
     const { blob } = await this.downloadFile(cloudinaryRes.url);
     await this.requestDatabase({
       text: ' SELECT add_or_update_avatar($1, $2, $3);',
-      values: [user_id, blob, 'image/jpeg'],
+      values: [userId, blob, 'image/jpeg'],
     });
 
     // Delete temp files

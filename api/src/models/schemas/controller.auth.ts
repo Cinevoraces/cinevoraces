@@ -68,12 +68,11 @@ export const POSTLogin = {
       properties: {
         user: {
           type: 'object',
-          required: ['id', 'pseudo', 'role', 'avatar_url'],
+          required: ['id', 'pseudo', 'role'],
           properties: {
             id: { type: 'string' },
             pseudo: { type: 'string' },
             role: { type: 'number' },
-            avatar_url: { type: 'string' },
           },
         },
         token: { type: 'string' },
@@ -106,13 +105,12 @@ export const GETRefresh = {
       properties: {
         user: {
           type: 'object',
-          required: ['id', 'pseudo', 'mail', 'role', 'avatar_url'],
+          required: ['id', 'pseudo', 'mail', 'role'],
           properties: {
             id: { type: 'string' },
             pseudo: { type: 'string' },
             mail: { type: 'string' },
             role: { type: 'number' },
-            avatar_url: { type: 'string' },
           },
         },
         token: { type: 'string' },

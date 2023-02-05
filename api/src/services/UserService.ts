@@ -52,7 +52,7 @@ class UserService extends DatabaseService {
     }
 
     const { rowCount, rows } = await this.requestDatabase({
-      text: ` SELECT id, pseudo, mail, avatar_url, role, created_at, updated_at
+      text: ` SELECT id, pseudo, mail, role, created_at, updated_at
               ${SELECT ? `,${SELECT}` : ''}
               FROM userview
               ${WHERE?.count ? `WHERE ${WHERE.query}` : ''}

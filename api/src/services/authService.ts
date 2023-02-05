@@ -65,11 +65,10 @@ class AuthService extends DatabaseService {
       pseudo: string;
       mail: string;
       role: ERoles;
-      avatar_url: string;
     }> {
     const column: string = Object.keys(value)[0];
     const { rows } = await this.requestDatabase({
-      text: ` SELECT id, pseudo, mail, password, role, avatar_url
+      text: ` SELECT id, pseudo, mail, password, role, document_group_id
               FROM "user"
               WHERE ${Object.keys(value)[0]} = $1;`,
       values: [value[column as keyof typeof value]],

@@ -7,7 +7,7 @@ CREATE TABLE "document_group" (
   "id" INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   "created_at" TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
-CREATE TABLE  "document" (
+CREATE TABLE "document" (
   "id" INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   "document_group_id" INTEGER NOT NULL REFERENCES "document_group"("id") ON DELETE CASCADE,
   "data" bytea NOT NULL,
@@ -38,14 +38,34 @@ UPDATE "movie" SET poster_url = NULL;
 ALTER TABLE "movie" RENAME COLUMN poster_url TO document_group_id;
 ALTER TABLE "movie" ALTER COLUMN document_group_id TYPE INTEGER USING document_group_id::integer;
 ALTER TABLE "movie" ADD CONSTRAINT fk_document_group_id FOREIGN KEY ("document_group_id") 
-  REFERENCES "document_group"(id) ON DELETE CASCADE;
+  REFERENCES "document_group"(id) ON DELETE SET NULL;
 -- Replace the user.avatar_url column with a document_group
 ALTER TABLE "user" ALTER COLUMN avatar_url DROP NOT NULL;
 UPDATE "user" SET avatar_url = NULL;
 ALTER TABLE "user" RENAME COLUMN avatar_url TO document_group_id;
 ALTER TABLE "user" ALTER COLUMN document_group_id TYPE INTEGER USING document_group_id::integer;
 ALTER TABLE "user" ADD CONSTRAINT fk_document_group_id FOREIGN KEY (document_group_id) 
-  REFERENCES "document_group"(id) ON DELETE CASCADE;
+  REFERENCES "document_group"(id) ON DELETE SET NULL;
+
+----------------------------------------------------------------------------------------------------
+----------------------------------------- Create Triggers ------------------------------------------
+----------------------------------------------------------------------------------------------------
+CREATE OR REPLACE FUNCTION delete_document_group()
+RETURNS TRIGGER AS $$
+BEGIN
+  DELETE FROM document_group WHERE id = OLD.document_group_id;
+  RETURN OLD;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER delete_document_group_movie_trigger
+  AFTER DELETE ON movie 
+  FOR EACH ROW
+  EXECUTE FUNCTION delete_document_group();
+CREATE TRIGGER delete_document_group_user_trigger
+  AFTER DELETE ON "user" 
+  FOR EACH ROW
+  EXECUTE FUNCTION delete_document_group();
 
 ----------------------------------------------------------------------------------------------------
 ----------------------------------- Re-create new_movie function -----------------------------------
@@ -63,7 +83,7 @@ CREATE OR REPLACE FUNCTION new_movie(
 	movie_countries TEXT[],
 	episode_id INT,
 	user_id INT
-) RETURNS void AS $$
+) RETURNS INT AS $$
 DECLARE
 	movie_id INT;
 	g TEXT;
@@ -123,6 +143,7 @@ BEGIN
 	ELSE
 		RAISE NOTICE 'Movie (%) déjà là', title;
 	END IF;
+  RETURN movie_id;
 END
 $$ LANGUAGE plpgsql;
 
@@ -431,6 +452,5 @@ BEGIN
   WHERE id = l_document_id;
 END;
 $$ LANGUAGE plpgsql;
-
 
 COMMIT;

@@ -91,10 +91,10 @@ export const GETRandomMoviePosters = {
       type: 'array',
       items: { 
         type: 'object',
+        required: ['id', 'french_title'],
         properties: {
           id: { type: 'number' },
           french_title: { type: 'string' },
-          poster_url: { type: 'string' },
         },
       },
     },

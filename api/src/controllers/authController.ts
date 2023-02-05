@@ -83,11 +83,10 @@ export default async (fastify: FastifyInstance) => {
         pseudo: privateUser.pseudo,
         role: privateUser.role,
       };
-      const userObject = { ...tokensContent, avatar_url: privateUser.avatar_url };
 
       // Generate tokens
-      const accessToken = await reply.jwtSign(userObject, aTokenOptions);
-      const refreshToken = await reply.jwtSign(userObject, rTokenOptions);
+      const accessToken = await reply.jwtSign(tokensContent, aTokenOptions);
+      const refreshToken = await reply.jwtSign(tokensContent, rTokenOptions);
 
       reply
         .code(200)
@@ -99,7 +98,7 @@ export default async (fastify: FastifyInstance) => {
           expires: new Date(new Date().setDate(new Date().getDate() + 1)),
         })
         .send({
-          user: userObject,
+          user: privateUser,
           token: accessToken,
           message: `${EResponseMessages.LOGIN_SUCCESS} ${privateUser.pseudo} !`,
         });
@@ -145,7 +144,7 @@ export default async (fastify: FastifyInstance) => {
           expires: new Date(new Date().setDate(new Date().getDate() + 1)),
         })
         .send({
-          user: { ...privateUser },
+          user: privateUser,
           token: accessToken,
           message: EResponseMessages.REFRESH_SUCCESS,
         });

@@ -1,6 +1,7 @@
 export interface PPostMovie {
   french_title: string;
   original_title: string;
+  poster_url: string;
   directors: Array<string>;
   release_date: string;
   runtime: number;

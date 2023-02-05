@@ -12,7 +12,6 @@ export default async function (Server: TTestServer) {
         id: expect.any(String),
         pseudo: expect.any(String),
         role: expect.any(Number),
-        avatar_url: expect.any(String),
       }),
       token: expect.any(String),
       message: expect.any(String),

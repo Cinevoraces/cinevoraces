@@ -10,7 +10,7 @@ declare module '@fastify/jwt' {
       pseudo?: string;
       mail?: string;
       role?: ERoles;
-      avatar_url?: string;
+      document_group_id?: number;
       previous_review?: {
         comment?: string;
         rating?: number;

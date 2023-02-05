@@ -73,7 +73,6 @@ export default async (fastify: FastifyInstance) => {
     schema: fastify.getSchema(ESchemasIds.PUTUsersAvatar),
     onRequest: [fastify.verifyAccessToken],
     handler: async function (request: Request, reply: Reply) {
-      // TODO: TEST ME
       const { _errorService, _fileService } = this;
       const { id } = request.user;
       const avatar = await request.file();
