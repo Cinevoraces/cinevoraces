@@ -397,4 +397,40 @@ GROUP BY
 ORDER BY movie.id DESC
 ;
 
+----------------------------------------------------------------------------------------------------
+--------------------------------- Update or Create Avatar function ---------------------------------
+----------------------------------------------------------------------------------------------------
+CREATE OR REPLACE FUNCTION add_or_update_avatar(
+  p_user_id INTEGER, p_data BYTEA, p_content_type VARCHAR(100)
+)
+RETURNS VOID AS $$
+DECLARE
+  l_document_group_id INTEGER;
+  l_document_id INTEGER;
+BEGIN
+  -- Verify if user already has a document_group and create one if not
+  SELECT document_group_id INTO l_document_group_id FROM "user" WHERE id = p_user_id;
+  IF l_document_group_id IS NULL THEN
+    INSERT INTO "document_group" DEFAULT VALUES
+    RETURNING id INTO l_document_group_id;
+    UPDATE "user" SET "document_group_id" = l_document_group_id
+    WHERE id = p_user_id;
+  END IF;
+
+  -- Verify if document_group already has a document with type 0 (avatar) and get its id
+  -- If document does not exist, create one
+  SELECT id INTO l_document_id FROM "document" WHERE "document_group_id" = l_document_group_id AND "type" = 0;
+  IF l_document_id IS NULL THEN
+    INSERT INTO "document" ("document_group_id", "data", "content_type", "type")
+    VALUES (l_document_group_id, p_data, p_content_type, 0)
+    RETURNING id INTO l_document_id;
+  END IF;
+
+  -- Update the document with new data and content_type
+  UPDATE "document" SET "data" = p_data, "content_type" = p_content_type
+  WHERE id = l_document_id;
+END;
+$$ LANGUAGE plpgsql;
+
+
 COMMIT;

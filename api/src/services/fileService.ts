@@ -1,8 +1,10 @@
+import type { PoolClient } from 'pg';
 import type { FastifyPluginCallback } from 'fastify';
 import type { Readable } from 'stream';
 import type { UploadApiOptions, UploadApiResponse } from 'cloudinary';
 import type { MultipartFile } from '@fastify/multipart';
 import { EErrorMessages } from '../models/enums/_index';
+import DatabaseService from './databaseService';
 import plugin from 'fastify-plugin';
 import fs from 'fs';
 import { v2 } from 'cloudinary';
@@ -13,7 +15,11 @@ import { Stream } from 'stream';
  * @description File service takes care of downloading/saving/naming files to disk.
  * Any file system related operations should be done through this service.
  */
-class FileService {
+class FileService extends DatabaseService {
+  constructor(client: PoolClient) {
+    super(client);
+  }
+  
   public files = [] as Array<{
     filename?: string;
     path?: string;
@@ -42,9 +48,10 @@ class FileService {
    * @param {string} url URL to download from
    * @returns Promise: object containing stream, content type, and extension
    */
-  public async downloadFile(url: string): Promise<{ stream: Readable, contentType: string, ext: string }> {
+  public async downloadFile(url: string): Promise<{ blob: Blob, stream: Readable, contentType: string, ext: string }> {
     const res = await fetch(url);
     return {
+      blob: await res.blob(),
       stream: Stream.Readable.fromWeb(res.body),
       contentType: res.headers.get('content-type'),
       ext: res.headers.get('content-type').split('/')[1],
@@ -96,23 +103,16 @@ class FileService {
     
   /**
    * @description Compress and save new user avatar using Cloudinary.
-   * @param {object} user - User's id and pseudo.
+   * @param {object} user_id - User's id.
    * @param {object} avatar - The file to upload.
    */
   public async UploadAvatar(
-    user: { id: number, pseudo: string },
+    user_id: number,
     avatar: MultipartFile
-  ): Promise<{ avatar_url: string }> {
-    const public_id = `${user.id}-${this.generateGuid()}`;
-    const tempFile = `temp_${user.id}-${user.pseudo}.${avatar.mimetype.split('/')[1]}`;
-    const tempFilePath = `${this.paths.temp}/${tempFile}`;
+  ): Promise<void> {
+    const public_id = this.generateGuid();
+    const tempFilePath = `${this.paths.temp}/${public_id}.${avatar.mimetype.split('/')[1]}`;
     await this.saveFile(tempFilePath, avatar.file);
-
-    // TODO: Do not save image to server, but convert it to base64 and save it in DB
-
-    // Remove current avatar
-    // const currentAvatar = await this.findFileById(this.paths.avatar, `${user.id}-`);
-    // currentAvatar && await this.deleteFile(currentAvatar);
 
     // Upload avatar to Cloudinary for compression
     const cloudinaryRes = await this.cloudinaryUpload(tempFilePath, {
@@ -122,21 +122,23 @@ class FileService {
       height: 200,
       crop: 'fill',
       gravity: 'faces',
-      format: 'jpeg',
+      format: 'jpeg', //!\ Beware of hard coded mime type below /!\\
       public_id,
     });
 
     if (!cloudinaryRes)
       throw new Error(EErrorMessages.CLOUDINARY_FAILURE);
 
-    // Download compressed file from Cloudinary
-    const { stream, ext } = await this.downloadFile(cloudinaryRes.url);
-    //await this.saveFile(`${this.paths.avatar}/${public_id}.${ext}`, stream);
+    // Download compressed file from Cloudinary and save it to database
+    const { blob } = await this.downloadFile(cloudinaryRes.url);
+    await this.requestDatabase({
+      text: ' SELECT add_or_update_avatar($1, $2, $3);',
+      values: [user_id, blob, 'image/jpeg'],
+    });
+
     // Delete temp files
     await this.deleteFile(tempFilePath);
-    await this.cloudinaryDelete(tempFile);
-        
-    return { avatar_url: '' };
+    await this.cloudinaryDelete(public_id);
   }
 
   /**
@@ -174,13 +176,12 @@ class FileService {
 };
 
 // Decorate FastifyInstance with FileService
-export type TFileService = typeof FileServiceInstance;
-const FileServiceInstance = new FileService();
+export type TFileService = InstanceType<typeof FileService>;
 export default plugin((async (fastify, opts, done) => {
   // Check if service is already registered
   if (fastify.hasDecorator('_fileService'))
     return fastify.log.warn('FileService already registered');
 
-  fastify.decorate('_fileService', { getter: () => FileServiceInstance });
+  fastify.decorate('_fileService', { getter: () => new FileService(fastify._postgres.client) });
   done();
 }) as FastifyPluginCallback);

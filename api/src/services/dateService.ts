@@ -27,13 +27,12 @@ class DateService {
 };
 
 // Decorate FastifyInstance with DateService
-export type TDateService = typeof DateServiceInstance;
-const DateServiceInstance = new DateService();
+export type TDateService = InstanceType<typeof DateService>;
 export default plugin((async (fastify, opts, done) => {
   // Check if service is already registered
   if (fastify.hasDecorator('_dateService'))
     return fastify.log.warn('DateService already registered');
 
-  fastify.decorate('_dateService', { getter: () => DateServiceInstance });
+  fastify.decorate('_dateService', { getter: () => new DateService() });
   done();
 }) as FastifyPluginCallback);

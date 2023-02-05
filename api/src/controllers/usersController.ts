@@ -73,8 +73,9 @@ export default async (fastify: FastifyInstance) => {
     schema: fastify.getSchema(ESchemasIds.PUTUsersAvatar),
     onRequest: [fastify.verifyAccessToken],
     handler: async function (request: Request, reply: Reply) {
-      const { _errorService, _fileService, _userService } = this;
-      const { id, pseudo } = request.user;
+      // TODO: TEST ME
+      const { _errorService, _fileService } = this;
+      const { id } = request.user;
       const avatar = await request.file();
       
       // File validation checks
@@ -94,8 +95,7 @@ export default async (fastify: FastifyInstance) => {
       });
 
       try {
-        const avatarFilePath = await _fileService.UploadAvatar({ id, pseudo }, avatar);
-        await _userService.updateUser(id, avatarFilePath);
+        await _fileService.UploadAvatar(id, avatar);
         reply
           .code(201)
           .send({ message: EResponseMessages.UPDATE_USER_PIC_SUCCESS });

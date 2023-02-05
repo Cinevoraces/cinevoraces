@@ -73,7 +73,7 @@ class UserService extends DatabaseService {
     id: number,
     set: Record<string, unknown>
   ): Promise<void> {
-    const enumerator = ['pseudo', 'mail', 'password', 'avatar_url'];
+    const enumerator = ['pseudo', 'mail', 'password'];
     const SET = this.reduceWhere(set, ',', enumerator, 1);
     await this.requestDatabase({
       text: ` UPDATE "user"

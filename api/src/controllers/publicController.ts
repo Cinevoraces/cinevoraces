@@ -22,8 +22,7 @@ export default async (fastify: FastifyInstance) => {
     url: '/poster/:movieId',
     schema: fastify.getSchema(ESchemasIds.GETPosterById),
     handler: async function (request: Request<{ Params: { movieId: number } }>, reply: Reply) {
-      // TODO: Build file from data
-      // reply.sendFile();
+      const { _fileService } = this;
     },
   });
 
