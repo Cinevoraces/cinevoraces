@@ -94,9 +94,11 @@ class FileService extends DatabaseService {
   public async BlobToBuffer(blob: Blob): Promise<Buffer> {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
-      reader.onload = () => resolve(Buffer.from(reader.result as ArrayBuffer));
-      reader.onerror = reject;
       reader.readAsArrayBuffer(blob);
+      reader.onloadend = () => {
+        resolve(Buffer.from(reader.result as ArrayBuffer));
+      };
+      reader.onerror = reject;
     });
   };
 
@@ -158,6 +160,7 @@ class FileService extends DatabaseService {
     // This is not a used feature for now, but might be useful in the future.
     const { blob, contentType } = await this.downloadFile(url);
 
+    // TODO: Passing blob does not work, but passing a buffer does.
     // Add file to the movie's documents
     await this.requestDatabase({
       text: ` DECLARE l_document_group_id INTEGER;
@@ -198,6 +201,7 @@ class FileService extends DatabaseService {
     if (!cloudinaryRes)
       throw new Error(EErrorMessages.CLOUDINARY_FAILURE);
 
+    // TODO: Passing blob does not work, but passing a buffer does.
     // Download compressed file from Cloudinary and save it to database
     const { blob } = await this.downloadFile(cloudinaryRes.url);
     await this.requestDatabase({

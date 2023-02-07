@@ -24,6 +24,7 @@ export default async (fastify: FastifyInstance) => {
     handler: async function (request: Request<{ Params: { movieId: number } }>, reply: Reply) {
       const files = await this._fileService.getDocumentByEntityId(request.params.movieId, EDocType.POSTER);
       if (!files.length) this._errorService.send(EErrorMessages.NOT_FOUND, 404);
+      // TODO: This isn't finished
       reply
         .code(200)
         .send(files[0]);
@@ -43,6 +44,7 @@ export default async (fastify: FastifyInstance) => {
     handler: async function (request: Request<{ Params: { userId: number } }>, reply: Reply) {
       const files = await this._fileService.getDocumentByEntityId(request.params.userId, EDocType.AVATAR);
       if (!files.length) this._errorService.send(EErrorMessages.NOT_FOUND, 404);
+      // TODO: This isn't finished
       reply
         .code(200)
         .send(files[0]);
@@ -530,20 +532,37 @@ export default async (fastify: FastifyInstance) => {
       for (const movie of moviesPosterUrls) {
         const { blob, contentType } = await _fileService.downloadFile(movie.poster_url);
         const buffer = await _fileService.BlobToBuffer(blob);
-        await _postgres.client.query(
+        const { rows } = await _postgres.client.query(
           ` WITH new_doc_grp AS (INSERT INTO "document_group" DEFAULT VALUES RETURNING id)
-            INSERT INTO "document" (document_group_id, type, content_type, data)
-            VALUES ((SELECT id FROM new_doc_grp), ${EDocType.POSTER}, ${contentType}, ${buffer});
-            UPDATE "movie" SET "document_group_id" = new_doc_grp_id WHERE id = ${movie.id};`);
+            SELECT id FROM new_doc_grp;`
+        );
+        await _postgres.client.query(
+          ` INSERT INTO "document" (document_group_id, type, content_type, data)
+            VALUES ($1, $2, $3, $4);`,
+          [rows[0].id, EDocType.POSTER, contentType, { type: 'binary', value: buffer }],
+        );
+        await _postgres.client.query(
+          'UPDATE "movie" SET "document_group_id" = $1 WHERE id = $2;',
+          [rows[0].id, movie.id],
+        );
       }
       for (const user of usersAvatarUrls) {
+        if (!user.avatar_url) continue;
         const { blob, contentType } = await _fileService.downloadFile(user.avatar_url);
         const buffer = await _fileService.BlobToBuffer(blob);
-        await _postgres.client.query(
+        const { rows } = await _postgres.client.query(
           ` WITH new_doc_grp AS (INSERT INTO "document_group" DEFAULT VALUES RETURNING id)
-            INSERT INTO "document" (document_group_id, type, content_type, data)
-            VALUES ((SELECT id FROM new_doc_grp), ${EDocType.AVATAR}, ${contentType}, ${buffer});
-            UPDATE "user" SET "document_group_id" = new_doc_grp_id WHERE id = ${user.id};`);
+            SELECT id FROM new_doc_grp;`
+        );
+        await _postgres.client.query(
+          ` INSERT INTO "document" (document_group_id, type, content_type, data)
+            VALUES ($1, $2, $3, $4);`,
+          [rows[0].id, EDocType.AVATAR, contentType, { type: 'binary', value: buffer }],
+        );
+        await _postgres.client.query(
+          'UPDATE "user" SET "document_group_id" = $1 WHERE id = $2;',
+          [rows[0].id, user.id],
+        );
       }
 
       reply.send('Woopidooh!');

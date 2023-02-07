@@ -77,7 +77,7 @@ export const GETMovies = {
 export const GETRandomMoviePosters = {
   $id: ESchemasIds.GETRandomMoviePosters,
   description: `
-  **Get random movie posters**.
+  **Get random movie ids with french title in order to use theme for poster request**.
   `,
   tags: ['Movies'],
   params: {

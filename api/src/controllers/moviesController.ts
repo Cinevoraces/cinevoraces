@@ -48,7 +48,7 @@ export default async (fastify: FastifyInstance) => {
   });
 
   /**
-   * @description Get Random Movie posters.
+   * @description Get Random Movie ids.
    * @route GET /movies/random-posters/:count
    */
   fastify.route({
