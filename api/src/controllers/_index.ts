@@ -1,5 +1,4 @@
 import type { FastifyPluginCallback } from 'fastify';
-import _tests from './_tests';
 import publicController from './publicController';
 import authController from './authController';
 import episodesController from './episodesController';
@@ -14,7 +13,6 @@ import usersController from './usersController';
  * Add any new controller to this array.
  */
 export default [
-  { c: _tests, opts: { prefix: '/test' } },
   { c: publicController, opts: { prefix: '/public' } },
   { c: authController },
   { c: episodesController },

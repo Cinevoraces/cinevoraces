@@ -9,8 +9,7 @@ import DatabaseService from './databaseService';
 import plugin from 'fastify-plugin';
 import fs from 'fs';
 import { v2 } from 'cloudinary';
-import { fetch } from 'undici';
-import { Stream } from 'stream';
+import { fetch, FileReader } from 'undici';
 
 /**
  * @description File service takes care of downloading/saving/naming files to disk.
@@ -49,14 +48,19 @@ class FileService extends DatabaseService {
    * @param {string} url URL to download from
    * @returns Promise: object containing stream, content type, and extension
    */
-  public async downloadFile(url: string): Promise<{ blob: Blob, stream: Readable, contentType: string, ext: string }> {
-    const res = await fetch(url);
-    return {
-      blob: await res.blob(),
-      stream: Stream.Readable.fromWeb(res.body),
-      contentType: res.headers.get('content-type'),
-      ext: res.headers.get('content-type').split('/')[1],
-    };
+  public async downloadFile(url: string, retryCount = 0): Promise<{ blob: Blob, contentType: string }> {
+    try {
+      const res = await fetch(url);
+      return {
+        blob: await res.blob(),
+        contentType: res.headers.get('content-type'),
+      };
+    } catch (err) {
+      if (retryCount < 3)
+        return this.downloadFile(url, retryCount + 1);
+      else
+        return;
+    }
   };
 
   /**
@@ -83,15 +87,16 @@ class FileService extends DatabaseService {
   };
 
   /**
-   * @description Get blob from a buffer
-   * @param {Buffer} buffer Stream to get blob from
-   * @param {string} contentType Content type of the blob
+   * @description Get buffer from blob
+   * @param {Blob} blob blob to convert
+   * @returns Promise: Buffer
    */
-  public async bufferToBlob(buffer: Buffer, contentType: string): Promise<Blob> {
-    // NOTE: Currently unused, but might be useful in the future
-    return new Promise((resolve) => {
-      const blob = new Blob([buffer], { type: contentType });
-      resolve(blob);
+  public async BlobToBuffer(blob: Blob): Promise<Buffer> {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(Buffer.from(reader.result as ArrayBuffer));
+      reader.onerror = reject;
+      reader.readAsArrayBuffer(blob);
     });
   };
 

@@ -22,7 +22,7 @@ export enum ESchemasIds {
   PUTMovies = 'PUT/movies',
   // Public API schemas
   GETPosterById = 'GET/poster/:movieId',
-  GETAvatarById = 'GET/poster/:movieId',
+  GETAvatarById = 'GET/avatar/:userId',
   // Reviews API schemas
   PUTReviews = 'PUT/reviews/:movieId',
   // Seasons API schemas
