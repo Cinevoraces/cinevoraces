@@ -25,14 +25,18 @@
       "name": "Debug App (Chrome)",
       "type": "chrome",
       "request": "launch",
-      "runtimeArgs": ["--disable-web-security"],
+      //"runtimeArgs": ["--disable-web-security"],
+      "runtimeArgs": ["--remote-debugging-port=9222"],
       "url": "http://localhost:3000",
       "webRoot": "${workspaceRoot}/app",
       "sourceMapPathOverrides": {
       "/app/*": "${webRoot}/*"
       },
+      "resolveSourceMapLocations": [
+        "${webRoot}/*"
+      ],
+      "skipFiles": ["!${webRoot}/node_modules/**"],
       "port": 9222,
     }
-
   ]
 }
