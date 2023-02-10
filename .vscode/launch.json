@@ -5,7 +5,7 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Docker: Attach to Node",
+      "name": "Debug API",
       "type": "node",
       "request": "attach",
       "port": 9229,
@@ -20,6 +20,19 @@
       "skipFiles": [
         "<node_internals>/**/*.js"
       ]
+    },
+    {
+      "name": "Debug App (Chrome)",
+      "type": "chrome",
+      "request": "launch",
+      "runtimeArgs": ["--disable-web-security"],
+      "url": "http://localhost:3000",
+      "webRoot": "${workspaceRoot}/app",
+      "sourceMapPathOverrides": {
+      "/app/*": "${webRoot}/*"
+      },
+      "port": 9222,
     }
+
   ]
 }

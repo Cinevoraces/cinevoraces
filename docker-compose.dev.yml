@@ -56,6 +56,7 @@ services:
       dockerfile: Dockerfile.dev
     ports:
       - 3000:3000
+      - 9222:9222
     restart: always
     volumes:
       - ./app:/app
