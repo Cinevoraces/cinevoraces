@@ -23,4 +23,4 @@ temp/*
 logs/*
 
 # prod db data
-./database.tar
+database.tar
