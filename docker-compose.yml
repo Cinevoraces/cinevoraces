@@ -3,17 +3,14 @@ version: "3"
 services:
   postgres:
     container_name: postgres
-    build:
-      context: ./data
-      dockerfile: Dockerfile
+    image: postgres:15.1
     env_file:
       - .env
     ports:
       - 5432:5432
     restart: always
-    volumes:
+    volumes :
       - database:/var/lib/postgresql/data
-      - ./data:/data
 
   pgadmin:
     container_name: pgadmin

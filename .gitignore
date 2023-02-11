@@ -13,35 +13,14 @@ api/dist
 
 # logs
 */npm-debug.log*
-*/yarn-debug.log*
-*/yarn-error.log*
-*/.yarn-integrity
 
 # misc
 */.DS_Store
 */.vscode
 
 # Server files storage
-app/public/poster/*.jpg
-app/public/poster/*.png
-app/public/poster/*.gif
-app/public/poster/*.jpeg
-app/public/poster/*.bmp
-app/public/poster/*.webp
-app/public/poster/*.svg
-app/public/poster/*.ico
-app/public/avatar/*.jpg
-app/public/avatar/*.png
-app/public/avatar/*.gif
-app/public/avatar/*.jpeg
-app/public/avatar/*.bmp
-app/public/avatar/*.webp
-app/public/avatar/*.svg
-app/public/avatar/*.ico
-public/*/*.*
 temp/*
 logs/*
 
 # prod db data
-data/migration_v2.sql
-data/bak.sql
+./database.tar
