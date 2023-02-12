@@ -68,7 +68,7 @@ class FileService extends DatabaseService {
    * @param {string} path Path to save file to
    * @param {Readable | Buffer} source Readable stream or Buffer to save the file from
    */
-  public async saveFile(path: string, source: Readable | Buffer): Promise<void> {
+  public async saveFile(path: string, source: Readable | Uint8Array): Promise<void> {
     if (source instanceof Readable)
       return new Promise<void>((resolve, reject) => {
         const ws = fs.createWriteStream(path);
@@ -77,9 +77,9 @@ class FileService extends DatabaseService {
         ws.on('finish', resolve);
         ws.on('close', resolve);
       });
-    else if (source instanceof Buffer)
+    else if (source instanceof Uint8Array)
       return new Promise((resolve, reject) => {
-        fs.writeFile(path, (source as Buffer), (error) => {
+        fs.writeFile(path, (source as Uint8Array), (error) => {
           if (error) {
             reject(error);
           } else {
@@ -134,14 +134,13 @@ class FileService extends DatabaseService {
                 WHERE type = $1 
                 AND document_group_id = (SELECT document_group_id FROM ${entitySelection} WHERE id = $2);`,
       values: [type, entityId],
-    }) as { rows: Array<{ data: string, content_type: string }> };
+    }) as { rows: Array<{ data: Uint8Array, content_type: string }> };
 
     if (rows.length === 0) return null;
 
     // Save data to a file stored in temp folder
-    const buffer = Buffer.from(rows[0].data, 'binary');
-    const filePath = `${this.paths.temp}/${this.generateGuid()}.${rows[0].content_type.split('/')[1]}`;
-    await this.saveFile(filePath, buffer);
+    const filePath = `${this.paths.temp}/${type}${entityId}.${rows[0].content_type.split('/')[1]}`;
+    await this.saveFile(filePath, rows[0].data);
     
     return filePath;
   };

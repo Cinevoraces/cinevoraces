@@ -28,7 +28,7 @@ export default async (fastify: FastifyInstance) => {
       // FIXME: saved file seems corrupted
       reply
         .code(200)
-        .sendFile(file);
+        .sendFile(`${this._fileService.paths.temp}/ptdr.jpg`);
     },
   });
 

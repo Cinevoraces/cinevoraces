@@ -11,6 +11,14 @@ api/dist
 # dependencies
 */node_modules
 
+# temp
+*/temp/*.jpeg
+*/temp/*.jpg
+*/temp/*.png
+*/temp/*.gif
+*/temp/*.svg
+*/temp/*.webp
+
 # logs
 */npm-debug.log*
 
