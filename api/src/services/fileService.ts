@@ -1,10 +1,10 @@
 import type { PoolClient } from 'pg';
 import type { FastifyPluginCallback } from 'fastify';
-import type { Readable } from 'stream';
 import type { UploadApiOptions, UploadApiResponse } from 'cloudinary';
 import type { MultipartFile } from '@fastify/multipart';
 import { EDocType } from '../models/enums/_index';
 import { EErrorMessages } from '../models/enums/_index';
+import { Readable } from 'stream';
 import DatabaseService from './databaseService';
 import plugin from 'fastify-plugin';
 import fs from 'fs';
@@ -66,16 +66,27 @@ class FileService extends DatabaseService {
   /**
    * @description Save a file to disk
    * @param {string} path Path to save file to
-   * @param {Readable} stream Stream to save
+   * @param {Readable | Buffer} source Readable stream or Buffer to save the file from
    */
-  public async saveFile(path: string, stream: Readable): Promise<void> {
-    return new Promise<void>((resolve, reject) => {
-      const ws = fs.createWriteStream(path);
-      stream.pipe(ws);
-      ws.on('error', reject);
-      ws.on('finish', resolve);
-      ws.on('close', resolve);
-    });
+  public async saveFile(path: string, source: Readable | Buffer): Promise<void> {
+    if (source instanceof Readable)
+      return new Promise<void>((resolve, reject) => {
+        const ws = fs.createWriteStream(path);
+        (source as Readable).pipe(ws);
+        ws.on('error', reject);
+        ws.on('finish', resolve);
+        ws.on('close', resolve);
+      });
+    else if (source instanceof Buffer)
+      return new Promise((resolve, reject) => {
+        fs.writeFile(path, (source as Buffer), (error) => {
+          if (error) {
+            reject(error);
+          } else {
+            resolve();
+          }
+        });
+      });
   };
 
   /**
@@ -91,7 +102,7 @@ class FileService extends DatabaseService {
    * @param {Blob} blob blob to convert
    * @returns Promise: Buffer
    */
-  public async BlobToBuffer(blob: Blob): Promise<Buffer> {
+  public async blobToBuffer(blob: Blob): Promise<Buffer> {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
       reader.readAsArrayBuffer(blob);
@@ -103,48 +114,36 @@ class FileService extends DatabaseService {
   };
 
   /**
-   * @description Find the first file starting with a given string
-   * @param {string} path Path to search in
-   * @param {string} startsWith String to search for
-   * @returns Promise: string containing the path to the file
-   */
-  public async findFileById(path: string, startsWith: string): Promise<string> {
-    // NOTE: Currently unused, but might be useful in the future
-    return new Promise((resolve, reject) => {
-      fs.readdir(path, (err, files) => {
-        if (err) reject(err);
-        else {
-          for (const file of files) 
-            if (file.startsWith(startsWith)) return resolve(`${path}/${file}`);
-            
-          resolve(null);
-        }
-      });
-    });
-  };
-
-  /**
    * @description Get document using entity id and document type
    * @param {EDocType} type Document type id
    * @param {number} entityId Entity's id
-   * @returns Promise: Object containing a blob data string of the document and its content type
+   * @returns Promise: file path
    */
-  public async getDocumentByEntityId(type: EDocType, entityId: number): Promise<Array<{ blob: string, contentType: string }>> {
+  public async getDocumentByEntityId(type: EDocType, entityId: number): Promise<string> {
+    // Define wich type of file to look for
     let entitySelection: string;
     if (type === EDocType.AVATAR)
       entitySelection = '"user"';
     else if (type === EDocType.POSTER || type === EDocType.SCREENSHOT)
       entitySelection = '"movie"';
     else
-      return [];
+      return null;
     
     const { rows } = await this.requestDatabase({
-      text: ` SELECT data as blob, content_type as contentType FROM document WHERE type = $1 
-              AND document_group_id = (SELECT document_group_id FROM ${entitySelection} WHERE id = $2);`,
+      text: ` SELECT data, content_type FROM document 
+                WHERE type = $1 
+                AND document_group_id = (SELECT document_group_id FROM ${entitySelection} WHERE id = $2);`,
       values: [type, entityId],
-    }) as { rows: Array<{ blob: string, contentType: string }> };
+    }) as { rows: Array<{ data: string, content_type: string }> };
 
-    return rows;
+    if (rows.length === 0) return null;
+
+    // Save data to a file stored in temp folder
+    const buffer = Buffer.from(rows[0].data, 'binary');
+    const filePath = `${this.paths.temp}/${this.generateGuid()}.${rows[0].content_type.split('/')[1]}`;
+    await this.saveFile(filePath, buffer);
+    
+    return filePath;
   };
   
   /**

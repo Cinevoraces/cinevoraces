@@ -22,12 +22,13 @@ export default async (fastify: FastifyInstance) => {
     url: '/poster/:movieId',
     schema: fastify.getSchema(ESchemasIds.GETPosterById),
     handler: async function (request: Request<{ Params: { movieId: number } }>, reply: Reply) {
-      const files = await this._fileService.getDocumentByEntityId(request.params.movieId, EDocType.POSTER);
-      if (!files.length) this._errorService.send(EErrorMessages.NOT_FOUND, 404);
-      // TODO: This isn't finished
+      const file = await this._fileService.getDocumentByEntityId(EDocType.POSTER, request.params.movieId);
+      if (!file) this._errorService.send(EErrorMessages.NOT_FOUND, 404);
+
+      // FIXME: saved file seems corrupted
       reply
         .code(200)
-        .send(files[0]);
+        .sendFile(file);
     },
   });
 
@@ -43,11 +44,11 @@ export default async (fastify: FastifyInstance) => {
     schema: fastify.getSchema(ESchemasIds.GETAvatarById),
     handler: async function (request: Request<{ Params: { userId: number } }>, reply: Reply) {
       const files = await this._fileService.getDocumentByEntityId(request.params.userId, EDocType.AVATAR);
-      if (!files.length) this._errorService.send(EErrorMessages.NOT_FOUND, 404);
       // TODO: This isn't finished
+
       reply
         .code(200)
-        .send(files[0]);
+        .send('null');
     },
   });
 
@@ -531,7 +532,7 @@ export default async (fastify: FastifyInstance) => {
       // Download all images and update entities in database with blob
       for (const movie of moviesPosterUrls) {
         const { blob, contentType } = await _fileService.downloadFile(movie.poster_url);
-        const buffer = await _fileService.BlobToBuffer(blob);
+        const buffer = await _fileService.blobToBuffer(blob);
         const { rows } = await _postgres.client.query(
           ` WITH new_doc_grp AS (INSERT INTO "document_group" DEFAULT VALUES RETURNING id)
             SELECT id FROM new_doc_grp;`
@@ -549,7 +550,7 @@ export default async (fastify: FastifyInstance) => {
       for (const user of usersAvatarUrls) {
         if (!user.avatar_url) continue;
         const { blob, contentType } = await _fileService.downloadFile(user.avatar_url);
-        const buffer = await _fileService.BlobToBuffer(blob);
+        const buffer = await _fileService.blobToBuffer(blob);
         const { rows } = await _postgres.client.query(
           ` WITH new_doc_grp AS (INSERT INTO "document_group" DEFAULT VALUES RETURNING id)
             SELECT id FROM new_doc_grp;`
