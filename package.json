@@ -5,7 +5,7 @@
     "win-install": "(cd api && npm i) && (cd ../app && npm i)",
     "dev-build": "docker-compose -f docker-compose.dev.yml up --build -d",
     "dev": "docker-compose -f docker-compose.dev.yml up",
-    "restore-db": "docker cp ./database.tar postgres:/ && docker exec -i postgres pg_restore -U cinevoraces -d cinevoraces -F t ./database.tar && docker exec -i postgres rm ./database.tar",
+    "restore-db": "docker cp ./database.tar postgres:/database.tar && docker exec -i postgres pg_restore -U cinevoraces -d cinevoraces -F t /database.tar && docker exec -i postgres rm ./database.tar",
     "build-test": "docker-compose -f docker-compose.test.yml up --build -d",
     "build": "docker-compose up --build -d",
     "build-app": "docker exec app npm run build && docker-compose restart app",
