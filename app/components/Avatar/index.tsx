@@ -1,9 +1,9 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import defaultUserPic from '@public/icons/user_default.svg';
+import { useState } from 'react';
 
 interface AvatarProps {
-  url: string;
   id: number;
   pseudo: string;
   interactive?: boolean;
@@ -16,21 +16,23 @@ transition duration-150 hover:ease-out`;
 
 /**
  * 
- * @param url
  * @param id
  * @param pseudo
  * @param interactive facultative param to freeze animation - default to true
  * @returns <Link> encapsulating the avatar picture of the concerned user
  */
-const Avatar = ({ url, id, pseudo, interactive }: AvatarProps) => {
+const Avatar = ({ id, pseudo, interactive }: AvatarProps) => {
+  const url = `${process.env.NEXT_PUBLIC_API_BASE_URL_SSR}/public/avatar/${id}`;
+  const [source, setSource] = useState(url);
   return (
     <Link href={`/membres/${id}`}>
       <Image
-        src={url ? url : defaultUserPic}
+        src={source}
         alt={`avatar de ${pseudo}`}
         height={50}
         width={50}
         className={(interactive === false) ? baseStyle : baseStyle + animationStyle}
+        onError={() => setSource(defaultUserPic)}
       />
     </Link>
   );

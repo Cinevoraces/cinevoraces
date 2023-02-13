@@ -3,7 +3,7 @@ const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
   images: {
-    domains: ['image.tmdb.org', 'res.cloudinary.com'],
+    domains: ['image.tmdb.org', 'res.cloudinary.com', 'cinevoraces_api'],
   },
   env: {
     NEXT_PUBLIC_TMDB_KEY: process.env.TMDB_KEY,

@@ -22,7 +22,7 @@ const CommentsSection = forwardRef<HTMLTextAreaElement, CommentsSectionProps>(({
   // Special state to handle form rendering
   const [isCommentFormOpened, setIsCommentFormOpened] = useState(false);
   const [isEditionFormOpened, setIsEditionFormOpened] = useState(false);
-  const { pseudo, avatar_url } = useAppSelector(user);
+  const { pseudo } = useAppSelector(user);
   const id = Number(useAppSelector(user).id) || undefined;
 
   const toggleCommentForm = () => {
@@ -90,7 +90,6 @@ const CommentsSection = forwardRef<HTMLTextAreaElement, CommentsSectionProps>(({
             type="form"
             author_pseudo={pseudo!}
             author_id={id!}
-            author_avatar={avatar_url!}
             publishing_date={new Date().toISOString()}>
             <form
               id="comment-form"

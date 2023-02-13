@@ -3,6 +3,7 @@ import Image from 'next/image';
 import { useAppSelector } from '@store/store';
 import { user } from '@store/slices/user';
 import defaultUserPic from '@public/icons/user_default.svg';
+import { useState } from 'react';
 
 export interface HeaderMenuButtonProps {
   type: 'burger' | 'user';
@@ -19,7 +20,8 @@ export interface HeaderMenuButtonProps {
  */
 const HeaderMenuButton = (props: HeaderMenuButtonProps) => {
   const { type, stateValue, setter } = props;
-  const avatar_url = useAppSelector(user).avatar_url;
+  const userId = useAppSelector(user).id;
+  const [source, setSource] = useState(`${process.env.NEXT_PUBLIC_API_BASE_URL_SSR}/public/avatar/${userId}`);
   const basicHeaderButtonStyle = `relative w-10 h-10 flex flex-col gap-1.5 items-center rounded-full overflow-hidden
   focus:outline-none focus:ring-4 focus:ring-offset-0 focus:ring-white/5 focus:scale-110 
   hover:outline-none hover:ring-4 hover:ring-offset-0 hover:ring-white/5 hover:scale-110
@@ -41,11 +43,12 @@ const HeaderMenuButton = (props: HeaderMenuButtonProps) => {
           </>
         ) :
           (<Image
-            src={avatar_url ? avatar_url : defaultUserPic}
+            src={source}
             width={35}
             height={35}
             alt="User menu button"
             className="user w-[35px] h-[35px] p-0.5 border border-white rounded-full lg:w-[45px] lg:h-[45px] hover:border-2"
+            onError={() => setSource(defaultUserPic)}
           />)
       }
     </button>

@@ -17,8 +17,9 @@ const submitSuccess = async (
   data?: BodyData
 ) => {
   const responseBody = await mutationRequestCSR(method, endpoint, data);
-  const user = await userMutation();
-  if (user && user.length > 0) dispatch(setUserModification({ avatar_url: user[0].avatar_url }));
+  // const user = await userMutation();
+  // if (user && user.length > 0) dispatch(setUserModification({ avatar_url: user[0].avatar_url }));
+  // FIXME: No idea on how to re-render the avatar after upload
   toast.success(responseBody.message);
 };
 

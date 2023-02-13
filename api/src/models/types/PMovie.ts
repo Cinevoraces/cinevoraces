@@ -6,7 +6,7 @@ export interface PMovie {
   is_published: boolean,
   french_title: string,
   original_title: string,
-  poster_url: string,
+  document_group_id: number,
   casting: Array<string>,
   directors: Array<string>,
   runtime: number,

@@ -6,7 +6,6 @@ export interface MinimalMovie {
   is_published: boolean;
   french_title: string;
   original_title: string;
-  poster_url: string;
   publishing_date: string;
   release_date: string;
 }

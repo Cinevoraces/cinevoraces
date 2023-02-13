@@ -3,7 +3,6 @@ import Avatar from '@components/Avatar';
 
 interface PostCardProps {
   type: 'presentation' | 'comment' | 'form';
-  author_avatar: string;
   author_id: number;
   author_pseudo: string;
   publishing_date?: string;
@@ -22,7 +21,6 @@ const formStyle = basicStyle + 'bg-card-bg-one';
 /**
  * 
  * @param type 
- * @param author_avatar 
  * @param author_id 
  * @param author_pseudo 
  * @param publishing_date 
@@ -33,7 +31,6 @@ const formStyle = basicStyle + 'bg-card-bg-one';
  */
 const PostCard = ({
   type,
-  author_avatar,
   author_id,
   author_pseudo,
   publishing_date,
@@ -50,7 +47,6 @@ const PostCard = ({
         id="card-header">
         <div className="flex items-center gap-2">
           <Avatar
-            url={author_avatar}
             id={author_id}
             pseudo={author_pseudo}
           />

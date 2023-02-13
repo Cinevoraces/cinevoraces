@@ -1,7 +1,6 @@
 import type { UserReview, CompleteMovie, MovieWithPresentation } from './index';
 
 export default interface User {
-  avatar_url: string;
   created_at: string;
   id: number;
   mail: string;

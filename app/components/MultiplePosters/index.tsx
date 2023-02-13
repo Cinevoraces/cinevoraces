@@ -27,7 +27,7 @@ interface PostersComponentProps {
  * @param number number of posters to display
  */
 const MultiplePosters = ({ number }: PostersComponentProps) => {
-  const { data: posters } = useSWR<{ id: number; french_title: string; poster_url: string }[]>(`/movies/random-posters/${number}`);
+  const { data: posters } = useSWR<{ id: number; french_title: string; }[]>(`/movies/random-posters/${number}`);
 
   const trail = useTrail(
     posters?.length || 0, {
@@ -57,7 +57,7 @@ const MultiplePosters = ({ number }: PostersComponentProps) => {
           <animated.li style={props} key={index+ '-' + posters[index].french_title}>
             <Link href={`/films/${posters[index].id}`} className={posterStyles + ' ' + indivStyles[index]}>
               <Poster
-                src={posters[index].poster_url}
+                src={`${process.env.NEXT_PUBLIC_API_BASE_URL_SSR}/public/poster/${posters[index].id}`}
                 title={posters[index].french_title}
               />
             </Link>
