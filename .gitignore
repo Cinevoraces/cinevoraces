@@ -18,6 +18,12 @@ api/dist
 */temp/*.gif
 */temp/*.svg
 */temp/*.webp
+*/public/*.jpeg
+*/public/*.jpg
+*/public/*.png
+*/public/*.gif
+*/public/*.svg
+*/public/*.webp
 
 # logs
 */npm-debug.log*
@@ -32,3 +38,4 @@ logs/*
 
 # prod db data
 database.tar
+database_public.tar

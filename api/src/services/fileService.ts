@@ -31,6 +31,7 @@ class FileService extends DatabaseService {
     root: '/',
     temp: '/api/temp',
     log: '/api/logs',
+    public: '/api/public',
   };
   public cloudinaryConfig = { cloudinary_url: process.env.CLOUDINARY_URL };
 
@@ -46,47 +47,45 @@ class FileService extends DatabaseService {
   /**
    * @description Download a file from a URL
    * @param {string} url URL to download from
-   * @returns Promise: object containing stream, content type, and extension
+   * @param {string} path Define if the file should be saved to disk, if so, define the path without extension
+   * @returns Promise: object containing A Blob, the content type and the file path
    */
-  public async downloadFile(url: string, retryCount = 0): Promise<{ blob: Blob, contentType: string }> {
+  public async downloadFile(url: string, path: string = null, retryCount = 0): Promise<{ blob: Blob, contentType: string, path?: string }> {
     try {
       const res = await fetch(url);
-      return {
-        blob: await res.blob(),
-        contentType: res.headers.get('content-type'),
-      };
+      const blob = await res.blob();
+      const contentType = res.headers.get('content-type');
+      if (path !== null) {
+        path = `${path}.${contentType.split('/')[1]}`;
+        await this.saveFile(path, blob);
+      }
+      return { blob, contentType, path };
     } catch (err) {
-      if (retryCount < 3)
-        return this.downloadFile(url, retryCount + 1);
-      else
-        return;
+      if (retryCount < 3) return this.downloadFile(url, path, retryCount + 1);
+      else return;
     }
   };
 
   /**
    * @description Save a file to disk
    * @param {string} path Path to save file to
-   * @param {Readable | Buffer} source Readable stream or Buffer to save the file from
+   * @param {Readable | Buffer} source Readable stream or Blob to save the file from
    */
-  public async saveFile(path: string, source: Readable | Uint8Array): Promise<void> {
+  public async saveFile(path: string, source: Readable | Blob): Promise<void> {
     if (source instanceof Readable)
       return new Promise<void>((resolve, reject) => {
         const ws = fs.createWriteStream(path);
-        (source as Readable).pipe(ws);
+        source.pipe(ws);
         ws.on('error', reject);
         ws.on('finish', resolve);
         ws.on('close', resolve);
       });
-    else if (source instanceof Uint8Array)
+    else if (source instanceof Blob) {
+      const bytea = await source.arrayBuffer();
       return new Promise((resolve, reject) => {
-        fs.writeFile(path, (source as Uint8Array), (error) => {
-          if (error) {
-            reject(error);
-          } else {
-            resolve();
-          }
-        });
+        fs.writeFile(path, Buffer.from(bytea), (error) => error ? reject(error) : resolve());
       });
+    }
   };
 
   /**
@@ -95,22 +94,6 @@ class FileService extends DatabaseService {
    */
   public async deleteFile(path: string): Promise<void> {
     await fs.promises.unlink(path);
-  };
-
-  /**
-   * @description Get buffer from blob
-   * @param {Blob} blob blob to convert
-   * @returns Promise: Buffer
-   */
-  public async blobToBuffer(blob: Blob): Promise<Buffer> {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsArrayBuffer(blob);
-      reader.onloadend = () => {
-        resolve(Buffer.from(reader.result as ArrayBuffer));
-      };
-      reader.onerror = reject;
-    });
   };
 
   /**
@@ -140,8 +123,7 @@ class FileService extends DatabaseService {
 
     // Save data to a file stored in temp folder
     const filePath = `${this.paths.temp}/${type}${entityId}.${rows[0].content_type.split('/')[1]}`;
-    await this.saveFile(filePath, rows[0].data);
-    
+    // await this.saveFile(filePath, rows[0].data);
     return filePath;
   };
   
@@ -158,17 +140,17 @@ class FileService extends DatabaseService {
     // This is not a used feature for now, but might be useful in the future.
     const { blob, contentType } = await this.downloadFile(url);
 
-    // TODO: Passing blob does not work, but passing a buffer does.
+    // TODO: revert to server file storage.
     // Add file to the movie's documents
-    await this.requestDatabase({
-      text: ` DECLARE l_document_group_id INTEGER;
-              BEGIN
-                SELECT document_group_id INTO l_document_group_id FROM movie WHERE movie_id = $1;
-                INSERT INTO "document" ("document_group_id", "data", "content_type", "type")
-                  VALUES (l_document_group_id, $2, $3, $4);
-              END;`,
-      values: [movieId, blob, contentType, EDocType.POSTER],
-    });
+    // await this.requestDatabase({
+    //   text: ` DECLARE l_document_group_id INTEGER;
+    //           BEGIN
+    //             SELECT document_group_id INTO l_document_group_id FROM movie WHERE movie_id = $1;
+    //             INSERT INTO "document" ("document_group_id", "data", "content_type", "type")
+    //               VALUES (l_document_group_id, $2, $3, $4);
+    //           END;`,
+    //   values: [movieId, base64, contentType, EDocType.POSTER],
+    // });
   }
 
   /**
@@ -199,13 +181,13 @@ class FileService extends DatabaseService {
     if (!cloudinaryRes)
       throw new Error(EErrorMessages.CLOUDINARY_FAILURE);
 
-    // TODO: Passing blob does not work, but passing a buffer does.
+    // TODO: revert to server file storage.
     // Download compressed file from Cloudinary and save it to database
-    const { blob } = await this.downloadFile(cloudinaryRes.url);
-    await this.requestDatabase({
-      text: ' SELECT add_or_update_avatar($1, $2, $3);',
-      values: [userId, blob, 'image/jpeg'],
-    });
+    // const { blob } = await this.downloadFile(cloudinaryRes.url);
+    // await this.requestDatabase({
+    //   text: ' SELECT add_or_update_avatar($1, $2, $3);',
+    //   values: [userId, base64, 'image/jpeg'],
+    // });
 
     // Delete temp files
     await this.deleteFile(tempFilePath);

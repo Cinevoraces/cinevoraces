@@ -39,23 +39,23 @@ services:
     volumes:
       - ./api:/api
 
-  app:
-    container_name: app
-    hostname: cinevoraces_app
-    env_file:
-      - .env
-    environment:
-      - NEXT_PUBLIC_API_BASE_URL_CSR=http://localhost:3005
-    depends_on:
-      - api
-    build:
-      context: ./app
-      dockerfile: Dockerfile.dev
-    ports:
-      - 3000:3000
-    restart: always
-    volumes:
-      - ./app:/app
+  # app:
+  #   container_name: app
+  #   hostname: cinevoraces_app
+  #   env_file:
+  #     - .env
+  #   environment:
+  #     - NEXT_PUBLIC_API_BASE_URL_CSR=http://localhost:3005
+  #   depends_on:
+  #     - api
+  #   build:
+  #     context: ./app
+  #     dockerfile: Dockerfile.dev
+  #   ports:
+  #     - 3000:3000
+  #   restart: always
+  #   volumes:
+  #     - ./app:/app
 
 volumes:
   database:
