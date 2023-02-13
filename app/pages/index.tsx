@@ -229,7 +229,7 @@ const Home: NextPage<HomeProps> = (props) => {
 export const getServerSideProps = async () => {
   try {
     const metrics = await getRequestSSR('/metrics');
-    const lastSixMovies = await getRequestSSR('/movies?where[is_published]=true&limit=6');
+    const lastSixMovies = await getRequestSSR('/movies?where[is_published]=true&sort=desc&limit=6');
     return {
       props: {
         metrics,
