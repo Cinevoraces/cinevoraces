@@ -10,6 +10,7 @@ export enum EErrorMessages {
   INVALID_PASSWORD = 'Mot de passe incorrect.',
   INVALID_PASSWORD_FORMAT = 'Le format du mot de passe est invalide.',
   INVALID_PROPOSAL = 'Ce film a déjà été proposé.',
+  INVALID_PUBLIC_ENTITY = 'n\'est pas une entité valide.',
   EXPIRED_ACCESS_TOKEN = 'Token d\'accès périmé.',
   EXPIRED_SESSION = 'Session expirée. Veuillez vous reconnecter.',
   COMPROMISED_SESSION = 'Session compromise. Veuillez vous reconnecter.',

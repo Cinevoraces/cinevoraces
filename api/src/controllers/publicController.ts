@@ -11,59 +11,30 @@ import { EErrorMessages, ESchemasIds, EDocType } from '../models/enums/_index';
  */
 export default async (fastify: FastifyInstance) => {
 
-  fastify.route({
-    method: 'GET',
-    url: '/test',
-    handler: async function (request: Request, reply: Reply) {
-      const url = 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2F2.bp.blogspot.com%2F-Oi8IolkP1Sc%2FT9_A86f0HeI%2FAAAAAAAAGwQ%2Fy_hP9Y1LdB0%2Fs1600%2Fgarfield_pose.jpg&f=1&nofb=1&ipt=a0460f6ba00d4b357383f1740b346485cd0c0138189dbbfd56e392135ce51dd4&ipo=images';
-      const { path } = await this._fileService.downloadFile(url, `${this._fileService.paths.temp}/test`);
-      
-      reply
-        .code(200)
-        .sendFile(path);
-    },
-  });
-
   /**
-   * @description Get movie's poster file.
-   * @route GET /poster/:movieId
-   * @param {number} movieId - Movie's id.
-   * @returns Poster image.
+   * @description Get file.
+   * @route GET /:docType/:entityId
+   * @param {number} entityId - Entity's id.
+   * @param {string} docType - File enum type "avatar" | "poster".
+   * @returns file.
    */
   fastify.route({
     method: 'GET',
-    url: '/poster/:movieId',
-    schema: fastify.getSchema(ESchemasIds.GETPosterById),
-    handler: async function (request: Request<{ Params: { movieId: number } }>, reply: Reply) {
-      const file = await this._fileService.getDocumentByEntityId(EDocType.POSTER, request.params.movieId);
-      if (!file) this._errorService.send(EErrorMessages.NOT_FOUND, 404);
+    url: '/:docType/:entityId',
+    schema: fastify.getSchema(ESchemasIds.GETFileByEntityId),
+    handler: async function (request: Request<{ Params: { docType: string, entityId: number } }>, reply: Reply) {
+      const { docType, entityId } = request.params;
+      let type: EDocType;
 
-      // FIXME: saved file seems corrupted
-      reply
-        .code(200)
-        .sendFile(`${this._fileService.paths.temp}/ptdr.jpg`);
+      if (docType === 'avatar') type = EDocType.AVATAR;
+      else if (docType === 'poster') type = EDocType.POSTER;
+      else this._errorService.send(`"${docType}" ${EErrorMessages.INVALID_PUBLIC_ENTITY}`, 400);
+
+      const path = await this._fileService.getDocumentByEntityId(type, entityId);
+      if (!path) this._errorService.send(EErrorMessages.NOT_FOUND, 404);
+      await reply.sendFile(path);
     },
   });
-
-  // /**
-  //  * @description Get file avatar.
-  //  * @route GET /avatar/:userId
-  //  * @param {number} userId - User's id.
-  //  * @returns User avatar.
-  //  */
-  // fastify.route({
-  //   method: 'GET',
-  //   url: '/avatar/:userId',
-  //   schema: fastify.getSchema(ESchemasIds.GETAvatarById),
-  //   handler: async function (request: Request<{ Params: { userId: number } }>, reply: Reply) {
-  //     const files = await this._fileService.getDocumentByEntityId(request.params.userId, EDocType.AVATAR);
-  //     // TODO: This isn't finished
-
-  //     reply
-  //       .code(200)
-  //       .send('null');
-  //   },
-  // });
 
   /**
    * @description Migration update query. This is a temporary route used to migrate 

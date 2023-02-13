@@ -21,8 +21,7 @@ export enum ESchemasIds {
   POSTMovies = 'POST/movies',
   PUTMovies = 'PUT/movies',
   // Public API schemas
-  GETPosterById = 'GET/poster/:movieId',
-  GETAvatarById = 'GET/avatar/:userId',
+  GETFileByEntityId = 'GET/:docType/:entityId',
   // Reviews API schemas
   PUTReviews = 'PUT/reviews/:movieId',
   // Seasons API schemas

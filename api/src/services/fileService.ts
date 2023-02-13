@@ -9,7 +9,7 @@ import DatabaseService from './databaseService';
 import plugin from 'fastify-plugin';
 import fs from 'fs';
 import { v2 } from 'cloudinary';
-import { fetch, FileReader } from 'undici';
+import { fetch } from 'undici';
 
 /**
  * @description File service takes care of downloading/saving/naming files to disk.
@@ -104,27 +104,26 @@ class FileService extends DatabaseService {
    */
   public async getDocumentByEntityId(type: EDocType, entityId: number): Promise<string> {
     // Define wich type of file to look for
-    let entitySelection: string;
+    let tableName: string;
     if (type === EDocType.AVATAR)
-      entitySelection = '"user"';
-    else if (type === EDocType.POSTER || type === EDocType.SCREENSHOT)
-      entitySelection = '"movie"';
+      tableName = '"user"';
+    else if (type === EDocType.POSTER)
+      tableName = '"movie"';
     else
       return null;
-    
+
+    // Get the file path
     const { rows } = await this.requestDatabase({
-      text: ` SELECT data, content_type FROM document 
-                WHERE type = $1 
-                AND document_group_id = (SELECT document_group_id FROM ${entitySelection} WHERE id = $2);`,
+      text: ` SELECT filename, content_type FROM document 
+              WHERE type = $1 
+              AND document_group_id = (SELECT document_group_id FROM ${tableName} WHERE id = $2);`,
       values: [type, entityId],
-    }) as { rows: Array<{ data: Uint8Array, content_type: string }> };
+    }) as { rows: Array<{ filename: string, content_type: string }> };
 
-    if (rows.length === 0) return null;
-
-    // Save data to a file stored in temp folder
-    const filePath = `${this.paths.temp}/${type}${entityId}.${rows[0].content_type.split('/')[1]}`;
-    // await this.saveFile(filePath, rows[0].data);
-    return filePath;
+    // Return file path if found, else return null
+    return rows.length === 0
+      ? null
+      : `${this.paths.public}/${type}${entityId}.${rows[0].content_type.split('/')[1]}`;
   };
   
   /**
@@ -138,19 +137,18 @@ class FileService extends DatabaseService {
   ): Promise<void> {
     // NOTE: It is currently possible for a movie to have multiple posters.
     // This is not a used feature for now, but might be useful in the future.
-    const { blob, contentType } = await this.downloadFile(url);
+    const fileName = `${EDocType.POSTER}${movieId}`;
+    const { contentType } = await this.downloadFile(url, `${this.paths.public}/${fileName}`);
 
-    // TODO: revert to server file storage.
-    // Add file to the movie's documents
-    // await this.requestDatabase({
-    //   text: ` DECLARE l_document_group_id INTEGER;
-    //           BEGIN
-    //             SELECT document_group_id INTO l_document_group_id FROM movie WHERE movie_id = $1;
-    //             INSERT INTO "document" ("document_group_id", "data", "content_type", "type")
-    //               VALUES (l_document_group_id, $2, $3, $4);
-    //           END;`,
-    //   values: [movieId, base64, contentType, EDocType.POSTER],
-    // });
+    await this.requestDatabase({
+      text: ` DECLARE l_document_group_id INTEGER;
+              BEGIN
+                SELECT document_group_id INTO l_document_group_id FROM movie WHERE movie_id = $1;
+                INSERT INTO "document" ("document_group_id", "filename", "content_type", "type")
+                  VALUES (l_document_group_id, $2, $3, $4);
+              END;`,
+      values: [movieId, fileName, contentType, EDocType.POSTER],
+    });
   }
 
   /**
@@ -181,13 +179,13 @@ class FileService extends DatabaseService {
     if (!cloudinaryRes)
       throw new Error(EErrorMessages.CLOUDINARY_FAILURE);
 
-    // TODO: revert to server file storage.
     // Download compressed file from Cloudinary and save it to database
-    // const { blob } = await this.downloadFile(cloudinaryRes.url);
-    // await this.requestDatabase({
-    //   text: ' SELECT add_or_update_avatar($1, $2, $3);',
-    //   values: [userId, base64, 'image/jpeg'],
-    // });
+    const fileName = `${EDocType.POSTER}${userId}`;
+    const { contentType } = await this.downloadFile(cloudinaryRes.url, `${this.paths.public}/${fileName}`);
+    await this.requestDatabase({
+      text: ' SELECT add_or_update_avatar($1, $2, $3);',
+      values: [userId, fileName, contentType],
+    });
 
     // Delete temp files
     await this.deleteFile(tempFilePath);

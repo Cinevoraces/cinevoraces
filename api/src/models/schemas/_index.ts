@@ -1,5 +1,5 @@
 import type { FastifySchema } from 'fastify';
-import { GETAvatarImage, GETPosterImage } from './controller.public';
+import { GETFile } from './controller.public';
 import {
   PUTMoviesAsAdmin,
   DELETEMoviesAsAdmin, 
@@ -44,8 +44,7 @@ export default [
   POSTSeasonsAsAdmin,
   DELETEUsersAsAdmin,
   PUTMoviesPosterAsAdmin,
-  GETPosterImage,
-  GETAvatarImage,
+  GETFile,
   POSTLogin,
   POSTRegister,
   GETRefresh,

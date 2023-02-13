@@ -42,8 +42,9 @@ export default plugin((async (fastify, opts, done) => {
   fastify.register(FastifySwaggerUi, {
     routePrefix: '/swagger',
     uiConfig: {
-      docExpansion: 'full',
+      docExpansion: 'list',
       deepLinking: false,
+      tryItOutEnabled: false,
     },
   });
   
