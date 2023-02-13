@@ -1,4 +1,3 @@
-import Image from 'next/image';
 import Rate from '@components/Rate';
 import PosterImage from '@components/Poster';
 
@@ -16,7 +15,7 @@ const Poster = ({ poster_url, french_title }: PosterProps) => {
   return (
     <div
       id="image-container"
-      className="relative h-fit self-center xl:w-full 
+      className="relative w-full h-full
         before:content-[''] before:absolute before:-inset-0.5 before:bg-gradient-to-tr before:from-dark-gray before:to-orange-primary before:rounded-xl">
       <PosterImage
         src={poster_url}
