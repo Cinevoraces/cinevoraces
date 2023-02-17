@@ -58,18 +58,18 @@ services:
       - api
 
   nginx:
-  container_name: nginx
-  depends_on:
-    - app
-    - api
-  build:
-    context: ./nginx
-    dockerfile: Dockerfile.dev
-  restart: unless-stopped
-  ports: 
-    - 80:80
-  volumes:
-    - ./nginx/conf/:/etc/nginx/conf.d/
+    container_name: nginx
+    depends_on:
+      - app
+      - api
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile.dev
+    restart: unless-stopped
+    ports: 
+      - 80:80
+    volumes:
+      - ./nginx/conf/:/etc/nginx/conf.d/
 
 volumes:
   next:
