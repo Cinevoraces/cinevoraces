@@ -68,8 +68,8 @@ services:
     restart: unless-stopped
     ports: 
       - 80:80
-    volumes:
-      - ./nginx/conf/:/etc/nginx/conf.d/
+    # volumes:
+    #   - ./nginx/conf/:/etc/nginx/conf.d/
 
 volumes:
   next:
