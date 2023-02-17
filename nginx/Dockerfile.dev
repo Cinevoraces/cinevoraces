@@ -1,0 +1,2 @@
+FROM nginx:1.23.1
+COPY ./conf/virtual_machine.conf /etc/nginx/conf.d/default.conf
