@@ -82,7 +82,7 @@ const Films: NextPage = () => {
   } = useSWR<CompleteMovie[], Error>(
     () =>
       season &&
-      '/movies?where[is_published]=true' +
+      '/movies?where[is_published]=true&sort=desc' +
         `${selectQueryString}${season.value !== '0' ? `&where[season_number]=${season.value}` : ''}`
   );
   // Each Season change triggers an SWR call
