@@ -31,7 +31,7 @@ export default plugin((async (fastify, opts, done) => {
 const sanitizeHTMLString = (
   htmlString: string,
   exceptions: string[] = [],
-  bannedWords: string[] = []
+  bannedWords: string[] = ['con']
 ): string => {
   //FIXME: exceptions and banned words are not working yet
   const htmlTagRegex = /<[^>]+>/gi;
