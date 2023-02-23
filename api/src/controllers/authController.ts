@@ -39,7 +39,7 @@ export default async (fastify: FastifyInstance) => {
         _errorService.send(EErrorMessages.DUPLICATE_MAIL, 409);
       if (user && body.pseudo === user.pseudo)
         _errorService.send(EErrorMessages.DUPLICATE_PSEUDO, 409);
-
+      console.log('----------', body.password, '----------');
       // Test and Hash password
       if (!body.password.match(process.env.PASS_REGEXP))
         _errorService.send(EErrorMessages.INVALID_PASSWORD_FORMAT, 422);
