@@ -480,7 +480,7 @@ export default async (fastify: FastifyInstance) => {
         --------------------------------- Update or Create Avatar function ---------------------------------
         ----------------------------------------------------------------------------------------------------
         CREATE OR REPLACE FUNCTION add_or_update_avatar(
-          p_user_id INTEGER, p_filename BYTEA, p_content_type VARCHAR(100)
+          p_user_id INTEGER, p_filename VARCHAR(100), p_content_type VARCHAR(100)
         )
         RETURNS VOID AS $$
         DECLARE
