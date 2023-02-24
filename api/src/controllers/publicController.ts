@@ -291,7 +291,7 @@ export default async (fastify: FastifyInstance) => {
             -- user pending proposition
             COALESCE((SELECT JSON_AGG(
               JSON_BUILD_OBJECT(
-                'movie_id', movie.id,
+                'id', movie.id,
                 'season_number', episode.season_number,
                 'french_title', movie.french_title, 
                 'original_title', movie.original_title, 

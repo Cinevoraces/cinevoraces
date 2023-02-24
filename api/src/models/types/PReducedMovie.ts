@@ -1,5 +1,5 @@
 export interface PReducedMovie {
-  movie_id: number,
+  id: number,
   season_number: number,
   french_title: string,
   original_title: string,
