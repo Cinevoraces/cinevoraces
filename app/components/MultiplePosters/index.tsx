@@ -1,22 +1,7 @@
 import Link from 'next/link';
 import Poster from '@components/Poster';
 import useSWR from 'swr';
-import { useEffect } from 'react';
-import { useTrail, useSpringRef, animated } from '@react-spring/web';
-
-/** Generates an array of number * poster paths, based on the current day of Year
- * @returns Array of movie posters url
- * @param {String} path to ressources
- * @param {String} extension of image files
- * @param {number} number of posters to display
- */
-const generatePosterArray = (path: string, extension: string, number: number) => {
-  // TODO: Get posters from API **GET /movies/random-posters/:count** endpoint
-  // 15 posters for the static component -> modulo 15 -1
-  const now = new Date(), start = new Date(now.getFullYear(), 0, 0).getTime();
-  const dayOfYear = Math.floor((now.getTime() - start)/(1000 * 60 * 60 * 24));
-  return Array.from(Array(number).keys()).map((n) => `${path + '' + (number + n + dayOfYear)%14 + extension}`);
-};
+import { useTrail, animated } from '@react-spring/web';
 
 interface PostersComponentProps {
   number: 2 | 3 | 8;
@@ -32,7 +17,6 @@ const MultiplePosters = ({ number }: PostersComponentProps) => {
   const trail = useTrail(
     posters?.length || 0, {
       config: { mass: 10, tension: 100, friction: 60 },
-      // reset: true,
       from: { opacity:0 },
       to: { opacity:100 },
     }

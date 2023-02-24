@@ -25,16 +25,29 @@ const Avatar = ({ id, pseudo, interactive }: AvatarProps) => {
   const url = `${process.env.NEXT_PUBLIC_API_BASE_URL_SSR}/public/avatar/${id}`;
   const [source, setSource] = useState(url);
   return (
-    <Link href={`/membres/${id}`}>
-      <Image
-        src={source}
-        alt={`avatar de ${pseudo}`}
-        height={50}
-        width={50}
-        className={(interactive === false) ? baseStyle : baseStyle + animationStyle}
-        onError={() => setSource(defaultUserPic)}
-      />
-    </Link>
+    <>
+      { 
+        interactive 
+          ? (<Link href={`/membres/${id}`}>
+            <Image
+              src={source}
+              alt={pseudo === 'me' ? 'mon avatar' : `avatar de ${pseudo}`}
+              height={50}
+              width={50}
+              className={baseStyle + animationStyle}
+              onError={() => setSource(defaultUserPic)}
+            />
+          </Link>)
+          : (<Image
+            src={source}
+            alt={pseudo === 'me' ? 'mon avatar' : `avatar de ${pseudo}`}
+            height={50}
+            width={50}
+            className={baseStyle}
+            onError={() => setSource(defaultUserPic)}
+          />)
+      }
+    </>
   );
 };
 
