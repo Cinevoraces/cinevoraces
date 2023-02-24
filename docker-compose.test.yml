@@ -11,6 +11,7 @@ services:
     restart: always
     volumes :
       - database:/var/lib/postgresql/data
+      - ./data:/data
 
   pgadmin:
     container_name: pgadmin
