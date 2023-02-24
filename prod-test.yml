@@ -52,8 +52,6 @@ services:
     restart: always
     depends_on:
       - api
-    volumes:
-      - fastify_public:/app/public/ressources
 
   nginx:
     container_name: nginx
