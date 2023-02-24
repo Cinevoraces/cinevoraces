@@ -1,5 +1,5 @@
 FROM node:19-slim AS deps
-RUN apk add --no-cache libc6-compat
+RUN apt update && apt install -y openssl && apt install -y curl
 WORKDIR /usr/src/app
 
 COPY . ./
