@@ -178,7 +178,7 @@ class FileService extends DatabaseService {
       throw new Error(EErrorMessages.CLOUDINARY_FAILURE);
 
     // Download compressed file from Cloudinary and save it to database
-    const fileName = `${EDocType.POSTER}${userId}`;
+    const fileName = `${EDocType.AVATAR}${userId}`;
     const { contentType } = await this.downloadFile(cloudinaryRes.url, `${this.paths.public}/${fileName}`);
     await this.requestDatabase({
       text: ' SELECT add_or_update_avatar($1, $2, $3);',
