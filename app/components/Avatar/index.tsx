@@ -22,7 +22,8 @@ transition duration-150 hover:ease-out`;
  * @returns <Link> encapsulating the avatar picture of the concerned user
  */
 const Avatar = ({ id, pseudo, interactive }: AvatarProps) => {
-  const url = `${process.env.NEXT_PUBLIC_API_BASE_URL_SSR}/public/avatar/${id}`;
+  // Trick the browser to consider the latest version of the avatar
+  const url = `${process.env.NEXT_PUBLIC_API_BASE_URL_SSR}/public/avatar/${id}?x=timestamp`;
   const [source, setSource] = useState(url);
   return (
     <>
@@ -35,6 +36,7 @@ const Avatar = ({ id, pseudo, interactive }: AvatarProps) => {
               height={50}
               width={50}
               className={baseStyle + animationStyle}
+              priority
               onError={() => setSource(defaultUserPic)}
             />
           </Link>)
@@ -44,6 +46,7 @@ const Avatar = ({ id, pseudo, interactive }: AvatarProps) => {
             height={50}
             width={50}
             className={baseStyle}
+            priority
             onError={() => setSource(defaultUserPic)}
           />)
       }
