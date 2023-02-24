@@ -113,7 +113,6 @@ export const POSTMovies = {
     properties: {
       french_title: { type: 'string' },
       original_title: { type: 'string' },
-      document_group_id: { type: 'number' },
       directors: { type: 'array', items: { type: 'string' } },
       release_date: { type: 'string' },
       runtime: { type: 'number' },
@@ -127,7 +126,6 @@ export const POSTMovies = {
     required: [
       'french_title',
       'original_title',
-      'document_group_id',
       'directors',
       'release_date',
       'runtime',

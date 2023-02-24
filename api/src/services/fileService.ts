@@ -141,12 +141,10 @@ class FileService extends DatabaseService {
     const { contentType } = await this.downloadFile(url, `${this.paths.public}/${fileName}`);
 
     await this.requestDatabase({
-      text: ` DECLARE l_document_group_id INTEGER;
-              BEGIN
-                SELECT document_group_id INTO l_document_group_id FROM movie WHERE movie_id = $1;
-                INSERT INTO "document" ("document_group_id", "filename", "content_type", "type")
-                  VALUES (l_document_group_id, $2, $3, $4);
-              END;`,
+      text: ` INSERT INTO "document" ("document_group_id", "filename", "content_type", "type")
+              VALUES (
+                (SELECT document_group_id FROM movie WHERE movie.id = $1), 
+                $2, $3, $4);`,
       values: [movieId, fileName, contentType, EDocType.POSTER],
     });
   }
