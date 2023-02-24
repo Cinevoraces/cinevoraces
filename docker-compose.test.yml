@@ -36,7 +36,7 @@ services:
       - 3005:3005
     restart: always
     volumes:
-      - fastify:/usr/src/api/dist
+      - fastify_public:/api/public/
 
   app:
     container_name: app
@@ -49,8 +49,6 @@ services:
     ports:
       - 3000:3000
     restart: always
-    volumes:
-      - next:/usr/src/app/.next
     depends_on:
       - api
 
@@ -65,10 +63,7 @@ services:
     restart: unless-stopped
     ports: 
       - 80:80
-    # volumes:
-    #   - ./nginx/conf/:/etc/nginx/conf.d/
 
 volumes:
-  next:
-  fastify:
+  fastify_public:
   database:
