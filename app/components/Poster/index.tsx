@@ -38,6 +38,7 @@ const Poster = ({ src, title, type }: PosterProps) => {
       placeholder='blur'
       blurDataURL={placeholder}
       onError={() => setSource(placeholder)}
+      priority={true}
     />
   );
 };
