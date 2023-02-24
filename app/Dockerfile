@@ -1,4 +1,4 @@
-FROM node:19-alpine AS deps
+FROM node:19-slim AS deps
 RUN apk add --no-cache libc6-compat
 WORKDIR /usr/src/app
 
