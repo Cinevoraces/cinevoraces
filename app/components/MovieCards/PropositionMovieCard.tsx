@@ -20,7 +20,8 @@ interface PropositionMovieCardProps {
  * @returns a wrapper with a movie presentation card and a specific modal to display the complete presentation
  */
 const PropositionMovieCard = ({ movie, propositionCardStyle, posterStyle }: PropositionMovieCardProps) => {
-  const { poster_url, french_title, presentation: presentationObject, publishing_date, release_date } = movie;
+  const { id: movie_id_administration, movie_id: movie_id_user, french_title, presentation: presentationObject, publishing_date, release_date } = movie;
+  const id = movie_id_administration ? movie_id_administration : movie_id_user;
   const presentationCaster = (presentationObject: string | Presentation) => {
     if (typeof presentationObject === 'object') return presentationObject.presentation;
     return presentationObject;
@@ -35,7 +36,7 @@ const PropositionMovieCard = ({ movie, propositionCardStyle, posterStyle }: Prop
         id="proposition_result_card"
         className={propositionCardStyle}>
         <Poster 
-          src={poster_url ? poster_url : '/movie_posters/placeholder.jpg'}
+          src={id ? `${process.env.NEXT_PUBLIC_API_BASE_URL_SSR}/public/poster/${id}` : '/poster_placeholder.jpg'}
           title={french_title || 'placeholder'}
           type='card'
         />

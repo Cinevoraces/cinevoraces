@@ -70,7 +70,7 @@ class MovieService extends DatabaseService {
 
     const { rowCount, rows } = await this.requestDatabase({
       text: ` SELECT id, author_id, season_number, is_published, 
-						french_title, original_title, poster_url, publishing_date
+						french_title, original_title, document_group_id, publishing_date
             ${SELECT ? `,${SELECT}` : ''}
             FROM movieview
             ${WHERE?.count ? `WHERE ${WHERE.query}` : ''}
@@ -84,14 +84,30 @@ class MovieService extends DatabaseService {
   }
 
   /**
+   * @description Randomly get a number of movie posters.
+   * @param {number} count Count of requested posters.
+   * @returns Array of movie posters.
+   */
+  public async getRandomMoviePosters(count: number): Promise<Array<{ id: number; french_title: string; }>> {
+    const { rowCount, rows } = await this.requestDatabase({
+      text: 'SELECT id, french_title FROM movie WHERE is_published = true ORDER BY random() LIMIT $1;',
+      values: [count],
+    });
+    return rowCount ? rows : [];
+  }
+
+  /**
    * @description Create a movie.
    * @param {object} payload Object containing movie's values.
+   * @returns movie's id.
    */
-  public async insertNewMovie(payload: PPostMovie): Promise<void> {
-    await this.requestDatabase({
-      text: 'SELECT new_movie($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13)',
+  public async insertNewMovie(payload: PPostMovie): Promise<number> {
+    const { rows } = await this.requestDatabase({
+      text: 'SELECT new_movie($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12) as movie_id;',
       values: Object.values(payload),
     });
+
+    return rows[0].movie_id;
   }
 
   /**
@@ -99,10 +115,11 @@ class MovieService extends DatabaseService {
    * @param {object} payload Object containing movie's id and new values.
    */
   public async updateUnpublishedMovie(payload: PPutMovie): Promise<void> {
-    await this.requestDatabase({
+    const { rows } = await this.requestDatabase({
       text: 'UPDATE movie SET presentation = $1 WHERE id = $2;',
       values: [payload.presentation, payload.movie_id],
     });
+    return rows[0];
   }
 
   /**
@@ -175,7 +192,7 @@ class MovieService extends DatabaseService {
 
   /**
    * @description Get the next 5 available episodes within 1 month. Consider current episode if available too.
-   * @returns
+   * @returns Array of episodes.
    */
   public async getAvailableEpisodes(): Promise<{
     rowCount: number;

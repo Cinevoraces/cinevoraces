@@ -11,7 +11,7 @@ export const IMovie = {
     is_published: { type: 'boolean' },
     french_title: { type: 'string' },
     original_title: { type: 'string' },
-    poster_url: { type: 'string' },
+    document_group_id: { type: 'number' },
     casting: {
       type: 'array',
       items: { type: 'string' },
@@ -40,7 +40,6 @@ export const IMovie = {
       properties: {
         author_id: { type: 'number' },
         author_pseudo: { type: 'string' },
-        author_avatar: { type: 'string' },
         author_role: { type: 'number' },
         presentation: { type: 'string' },
       },
@@ -62,7 +61,6 @@ export const IMovie = {
         properties: {
           author_id: { type : 'number' },
           author_pseudo: { type : 'string' },
-          author_avatar: { type : 'string' },
           author_role: { type : 'number' },
           comment: { type : 'string' },
           rating: { type : 'number' },
@@ -90,7 +88,6 @@ export const IMovie = {
     'is_published',
     'french_title',
     'original_title',
-    'poster_url',
     'publishing_date',
   ],
 };
@@ -103,7 +100,7 @@ export const IReducedMovie = {
     season_number: { type: 'number' },
     french_title: { type: 'string' },
     original_title: { type: 'string' },
-    poster_url: { type: 'string' },
+    document_group_id: { type: 'number' },
     publishing_date: { type: 'string' },
     release_date: { type: 'string' },
     presentation: {
@@ -111,7 +108,6 @@ export const IReducedMovie = {
       properties: {
         author_id: { type: 'number' },
         author_pseudo: { type: 'string' },
-        author_avatar: { type: 'string' },
         author_role: { type: 'number' },
         presentation: { type: 'string' },
       },

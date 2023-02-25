@@ -1,4 +1,5 @@
 export type { dbCountry } from './db.country';
+export type { dbDocument } from './db.document';
 export type { dbEpisode } from './db.episode';
 export type { dbGenre } from './db.genre';
 export type { dbLanguage } from './db.language';

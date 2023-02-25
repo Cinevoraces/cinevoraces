@@ -1,5 +1,5 @@
-FROM node:19-alpine
-RUN apk add --no-cache libc6-compat
+FROM node:19-slim
+RUN apt update && apt install -y openssl && apt install -y curl
 WORKDIR /app
 
 COPY package.json .

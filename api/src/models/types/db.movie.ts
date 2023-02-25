@@ -2,7 +2,7 @@ export interface dbMovie {
   id: number
   french_title: string
   original_title: string
-  poster_url: string
+  document_group_id: number
   directors: string[]
   release_date: Date
   runtime: number

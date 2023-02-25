@@ -4,7 +4,6 @@ import type {
   FastifyPluginCallback,
 } from 'fastify';
 import plugin from 'fastify-plugin';
-import sanitizeHtml from 'sanitize-html';
 
 export default plugin((async (fastify, opts, done) => {
 
@@ -24,26 +23,34 @@ export default plugin((async (fastify, opts, done) => {
 
 /**
  * @description Sanitize HTML tags of a string
- * @param {string} dirty string to sanitize
+ * @param {string} htmlString string to sanitize
+ * @param {string[]} exceptions list of tags to exclude from the sanitization
+ * @param {string[]} bannedWords list of words to replace with asterisks
  * @returns sanitized string
- * @see https://github.com/apostrophecms/sanitize-html
  */
-const sanitizeString = (dirty: string): string => {
-  return sanitizeHtml(dirty, {
-    allowedTags: [],
-    disallowedTagsMode: 'discard',
-    // Those are for exemple only as they are not allowed in tags
-    allowedAttributes: {
-      a: [ 'href' ],
-      img: [ 'src', 'alt' ],
-    },
-    selfClosing: [ 'img', 'br', 'hr', 'area', 'base', 'basefont', 'input', 'link', 'meta' ],
-    // URL schemes we permit
-    allowedSchemes: [ 'http', 'https', 'ftp', 'mailto', 'tel' ],
-    allowedSchemesByTag: {},
-    allowedSchemesAppliedToAttributes: [ 'href', 'src', 'cite' ],
-    allowProtocolRelative: true,
-    enforceHtmlBoundary: false,
+const sanitizeHTMLString = (
+  htmlString: string,
+  exceptions: string[] = [],
+  bannedWords: string[] = ['con']
+): string => {
+  //FIXME: exceptions and banned words are not working yet
+  const htmlTagRegex = /<[^>]+>/gi;
+  const bannedWordsRegex = new RegExp(`\\b(${bannedWords.join('|')})\\b`, 'gi');
+
+  // Banned words
+  const sanitizedWords = htmlString.split(' ').map((word) => {
+    if (bannedWordsRegex.test(word)) return word.replace(bannedWordsRegex, '****');
+    return word;
+  });
+  
+  // HTML tags
+  return sanitizedWords.join(' ').replace(htmlTagRegex, (tag) => {
+    if (exceptions.includes(tag)) {
+      // find any html attributes in that tag and remove them
+      const attributesRegex = /(\s+)(\w+)(="[^"]+")/gi;
+      return tag.replace(attributesRegex, '');
+    }
+    return '';
   });
 };
 
@@ -55,7 +62,7 @@ const sanitizeString = (dirty: string): string => {
 const sanitizeObject = (obj: Record<string, unknown>): Record<string, unknown> => {
   for (const key in obj) {
     if (typeof obj[key] === 'string') {
-      obj[key] = sanitizeString(obj[key] as string);
+      obj[key] = sanitizeHTMLString(obj[key] as string);
     } else if (typeof obj[key] === 'object') {
       obj[key] = sanitizeObject(obj[key] as Record<string, unknown>);
     }

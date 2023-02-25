@@ -1,37 +1,27 @@
 import tryCatchWrapper from '@utils/tryCatchWrapper';
 import { mutationRequestCSR } from 'binders';
 import { toast } from 'react-hot-toast';
-import { setUserModification } from '@store/slices/user';
 
-import type { KeyedMutator } from 'swr';
-import type { AnyAction, ThunkDispatch } from '@reduxjs/toolkit';
 import type { BodyData } from 'models/custom_types';
-import type { User } from 'models/custom_types/index';
-import type { UserProps } from '@store/slices/user';
 
 const submitSuccess = async (
   method: 'POST' | 'PUT' | 'DELETE',
   endpoint: string,
-  userMutation: KeyedMutator<User[]>,
-  dispatch: ThunkDispatch<{ user: UserProps }, undefined, AnyAction>,
-  data?: BodyData
+  data?: BodyData,
 ) => {
   const responseBody = await mutationRequestCSR(method, endpoint, data);
-  const user = await userMutation();
-  if (user && user.length > 0) dispatch(setUserModification({ avatar_url: user[0].avatar_url }));
-  toast.success(responseBody.message);
+  toast.success(responseBody.message + '\n Attendre le rechargement de la page.');
+  setTimeout(() => window.location.reload(), 4000);
 };
 
 export const handleAvatarUpload = async (
   e: React.FormEvent,
   avatar: File | undefined,
-  userMutation: KeyedMutator<User[]>,
-  dispatch: ThunkDispatch<{ user: UserProps }, undefined, AnyAction>
 ) => {
   e.preventDefault();
   const formData = new FormData();
   if (avatar) {
     formData.append('avatar', avatar, avatar.name);
-    tryCatchWrapper(submitSuccess)('PUT', '/users/avatar', userMutation, dispatch, formData);
+    tryCatchWrapper(submitSuccess)('PUT', '/users/avatar', formData);
   }
 };

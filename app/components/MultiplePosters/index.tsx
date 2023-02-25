@@ -1,17 +1,7 @@
-import Image from 'next/image';
-
-/** Generates an array of number * poster paths, based on the current day of Year
- * @returns Array of movie posters url
- * @param {String} path to ressources
- * @param {String} extension of image files
- * @param {number} number of posters to display
- */
-const generatePosterArray = (path: string, extension: string, number: number) => {
-  // 15 posters for the static component -> modulo 15 -1
-  const now = new Date(), start = new Date(now.getFullYear(), 0, 0).getTime();
-  const dayOfYear = Math.floor((now.getTime() - start)/(1000 * 60 * 60 * 24));
-  return Array.from(Array(number).keys()).map((n) => `${path + '' + (number + n + dayOfYear)%14 + extension}`);
-};
+import Link from 'next/link';
+import Poster from '@components/Poster';
+import useSWR from 'swr';
+import { useTrail, animated } from '@react-spring/web';
 
 interface PostersComponentProps {
   number: 2 | 3 | 8;
@@ -22,7 +12,16 @@ interface PostersComponentProps {
  * @param number number of posters to display
  */
 const MultiplePosters = ({ number }: PostersComponentProps) => {
-  const posters = generatePosterArray('/movie_posters/', '.jpg', number);
+  const { data: posters } = useSWR<{ id: number; french_title: string; }[]>(`/movies/random-posters/${number}`);
+
+  const trail = useTrail(
+    posters?.length || 0, {
+      config: { mass: 10, tension: 100, friction: 60 },
+      from: { opacity:0 },
+      to: { opacity:100 },
+    }
+  );
+
   const posterStyles = 'absolute w-[1/2] rounded-lg object-cover shadow-lg';
   const indivStyles = [
     'left-0 top-0', //Style for 2 - 3 - 8 configurations
@@ -35,20 +34,20 @@ const MultiplePosters = ({ number }: PostersComponentProps) => {
     'left-[25%] bottom-[13%]',
   ];
   return (
-    <div className="relative w-full aspect-square max-w-md">
-      {posters.map((poster, i) => (
-        // <Link href={`films/${i + 1}`} key={'poster_' + i}> // to uncomment later, when all posters will ve stored
-        <Image
-          src={poster}
-          alt="movie poster"
-          width={200}
-          height={(200 * 9) / 16}
-          className={posterStyles + ' ' + indivStyles[i]}
-          key={poster}
-        />
-        // </Link>
-      ))}
-    </div>
+    <ul className="relative w-full aspect-square max-w-md">
+      {
+        (posters && posters?.length > 0) && 
+        trail.map((props, index) => (
+          <animated.li style={props} key={index+ '-' + posters[index].french_title}>
+            <Link href={`/films/${posters[index].id}`} className={posterStyles + ' ' + indivStyles[index]}>
+              <Poster
+                src={`${process.env.NEXT_PUBLIC_API_BASE_URL_SSR}/public/poster/${posters[index].id}`}
+                title={posters[index].french_title}
+              />
+            </Link>
+          </animated.li>
+        ))}
+    </ul>
   );
 };
 

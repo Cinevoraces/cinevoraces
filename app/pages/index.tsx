@@ -17,6 +17,7 @@ import { user } from '@store/slices/user';
 import { useTrail, animated } from '@react-spring/web';
 
 import Poster from '@components/Poster';
+
 interface HomeProps {
   metrics: MetricsProps;
   lastSixMovies: MinimalMovie[];
@@ -28,7 +29,6 @@ const Home: NextPage<HomeProps> = (props) => {
   const lastSixMoviesInfos = lastSixMovies.map((m) => ({
     id: m.id,
     french_title: m.french_title,
-    poster_url: m.poster_url,
   }));
 
   // Prepared Tailwind Styles
@@ -88,7 +88,7 @@ const Home: NextPage<HomeProps> = (props) => {
                       <Link
                         href={`/films/${lastSixMovies[index].id}`}>
                         <Poster
-                          src={lastSixMovies[index].poster_url}
+                          src={`${process.env.NEXT_PUBLIC_API_BASE_URL_SSR}/public/poster/${lastSixMovies[index].id}`}
                           title={lastSixMovies[index].french_title}
                           type='caroussel'
                         />

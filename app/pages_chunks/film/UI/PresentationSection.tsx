@@ -8,17 +8,17 @@ const hListTypeStyle = dataTitleStyle + 'flex-shrink-0 ';
 const hListDataStyle = 'text-lg text-orange-primary flex-1 flex gap-1 items-end flex-wrap ';
 
 interface PosterProps {
-  poster_url: string;
+  movieId: number;
   french_title: string;
 }
-const Poster = ({ poster_url, french_title }: PosterProps) => {
+const Poster = ({ movieId, french_title }: PosterProps) => {
   return (
     <div
       id="image-container"
       className="relative w-full h-full
         before:content-[' '] before:absolute before:-inset-0.5 before:bg-gradient-to-tr before:from-dark-gray before:to-orange-primary before:rounded-xl">
       <PosterImage
-        src={poster_url}
+        src={`${process.env.NEXT_PUBLIC_API_BASE_URL_SSR}/public/poster/${movieId}`}
         title={french_title}
         type='film'
       />

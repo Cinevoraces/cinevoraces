@@ -47,7 +47,7 @@ const MoviesGrid = ({ error, moviesResults, isFilterMenuOpen }: MovieGridProps) 
                 <animated.li style={props} className='relative' key={moviesResults[index].french_title}>
                   <Link href={`/films/${moviesResults[index].id}`}>
                     <Poster
-                      src={moviesResults[index].poster_url}
+                      src={`${process.env.NEXT_PUBLIC_API_BASE_URL_SSR}/public/poster/${moviesResults[index].id}`}
                       title={moviesResults[index].french_title}
                       type='grid'/>
                   </Link>

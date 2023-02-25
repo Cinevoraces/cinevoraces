@@ -1,24 +1,20 @@
-import type { NextPage } from 'next';
 import CustomHead from '@components/Head';
-import type { FormEvent } from 'react';
 import { useState } from 'react';
 import useSWR from 'swr';
 import { mutationRequestCSR } from 'binders';
 import { user } from '@store/slices/user';
 import { Roles } from 'models/enums';
-import type { AdminActions } from 'models/enums';
 import { useAppDispatch, useAppSelector } from '@store/store';
 import { toggleConfirmationModal, global } from '@store/slices/global';
-import type { User, MovieWithPresentation } from 'models/custom_types/index';
-
-import PropositionsSection from 'pages_chunks/administration/UI/PropositionsSection';
-import UsersSection from 'pages_chunks/administration/UI/UsersSection';
 import Modal from '@components/Modal';
-import ConfirmationForm from 'pages_chunks/administration/UI/ConfirmationForm';
-
 import tryCatchWrapper from '@utils/tryCatchWrapper';
 import { toast } from 'react-hot-toast';
+import { ConfirmationForm, FileManagement, PropositionsSection, UsersSection } from 'pages_chunks/administration/UI';
 
+import type { NextPage } from 'next';
+import type { FormEvent } from 'react';
+import type { AdminActions } from 'models/enums';
+import type { User, MovieWithPresentation } from 'models/custom_types/index';
 import type { HandleSubmitAction, HandleSubmitActions } from 'models/custom_types/index';
 
 const Administration: NextPage = () => {
@@ -41,43 +37,44 @@ const Administration: NextPage = () => {
   const submitSuccess = async (method: 'POST' | 'PUT' | 'DELETE', endpoint: string, data: { password: string }) => {
     const response = await mutationRequestCSR(method, endpoint, data);
     // No response data as it is a 204 success Status
-    toast.success(
-      `${method === 'PUT' ? 'Publication' : 'Supression'} ${
-        endpoint.includes('users') ? 'du membre' : 'de la proposition'
-      } réussie`
-    );
+    toast.success(response.message);
     endpoint.includes('users') ? usersMutate() : propositionsMutate();
     userMutate();
     return handleOpenConfirmationModal();
   };
   // Edition actions
-  const handleMoviePublishing = async (e: FormEvent, id: number, data: { password: string }) => {
+  const handleMoviePublishing = async (e: FormEvent, data: { password: string }, id?: number) => {
     e.preventDefault();
     tryCatchWrapper(submitSuccess)('PUT', `/admin/movies/publish/${id}`, data);
   };
-  const handleMovieDeletion = (e: FormEvent, id: number, data: { password: string }) => {
+  const handleMovieDeletion = (e: FormEvent, data: { password: string }, id?: number) => {
     e.preventDefault();
     tryCatchWrapper(submitSuccess)('DELETE', `/admin/movies/${id}`, data);
   };
-  const handleUserDeletion = (e: FormEvent, id: number, data: { password: string }) => {
+  const handleUserDeletion = (e: FormEvent, data: { password: string }, id?: number) => {
     e.preventDefault();
     tryCatchWrapper(submitSuccess)('DELETE', `/admin/users/${id}`, data);
+  };
+  const handlePostersImport = (e: FormEvent, data: { password: string }) => {
+    e.preventDefault();
+    tryCatchWrapper(submitSuccess)('PUT', '/admin/movies/update-posters', data);
   };
 
   const handleSubmitActions: HandleSubmitActions = {
     0: { description: 'la publication du film', handlingFunction: handleMoviePublishing },
     1: { description: 'la suppression du film', handlingFunction: handleMovieDeletion },
     2: { description: 'la suppression de l\'utilisateur', handlingFunction: handleUserDeletion },
+    3: { description: 'l\'import des posters depuis TMDB', handlingFunction: handlePostersImport },
   };
   // Arbitrary initial State
-  const [confirmationAction, setConfirmationAction] = useState<{ handlingAction: HandleSubmitAction; id: number }>({
+  const [confirmationAction, setConfirmationAction] = useState<{ handlingAction: HandleSubmitAction; id?: number }>({
     handlingAction: {
       description: 'Erreur',
-      handlingFunction: (e: FormEvent, id: number, data: { password: string }) => console.log(id, data),
+      handlingFunction: (e: FormEvent, data: { password: string }, id?: number) => console.log(id, data),
     },
     id: 0,
   });
-  const handleConfirmationModal = (action: AdminActions, id: number) => {
+  const handleConfirmationModal = (action: AdminActions, id?: number) => {
     setConfirmationAction({ handlingAction: handleSubmitActions[action], id });
     handleOpenConfirmationModal();
   };
@@ -105,6 +102,7 @@ const Administration: NextPage = () => {
               error={usersError}
               handleConfirmationModal={handleConfirmationModal}
             />
+            <FileManagement handleConfirmationModal={handleConfirmationModal}/>
           </>
         )}
       </main>

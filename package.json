@@ -1,13 +1,14 @@
 {
   "name": "cinevoraces",
   "scripts": {
-    "unix-install": "(cd api && npm install); (cd app && npm install)",
-    "win-install": "(cd api && npm i) && (cd ../app && npm i)",
-    "dev-build": "docker-compose -f docker-compose.dev.yml up --build -d",
-    "dev": "docker-compose -f docker-compose.dev.yml up",
-    "build-test": "docker-compose -f docker-compose.test.yml up --build -d",
+    "install": "(cd api && npm install); (cd app && npm install)",
+    "dev-build": "docker-compose -f dev.yml up --build -d",
+    "dev": "docker-compose -f dev.yml up -d",
+    "dump-db": "sudo tar -cf database_public.tar api/public && docker exec postgres pg_dump -U cinevoraces cinevoraces -F t -f /database.tar && docker cp postgres:/database.tar ./",
+    "restore-db": "docker cp ./database.tar postgres:/database.tar && docker exec -i postgres pg_restore -U cinevoraces -d cinevoraces -F t /database.tar && docker exec -i postgres rm ./database.tar && tar xf ./database_public.tar",
+    "build-test": "docker-compose -f prod-test.yml up --build -d",
+    "rebuild-test": "docker rm -f app && docker-compose -f prod-test.yml up --build -d app && docker exec app npm run build && docker-compose -f prod-test.yml restart", 
     "build": "docker-compose up --build -d",
-    "rebuild-test": "docker rm -f app && docker volume rm cinevoraces_next && npm run build-test && docker exec app npm run build && docker-compose -f docker-compose.test.yml restart", 
     "rebuild": "docker rm -f app && docker volume rm cinevoraces_next && npm run build && npm run build-app && docker exec app npm run build && docker-compose restart", 
     "start": "docker-compose up"
   },

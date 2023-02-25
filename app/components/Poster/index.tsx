@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import Image from 'next/image';
 
 interface PosterProps{
@@ -20,7 +21,8 @@ enum PosterStyles {
  * @returns A unified movie poster component, using Next Image tool as much as possible
  */
 const Poster = ({ src, title, type }: PosterProps) => {
-
+  const [source, setSource] = useState(src);
+  const placeholder = '/poster_placeholder.jpg';
   const styleResolver = (type?: 'caroussel' | 'grid' | 'film' | 'card') => {
     if (type) return PosterStyles[type];
     return PosterStyles['grid'];
@@ -28,13 +30,15 @@ const Poster = ({ src, title, type }: PosterProps) => {
 
   return (
     <Image
-      src={src}
+      src={source}
       alt={`${title} movie poster`}
       width={(type === 'card') ? 125 : (type === 'grid') ? 240 : 336}
       height={(type === 'card') ? 187.5 : (type === 'grid') ? 360 : 504}
       className={styleResolver(type)}
       placeholder='blur'
-      blurDataURL='/movie_posters/placeholder.jpg'
+      blurDataURL={placeholder}
+      onError={() => setSource(placeholder)}
+      priority={true}
     />
   );
 };

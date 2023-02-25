@@ -5,7 +5,6 @@ export interface dbUser {
   pseudo: string
   mail: string
   password: string
-  avatar_url: string | null
   mail_sub: boolean | null
   role: ERoles
   created_at: Date

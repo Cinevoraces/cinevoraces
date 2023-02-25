@@ -1,8 +1,6 @@
 import type { PoolClient } from 'pg';
 import type { FastifyPluginCallback } from 'fastify';
 import type { PQuerystring, PUser } from '../models/types/_index';
-import type { UploadApiResponse } from 'cloudinary';
-import { v2 } from 'cloudinary';
 import DatabaseService from './databaseService';
 import plugin from 'fastify-plugin';
 
@@ -54,7 +52,7 @@ class UserService extends DatabaseService {
     }
 
     const { rowCount, rows } = await this.requestDatabase({
-      text: ` SELECT id, pseudo, mail, avatar_url, role, created_at, updated_at
+      text: ` SELECT id, pseudo, mail, role, created_at, updated_at
               ${SELECT ? `,${SELECT}` : ''}
               FROM userview
               ${WHERE?.count ? `WHERE ${WHERE.query}` : ''}
@@ -75,7 +73,7 @@ class UserService extends DatabaseService {
     id: number,
     set: Record<string, unknown>
   ): Promise<void> {
-    const enumerator = ['pseudo', 'mail', 'password', 'avatar_url'];
+    const enumerator = ['pseudo', 'mail', 'password'];
     const SET = this.reduceWhere(set, ',', enumerator, 1);
     await this.requestDatabase({
       text: ` UPDATE "user"
@@ -94,33 +92,6 @@ class UserService extends DatabaseService {
       text: ' DELETE FROM "user" WHERE id=$1;',
       values: [id],
     });
-  }
-
-  /**
-   * @description Upload image to Cloudinary account.
-   * @param {string} userPseudo - The user's pseudo that will prefix filename.
-   * @param {string} filePath - The name of the file to upload.
-   */
-  public async cloudinaryUpload(
-    userPseudo: string,
-    filePath: string
-  ): Promise<UploadApiResponse> {
-    v2.config({ cloudinary_url: process.env.CLOUDINARY_URL });
-    try {
-      const cloudinaryRes = await v2.uploader.upload(filePath, {
-        folder: 'cinevoraces',
-        tags: 'avatar',
-        width: 200,
-        height: 200,
-        crop: 'fill',
-        gravity: 'faces',
-        format: 'jpeg',
-        public_id: userPseudo,
-      });
-      return cloudinaryRes;
-    } catch (err) {
-      console.error(err);
-    }
   }
 };
 

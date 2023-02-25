@@ -7,7 +7,7 @@ import fs from 'fs';
  * Any error related operations should be done through this service.
  */
 class ErrorService {
-  private readonly path = `${process.env.ROOT_PATH='/api'}/logs`;
+  private readonly path = '/logs';
 
   public send(message: string, statusCode: number): void {
     throw { message, statusCode };
@@ -34,13 +34,12 @@ class ErrorService {
 }
 
 // Decorate FastifyInstance with ErrorService
-const ErrorServiceInstance = new ErrorService();
-export type TErrorService = typeof ErrorServiceInstance;
+export type TErrorService = InstanceType<typeof ErrorService>;
 export default plugin((async (fastify, opts, done) => {
   // Check if service is already registered
   if (fastify.hasDecorator('_errorService'))
     return fastify.log.warn('ErrorService already registered');
   
-  fastify.decorate('_errorService', ErrorServiceInstance);
+  fastify.decorate('_errorService', new ErrorService());
   done();
 }) as FastifyPluginCallback);

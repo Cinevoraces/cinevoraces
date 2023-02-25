@@ -74,6 +74,33 @@ export const GETMovies = {
   },
 };
 
+export const GETRandomMoviePosters = {
+  $id: ESchemasIds.GETRandomMoviePosters,
+  description: `
+  **Get random movie ids with french title in order to use theme for poster request**.
+  `,
+  tags: ['Movies'],
+  params: {
+    type: 'object',
+    properties: {
+      count: { type: 'number' },
+    },
+  },
+  response: {
+    200: {
+      type: 'array',
+      items: { 
+        type: 'object',
+        required: ['id', 'french_title'],
+        properties: {
+          id: { type: 'number' },
+          french_title: { type: 'string' },
+        },
+      },
+    },
+  },
+};
+
 export const POSTMovies = {
   $id: ESchemasIds.POSTMovies,
   summary: '(TOKEN REQUIRED)',
@@ -86,7 +113,6 @@ export const POSTMovies = {
     properties: {
       french_title: { type: 'string' },
       original_title: { type: 'string' },
-      poster_url: { type: 'string' },
       directors: { type: 'array', items: { type: 'string' } },
       release_date: { type: 'string' },
       runtime: { type: 'number' },
@@ -100,7 +126,6 @@ export const POSTMovies = {
     required: [
       'french_title',
       'original_title',
-      'poster_url',
       'directors',
       'release_date',
       'runtime',

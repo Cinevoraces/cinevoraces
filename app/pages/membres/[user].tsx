@@ -37,7 +37,7 @@ const User: NextPage = () => {
         title={`Cinévoraces - ${isPrivatePage ? 'Mon profil' : `Profil de ${askedUser?.pseudo}`}`}
         description='Découvrez les profils de nos membres.'
         slug={router.asPath}
-        imageUrl={askedUser?.avatar_url}
+        imageUrl={askedUser?.id ? `${process.env.NEXT_PUBLIC_API_BASE_URL_SSR}/public/avatar/${askedUser?.id}` : undefined}
       />
       <main className="grow flex flex-col justify-start">
         <h1 className="custom-container grow-0 pb-4 hero-text text-center">

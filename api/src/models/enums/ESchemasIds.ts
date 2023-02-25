@@ -2,6 +2,7 @@ export enum ESchemasIds {
   // Admin API schemas
   PUTMoviesAsAdmin = 'PUT/admin/movies/publish/:id',
   DELETEMoviesAsAdmin = 'DELETE/admin/movies/:id',
+  PUTMoviesPosterAsAdmin = 'PUT/admin/movies/update-posters',
   GETReviewsAsAdmin = 'GET/admin/reviews',
   DELETEReviewsAsAdmin = 'DELETE/admin/reviews/:movieId/:userId',
   POSTSeasonsAsAdmin = 'POST/seasons',
@@ -16,10 +17,11 @@ export enum ESchemasIds {
   GETMetrics = 'GET/metrics',
   // Movies API schemas
   GETMovies = 'GET/movies',
+  GETRandomMoviePosters = 'GET/movies/random-posters/:count',
   POSTMovies = 'POST/movies',
   PUTMovies = 'PUT/movies',
   // Public API schemas
-  GETPosterByFileName = 'GET/poster/:fileName',
+  GETFileByEntityId = 'GET/:docType/:entityId',
   // Reviews API schemas
   PUTReviews = 'PUT/reviews/:movieId',
   // Seasons API schemas

@@ -1,5 +1,5 @@
 import type { FastifySchema } from 'fastify';
-import { GETPosterImage } from './controller.public';
+import { GETFile } from './controller.public';
 import {
   PUTMoviesAsAdmin,
   DELETEMoviesAsAdmin, 
@@ -7,11 +7,17 @@ import {
   DELETEReviewsAsAdmin,
   POSTSeasonsAsAdmin,
   DELETEUsersAsAdmin,
+  PUTMoviesPosterAsAdmin,
 } from './controller.Admin';
 import { POSTLogin, POSTRegister, GETRefresh } from './controller.auth';
 import { GETEpisodes } from './controller.episodes';
 import { GETMetrics } from './controller.metrics';
-import { GETMovies, POSTMovies, PUTMovies } from './controller.movies';
+import {
+  GETMovies,
+  GETRandomMoviePosters,
+  POSTMovies,
+  PUTMovies,
+} from './controller.movies';
 import { PUTReviews } from './controller.reviews';
 import { GETSeasons } from './controller.seasons';
 import { GETUsers, PUTUsers, PUTUsersAvatar } from './controller.users';
@@ -37,13 +43,15 @@ export default [
   DELETEReviewsAsAdmin,
   POSTSeasonsAsAdmin,
   DELETEUsersAsAdmin,
-  GETPosterImage,
+  PUTMoviesPosterAsAdmin,
+  GETFile,
   POSTLogin,
   POSTRegister,
   GETRefresh,
   GETEpisodes,
   GETMetrics,
   GETMovies,
+  GETRandomMoviePosters,
   POSTMovies,
   PUTMovies,
   PUTReviews,

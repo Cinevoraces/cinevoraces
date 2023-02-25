@@ -23,7 +23,6 @@
     "fastify": "^4.11.0",
     "pg": "^8.8.0",
     "qs": "^6.11.0",
-    "sanitize-html": "^2.8.1",
     "undici": "^5.14.0"
   },
   "devDependencies": {
@@ -32,7 +31,6 @@
     "@types/node": "^18.11.18",
     "@types/pg": "^8.6.6",
     "@types/qs": "^6.9.7",
-    "@types/sanitize-html": "^2.8.0",
     "@typescript-eslint/eslint-plugin": "^5.48.0",
     "@typescript-eslint/parser": "^5.48.0",
     "eslint-config-prettier": "^8.6.0",

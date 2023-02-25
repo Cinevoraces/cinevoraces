@@ -6,7 +6,6 @@ export interface UserProps {
   id?: number;
   pseudo?: string;
   role?: Roles;
-  avatar_url?: string;
 }
 
 const initialState: UserProps = {};

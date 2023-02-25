@@ -3,9 +3,7 @@ version: "3"
 services:
   postgres:
     container_name: postgres
-    build:
-      context: ./data
-      dockerfile: Dockerfile.dev
+    image: postgres:15.1
     env_file:
       - .env
     ports:
@@ -34,31 +32,39 @@ services:
       - postgres
     build:
       context: ./api
-      dockerfile: Dockerfile.dev
+      dockerfile: Dockerfile
     ports:
       - 3005:3005
-      - 9229:9229
     restart: always
     volumes:
-      - ./api:/api
+      - fastify_public:/api/public/
 
   app:
     container_name: app
     hostname: cinevoraces_app
     env_file:
       - .env
-    environment:
-      - NEXT_PUBLIC_API_BASE_URL_CSR=http://localhost:3005
-    depends_on:
-      - api
     build:
       context: ./app
-      dockerfile: Dockerfile.dev
+      dockerfile: Dockerfile
     ports:
       - 3000:3000
     restart: always
-    volumes: 
-      - ./app:/app
+    depends_on:
+      - api
+
+  nginx:
+    container_name: nginx
+    depends_on:
+      - app
+      - api
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile.dev
+    restart: unless-stopped
+    ports: 
+      - 80:80
 
 volumes:
+  fastify_public:
   database:

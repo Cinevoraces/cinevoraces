@@ -12,12 +12,6 @@ export default plugin((async (fastify, opts: FastifyStaticOptions, done) => {
   // Check if plugin is already registered
   if (fastify.hasDecorator('sendFile'))
     return fastify.log.warn('@fastify/static already registered');
-
-  fastify.register(FastifyStatic, {
-    root: '/',
-    prefix: '/public/',
-    ...opts,
-  });
-  
+  fastify.register(FastifyStatic, { root: '/', ...opts });
   done();
 }) as FastifyPluginCallback);

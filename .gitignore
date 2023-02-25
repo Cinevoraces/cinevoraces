@@ -4,11 +4,6 @@ app/out
 
 # api
 api/dist
-api/logs
-api/coverage
-
-# database
-*/sqitch.conf
 
 # env
 .env*
@@ -16,26 +11,31 @@ api/coverage
 # dependencies
 */node_modules
 
+# temp
+*/temp/*.jpeg
+*/temp/*.jpg
+*/temp/*.png
+*/temp/*.gif
+*/temp/*.svg
+*/temp/*.webp
+*/public/*.jpeg
+*/public/*.jpg
+*/public/*.png
+*/public/*.gif
+*/public/*.svg
+*/public/*.webp
+
 # logs
 */npm-debug.log*
-*/yarn-debug.log*
-*/yarn-error.log*
-*/.yarn-integrity
 
 # misc
 */.DS_Store
 */.vscode
 
 # Server files storage
-api/test/Result.jpg
-storage/*/*.jpg
-storage/*/*.png
-storage/*/*.gif
-storage/*/*.jpeg
-storage/*/*.bmp
-storage/*/*.webp
-storage/*/*.svg
-storage/*/*.ico
+temp/*
+logs/*
 
 # prod db data
-data/migration_v2.sql
+database.tar
+database_public.tar

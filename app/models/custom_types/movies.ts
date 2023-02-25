@@ -1,12 +1,12 @@
 import type { Roles } from 'models/enums';
 export interface MinimalMovie {
-  id: number;
+  id?: number;
+  movie_id?: number,
   author_id: number;
   season_number: number;
   is_published: boolean;
   french_title: string;
   original_title: string;
-  poster_url: string;
   publishing_date: string;
   release_date: string;
 }

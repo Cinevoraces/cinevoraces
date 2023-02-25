@@ -38,8 +38,9 @@ const Layout = ({ children }: LayoutProps) => {
           className: '',
           duration: 5000,
           style: {
-            background: '#393945',
-            color: '#F2F2F3',
+            background: '#8A8A92',
+            color: '#000',
+            fontWeight: 'semibold'
           },
         }}/>
       <Header />

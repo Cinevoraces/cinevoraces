@@ -139,7 +139,7 @@ const Film: NextPage<FilmProps> = ({ movies }) => {
         title={`Cinévoraces - ${french_title}`}
         description={`Découvrez ${french_title}`}
         slug={router.asPath}
-        imageUrl={movie.poster_url}
+        imageUrl={`${process.env.NEXT_PUBLIC_API_BASE_URL_SSR}/public/poster/${movie.id}`}
       />
       <main className="custom-container ">
         {Object.keys(movie).length === 0 && <p>Loading</p>}
@@ -151,7 +151,7 @@ const Film: NextPage<FilmProps> = ({ movies }) => {
               <div
                 id="poster-interactions"
                 className="flex gap-6 mx-auto sm:flex-col sm:flex-0 self-top xl:col-span-2 xl:w-full">
-                <Poster {...movie} />
+                <Poster movieId={movie.id || 0} french_title={movie.french_title} />
                 <div
                   id="interactions"
                   className="flex flex-col h-full justify-around self-center sm:justify-between sm:flex-row sm:gap-5 lg:w-full xl:gap-0">

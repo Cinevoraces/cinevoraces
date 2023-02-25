@@ -48,6 +48,27 @@ export default async (fastify: FastifyInstance) => {
   });
 
   /**
+   * @description Get Random Movie ids.
+   * @route GET /movies/random-posters/:count
+   */
+  fastify.route({
+    method: 'GET',
+    url: '/movies/random-posters/:count',
+    schema: fastify.getSchema(ESchemasIds.GETRandomMoviePosters),
+    handler: async function (request: Request<{ Params: { count: number } }>, reply: Reply) {
+      const { _movieService, _errorService } = this;
+
+      const posters = await _movieService.getRandomMoviePosters(request.params.count);
+      if (posters.length < request.params.count || !posters.length)
+        _errorService.send(EErrorMessages.NOT_FOUND_MOVIE, 404);
+
+      reply
+        .code(200)
+        .send(posters);
+    },
+  });
+
+  /**
    * @description Propose a new movie.
    * @route POST /movies
    */
@@ -58,10 +79,21 @@ export default async (fastify: FastifyInstance) => {
     onRequest: [fastify.verifyAccessToken],
     preValidation: [fastify.throwIfMovieFound],
     handler: async function (request: Request, reply: Reply) {
-      const { _movieService } = this;
-      const { body, user } = request;
-      const payload = { ...body as PPostMovie, user_id: user.id };
-      await _movieService.insertNewMovie(payload);
+      const { _movieService, _fileService } = this;
+      const movie = request.body as PPostMovie;
+      // Get poster url and delete it from payload as it's not a movie property
+      const poster_url = movie.poster_url;
+      delete movie.poster_url;
+
+      // Insert movie in database
+      const payload = {
+        ...movie,
+        user_id: request.user.id,
+      };
+      const movieId = await _movieService.insertNewMovie(payload);
+      // Save poster to DB
+      await _fileService.UploadMoviePoster(movieId, poster_url);
+
       reply
         .code(200)
         .send({ message: EResponseMessages.PROPOSITION_SUCCESS });
@@ -108,7 +140,7 @@ export default async (fastify: FastifyInstance) => {
   
   /**
    * @description Delete one movie.
-   * @route DELETE /movies
+   * @route DELETE /admin/movies
    */
   fastify.route({
     method: 'DELETE',
@@ -117,12 +149,11 @@ export default async (fastify: FastifyInstance) => {
     onRequest: [fastify.isAdmin],
     preValidation: [fastify.verifyPassword, fastify.throwIfMovieNotFound],
     handler: async function (request: Request<{ Params: { id: number } }>, reply: Reply) {
-      const { _movieService } = this;
-      await _movieService.deleteMovie(request.params.id);
+      await this._movieService.deleteMovie(request.params.id);
+
       reply
         .code(201)
         .send({ message: EResponseMessages.DELETE_MOVIE_SUCCESS });
     },
-  });
-  
+  });  
 };

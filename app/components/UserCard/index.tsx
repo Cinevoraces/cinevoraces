@@ -25,7 +25,6 @@ const UserCard = ({ user, type, children }: UserCardProps) => {
       <div className="flex gap-2">
         <Avatar
           id={user.id}
-          url={user.avatar_url}
           pseudo={user.pseudo}
           interactive={false}
         />

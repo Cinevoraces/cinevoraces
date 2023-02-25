@@ -1,13 +1,19 @@
 import { ESchemasIds } from '../enums/_index';
 
-export const GETPosterImage = {
-  $id: ESchemasIds.GETPosterByFileName,
-  description: 'Get poster image\'s public URL.',
+export const GETFile = {
+  $id: ESchemasIds.GETFileByEntityId,
+  description: `
+  **Get a file using it's entity's id.**  
+  For an avatar use the parameter "avatar" followed by the corresponding userId.
+  For a movie poster use the parameter "poster" followed by the corresponding movieId.
+  `,
   tags: ['Public'],
   params: {
     type: 'object',
     properties: {
-      fileName: { type: 'string' },
+      docType: { type: 'string' },
+      entityId: { type: 'number' },
     },
   },
 };
+
