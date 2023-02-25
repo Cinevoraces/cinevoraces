@@ -22,6 +22,7 @@ interface PropositionMovieCardProps {
 const PropositionMovieCard = ({ movie, propositionCardStyle, posterStyle }: PropositionMovieCardProps) => {
   const { id: movie_id_administration, movie_id: movie_id_user, french_title, presentation: presentationObject, publishing_date, release_date } = movie;
   const id = movie_id_administration ? movie_id_administration : movie_id_user;
+  console.log('movie id', id); // ---------------------------------------------------
   const presentationCaster = (presentationObject: string | Presentation) => {
     if (typeof presentationObject === 'object') return presentationObject.presentation;
     return presentationObject;
