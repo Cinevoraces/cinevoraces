@@ -16,7 +16,7 @@ const propositionStyles = {
 };
 
 const PendingProposition = ({ propositions }: PendingPropositionProps) => {
-  console.log(propositions); // -----------------------------------------------
+  console.log('Proposition passée au composant', propositions); // -----------------------------------------------
   return (
     <div id="pending_proposition">
       <h2 className={propositionStyles.titleStyle}>Proposition en attente</h2>
