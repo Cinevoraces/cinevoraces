@@ -37,7 +37,7 @@ services:
       - 3005:3005
     restart: always
     volumes:
-      - fastify:/usr/src/api/dist
+      - fastify_public:/api/public/
 
   app:
     container_name: app
@@ -78,5 +78,5 @@ services:
       - ./certbot/conf/:/etc/letsencrypt/
 
 volumes:
-  fastify:
+  fastify_public:
   database:
