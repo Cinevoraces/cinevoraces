@@ -10,7 +10,8 @@ const submitSuccess = async (
   data?: BodyData,
 ) => {
   const responseBody = await mutationRequestCSR(method, endpoint, data);
-  toast.success(responseBody.message + '\n Le changement sera effectif dans quelques instants.');
+  toast.success(responseBody.message + '\n Attendre le rechargement de la page.');
+  setTimeout(() => window.location.reload(), 4000);
 };
 
 export const handleAvatarUpload = async (

@@ -30,7 +30,6 @@ const User: NextPage = () => {
   );
   const [askedUser, setAskedUser] = useState<User | undefined>(undefined);
   useRefreshUserData(userId, connectedUserId, userData, mutate, setAskedUser);
-  console.log('askedUser', askedUser); // -----------------------------------
 
   return (
     <>
