@@ -9,7 +9,7 @@
     "build-test": "docker-compose -f prod-test.yml up --build -d",
     "rebuild-test": "docker rm -f app && docker-compose -f prod-test.yml up --build -d app && docker exec app npm run build && docker-compose -f prod-test.yml restart", 
     "build": "docker-compose up --build -d",
-    "rebuild": "docker rm -f app && docker volume rm cinevoraces_next && npm run build && npm run build-app && docker exec app npm run build && docker-compose restart", 
+    "rebuild": "docker rm -f app && docker-compose up --build -d app && docker exec app npm run build && docker-compose restart", 
     "start": "docker-compose up"
   },
   "dependencies": {
