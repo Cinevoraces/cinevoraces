@@ -1,0 +1,31 @@
+#!/bin/bash
+# -*- ENCODING: UTF-8 -*-
+
+source .env && cd data/backups && today=`date +%Y-%m-%d.%H:%M:%S` \
+&& mkdir backup_$today \
+&& docker exec postgres pg_dump -U ${POSTGRES_USER} -F c ${POSTGRES_DB} -v -Z 9  > backup_$today/database_backup_$today \
+&& docker cp api:/public ./backup_$today/public \
+&& tar -cf backup_$today.tar ./
+echo 'Backup done'
+path=data/backups/backup_$today
+echo "The path for the backup is ${path}"
+# cd ~ && gdrive upload -p 1hsYajdLcGhAHKx0qNb-2FGvAwD978Zzd $path
+# echo 'Backup uploaded on Google Drive'
+# gdrive list --query " '1hsYajdLcGhAHKx0qNb-2FGvAwD978Zzd' in parents" > backups_list.txt
+# echo 'List of backups saved in backups_list.txt : '
+# echo 'Number of remote backups: '$(wc -l backups_list.txt | cut -d " " -f1)
+# if [ $(wc -l backups_list.txt | cut -d " " -f1) -lt 11 ]
+#   then
+#     echo 'Less than 10 backups saved, keeping previous backups.'
+#   else
+#     echo '10 backups already saved, deletion needed.'
+#     rm "data/backups/$(ls -t data/backups | tail -1)"
+#     echo 'Oldest backup deleted locally'
+#     gdrive list -q "'1hsYajdLcGhAHKx0qNb-2FGvAwD978Zzd' in parents" --order "createdTime asc" | sed -rn 's/([0-9A-Za-z_\-]+)\s.*/\1/p' > list.log
+#     oldest_backup_id=$(sed -n '2p' list.log)
+#     echo $oldest_backup_id
+#     gdrive delete $oldest_backup_id
+#     rm list.log
+#     echo 'Oldest backup removed from drive'
+# fi
+# rm backups_list.txt
