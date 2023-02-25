@@ -18,7 +18,7 @@ transition duration-150 hover:ease-out`;
  * 
  * @param id
  * @param pseudo
- * @param interactive facultative param to freeze animation - default to true
+ * @param interactive facultative to use it as link
  * @returns <Link> encapsulating the avatar picture of the concerned user
  */
 const Avatar = ({ id, pseudo, interactive }: AvatarProps) => {
@@ -28,7 +28,7 @@ const Avatar = ({ id, pseudo, interactive }: AvatarProps) => {
   return (
     <>
       { 
-        interactive 
+        interactive
           ? (<Link href={`/membres/${id}`}>
             <Image
               src={source}

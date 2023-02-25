@@ -49,6 +49,7 @@ const PostCard = ({
           <Avatar
             id={author_id}
             pseudo={author_pseudo}
+            interactive
           />
           <div
             id="post-infos"
