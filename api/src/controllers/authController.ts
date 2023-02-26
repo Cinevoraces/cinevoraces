@@ -40,7 +40,7 @@ export default async (fastify: FastifyInstance) => {
       if (user && body.pseudo === user.pseudo)
         _errorService.send(EErrorMessages.DUPLICATE_PSEUDO, 409);
       // Test and Hash password
-      if (!body.password.match(/`${process.env.PASS_REGEXP)/))
+      if (!body.password.match(/`${process.env.PASS_REGEXP)`/))
         _errorService.send(EErrorMessages.INVALID_PASSWORD_FORMAT, 422);
 
       body.password = await _authService.hashString(body.password);
