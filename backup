@@ -30,3 +30,4 @@ if [ $(wc -l backups_list.txt | cut -d " " -f1) -lt 11 ]
     echo 'Oldest backup removed from drive'
 fi
 rm backups_list.txt
+echo 'Backup procedure achieved.'
