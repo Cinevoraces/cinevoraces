@@ -3,7 +3,7 @@
 
 echo 'Please enter a backup name, without the .tar extension. The tar archive must be placed inside data/backups folder, on host.'
 read
-source .env && cd data/backups
+source ~/cinevoraces/.env && cd ~/cinevoraces/data/backups
 echo "Unzipping backup archive..."
 tar -xvf ./$REPLY.tar 
 echo "Copying api/public backup folder into container..."
