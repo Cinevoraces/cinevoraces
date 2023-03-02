@@ -38,3 +38,6 @@ logs/*
 
 # all archives with .tar extension
 *.tar
+
+# Mac .DS_Store
+.DS_Store
