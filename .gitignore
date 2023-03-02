@@ -36,6 +36,5 @@ api/dist
 temp/*
 logs/*
 
-# prod db data
-database.tar
-database_public.tar
+# all archives with .tar extension
+*.tar
