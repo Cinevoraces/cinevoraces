@@ -22,11 +22,11 @@ const MultiplePosters = ({ number }: PostersComponentProps) => {
     }
   );
 
-  const posterStyles = 'absolute w-[1/2] rounded-lg object-cover shadow-lg';
+  const posterStyles = 'absolute w-[1/2] rounded-lg object-cover shadow-lg hover:z-10';
   const indivStyles = [
     'left-0 top-0', //Style for 2 - 3 - 8 configurations
-    'right-[25%] bottom-0', //Style for 2 - 3 - 8 configurations
-    'right-0 bottom-[16%]', //Style for 3 - 8 configurations
+    'right-0 bottom-0', //Style for 2 - 3 - 8 configurations
+    'left-[25%] bottom-[16%]', //Style for 3 - 8 configurations
     'right-0 top-[5%]',
     'left-[5%] bottom-[5%]',
     'right-[8%] bottom-[12%]',

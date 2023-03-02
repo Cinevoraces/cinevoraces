@@ -9,24 +9,32 @@ interface PostCardProps {
   rating?: number;
   created_at?: string;
   children: React.ReactNode;
+  backgroundColorStyle?: string;
 }
 
-const basicStyle = 'w-full p-3 rounded-xl drop-shadow-sm flex flex-col gap-4 h-fit ';
-const presentationStyle = basicStyle + 'bg-medium-gray ';
-const commentStyle =
-  basicStyle +
-  'threeModulusZero-child:bg-card-bg-two threeModulusOne-child:bg-card-bg-three threeModulusTwo-child:bg-card-bg-one';
-const formStyle = basicStyle + 'bg-card-bg-one';
+const basicStyle = 'w-full p-3 rounded-xl drop-shadow-sm flex flex-col gap-4 h-fit';
+const presentationStyle = basicStyle + ' bg-medium-gray ';
+const formStyle = basicStyle + ' bg-card-one';
+
+// Background variables must be declared inside component code and be imported with the component.
+// Could a bug due to tailwind compilation procedure
+export const backgroundColorStyles = [
+  'bg-card-one',
+  'bg-card-two',
+  'bg-card-three',
+  'bg-card-four',
+  'bg-card-five',
+];
 
 /**
- * 
- * @param type 
- * @param author_id 
- * @param author_pseudo 
- * @param publishing_date 
- * @param children 
- * @param rating 
- * @param created_at 
+ *
+ * @param type
+ * @param author_id
+ * @param author_pseudo
+ * @param publishing_date
+ * @param children
+ * @param rating
+ * @param created_at
  * @returns <div> versatile cards to be used as wrapper for presentation and comments tiles
  */
 const PostCard = ({
@@ -37,11 +45,18 @@ const PostCard = ({
   children,
   rating,
   created_at,
+  backgroundColorStyle,
 }: PostCardProps) => {
   return (
     <div
       id={type === 'presentation' ? 'presentation-card' : type === 'comment' ? 'comment-card' : 'comment-form'}
-      className={type === 'presentation' ? presentationStyle : type === 'comment' ? commentStyle : formStyle}>
+      className={
+        type === 'presentation'
+          ? presentationStyle
+          : type === 'comment'
+            ? basicStyle + ` ${backgroundColorStyle ? backgroundColorStyle : ''}`
+            : formStyle
+      }>
       <div
         className="flex flex-col gap-2 sm:items-center sm:flex-row sm:justify-between"
         id="card-header">

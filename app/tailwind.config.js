@@ -19,12 +19,14 @@ module.exports = {
         'yellow':'#FCCA15',
         'green':'#85F086',
         'dark-gray':'#202029',
+        'white':'#F2F2F3',
         'medium-gray':'#393945',
         'light-gray': '#8A8A92',
-        'card-bg-one': '#434356',
-        'card-bg-two': '#4D4D66',
-        'card-bg-three': '#565676',
-        'white':'#F2F2F3'
+        'card-one': '#434356',
+        'card-two': '#4D4D66',
+        'card-three': '#565676',
+        'card-four': '#5E5E87',
+        'card-five': '#666699',
       },
       animation: {
         'slidein': 'slidein 400ms ease-in',

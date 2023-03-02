@@ -18,6 +18,7 @@ export interface HeaderMenuButtonProps {
 const HeaderMenuButton = (props: HeaderMenuButtonProps) => {
   const { type, stateValue, setter } = props;
   const userId = useAppSelector(user).id;
+  const avatarUrl = useAppSelector(user).avatarUrl;
   const basicHeaderButtonStyle = `relative w-10 h-10 flex flex-col gap-1.5 items-center rounded-full overflow-hidden
   focus:outline-none focus:ring-4 focus:ring-offset-0 focus:ring-white/5 focus:scale-110 
   hover:outline-none hover:ring-4 hover:ring-offset-0 hover:ring-white/5 hover:scale-110
@@ -38,7 +39,7 @@ const HeaderMenuButton = (props: HeaderMenuButtonProps) => {
             <div className={burgerLineStyle + `${stateValue && ' -rotate-45 -translate-y-2'}`} />
           </>
         ) :
-          <Avatar id={userId ? userId : 0} pseudo='me'/>
+          <Avatar id={userId ? userId : 0} pseudo='moi' avatarUrl={avatarUrl}/>
       }
     </button>
   );

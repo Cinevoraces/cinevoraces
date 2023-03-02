@@ -191,9 +191,9 @@ const Home: NextPage<HomeProps> = (props) => {
               alt="Discord invite"
               width={1005}
               height={856}
-              className="flex-1 w-5/6 max-w-lg min-w-[300px] rounded-xl"
+              className="flex-0 w-5/6 max-w-lg min-w-[300px] rounded-xl"
             />
-            <div className="flex flex-col items-center gap-6 md:items-end">
+            <div className="w-full flex flex-col items-center gap-6 md:items-end">
               <h2 className={h2Style + 'mb-8 hidden md:block'}>Rejoignez le serveur Discord</h2>
               <p>
                 Vous souhaitez rejoindre la communauté active de Cinévoraces ? <br />

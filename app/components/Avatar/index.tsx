@@ -7,6 +7,7 @@ interface AvatarProps {
   id: number;
   pseudo: string;
   interactive?: boolean;
+  avatarUrl?: string;
 }
 
 const baseStyle = 'w-[35px] h-[35px] p-0.5 border border-white rounded-full lg:w-[45px] lg:h-[45px]';
@@ -19,11 +20,12 @@ transition duration-150 hover:ease-out`;
  * @param id
  * @param pseudo
  * @param interactive facultative to use it as link
+ * @param avatarUrl used for user button menu and user card in users/me private user page
  * @returns <Link> encapsulating the avatar picture of the concerned user
  */
-const Avatar = ({ id, pseudo, interactive }: AvatarProps) => {
+const Avatar = ({ id, pseudo, interactive, avatarUrl }: AvatarProps) => {
   // Trick the browser to consider the latest version of the avatar
-  const url = `${process.env.NEXT_PUBLIC_API_BASE_URL_SSR}/public/avatar/${id}`;
+  const url = avatarUrl ? avatarUrl :`${process.env.NEXT_PUBLIC_API_BASE_URL_SSR}/public/avatar/${id}`;
   const [source, setSource] = useState(url);
   return (
     <>
@@ -32,7 +34,7 @@ const Avatar = ({ id, pseudo, interactive }: AvatarProps) => {
           ? (<Link href={`/membres/${id}`}>
             <Image
               src={source}
-              alt={pseudo === 'me' ? 'mon avatar' : `avatar de ${pseudo}`}
+              alt={pseudo === 'moi' ? 'mon avatar' : `avatar de ${pseudo}`}
               height={50}
               width={50}
               className={baseStyle + animationStyle}
@@ -41,8 +43,8 @@ const Avatar = ({ id, pseudo, interactive }: AvatarProps) => {
             />
           </Link>)
           : (<Image
-            src={source + `?${Date.now().toString()}`} // Specific treatment to handle avatar modification
-            alt={pseudo === 'me' ? 'mon avatar' : `avatar de ${pseudo}`}
+            src={source} // Specific treatment to handle avatar modification
+            alt={pseudo === 'moi' ? 'mon avatar' : `avatar de ${pseudo}`}
             height={50}
             width={50}
             className={baseStyle}

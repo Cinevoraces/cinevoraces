@@ -38,7 +38,7 @@ const Layout = ({ children }: LayoutProps) => {
           className: '',
           duration: 5000,
           style: {
-            background: '#8A8A92',
+            background: '#F2F2F3',
             color: '#000',
             fontWeight: 'semibold'
           },
