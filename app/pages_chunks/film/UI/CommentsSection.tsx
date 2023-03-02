@@ -12,6 +12,8 @@ import RichText from '@components/RichText';
 import type { Comment } from 'models/custom_types/movies';
 import type { FormEventHandler } from 'react';
 
+import { backgroundColorStyles } from '@components/PostCard';
+
 interface CommentsSectionProps {
   comments: Comment[];
   onSubmit: FormEventHandler;
@@ -19,6 +21,13 @@ interface CommentsSectionProps {
 
 const CommentsSection = forwardRef<HTMLTextAreaElement, CommentsSectionProps>(({ comments, onSubmit }, ref) => {
   CommentsSection.displayName = 'CommentsSection';
+  // Internal params
+  const maxDisplayChar = 650;
+  // const backgroundColorStyles = [
+  //   'bg-lime-800',
+  //   'bg-white',
+  //   'bg-purple',
+  // ];
   // Special state to handle form rendering
   const [isCommentFormOpened, setIsCommentFormOpened] = useState(false);
   const [isEditionFormOpened, setIsEditionFormOpened] = useState(false);
@@ -46,10 +55,13 @@ const CommentsSection = forwardRef<HTMLTextAreaElement, CommentsSectionProps>(({
   const [commentsExpansionStates, setCommentsExpansionStates] = useState(comments.map((c: Comment) => false));
   useEffect(() => {
     setOrderedComments(reorderComments(id, comments));
-    setCutComments(orderedComments.map((c: Comment) => cutText(c.comment, 700)));
-    setCommentsExpansionStates(comments.map((c: Comment) => false));
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id, comments]);
+  useEffect(() => {
+    setCutComments(orderedComments.map((c: Comment) => cutText(c.comment, maxDisplayChar)));
+    setCommentsExpansionStates(orderedComments.map((c: Comment) => false));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id, orderedComments]);
   const toggleCommentExpansion = (index: number) => {
     const newState = commentsExpansionStates.map((ces: boolean, i: number) => (index === i ? !ces : ces));
     setCommentsExpansionStates(newState);
@@ -133,9 +145,11 @@ const CommentsSection = forwardRef<HTMLTextAreaElement, CommentsSectionProps>(({
                   style={props}
                   key={index}>
                   <PostCard
+                    // Dual key is necessary as animation key and postcard keys allow to reorder cards without bugs such as misplaced avatars
                     key={orderedComments[index].author_pseudo}
                     type="comment"
-                    {...orderedComments[index]}>
+                    {...orderedComments[index]}
+                    backgroundColorStyle={backgroundColorStyles[index % backgroundColorStyles.length]}>
                     {
                       // Go into edition mode
                       isEditionFormOpened && id === orderedComments[index].author_id ? (
@@ -192,7 +206,7 @@ const CommentsSection = forwardRef<HTMLTextAreaElement, CommentsSectionProps>(({
                                   Éditer
                                 </Button>
                               )}
-                              {orderedComments[index].comment.length > 700 && (
+                              {orderedComments[index].comment.length > maxDisplayChar && (
                                 <Button
                                   onClick={() => toggleCommentExpansion(index)}
                                   customStyle="rounded">
