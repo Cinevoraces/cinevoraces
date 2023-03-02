@@ -6,7 +6,7 @@ COPY . ./
 
 # building the app
 RUN npm i
-RUN npm i sharp
+RUN yarn add sharp
 RUN npm run build
 
 # Running the app
