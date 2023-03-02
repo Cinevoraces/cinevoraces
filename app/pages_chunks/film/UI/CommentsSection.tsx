@@ -22,12 +22,7 @@ interface CommentsSectionProps {
 const CommentsSection = forwardRef<HTMLTextAreaElement, CommentsSectionProps>(({ comments, onSubmit }, ref) => {
   CommentsSection.displayName = 'CommentsSection';
   // Internal params
-  const maxDisplayChar = 650;
-  // const backgroundColorStyles = [
-  //   'bg-lime-800',
-  //   'bg-white',
-  //   'bg-purple',
-  // ];
+  const maxDisplayChar = 500;
   // Special state to handle form rendering
   const [isCommentFormOpened, setIsCommentFormOpened] = useState(false);
   const [isEditionFormOpened, setIsEditionFormOpened] = useState(false);

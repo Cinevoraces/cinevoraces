@@ -12,7 +12,7 @@ interface PostCardProps {
   backgroundColorStyle?: string;
 }
 
-const basicStyle = 'w-full p-3 rounded-xl drop-shadow-sm flex flex-col gap-4 h-fit min-h-[350px] ';
+const basicStyle = 'w-full p-3 rounded-xl drop-shadow-sm flex flex-col gap-4 h-fit min-h-[300px] ';
 const presentationStyle = basicStyle + 'bg-medium-gray ';
 const formStyle = basicStyle + 'bg-card-bg-one';
 
