@@ -17,11 +17,13 @@ const submitSuccess = async (
 export const handleAvatarUpload = async (
   e: React.FormEvent,
   avatar: File | undefined,
+  changeAvatarUrlState: ()=>void,
 ) => {
   e.preventDefault();
   const formData = new FormData();
   if (avatar) {
     formData.append('avatar', avatar, avatar.name);
     tryCatchWrapper(submitSuccess)('PUT', '/users/avatar', formData);
+    changeAvatarUrlState();
   }
 };

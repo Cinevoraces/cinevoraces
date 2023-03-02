@@ -7,10 +7,11 @@ import Button from '@components/Input/Button';
 import SendLogo from '@public/icons/send-icon.svg';
 import { File } from '@components/Input';
 import { matchingErrorMessage, handleTextSubmit } from '../business_logic/textFormSubmit';
-import { handleAvatarUpload } from '../business_logic/profilePicFormSubmit'; 
+import { handleAvatarUpload } from '../business_logic/profilePicFormSubmit';
 import type { RefObject } from 'react';
 import type { KeyedMutator } from 'swr';
 import type { User } from 'models/custom_types/index';
+import { user, setUserModification } from '@store/slices/user';
 
 interface ParameterFormInterface {
   mutate: KeyedMutator<User[]>;
@@ -21,31 +22,36 @@ const ParameterForm = ({ mutate, mail }: ParameterFormInterface) => {
   const isPWVisible = useAppSelector(global).arePWVisible;
   const dispatch = useAppDispatch();
 
+  const avatarUrl = useAppSelector(user).avatarUrl;
+
   const emailRef = useRef<HTMLInputElement>(null);
   const usernameRef = useRef<HTMLInputElement>(null);
   const PWRef = useRef<HTMLInputElement>(null);
   const newPWRef = useRef<HTMLInputElement>(null);
   const confirmNewPWRef = useRef<HTMLInputElement>(null);
   const allInputsRef: {[key: string]: RefObject<HTMLInputElement> } = {
-    'emailRef': emailRef, 
-    'usernameRef': usernameRef, 
-    'PWRef': PWRef, 
-    'newPWRef': newPWRef, 
-    'confirmNewPWRef': confirmNewPWRef };
+    emailRef: emailRef,
+    usernameRef: usernameRef,
+    PWRef: PWRef,
+    newPWRef: newPWRef,
+    confirmNewPWRef: confirmNewPWRef,
+  };
 
   const [arePWMatching, setArePWMatching] = useState(true);
 
   const helpingTextStyle = 'px-1 text-sm font-light italic text-gray-300';
 
   const [avatar, setAvatar] = useState<File>();
+  const changeAvatarUrlState = () =>
+    dispatch(setUserModification({ avatarUrl: avatarUrl + `?${Date.now().toString()}` }));
 
   return (
     <div className="flex flex-col gap-6">
-      <form 
+      <form
         action="submit"
         className="flex flex-col gap-6 w-full max-w-xl border border-transparent px-6 py-4"
-        onSubmit={(e) => handleAvatarUpload(e, avatar)}>
-        <File fileSetter={setAvatar}/>
+        onSubmit={(e) => handleAvatarUpload(e, avatar, changeAvatarUrlState)}>
+        <File fileSetter={setAvatar} />
         <div className="flex justify-end">
           <Button customStyle="rounded">
             <Image
@@ -60,16 +66,7 @@ const ParameterForm = ({ mutate, mail }: ParameterFormInterface) => {
       </form>
       <form
         action="submit"
-        onSubmit={async (e) =>
-          handleTextSubmit(
-            e,
-            allInputsRef,
-            arePWMatching,
-            setArePWMatching,
-            mutate,
-            dispatch,
-          )
-        }
+        onSubmit={async (e) => handleTextSubmit(e, allInputsRef, arePWMatching, setArePWMatching, mutate, dispatch)}
         className="flex flex-col w-full gap-6 max-w-xl border px-6 py-4 border-orange-primary rounded-xl">
         <div className="flex flex-col gap-1">
           <RefTextInput

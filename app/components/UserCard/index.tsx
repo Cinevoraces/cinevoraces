@@ -1,5 +1,7 @@
 import Avatar from '@components/Avatar';
 import dateFormater from '@utils/dateFormater';
+import { useAppSelector } from '@store/store';
+import { user as userSlice } from '@store/slices/user';
 
 import type { User } from 'models/custom_types/index';
 import { Roles } from 'models/enums';
@@ -18,6 +20,8 @@ interface UserCardProps {
  * @returns <div> wrapper for a user tile that can be filled with extra elements
  */
 const UserCard = ({ user, type, children }: UserCardProps) => {
+  // Retrieving user slice state for personnal avatar use
+  const avatarUrl = useAppSelector(userSlice).avatarUrl;
   return (
     <div
       id="user-card"
@@ -27,6 +31,7 @@ const UserCard = ({ user, type, children }: UserCardProps) => {
           id={user.id}
           pseudo={user.pseudo}
           interactive={false}
+          avatarUrl={type ? avatarUrl : undefined}
         />
         <h2 className="title-section">{user.pseudo}</h2>
       </div>
