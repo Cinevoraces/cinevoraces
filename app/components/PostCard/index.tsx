@@ -14,7 +14,7 @@ interface PostCardProps {
 
 const basicStyle = 'w-full p-3 rounded-xl drop-shadow-sm flex flex-col gap-4 h-fit';
 const presentationStyle = basicStyle + ' bg-medium-gray ';
-const formStyle = basicStyle + 'bg-card-one';
+const formStyle = basicStyle + ' bg-card-one';
 
 // Background variables must be declared inside component code and be imported with the component.
 // Could a bug due to tailwind compilation procedure
