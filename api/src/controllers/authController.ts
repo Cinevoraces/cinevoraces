@@ -10,7 +10,7 @@ import {
   EResponseMessages,
 } from '../models/enums/_index';
 
-const aTokenOptions = { expiresIn: 60 };
+const aTokenOptions = { expiresIn: 600 };
 const rTokenOptions = { expiresIn: '1d' };
 
 /**
