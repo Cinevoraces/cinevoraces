@@ -6,7 +6,7 @@ COPY . ./
 
 # building the app
 RUN npm i
-RUN yarn add sharp
+RUN export NEXT_SHARP_PATH=/tmp/node_modules/sharp
 RUN npm run build
 
 # Running the app
