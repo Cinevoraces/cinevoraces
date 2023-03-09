@@ -50,7 +50,7 @@ const Home: NextPage<HomeProps> = (props) => {
     <>
       <CustomHead
         title="Cinévoraces - Accueil"
-        description="Votre ciné-club distantiel"
+        description="Découvrez les derniers films proposés dans votre ciné-club distantiel !"
         slug=""
       />
       <main>
