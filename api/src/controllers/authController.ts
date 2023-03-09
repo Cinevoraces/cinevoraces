@@ -33,6 +33,11 @@ export default async (fastify: FastifyInstance) => {
       const { _errorService, _authService } = this;
       const { body } = request;
 
+      // 'moi' endpoint is used for private user pages
+      // forbiddenPseudos could be filled later whith bad words
+      const forbiddenPseudos = ['moi'];
+      if (forbiddenPseudos.includes(body.pseudo))
+        _errorService.send(EErrorMessages.FORBIDDEN_PSEUDO, 409);
       // Duplicate check
       const user = await _authService.getUserByPseudoOrMail(body.pseudo, body.mail);
       if (user && body.mail === user.mail)
