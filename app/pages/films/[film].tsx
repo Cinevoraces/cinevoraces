@@ -139,7 +139,7 @@ const Film: NextPage<FilmProps> = ({ movies }) => {
         title={`Cinévoraces - ${french_title}`}
         description={`Découvrez ${french_title}, recommandé par ${movie.presentation.author_pseudo}`}
         slug={router.asPath}
-        imageUrl={`${process.env.NEXT_PUBLIC_API_BASE_URL_SSR}/public/poster/${movie.id}`}
+        imageUrl={`https://cinevoraces.fr/api/public/poster/${movie.id}`}
       />
       <main className="custom-container ">
         {Object.keys(movie).length === 0 && <p>Loading</p>}
