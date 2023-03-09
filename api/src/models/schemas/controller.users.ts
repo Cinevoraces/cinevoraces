@@ -1,7 +1,62 @@
 import { ESchemasIds } from '../enums/_index';
 
-export const GETUsers = {
-  $id: ESchemasIds.GETUsers,
+export const GETPublicUsers = {
+  $id: ESchemasIds.GETPublicUsers,
+  description: `
+  **Get public users**.
+  Use query parameters to populate the results using the following format: */users?select[reviews]=true&where[id]=1*  
+  **Available filters:**
+  - where[id] -> number
+  - where[pseudo] -> string
+  - where[mail] -> string
+  - where[role] -> string
+
+  **Available populators**
+  - select[propositions] -> boolean
+  - select[movies] -> boolean
+  - select[reviews] -> boolean
+  - select[metrics] -> boolean
+
+  **Misc:**
+  - limit -> number: *limit the number of results*.
+  - sort -> 'asc' | 'desc' as string *(Will sort by id)*
+  `,
+  tags: ['Users'],
+  querystring: {
+    type: 'object',
+    properties: {
+      where: {
+        type: 'object',
+        properties: {
+          id: { type: 'number' },
+          pseudo: { type: 'string' },
+          mail: { type: 'string' },
+          role: { type: 'string' },
+        },
+      },
+      select: {
+        type: 'object',
+        properties: {
+          propositions: { type: 'boolean' },
+          movies: { type: 'boolean' },
+          reviews: { type: 'boolean' },
+          metrics: { type: 'boolean' },
+        },
+      },
+      limit: { type: 'number' },
+      sort: { type: 'string' },
+    },
+  },
+  response: {
+    200: {
+      type: 'array',
+      items: { $ref: `${ESchemasIds.IPublicUser}#` },
+    },
+  },
+};
+
+export const GETPrivateUsers = {
+  $id: ESchemasIds.GETPrivateUsers,
   description: `
   **Get users**.
   Use query parameters to populate the results using the following format: */users?select[reviews]=true&where[id]=1*  
@@ -50,7 +105,7 @@ export const GETUsers = {
   response: {
     200: {
       type: 'array',
-      items: { $ref: `${ESchemasIds.IUser}#` },
+      items: { $ref: `${ESchemasIds.IPrivateUser}#` },
     },
   },
 };

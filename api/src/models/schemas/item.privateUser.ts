@@ -1,7 +1,7 @@
 import { ESchemasIds } from '../enums/_index';
 
-export const IUser = {
-  $id: ESchemasIds.IUser,
+export const IPrivateUser = {
+  $id: ESchemasIds.IPrivateUser,
   type: 'object',
   properties: {
     id: { type: 'number' },

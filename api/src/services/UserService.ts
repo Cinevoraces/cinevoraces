@@ -16,20 +16,23 @@ class UserService extends DatabaseService {
   /**
    * @description Get users using query parameters.
    * @param {object} query object containing queries parameters
+   * @param {boolean} query determines if selected infos are public or private
+   * @param {number} id facultative user's id in case of fetching users/me endpoint
    * @returns Array of users.
    */
   public async getUsersByQuery(
-    query: PQuerystring
+    query: PQuerystring, isPrivate: boolean, id?: number,
   ): Promise<{ rowCount: number; rows: Array<PUser> }> {
     const enums = {
-      where: ['id', 'pseudo', 'mail', 'role'],
+      where: !id ? ['id', 'pseudo', 'mail', 'role'] : ['pseudo', 'mail', 'role'], // No WHERE id clause for users/me endpoint
       select: ['propositions', 'reviews', 'metrics', 'movies'],
     };
 
     const { select, where, limit, sort } = query;
     let values = [] as Array<unknown>,
       SELECT: string = undefined,
-      WHERE = { query: '', count: 0, values: [] as Array<unknown> },
+      WHERE = !id ? { query: '', count: 0, values: [] as Array<unknown> } 
+        : { query: 'id', count: 1, values: [id]},
       ORDERBY = '',
       LIMIT = '';
 
@@ -52,7 +55,7 @@ class UserService extends DatabaseService {
     }
 
     const { rowCount, rows } = await this.requestDatabase({
-      text: ` SELECT id, pseudo, mail, role, created_at, updated_at
+      text: ` SELECT id, pseudo, ${isPrivate ? 'mail, ': ''}role, created_at, updated_at
               ${SELECT ? `,${SELECT}` : ''}
               FROM userview
               ${WHERE?.count ? `WHERE ${WHERE.query}` : ''}

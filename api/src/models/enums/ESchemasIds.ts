@@ -27,7 +27,8 @@ export enum ESchemasIds {
   // Seasons API schemas
   GETSeasons = 'GET/seasons',
   // Users API schemas
-  GETUsers = 'GET/users',
+  GETPublicUsers = 'GET/users',
+  GETPrivateUsers = 'GET/users/me',
   PUTUsers = 'PUT/users',
   PUTUsersAvatar = 'PUT/users/avatar',
   // Global schemas
@@ -40,5 +41,6 @@ export enum ESchemasIds {
   IReducedMovie = 'IReducedMovie',
   IReview = 'IReview',
   ISeason = 'ISeason',
-  IUser = 'IUser',
+  IPublicUser = 'IPublicUser',
+  IPrivateUser = 'IPrivateUser',
 }

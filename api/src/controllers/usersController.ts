@@ -12,16 +12,36 @@ import { ESchemasIds, EResponseMessages, EErrorMessages, EMimeType } from '../mo
 export default async (fastify: FastifyInstance) => {
 
   /**
-   * @description Get users according to query.
+   * @description Get users according to query. Public datas only.
    * @route GET /users
    */
   fastify.route({
     method: 'GET',
     url: '/users',
-    schema: fastify.getSchema(ESchemasIds.GETUsers),
+    schema: fastify.getSchema(ESchemasIds.GETPublicUsers),
     handler: async function (request: Request, reply: Reply) {
       const { _errorService, _userService } = this;
-      const { rowCount, rows } = await _userService.getUsersByQuery(request.query);
+      const { rowCount, rows } = await _userService.getUsersByQuery(request.query, false);
+      if (!rowCount)
+        _errorService.send(EErrorMessages.NOT_FOUND, 404);
+      reply
+        .code(200)
+        .send(rows);
+    },
+  });
+
+  /**
+   * @description Get users according to query. Private datas included.
+   * @route GET /users/me
+   */
+  fastify.route({
+    method: 'GET',
+    url: '/users/me',
+    schema: fastify.getSchema(ESchemasIds.GETPrivateUsers),
+    onRequest: [fastify.verifyAccessToken],
+    handler: async function (request: Request, reply: Reply) {
+      const { _errorService, _userService } = this;
+      const { rowCount, rows } = await _userService.getUsersByQuery(request.query, false);
       if (!rowCount)
         _errorService.send(EErrorMessages.NOT_FOUND, 404);
       reply
@@ -119,7 +139,7 @@ export default async (fastify: FastifyInstance) => {
       const { _errorService, _userService } = this;
       const { id } = request.params;
       // Check if user exists
-      const { rowCount } = await _userService.getUsersByQuery({ where: { id } });
+      const { rowCount } = await _userService.getUsersByQuery({ where: { id } }, true);
       if (!rowCount)
         _errorService.send(EErrorMessages.NOT_FOUND, 404);
       // Delete user
