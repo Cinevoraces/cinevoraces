@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import Rate from '@components/Rate';
 import Avatar from '@components/Avatar';
 
@@ -69,7 +70,7 @@ const PostCard = ({
           <div
             id="post-infos"
             className="flex flex-col justify-between">
-            <p className="text-lg font-medium">{author_pseudo}</p>
+            <Link className="text-lg font-medium hover:underline transition ease-out " href={`/membres/${author_pseudo}`}>{author_pseudo}</Link>
             <p className="text-xs">
               {publishing_date &&
                 new Date(publishing_date.slice(0, 10)).toLocaleDateString('fr-FR', {
