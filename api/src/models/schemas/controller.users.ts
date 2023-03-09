@@ -57,6 +57,7 @@ export const GETPublicUsers = {
 
 export const GETPrivateUsers = {
   $id: ESchemasIds.GETPrivateUsers,
+  summary: '(TOKEN REQUIRED)',
   description: `
   **Get users**.
   Use query parameters to populate the results using the following format: */users?select[reviews]=true&where[id]=1*  
