@@ -16,13 +16,15 @@ class UserService extends DatabaseService {
   /**
    * @description Get users using query parameters.
    * @param {object} query object containing queries parameters
+   * @param {boolean} query determines if selected infos are public or private
+   * @param {number} id facultative user's id in case of fetching users/me endpoint
    * @returns Array of users.
    */
   public async getUsersByQuery(
-    query: PQuerystring
+    query: PQuerystring, isPrivate: boolean, id?: number,
   ): Promise<{ rowCount: number; rows: Array<PUser> }> {
     const enums = {
-      where: ['id', 'pseudo', 'mail', 'role'],
+      where: isPrivate ? [] : ['id', 'pseudo', 'mail', 'role'], // No WHERE clause for users/me
       select: ['propositions', 'reviews', 'metrics', 'movies'],
     };
 
@@ -42,6 +44,11 @@ class UserService extends DatabaseService {
       WHERE = this.reduceWhere(where, 'AND', enums.where);
       values = WHERE.values as Array<unknown>;
     }
+    // Specific WHERE query for /users/me endpoint
+    if (isPrivate) {
+      WHERE = { query: 'id=$1', count: 1, values: [id] as Array<unknown> };
+      values = WHERE.values;
+    }
     // Build ORDERBY query
     if (sort === 'asc' || sort === 'desc') {
       ORDERBY = `ORDER BY id ${sort}`;
@@ -52,7 +59,7 @@ class UserService extends DatabaseService {
     }
 
     const { rowCount, rows } = await this.requestDatabase({
-      text: ` SELECT id, pseudo, mail, role, created_at, updated_at
+      text: ` SELECT id, pseudo, ${isPrivate ? 'mail, ': ''}role, created_at, updated_at
               ${SELECT ? `,${SELECT}` : ''}
               FROM userview
               ${WHERE?.count ? `WHERE ${WHERE.query}` : ''}
@@ -60,6 +67,13 @@ class UserService extends DatabaseService {
               ${LIMIT};`,
       values,
     });
+
+    console.log(` SELECT id, pseudo, ${isPrivate ? 'mail, ': ''}role, created_at, updated_at
+    ${SELECT ? `,${SELECT}` : ''}
+    FROM userview
+    ${WHERE?.count ? `WHERE ${WHERE.query}` : ''}
+    ${ORDERBY}
+    ${LIMIT};`, values);
 
     return { rowCount, rows };
   }
