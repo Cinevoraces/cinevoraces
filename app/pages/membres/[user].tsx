@@ -30,7 +30,7 @@ const User = ({ user }: UserProps) => {
         title={`Cinévoraces - Profil de ${user.pseudo}`}
         description={`Découvrez le profil de ${user.pseudo}.`}
         slug={router.asPath}
-        imageUrl={`${process.env.NEXT_PUBLIC_API_BASE_URL_SSR}/public/avatar/${user.id}`}
+        imageUrl={`https://cinevoraces.fr/api/public/avatar/${user.id}`}
       />
       <main className="grow flex flex-col justify-start">
         <h1 className="custom-container grow-0 pb-4 hero-text text-center">
