@@ -10,9 +10,6 @@ import UserMetrics from 'pages_chunks/user/UI/UserMetrics';
 import UserCard from '@components/UserCard';
 import PendingProposition from 'pages_chunks/user/UI/PendingProposition';
 
-import { useEffect } from 'react';
-import type { User } from '@custom_types/index';
-
 const Moi: NextPage = () => {
   const userId = useAppSelector(user).id?.toString();
   console.log('userId : ', userId);
@@ -21,12 +18,6 @@ const Moi: NextPage = () => {
   const { data: userData, error, mutate } = useSWR(
     () => userId && '/users/me?select[metrics]=true&select[propositions]=true'
   );
-  // const users = useSWR('/users');
-  const userProfile = useSWR('/users?select[metrics]=true&where[pseudo]=Checco');
-  useEffect(()=> {
-    // users && console.log(users.data.map((user: User) => ({ params: { user: user.pseudo } })));
-    userProfile && console.log(userProfile.data);
-  }, [userProfile]);
 
   return (
     <>
