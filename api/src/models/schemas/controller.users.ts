@@ -61,11 +61,7 @@ export const GETPrivateUsers = {
   description: `
   **Get users**.
   Use query parameters to populate the results using the following format: */users?select[reviews]=true&where[id]=1*  
-  **Available filters:**
-  - where[id] -> number
-  - where[pseudo] -> string
-  - where[mail] -> string
-  - where[role] -> string
+  **No available filters:**
 
   **Available populators**
   - select[propositions] -> boolean
@@ -81,15 +77,6 @@ export const GETPrivateUsers = {
   querystring: {
     type: 'object',
     properties: {
-      where: {
-        type: 'object',
-        properties: {
-          id: { type: 'number' },
-          pseudo: { type: 'string' },
-          mail: { type: 'string' },
-          role: { type: 'string' },
-        },
-      },
       select: {
         type: 'object',
         properties: {

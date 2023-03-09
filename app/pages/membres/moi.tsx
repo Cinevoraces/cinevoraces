@@ -3,7 +3,7 @@ import { useState } from 'react';
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import useSWR from 'swr';
-import { User } from 'models/custom_types/index';
+import type { User } from 'models/custom_types/index';
 import { useAppSelector } from '@store/store';
 import { user } from 'store/slices/user';
 import Loader from '@components/Loader';
@@ -13,19 +13,17 @@ import UserCard from '@components/UserCard';
 import useRefreshUserData from 'pages_chunks/user/business_logic/useRefreshUserData';
 import PendingProposition from 'pages_chunks/user/UI/PendingProposition';
 
-const User: NextPage = () => {
+const Moi: NextPage = () => {
   const userId = useAppSelector(user).id?.toString();
+  console.log('userId : ', userId);
   // Retrieve asked member id
   const router = useRouter();
   // Next initializes the slug with a generic [user] string, this prevents unnecessary fetches and downstream errors
-  // const { data: userData, error, mutate } = useSWR(
-  //   () => userId && userId !== '[user]' ? '/users/me?select[metrics]=true&select[propositions]=true' : ''
-  // );
   const { data: userData, error, mutate } = useSWR(
-    () => userId && userId !== '[user]' ? '/users/me' : ''
+    () => userId && '/users/me?select[metrics]=true&select[propositions]=true'
   );
-  const [askedUser, setAskedUser] = useState<User | undefined>(undefined);
-  useRefreshUserData(userId, userData, mutate, setAskedUser, userId);
+  // const [askedUser, setAskedUser] = useState<User | undefined>(undefined);
+  // useRefreshUserData(userId, userData, mutate, setAskedUser);
 
   return (
     <>
@@ -33,7 +31,7 @@ const User: NextPage = () => {
         title='Cinévoraces - Modifier votre profil'
         description="Page d'administration de votre profil"
         slug={router.asPath}
-        imageUrl={askedUser?.id ? `${process.env.NEXT_PUBLIC_API_BASE_URL_SSR}/public/avatar/${askedUser?.id}` : undefined}
+        imageUrl={userId ? `${process.env.NEXT_PUBLIC_API_BASE_URL_SSR}/public/avatar/${userId}` : undefined}
       />
       <main className="grow flex flex-col justify-start">
         <h1 className="custom-container grow-0 pb-4 hero-text text-center">
@@ -51,21 +49,21 @@ const User: NextPage = () => {
                 <p className="custom-container grow-0">Une erreur est survenue. Veuillez réessayer plus tard.</p>
               ) : (
               // Fetched data
-                askedUser && (
+                userData[0] && (
                   <>
                     <section
                       id="public_section"
                       className="custom-container grow-0">
-                      <UserCard user={askedUser} type={router.asPath.includes('moi') ? 'personal' : undefined}/>
-                      <UserMetrics {...askedUser} />
+                      <UserCard user={userData[0]} type={router.asPath.includes('moi') ? 'personal' : undefined}/>
+                      <UserMetrics {...userData[0]} />
                     </section>
                     <section
                       id="private_section"
                       className="flex flex-col gap-6">
-                      <PendingProposition propositions={askedUser.propositions}/>
+                      <PendingProposition propositions={userData[0].propositions}/>
                       <div className="custom-container grow-0 pt-4">
                         <h2 className="title-section">Changer mes paramètres</h2>
-                        <ParameterForm mutate={mutate} mail={askedUser.mail}/>
+                        <ParameterForm mutate={mutate} mail={userData[0].mail}/>
                       </div>
                     </section>
                   </>
@@ -77,4 +75,4 @@ const User: NextPage = () => {
   );
 };
 
-export default User;
+export default Moi;

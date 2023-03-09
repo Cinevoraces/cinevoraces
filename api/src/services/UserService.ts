@@ -24,15 +24,14 @@ class UserService extends DatabaseService {
     query: PQuerystring, isPrivate: boolean, id?: number,
   ): Promise<{ rowCount: number; rows: Array<PUser> }> {
     const enums = {
-      where: !id ? ['id', 'pseudo', 'mail', 'role'] : ['pseudo', 'mail', 'role'], // No WHERE id clause for users/me endpoint
+      where: !isPrivate ? [] : ['id', 'pseudo', 'mail', 'role'], // No WHERE clause for users/me
       select: ['propositions', 'reviews', 'metrics', 'movies'],
     };
 
     const { select, where, limit, sort } = query;
     let values = [] as Array<unknown>,
       SELECT: string = undefined,
-      WHERE = !id ? { query: '', count: 0, values: [] as Array<unknown> } 
-        : { query: 'id', count: 1, values: [id]},
+      WHERE = { query: '', count: 0, values: [] as Array<unknown> },
       ORDERBY = '',
       LIMIT = '';
 
@@ -44,6 +43,11 @@ class UserService extends DatabaseService {
     if (where) {
       WHERE = this.reduceWhere(where, 'AND', enums.where);
       values = WHERE.values as Array<unknown>;
+    }
+    // Specific WHERE query for /users/me endpoint
+    if (isPrivate) {
+      WHERE = { query: 'id=$1', count: 1, values: [id] as Array<unknown> };
+      values = WHERE.values;
     }
     // Build ORDERBY query
     if (sort === 'asc' || sort === 'desc') {
