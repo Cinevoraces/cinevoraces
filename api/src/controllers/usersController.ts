@@ -41,7 +41,7 @@ export default async (fastify: FastifyInstance) => {
     onRequest: [fastify.verifyAccessToken],
     handler: async function (request: Request, reply: Reply) {
       const { _errorService, _userService } = this;
-      const { rowCount, rows } = await _userService.getUsersByQuery(request.query, false);
+      const { rowCount, rows } = await _userService.getUsersByQuery(request.query, false, request.user.id);
       if (!rowCount)
         _errorService.send(EErrorMessages.NOT_FOUND, 404);
       reply
