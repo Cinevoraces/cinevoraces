@@ -24,7 +24,7 @@ const CustomHead = ({ title, description, slug, imageUrl }: HeadProps) => {
       <meta property="og:type" content='website'/>
       <meta property="og:title" content={title}/>
       <meta property="og:description" content={description}/>
-      <meta property="og:image" content={(imageUrl) ? imageUrl : '/mstile-150x150.png'}/>
+      <meta property="og:image" content={(imageUrl) ? imageUrl : 'mstile-150x150.png'}/>
       <meta name="theme-color" content="#202029"/>
       <meta name="twitter:card" content="summary_large_image"></meta>
     </Head>
