@@ -1,29 +1,32 @@
 import CustomHead from '@components/Head';
-import { useState } from 'react';
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import useSWR from 'swr';
-import type { User } from 'models/custom_types/index';
 import { useAppSelector } from '@store/store';
 import { user } from 'store/slices/user';
 import Loader from '@components/Loader';
 import ParameterForm from 'pages_chunks/user/UI/ParameterForm';
 import UserMetrics from 'pages_chunks/user/UI/UserMetrics';
 import UserCard from '@components/UserCard';
-import useRefreshUserData from 'pages_chunks/user/business_logic/useRefreshUserData';
 import PendingProposition from 'pages_chunks/user/UI/PendingProposition';
+
+import { useEffect } from 'react';
+import type { User } from '@custom_types/index';
 
 const Moi: NextPage = () => {
   const userId = useAppSelector(user).id?.toString();
   console.log('userId : ', userId);
   // Retrieve asked member id
   const router = useRouter();
-  // Next initializes the slug with a generic [user] string, this prevents unnecessary fetches and downstream errors
   const { data: userData, error, mutate } = useSWR(
     () => userId && '/users/me?select[metrics]=true&select[propositions]=true'
   );
-  // const [askedUser, setAskedUser] = useState<User | undefined>(undefined);
-  // useRefreshUserData(userId, userData, mutate, setAskedUser);
+  // const users = useSWR('/users');
+  const userProfile = useSWR('/users?select[metrics]=true&where[pseudo]=Checco');
+  useEffect(()=> {
+    // users && console.log(users.data.map((user: User) => ({ params: { user: user.pseudo } })));
+    userProfile && console.log(userProfile.data);
+  }, [userProfile]);
 
   return (
     <>

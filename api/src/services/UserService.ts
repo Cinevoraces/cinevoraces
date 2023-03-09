@@ -24,7 +24,7 @@ class UserService extends DatabaseService {
     query: PQuerystring, isPrivate: boolean, id?: number,
   ): Promise<{ rowCount: number; rows: Array<PUser> }> {
     const enums = {
-      where: !isPrivate ? [] : ['id', 'pseudo', 'mail', 'role'], // No WHERE clause for users/me
+      where: isPrivate ? [] : ['id', 'pseudo', 'mail', 'role'], // No WHERE clause for users/me
       select: ['propositions', 'reviews', 'metrics', 'movies'],
     };
 
@@ -67,6 +67,13 @@ class UserService extends DatabaseService {
               ${LIMIT};`,
       values,
     });
+
+    console.log(` SELECT id, pseudo, ${isPrivate ? 'mail, ': ''}role, created_at, updated_at
+    ${SELECT ? `,${SELECT}` : ''}
+    FROM userview
+    ${WHERE?.count ? `WHERE ${WHERE.query}` : ''}
+    ${ORDERBY}
+    ${LIMIT};`, values);
 
     return { rowCount, rows };
   }
