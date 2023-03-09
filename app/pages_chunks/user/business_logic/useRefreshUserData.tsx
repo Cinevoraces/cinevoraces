@@ -6,10 +6,10 @@ import type { KeyedMutator } from 'swr';
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const useRefreshUserData = (
   userId: string | undefined,
-  connectedUserId: string | undefined,
   userData: User[],
   mutate: KeyedMutator<unknown>,
-  setAskedUser: Dispatch<SetStateAction<User | undefined>>
+  setAskedUser: Dispatch<SetStateAction<User | undefined>>,
+  connectedUserId?: string,
 ) => {
   useEffect(() => {
     if (userId && userData && userData.length > 0) {

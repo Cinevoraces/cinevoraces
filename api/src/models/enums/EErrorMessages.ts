@@ -2,6 +2,7 @@
 export enum EErrorMessages {
   ADMIN_ONLY = 'Accès restreint aux administrateurs.',
   CLOUDINARY_FAILURE = 'Erreur lors de l\'upload de l\'image.',
+  FORBIDDEN_PSEUDO = 'Ce pseudo est réservé ou interdit',
   DUPLICATE_MAIL = 'Cette adresse mail est déjà associée à un compte',
   DUPLICATE_PSEUDO = 'Ce pseudo est déjà utilisé.',
   INVALID_FILE = 'Le fichier est invalide.',

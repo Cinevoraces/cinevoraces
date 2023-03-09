@@ -31,7 +31,7 @@ const Avatar = ({ id, pseudo, interactive, avatarUrl }: AvatarProps) => {
     <>
       { 
         interactive
-          ? (<Link href={`/membres/${id}`}>
+          ? (<Link href={`/membres/${pseudo}`}>
             <Image
               src={source}
               alt={pseudo === 'moi' ? 'mon avatar' : `avatar de ${pseudo}`}

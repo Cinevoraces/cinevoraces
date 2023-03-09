@@ -20,7 +20,7 @@ import {
 } from './controller.movies';
 import { PUTReviews } from './controller.reviews';
 import { GETSeasons } from './controller.seasons';
-import { GETUsers, PUTUsers, PUTUsersAvatar } from './controller.users';
+import { GETPublicUsers, GETPrivateUsers, PUTUsers, PUTUsersAvatar } from './controller.users';
 import { Error } from './Error';
 import { IEpisode } from './item.episode';
 import { IGlobalMetrics } from './item.metrics';
@@ -29,7 +29,8 @@ import { IMovie } from './item.movie';
 import { IReducedMovie } from './item.movie';
 import { IReview } from './item.review';
 import { ISeason } from './item.season';
-import { IUser } from './item.user';
+import { IPublicUser } from './item.publicUser';
+import { IPrivateUser } from './item.privateUser';
 
 /**
  * **Schemas Registration _index**
@@ -56,7 +57,8 @@ export default [
   PUTMovies,
   PUTReviews,
   GETSeasons,
-  GETUsers,
+  GETPublicUsers,
+  GETPrivateUsers,
   PUTUsers,
   PUTUsersAvatar,
   // Global schemas
@@ -69,5 +71,6 @@ export default [
   IReducedMovie,
   IReview,
   ISeason,
-  IUser,
+  IPublicUser,
+  IPrivateUser,
 ] as Array<FastifySchema>;
