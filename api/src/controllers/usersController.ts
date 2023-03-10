@@ -69,7 +69,7 @@ export default async (fastify: FastifyInstance) => {
 
       if (update_user.password) {
         // Test and Hash new password
-        if (!update_user.password.match(process.env.PASS_REGEXP))
+        if (!update_user.password.match(/^(?=.*[A-Z])(?=.*[!#$%*+=?|-])(?=.*\d)[!#$%*+=?|\-A-Za-z\d]{12,}$/))
           _errorService.send(EErrorMessages.INVALID_PASSWORD_FORMAT, 422);
 
         update_user.password = await _authService.hashString(update_user.password);
