@@ -1,17 +1,12 @@
 #!/bin/bash
-# -*- ENCODING: UTF-8 -*-
 
 echo 'Please enter a backup name, without the .tar extension. The tar archive must be placed inside data/backups folder, on host.'
 read
 source .env && cd data/backups
 echo "Unzipping backup archive..."
 tar -xvf ./$REPLY.tar 
-echo "Emptying api/public folder to prevent duplicates..."
 docker exec api rm -rf public
-echo "Copying api/public backup folder into container..."
 docker cp ./$REPLY/public api:/api
-echo "Restoring backup database..."
 docker exec postgres pg_restore -c --no-owner -v -U ${POSTGRES_USER} -d ${POSTGRES_DB} data/backups/$REPLY/database_$REPLY
-echo "Deleting unzipped backup folder"
 rm -rf $REPLY
 echo 'Backup restore achieved.'
