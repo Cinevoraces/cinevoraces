@@ -1,7 +1,7 @@
 #!/bin/bash
 
 backup_files=$(ls ./data/backups)
-source ./data/.env
+source .env
 
 if [ -z "$backup_files" ]; then
     echo "No backup files found."
@@ -22,7 +22,7 @@ select backup_file in $backup_files Cancel; do
                 sudo docker stop api
                 sudo docker stop app
                 sudo docker exec api rm -rf public
-                sudo docker cp "./data/backups/${backup_file%.*}/public" api:/api/public
+                sudo docker cp "./data/backups/${backup_file%.*}/public" api:/api
                 sudo docker exec postgres pg_restore -c --no-owner -v -U ${POSTGRES_USER} -d ${POSTGRES_DB} "./data/backups/${backup_file%.*}/database_${backup_file%.*}"
                 sudo docker start api
                 sudo docker start app
