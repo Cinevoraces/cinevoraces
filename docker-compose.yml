@@ -16,6 +16,11 @@ services:
     api:
         container_name: api
         hostname: cinevoraces_api
+        environment:
+            - API_PORT=3005
+            - ROOT_PATH=/api
+            - JWT_SECRET=secret
+            - COOKIE_SECRET=secret
         env_file:
             - .env
         depends_on:
@@ -33,10 +38,11 @@ services:
     app:
         container_name: app
         hostname: cinevoraces_app
+        environment:
+            - API_BASE_URL_CSR=http://localhost:3005
+            - API_BASE_URL_SSR=http://cinevoraces_api:3005
         env_file:
             - .env
-        environment:
-            - NEXT_PUBLIC_API_BASE_URL_CSR=http://localhost:3005
         depends_on:
             - postgres
             - api

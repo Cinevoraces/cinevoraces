@@ -18,21 +18,14 @@
 POSTGRES_PASSWORD=
 POSTGRES_USER=
 POSTGRES_DB=
-POSTGRES_URL='postgres://xxx:xxx@postgres:5432/xxx'
-POSTGRES_HOST=
+POSTGRES_HOST=postgres
 POSTGRES_PORT=5432
 
 # API
 CLOUDINARY_URL=
 PASS_REGEXP='^(?=.*[A-Z])(?=.*[!#$%*+=?|\-])(?=.*\d)[!#$%*+=?|\-A-Za-z\d]{12,}$'
-JWT_SECRET=secret
-COOKIE_SECRET=secret
-API_PORT=3005
-ROOT_PATH='/api'
 
 # APP
 TMDB_KEY=
-API_BASE_URL_CSR=/api
-API_BASE_URL_SSR=http://cinevoraces_api:3005
 DISCORD_INVITE_URL=
 ```
