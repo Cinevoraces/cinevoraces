@@ -1,8 +1,4 @@
 {
-  "name": "fastify-api",
-  "version": "0.0.1",
-  "description": "Fastify API",
-  "auhtor": "BenoitSafari",
   "scripts": {
     "dev": "tsc-watch --onSuccess \"node --inspect=0.0.0.0:9229 dist/src/server.js\"",
     "build": "tsc",

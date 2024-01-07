@@ -1,5 +1,6 @@
 {
     "name": "cinevoraces",
+    "version": "2.0.0",
     "scripts": {
         "i": "(cd api && npm install); (cd app && npm install)",
         "i:win": "cd api && npm install && cd .. && cd app && npm install",
