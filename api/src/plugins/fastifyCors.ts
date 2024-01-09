@@ -8,12 +8,12 @@ import plugin from 'fastify-plugin';
  * @see https://github.com/fastify/fastify-cors
  */
 export default plugin((async (fastify, opts, done) => {
-  fastify.register(FastifyCors, {
-    origin: ['http://localhost:3000'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
-    credentials: true,
-    ...opts,
-  });
-  
-  done();
+    fastify.register(FastifyCors, {
+        origin: ['http://localhost:3000'],
+        allowedHeaders: ['Content-Type', 'Authorization'],
+        credentials: true,
+        ...opts,
+    });
+
+    done();
 }) as FastifyPluginCallback);

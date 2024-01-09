@@ -9,23 +9,22 @@ import { Pool } from 'pg';
  * @see https://node-postgres.com/
  */
 export default plugin((async (fastify, opts, done) => {
-  // Check if plugin is already registered
-  if (fastify.hasDecorator('_postgres'))
-    return fastify.log.warn('_postgres already registered');
-  
-  const pool = new Pool({
-    user: process.env.POSTGRES_USER,
-    database: process.env.POSTGRES_DB,
-    password: process.env.POSTGRES_PASSWORD,
-    host: process.env.POSTGRES_HOST,
-    port: Number(process.env.POSTGRES_PORT),
-  });
-  const client = await pool.connect();
+    // Check if plugin is already registered
+    if (fastify.hasDecorator('_postgres')) return fastify.log.warn('_postgres already registered');
 
-  fastify.decorate('_postgres', {
-    pool,
-    client,
-  });
-  
-  done();
+    const pool = new Pool({
+        user: process.env.POSTGRES_USER,
+        database: process.env.POSTGRES_DB,
+        password: process.env.POSTGRES_PASSWORD,
+        host: process.env.POSTGRES_HOST,
+        port: Number(process.env.POSTGRES_PORT),
+    });
+    const client = await pool.connect();
+
+    fastify.decorate('_postgres', {
+        pool,
+        client,
+    });
+
+    done();
 }) as FastifyPluginCallback);

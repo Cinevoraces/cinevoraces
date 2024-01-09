@@ -12,11 +12,11 @@ import UserService from './UserService';
  * Add any new service to this array (order matters!).
  */
 export default [
-  fileService,
-  errorService,
-  dateService,
-  authService,
-  movieService,
-  reviewService,
-  UserService,
+    fileService,
+    errorService,
+    dateService,
+    authService,
+    movieService,
+    reviewService,
+    UserService,
 ] as Array<FastifyPluginCallback>;

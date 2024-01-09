@@ -8,9 +8,9 @@ import plugin from 'fastify-plugin';
  * @see https://github.com/fastify/fastify-cookie
  */
 export default plugin((async (fastify, opts, done) => {
-  fastify.register(FastifyCookie, {
-    secret: process.env.COOKIE_SECRET,
-  });
-  
-  done();
+    fastify.register(FastifyCookie, {
+        secret: process.env.COOKIE_SECRET,
+    });
+
+    done();
 }) as FastifyPluginCallback);
