@@ -3,7 +3,9 @@
     "editor.formatOnSave": true,
     "eslint.format.enable": true,
     "editor.codeActionsOnSave": {
-        "source.fixAll": "explicit"
+        "source.fixAll": "explicit",
+        "source.organizeImports": true,
+        "source.fixAll.eslint": true,
     },
     "eslint.workingDirectories": [
         "./app",
