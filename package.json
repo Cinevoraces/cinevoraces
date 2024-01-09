@@ -1,19 +1,18 @@
 {
-  "name": "cinevoraces",
-  "scripts": {
-    "install": "(cd api && npm install); (cd app && npm install)",
-    "dev-build": "docker-compose -f dev.yml up --build -d",
-    "dev": "docker-compose -f dev.yml up -d",
-    "dump-db": "scripts/backup",
-    "restore-db": "scripts/restore",
-    "build-test": "docker-compose -f prod-test.yml up --build -d",
-    "rebuild-test": "docker rm -f app && docker-compose -f prod-test.yml up --build -d app && docker exec app npm run build && docker-compose -f prod-test.yml restart", 
-    "build": "docker-compose up --build -d",
-    "rebuild": "docker rm -f app && docker-compose up --build -d app && docker exec app npm run build && docker-compose restart && docker-compose stop pgadmin", 
-    "start": "docker-compose up"
-  },
-  "dependencies": {
-    "app": "file:app",
-    "cinevoraces-api": "file:api"
-  }
+    "name": "cinevoraces",
+    "version": "2.0.0",
+    "scripts": {
+        "i": "(cd api && npm install); (cd app && npm install)",
+        "i:win": "cd api && npm install && cd .. && cd app && npm install",
+        "compose:build": "docker compose build",
+        "compose:start": "docker compose up -d",
+        "db:dump": "./scripts/backup.sh",
+        "db:dump:win": ".\\scripts\\backup.bat",
+        "db:restore": "./scripts/restore.sh",
+        "db:restore:win": ".\\scripts\\restore.bat"
+    },
+    "dependencies": {
+        "app": "file:app",
+        "cinevoraces-api": "file:api"
+    }
 }
