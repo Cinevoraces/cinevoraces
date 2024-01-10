@@ -1,5 +1,5 @@
 export enum EDocType {
-  AVATAR,
-  POSTER,
-  // SCREENSHOT,
-};
+    AVATAR,
+    POSTER,
+    // SCREENSHOT,
+}

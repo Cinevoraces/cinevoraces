@@ -12,11 +12,11 @@ import postgresPool from './postgresPool';
  * Add any new plugin to this array.
  */
 export default [
-  fastifyMultipart,
-  fastifyStatic,
-  fastifySwagger,
-  fastifyCookie,
-  fastifyCors,
-  fastifyJwt,
-  postgresPool,
+    fastifyMultipart,
+    fastifyStatic,
+    fastifySwagger,
+    fastifyCookie,
+    fastifyCors,
+    fastifyJwt,
+    postgresPool,
 ] as Array<FastifyPluginCallback>;

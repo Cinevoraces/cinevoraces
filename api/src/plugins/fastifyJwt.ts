@@ -9,18 +9,17 @@ import plugin from 'fastify-plugin';
  * @see https://github.com/fastify/fastify-jwt
  */
 export default plugin((async (fastify, opts: FastifyJWTOptions, done) => {
-  // Check if plugin is already registered
-  if (fastify.hasDecorator('jwt'))
-    return fastify.log.warn('@fastify/jwt already registered');
-  
-  fastify.register(FastifyJwt, {
-    secret: process.env.JWT_SECRET,
-    cookie: {
-      cookieName: 'refresh_token',
-      signed: true,
-    },
-    ...opts,
-  });
-  
-  done();
+    // Check if plugin is already registered
+    if (fastify.hasDecorator('jwt')) return fastify.log.warn('@fastify/jwt already registered');
+
+    fastify.register(FastifyJwt, {
+        secret: process.env.JWT_SECRET,
+        cookie: {
+            cookieName: 'refresh_token',
+            signed: true,
+        },
+        ...opts,
+    });
+
+    done();
 }) as FastifyPluginCallback);

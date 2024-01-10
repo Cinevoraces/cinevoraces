@@ -10,9 +10,9 @@ import preHandlerReview from './preHandlerReview';
  * Add any new hook to this array.
  */
 export default [
-  preHandlerSanitizePayload,
-  verifyPassword,
-  verifyTokens,
-  preHandlerMovies,
-  preHandlerReview,
+    preHandlerSanitizePayload,
+    verifyPassword,
+    verifyTokens,
+    preHandlerMovies,
+    preHandlerReview,
 ] as Array<FastifyPluginCallback>;

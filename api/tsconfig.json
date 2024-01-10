@@ -1,36 +1,36 @@
 {
-  "include": [
-    "src/**/*",
-    "src/*",
-    "test/**/*.ts",
-    "test/*.ts",
-    "./jest.config.ts",
-  ],
-  "exclude": [
-    "dist",
-    "node_modules"
-  ],
-  "compilerOptions": {
-    "types": [
-      "@types/jest",
-      "node"
+    "include": [
+        "src/**/*",
+        "src/*",
+        "test/**/*.ts",
+        "test/*.ts",
+        "./jest.config.ts",
     ],
-    "moduleResolution": "node",
-    "target": "es2022",
-    "module": "commonjs",
-    "lib": [
-      "es2022",
-      "esnext.asynciterable"
+    "exclude": [
+        "dist",
+        "node_modules"
     ],
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "allowSyntheticDefaultImports": true,
-    "noImplicitAny": true,
-    "removeComments": true,
-    "esModuleInterop": true,
-    "incremental": true,
-    "sourceMap": true,
-    "baseUrl": ".",
-    "outDir": "dist",
-  }
+    "compilerOptions": {
+        "types": [
+            "@types/jest",
+            "node"
+        ],
+        "moduleResolution": "node",
+        "target": "es2022",
+        "module": "commonjs",
+        "lib": [
+            "es2022",
+            "esnext.asynciterable"
+        ],
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+        "allowSyntheticDefaultImports": true,
+        "noImplicitAny": true,
+        "removeComments": true,
+        "esModuleInterop": true,
+        "incremental": true,
+        "sourceMap": true,
+        "baseUrl": ".",
+        "outDir": "dist",
+    }
 }
