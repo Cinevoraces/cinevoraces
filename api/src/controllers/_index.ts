@@ -13,12 +13,12 @@ import usersController from './usersController';
  * Add any new controller to this array.
  */
 export default [
-  { c: publicController, opts: { prefix: '/public' } },
-  { c: authController },
-  { c: episodesController },
-  { c: metricsController },
-  { c: moviesController },
-  { c: reviewsController },
-  { c: seasonsController },
-  { c: usersController },
-] as Array<{ c: FastifyPluginCallback, opts: Record<never, never> }>;
+    { c: publicController, opts: { prefix: '/public' } },
+    { c: authController },
+    { c: episodesController },
+    { c: metricsController },
+    { c: moviesController },
+    { c: reviewsController },
+    { c: seasonsController },
+    { c: usersController },
+] as Array<{ c: FastifyPluginCallback; opts: Record<never, never> }>;
