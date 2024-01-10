@@ -9,7 +9,7 @@ import type { FastifyInstance, FastifyServerOptions } from 'fastify';
 import fastify from 'fastify';
 import type { PoolConfig } from 'pg';
 import qs from 'qs';
-import dbConnector from './dbConnector';
+import dbConnector from './utils/dbConnector';
 
 interface DependenciesOpts {
     '@fastify/cookie'?: FastifyCookieOptions;

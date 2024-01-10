@@ -1,4 +1,4 @@
-import { parserOpts, type ServerOpts } from './server';
+import { parserOpts, type ServerOpts } from './classes/Server';
 
 /**
  * For more information on the dependencies, see:

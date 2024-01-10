@@ -1,5 +1,5 @@
 import { testConfig } from 'src/config';
-import { Server } from '../../src/server';
+import { Server } from '../../src/classes/Server';
 
 // TODO: Add specific tests for the catcher
 describe('Initiate a Server instance', () => {
