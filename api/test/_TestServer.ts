@@ -6,7 +6,6 @@ import controllers from '../src/controllers/_index';
 import hooks from '../src/hooks/_index';
 import schemas from '../src/models/schemas/_index';
 import services from '../src/services/_index';
-import parseOptions from '../src/utils/parseOptions';
 
 enum ECrudMethods {
     POST = 'POST',
@@ -42,7 +41,7 @@ export default class TestServer {
 
     constructor() {
         this.fastify = Fastify({
-            querystringParser: str => qs.parse(str, parseOptions),
+            querystringParser: str => qs.parse(str),
         });
         this.pool = new Pool({
             user: process.env.POSTGRES_USER,

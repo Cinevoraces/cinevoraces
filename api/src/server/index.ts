@@ -1,2 +1,2 @@
-export { default as Server, type ServerOpts } from './Server';
 export { parserOpts } from './parserOpts';
+export { default as Server, type ServerOpts } from './server';

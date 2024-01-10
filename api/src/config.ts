@@ -74,4 +74,5 @@ export const defaultConfig: ServerOpts = {
 
 export const testConfig: ServerOpts = {
     ...defaultConfig,
+    logger: false,
 };
