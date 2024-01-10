@@ -1,5 +1,5 @@
-import type { FastifyInstance, FastifyRequest as Request, FastifyReply as Reply } from 'fastify';
-import { EErrorMessages, ESchemasIds, EDocType } from '../models/enums/_index';
+import type { FastifyInstance, FastifyReply as Reply, FastifyRequest as Request } from 'fastify';
+import { EDocType, EErrorMessages, ESchemasIds } from '../models/enums/_index';
 
 /**
  * @description File serving API.
@@ -41,14 +41,14 @@ export default async (fastify: FastifyInstance) => {
         method: 'GET',
         url: '/migration-api',
         handler: async function (request: Request, reply: Reply) {
-            const { _fileService, _postgres } = this;
+            const { _fileService, postgres } = this;
 
             // Get all existing images urls
-            const { rows: moviesPosterUrls } = await _postgres.client.query('SELECT id, poster_url FROM movie;');
-            const { rows: usersAvatarUrls } = await _postgres.client.query('SELECT id, avatar_url FROM "user";');
+            const { rows: moviesPosterUrls } = await postgres.query('SELECT id, poster_url FROM movie;');
+            const { rows: usersAvatarUrls } = await postgres.query('SELECT id, avatar_url FROM "user";');
 
             // Update database
-            await _postgres.client.query(`BEGIN;
+            await postgres.query(`BEGIN;
         ----------------------------------------------------------------------------------------------------
         --------------------------------------- Create document tables -------------------------------------
         ----------------------------------------------------------------------------------------------------
@@ -509,16 +509,16 @@ export default async (fastify: FastifyInstance) => {
             for (const movie of moviesPosterUrls) {
                 const filename = `${EDocType.POSTER}${movie.id}`;
                 const { contentType } = await _fileService.downloadFile(movie.poster_url, `${folder}/${filename}`);
-                const { rows } = await _postgres.client.query(
+                const { rows } = await postgres.query(
                     ` WITH new_doc_grp AS (INSERT INTO "document_group" DEFAULT VALUES RETURNING id)
             SELECT id FROM new_doc_grp;`,
                 );
-                await _postgres.client.query(
+                await postgres.query(
                     ` INSERT INTO "document" (document_group_id, type, content_type, filename)
             VALUES ($1, $2, $3, $4);`,
                     [rows[0].id, EDocType.POSTER, contentType, filename],
                 );
-                await _postgres.client.query('UPDATE "movie" SET "document_group_id" = $1 WHERE id = $2;', [
+                await postgres.query('UPDATE "movie" SET "document_group_id" = $1 WHERE id = $2;', [
                     rows[0].id,
                     movie.id,
                 ]);
@@ -527,16 +527,16 @@ export default async (fastify: FastifyInstance) => {
                 if (!user.avatar_url) continue;
                 const filename = `${EDocType.AVATAR}${user.id}`;
                 const { contentType } = await _fileService.downloadFile(user.avatar_url, `${folder}/${filename}`);
-                const { rows } = await _postgres.client.query(
+                const { rows } = await postgres.query(
                     ` WITH new_doc_grp AS (INSERT INTO "document_group" DEFAULT VALUES RETURNING id)
             SELECT id FROM new_doc_grp;`,
                 );
-                await _postgres.client.query(
+                await postgres.query(
                     ` INSERT INTO "document" (document_group_id, type, content_type, filename)
             VALUES ($1, $2, $3, $4);`,
                     [rows[0].id, EDocType.AVATAR, contentType, filename],
                 );
-                await _postgres.client.query('UPDATE "user" SET "document_group_id" = $1 WHERE id = $2;', [
+                await postgres.query('UPDATE "user" SET "document_group_id" = $1 WHERE id = $2;', [
                     rows[0].id,
                     user.id,
                 ]);

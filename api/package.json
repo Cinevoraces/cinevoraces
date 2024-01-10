@@ -1,6 +1,6 @@
 {
     "scripts": {
-        "dev": "tsc-watch --onSuccess \"node --inspect=0.0.0.0:9229 dist/src/server.js\"",
+        "dev": "tsc-watch --onSuccess \"node --inspect=0.0.0.0:9229 dist/src/index.js\"",
         "build": "tsc",
         "start": "node ./dist/src/server.js",
         "test": "jest --watchAll",

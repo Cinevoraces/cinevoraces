@@ -1,2 +1,2 @@
-export { defaultConfig, testConfig } from './config';
-export { createServer, type ServerConfig } from './server';
+export { default as Server, type ServerOpts } from './Server';
+export { parserOpts } from './parserOpts';

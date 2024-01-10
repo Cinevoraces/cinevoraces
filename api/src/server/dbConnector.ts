@@ -1,5 +1,5 @@
 import plugin from 'fastify-plugin';
-import type { PoolConfig } from 'pg';
+import type { PoolClient, PoolConfig } from 'pg';
 import { Pool } from 'pg';
 
 /**
@@ -9,8 +9,12 @@ import { Pool } from 'pg';
  */
 export default plugin(async (fastify, opts: PoolConfig) => {
     const pgPool = new Pool(opts);
-
     const postgres = await pgPool.connect();
-
     fastify.decorate('postgres', postgres);
 });
+
+declare module 'fastify' {
+    interface FastifyInstance {
+        postgres: PoolClient;
+    }
+}
