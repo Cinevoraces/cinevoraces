@@ -50,7 +50,7 @@ export default class Server {
     public init() {
         this.fastify = fastify({ ...this.serverOpts, querystringParser: this.querystringParser });
 
-        // Inject dependencies
+        // Register dependencies
         this.fastify.register(dbConnector, this.dependenciesOpts['pg']);
         this.fastify.register(fastifyCookie, this.dependenciesOpts['@fastify/cookie']);
         this.fastify.register(fastifyCors, this.dependenciesOpts['@fastify/cors']);
