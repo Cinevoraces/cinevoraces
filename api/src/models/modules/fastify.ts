@@ -1,19 +1,17 @@
-import type { FastifyRequest as Request, FastifyReply as Reply } from 'fastify';
-import type { PoolClient, Pool } from 'pg';
-import type { TFileService } from '../../services/fileService';
-import type { TErrorService } from '../../services/errorService';
-import type { TDateService } from '../../services/dateService';
+import type { FastifyReply as Reply, FastifyRequest as Request } from 'fastify';
+import type { Pool, PoolClient } from 'pg';
+import type { TUserService } from 'src/services/UserService';
 import type { TAuthService } from '../../services/authService';
+import type { TErrorService } from '../../services/errorService';
+import type { TFileService } from '../../services/fileService';
 import type { TMovieService } from '../../services/movieService';
 import type { TReviewService } from '../../services/reviewService';
-import type { TUserService } from 'src/services/UserService';
 
 // Extend FastifyInstance interface to include services, hooks and plugins
 declare module 'fastify' {
     interface FastifyInstance {
         _fileService: TFileService;
         _errorService: TErrorService;
-        _dateService: TDateService;
         _authService: TAuthService;
         _movieService: TMovieService;
         _reviewService: TReviewService;

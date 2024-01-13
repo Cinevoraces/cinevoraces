@@ -1,12 +1,13 @@
 import Fastify from 'fastify';
 import qs from 'qs';
+import './prototypes';
 
-import parseOptions from './utils/parseOptions';
+import controllers from './controllers/_index';
+import hooks from './hooks/_index';
 import schemas from './models/schemas/_index';
 import plugins from './plugins/_index';
 import services from './services/_index';
-import controllers from './controllers/_index';
-import hooks from './hooks/_index';
+import parseOptions from './utils/parseOptions';
 
 // Check environment variables
 [

@@ -1,6 +1,6 @@
 import { reduceSqlQuery, sql } from '../../src/classes/Database/utils/sql';
 
-describe('DBClient/sql/utils.ts', () => {
+describe('Database/sql/utils.ts', () => {
     it('reduceSqlQuery()', () => {
         // Prepare test conditions
         // (has to be a function because of the way reduceSqlQuery() works)
