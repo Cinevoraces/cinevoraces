@@ -2,8 +2,8 @@
     "include": [
         "src/**/*",
         "src/*",
-        "test/**/*.ts",
-        "test/*.ts",
+        "tests/**/*.ts",
+        "tests/*.ts",
         "./jest.config.ts",
     ],
     "exclude": [

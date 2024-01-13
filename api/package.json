@@ -4,6 +4,7 @@
         "build": "tsc",
         "start": "node ./dist/src/server.js",
         "test": "jest --watchAll",
+        "test:unit": "jest --watchAll ./tests/unit/*",
         "lint": "eslint --fix **/*.ts",
         "format": "prettier --write \"src/**/*.ts\""
     },
