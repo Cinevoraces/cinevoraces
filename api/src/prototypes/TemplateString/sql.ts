@@ -6,7 +6,9 @@ export const reduceSqlQuery = (query: TemplateStringsArray) => query.reduce((pre
 /**
  * Returns a SQL query object with numbered parameters, ready to be used with the pg library.
  */
-export const sql = (query: TemplateStringsArray, ...values: unknown[]) => {
+const sql = (query: TemplateStringsArray, ...values: unknown[]) => {
     const text = reduceSqlQuery(query);
     return { text, values };
 };
+
+global.sql = sql;

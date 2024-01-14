@@ -1,8 +1,9 @@
+import { Server } from './classes/Server';
 import { defaultConfig } from './config';
 import controllers from './controllers/_index';
 import hooks from './hooks/_index';
 import schemas from './models/schemas/_index';
-import { Server } from './server';
+import './prototypes';
 import services from './services/_index';
 
 try {
