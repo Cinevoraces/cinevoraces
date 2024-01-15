@@ -1,15 +1,14 @@
-import type { PoolClient } from 'pg';
-import type { FastifyPluginCallback } from 'fastify';
-import type { UploadApiOptions, UploadApiResponse } from 'cloudinary';
 import type { MultipartFile } from '@fastify/multipart';
-import { EDocType } from '../models/enums/_index';
-import { EErrorMessages } from '../models/enums/_index';
-import { Readable } from 'stream';
-import DatabaseService from './databaseService';
+import type { UploadApiOptions, UploadApiResponse } from 'cloudinary';
+import { v2 } from 'cloudinary';
+import type { FastifyPluginCallback } from 'fastify';
 import plugin from 'fastify-plugin';
 import fs from 'fs';
-import { v2 } from 'cloudinary';
+import type { PoolClient } from 'pg';
+import { Readable } from 'stream';
 import { fetch } from 'undici';
+import { EDocType, EErrorMessages } from '../models/enums/_index';
+import DatabaseService from './databaseService';
 
 /**
  * @description File service takes care of downloading/saving/naming files to disk.
@@ -224,6 +223,6 @@ export default plugin((async (fastify, opts, done) => {
     // Check if service is already registered
     if (fastify.hasDecorator('_fileService')) return fastify.log.warn('FileService already registered');
 
-    fastify.decorate('_fileService', { getter: () => new FileService(fastify._postgres.client) });
+    fastify.decorate('_fileService', { getter: () => new FileService(fastify.postgres) });
     done();
 }) as FastifyPluginCallback);

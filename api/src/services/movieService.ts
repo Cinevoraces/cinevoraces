@@ -1,8 +1,8 @@
-import type { PoolClient } from 'pg';
 import type { FastifyPluginCallback } from 'fastify';
-import type { PQuerystring, dbEpisode, PPostMovie, PPutMovie, PMovie, dbSeason } from '../models/types/_index';
-import DatabaseService from './databaseService';
 import plugin from 'fastify-plugin';
+import type { PoolClient } from 'pg';
+import type { PMovie, PPostMovie, PPutMovie, PQuerystring, dbEpisode, dbSeason } from '../models/types/_index';
+import DatabaseService from './databaseService';
 
 /**
  * @description MovieService contains movies and SQL query related methods
@@ -284,7 +284,7 @@ export default plugin((async (fastify, opts, done) => {
     // Check if service is already registered
     if (fastify.hasDecorator('_movieService')) return fastify.log.warn('movieService already registered');
 
-    const MovieServiceInstance = new MovieService(fastify._postgres.client);
+    const MovieServiceInstance = new MovieService(fastify.postgres);
     fastify.decorate('_movieService', { getter: () => MovieServiceInstance });
     done();
 }) as FastifyPluginCallback);

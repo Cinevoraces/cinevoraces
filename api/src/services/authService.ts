@@ -1,9 +1,9 @@
-import type { PoolClient } from 'pg';
+import bcrypt from 'bcryptjs';
 import type { FastifyPluginCallback } from 'fastify';
+import plugin from 'fastify-plugin';
+import type { PoolClient } from 'pg';
 import type { ERoles } from '../models/enums/ERoles';
 import DatabaseService from './databaseService';
-import bcrypt from 'bcryptjs';
-import plugin from 'fastify-plugin';
 
 /**
  * @description AuthService contains auth and SQL query methods
@@ -108,7 +108,7 @@ export default plugin((async (fastify, opts, done) => {
     // Check if service is already registered
     if (fastify.hasDecorator('_authService')) return fastify.log.warn('authService already registered');
 
-    const AuthServiceInstance = new AuthService(fastify._postgres.client);
+    const AuthServiceInstance = new AuthService(fastify.postgres);
     fastify.decorate('_authService', { getter: () => AuthServiceInstance });
     done();
 }) as FastifyPluginCallback);

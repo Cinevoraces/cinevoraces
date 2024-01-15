@@ -1,8 +1,8 @@
-import type { PoolClient } from 'pg';
 import type { FastifyPluginCallback } from 'fastify';
+import plugin from 'fastify-plugin';
+import type { PoolClient } from 'pg';
 import type { PQuerystring, PUser } from '../models/types/_index';
 import DatabaseService from './databaseService';
-import plugin from 'fastify-plugin';
 
 /**
  * @description UserService contains movies and SQL query related methods
@@ -117,7 +117,7 @@ export default plugin((async (fastify, opts, done) => {
     // Check if service is already registered
     if (fastify.hasDecorator('_userService')) return fastify.log.warn('userService already registered');
 
-    const UserServiceInstance = new UserService(fastify._postgres.client);
+    const UserServiceInstance = new UserService(fastify.postgres);
     fastify.decorate('_userService', { getter: () => UserServiceInstance });
     done();
 }) as FastifyPluginCallback);
