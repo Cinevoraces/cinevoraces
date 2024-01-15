@@ -1,13 +1,13 @@
-import type { FastifyInstance, FastifyRequest as Request, FastifyReply as Reply } from 'fastify';
 import {
-    ESchemasIds,
-    EReview,
     EAddReview,
-    EUpdateReview,
     EErrorMessages,
     EResponseMessages,
-} from '../models/enums/_index';
-import type { dbReview } from '../models/types/_index';
+    EReview,
+    ESchemasIds,
+    EUpdateReview,
+    type Review,
+} from '@src/types';
+import { type FastifyInstance, type FastifyReply as Reply, type FastifyRequest as Request } from 'fastify';
 
 /**
  * @description Reviews API.
@@ -28,7 +28,7 @@ export default async (fastify: FastifyInstance) => {
             request: Request<{
                 Params: { movieId: number; userId: number };
                 Body: Record<
-                    keyof Pick<dbReview, 'bookmarked' | 'viewed' | 'liked' | 'rating' | 'comment'>,
+                    keyof Pick<Review, 'bookmarked' | 'viewed' | 'liked' | 'rating' | 'comment'>,
                     boolean | number | string
                 >;
             }>,

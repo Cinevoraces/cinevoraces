@@ -1,4 +1,4 @@
-import type { FastifyRequest as Request, FastifyReply as Reply, FastifyPluginCallback } from 'fastify';
+import { type FastifyPluginCallback, type FastifyReply as Reply, type FastifyRequest as Request } from 'fastify';
 import plugin from 'fastify-plugin';
 
 export default plugin((async (fastify, opts, done) => {

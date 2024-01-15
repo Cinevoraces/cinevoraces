@@ -1,5 +1,5 @@
-import type { FastifyInstance, FastifyReply as Reply, FastifyRequest as Request } from 'fastify';
-import { EDocType, EErrorMessages, ESchemasIds } from '../models/enums/_index';
+import { EDocType, EErrorMessages, ESchemasIds } from '@src/types';
+import { type FastifyInstance, type FastifyReply as Reply, type FastifyRequest as Request } from 'fastify';
 
 /**
  * @description File serving API.

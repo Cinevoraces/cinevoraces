@@ -1,6 +1,5 @@
-import type { FastifyInstance, FastifyReply as Reply, FastifyRequest as Request } from 'fastify';
-
-import { EErrorMessages, EResponseMessages, ESchemasIds } from '../models/enums/_index';
+import { EErrorMessages, EResponseMessages, ESchemasIds } from '@src/types';
+import { type FastifyInstance, type FastifyReply as Reply, type FastifyRequest as Request } from 'fastify';
 
 const aTokenOptions = { expiresIn: 600 };
 const rTokenOptions = { expiresIn: '1d' };

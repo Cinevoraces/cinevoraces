@@ -1,7 +1,7 @@
+import type { Episode, Movie, PostMovie, PutMovie, QueryString, Season } from '@src/types';
 import type { FastifyPluginCallback } from 'fastify';
 import plugin from 'fastify-plugin';
 import type { PoolClient } from 'pg';
-import type { PMovie, PPostMovie, PPutMovie, PQuerystring, dbEpisode, dbSeason } from '../models/types/_index';
 import DatabaseService from './databaseService';
 
 /**
@@ -18,7 +18,7 @@ class MovieService extends DatabaseService {
      * @param {object} query object containing queries parameters
      * @returns Array of movies.
      */
-    public async getMoviesByQuery(query: PQuerystring): Promise<{ rowCount: number; rows: Array<PMovie> }> {
+    public async getMoviesByQuery(query: QueryString): Promise<{ rowCount: number; rows: Array<Movie> }> {
         const enums = {
             where: ['id', 'author_id', 'season_number', 'is_published', 'french_title'],
             select: [
@@ -93,7 +93,7 @@ class MovieService extends DatabaseService {
      * @param {object} payload Object containing movie's values.
      * @returns movie's id.
      */
-    public async insertNewMovie(payload: PPostMovie): Promise<number> {
+    public async insertNewMovie(payload: PostMovie): Promise<number> {
         const { rows } = await this.requestDatabase({
             text: 'SELECT new_movie($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12) as movie_id;',
             values: Object.values(payload),
@@ -106,7 +106,7 @@ class MovieService extends DatabaseService {
      * @description Update movie.
      * @param {object} payload Object containing movie's id and new values.
      */
-    public async updateUnpublishedMovie(payload: PPutMovie): Promise<void> {
+    public async updateUnpublishedMovie(payload: PutMovie): Promise<void> {
         const { rows } = await this.requestDatabase({
             text: 'UPDATE movie SET presentation = $1 WHERE id = $2;',
             values: [payload.presentation, payload.movie_id],
@@ -156,7 +156,7 @@ class MovieService extends DatabaseService {
      * @param {number} seasonNumber season's number
      * @returns Season object.
      */
-    public async getSeasonByNumber(seasonNumber: number): Promise<dbSeason> {
+    public async getSeasonByNumber(seasonNumber: number): Promise<Season> {
         const { rowCount, rows } = await this.requestDatabase({
             text: 'SELECT * FROM season WHERE number = $1;',
             values: [seasonNumber],
@@ -184,7 +184,7 @@ class MovieService extends DatabaseService {
      */
     public async getAvailableEpisodes(): Promise<{
         rowCount: number;
-        rows: dbEpisode[];
+        rows: Episode[];
     }> {
         const { rowCount, rows } = await this.requestDatabase({
             text: ` SELECT ep.id, ep.season_number, ep.episode_number, ep.publishing_date

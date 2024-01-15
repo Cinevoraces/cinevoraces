@@ -1,5 +1,5 @@
-import type { FastifyRequest as Request, FastifyReply as Reply, FastifyPluginCallback } from 'fastify';
-import { EErrorMessages, ERoles } from '../models/enums/_index';
+import { EErrorMessages, ERoles } from '@src/types';
+import { type FastifyPluginCallback, type FastifyReply as Reply, type FastifyRequest as Request } from 'fastify';
 import plugin from 'fastify-plugin';
 
 export default plugin((async (fastify, opts, done) => {

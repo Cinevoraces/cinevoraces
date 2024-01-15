@@ -1,7 +1,7 @@
+import type { QueryString, Review } from '@src/types';
 import type { FastifyPluginCallback } from 'fastify';
 import plugin from 'fastify-plugin';
 import type { PoolClient } from 'pg';
-import type { PQuerystring, dbReview } from '../models/types/_index';
 import DatabaseService from './databaseService';
 
 /**
@@ -39,7 +39,7 @@ class ReviewService extends DatabaseService {
      * @param {number} userId user's id
      * @returns All user review of one movie.
      */
-    public async getReviewsByUserId(userId: number): Promise<{ rowCount: number; rows: Array<dbReview> }> {
+    public async getReviewsByUserId(userId: number): Promise<{ rowCount: number; rows: Array<Review> }> {
         const { rowCount, rows } = await this.requestDatabase({
             text: ` SELECT movie_id, user_id, bookmarked, liked, viewed, rating
               FROM "review"
@@ -79,7 +79,7 @@ class ReviewService extends DatabaseService {
         userId: number,
         movieId: number,
         payload: Record<
-            keyof Pick<dbReview, 'bookmarked' | 'viewed' | 'liked' | 'rating' | 'comment'>,
+            keyof Pick<Review, 'bookmarked' | 'viewed' | 'liked' | 'rating' | 'comment'>,
             boolean | number | string
         >,
     ): Promise<void> {
@@ -97,7 +97,7 @@ class ReviewService extends DatabaseService {
      * @param {object} query object containing queries parameters
      * @returns Array of review object.
      */
-    public async getReviewsAsAdmind(query: PQuerystring): Promise<{ rowCount: number; rows: Array<unknown> }> {
+    public async getReviewsAsAdmind(query: QueryString): Promise<{ rowCount: number; rows: Array<unknown> }> {
         const enumerator = ['author_id', 'movie_id'];
         const { where, limit, sort } = query;
         let values = [] as Array<unknown>,

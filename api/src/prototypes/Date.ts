@@ -1,6 +1,3 @@
-// WARNING: While reviewing this code, you have to check that this still imported
-// as server.ts as been removed on another branch.
-
 type NamedDay = 'monday' | 'tuesday' | 'wednesday' | 'thursday' | 'friday' | 'saturday' | 'sunday';
 
 const NamedDays: Record<NamedDay, number> = {

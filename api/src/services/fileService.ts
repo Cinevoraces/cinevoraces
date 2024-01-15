@@ -1,15 +1,13 @@
-import type { MultipartFile } from '@fastify/multipart';
-import type { UploadApiOptions, UploadApiResponse } from 'cloudinary';
-import { v2 } from 'cloudinary';
-import type { FastifyPluginCallback } from 'fastify';
+import { type MultipartFile } from '@fastify/multipart';
+import { EDocType, EErrorMessages } from '@src/types';
+import { v2, type UploadApiOptions, type UploadApiResponse } from 'cloudinary';
+import { type FastifyPluginCallback } from 'fastify';
 import plugin from 'fastify-plugin';
 import fs from 'fs';
-import type { PoolClient } from 'pg';
+import { type PoolClient } from 'pg';
 import { Readable } from 'stream';
 import { fetch } from 'undici';
-import { EDocType, EErrorMessages } from '../models/enums/_index';
 import DatabaseService from './databaseService';
-
 /**
  * @description File service takes care of downloading/saving/naming files to disk.
  * Any file system related operations should be done through this service.
