@@ -1,4 +1,5 @@
 import { EErrorMessages, EMimeType, EResponseMessages, ESchemasIds } from '@src/types';
+import { hashString } from '@src/utils';
 import { type FastifyInstance, type FastifyReply as Reply, type FastifyRequest as Request } from 'fastify';
 
 /**
@@ -63,7 +64,7 @@ export default async (fastify: FastifyInstance) => {
                 if (!update_user.password.match(/^(?=.*[A-Z])(?=.*[!#$%*+=?|-])(?=.*\d)[!#$%*+=?|\-A-Za-z\d]{12,}$/))
                     _errorService.send(EErrorMessages.INVALID_PASSWORD_FORMAT, 422);
 
-                update_user.password = await _authService.hashString(update_user.password);
+                update_user.password = await hashString(update_user.password);
             }
             // Update user
             await _userService.updateUser(request.user.id, update_user);
