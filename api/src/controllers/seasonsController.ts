@@ -1,5 +1,5 @@
-import type { FastifyInstance, FastifyRequest as Request, FastifyReply as Reply } from 'fastify';
-import { ESchemasIds, EResponseMessages } from '../models/enums/_index';
+import { EResponseMessages, ESchemasIds } from '@src/types';
+import { type FastifyInstance, type FastifyReply as Reply, type FastifyRequest as Request } from 'fastify';
 
 /**
  * @description Seasons API.
@@ -30,10 +30,10 @@ export default async (fastify: FastifyInstance) => {
         schema: fastify.getSchema(ESchemasIds.POSTSeasonsAsAdmin),
         onRequest: [fastify.isAdmin],
         handler: async function (request: Request<{ Body: { year: number; season_number: number } }>, reply: Reply) {
-            const { _movieService, _dateService } = this;
+            const { _movieService } = this;
             const { year, season_number } = request.body;
-            const firstMonday = _dateService.getFirstMondayOfYear(request.body.year);
-            await _movieService.insertNewSeason(year, season_number, firstMonday);
+            const day = Date.firstDayOfYear('monday', year);
+            await _movieService.insertNewSeason(year, season_number, day);
             reply.code(200).send({ message: EResponseMessages.SEASON_CREATED_SUCCESS });
         },
     });

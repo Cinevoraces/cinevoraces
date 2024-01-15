@@ -16,10 +16,10 @@
             "node"
         ],
         "moduleResolution": "node",
-        "target": "es2022",
+        "target": "ES6",
         "module": "commonjs",
         "lib": [
-            "es2022",
+            "ES6",
             "esnext.asynciterable"
         ],
         "emitDecoratorMetadata": true,
@@ -32,5 +32,15 @@
         "sourceMap": true,
         "baseUrl": ".",
         "outDir": "dist",
+        "paths": {
+            "@src/*": [
+                "src/*"
+            ],
+        }
+    },
+    "ts-node": {
+        "require": [
+            "tsconfig-paths/register"
+        ]
     }
 }

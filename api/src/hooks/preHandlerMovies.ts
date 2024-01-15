@@ -1,6 +1,5 @@
-import type { FastifyRequest as Request, FastifyReply as Reply, FastifyPluginCallback } from 'fastify';
-import { EErrorMessages } from '../models/enums/_index';
-import type { PPutMovie, PPostMovie } from '../models/types/_index';
+import { EErrorMessages, type PostMovie, type PutMovie } from '@src/types';
+import { type FastifyPluginCallback, type FastifyReply as Reply, type FastifyRequest as Request } from 'fastify';
 import plugin from 'fastify-plugin';
 
 export default plugin((async (fastify, opts, done) => {
@@ -32,7 +31,7 @@ export default plugin((async (fastify, opts, done) => {
      * @preValidation
      * @description This hook verifies if a movie has been published.
      */ // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    fastify.decorate('throwIfMovieIsPublished', async (request: Request<{ Body: PPutMovie }>, reply: Reply) => {
+    fastify.decorate('throwIfMovieIsPublished', async (request: Request<{ Body: PutMovie }>, reply: Reply) => {
         const { _errorService, _movieService } = fastify;
         const isDraft = await _movieService.isMoviePublished(request.body.movie_id, request.user.id);
         if (!isDraft) _errorService.send(EErrorMessages.NOT_FOUND_PROPOSAL, 404);
@@ -43,7 +42,7 @@ export default plugin((async (fastify, opts, done) => {
      * @description This hook verifies if the user has already a pending proposition,
      * if the movie doesn't exist and if the episode is already booked.
      */ // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    fastify.decorate('throwIfProposalChecksFails', async (request: Request<{ Body: PPostMovie }>, reply: Reply) => {
+    fastify.decorate('throwIfProposalChecksFails', async (request: Request<{ Body: PostMovie }>, reply: Reply) => {
         const { _errorService, _movieService } = fastify;
         const { body, user } = request;
         const { episode_id, french_title, original_title } = body;

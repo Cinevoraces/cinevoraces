@@ -1,5 +1,5 @@
-import type { FastifyInstance, FastifyRequest as Request, FastifyReply as Reply } from 'fastify';
-import { ESchemasIds } from '../models/enums/_index';
+import { ESchemasIds } from '@src/types';
+import { type FastifyInstance, type FastifyReply as Reply, type FastifyRequest as Request } from 'fastify';
 
 /**
  * @description Metrics API.

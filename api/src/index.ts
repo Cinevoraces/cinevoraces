@@ -1,14 +1,14 @@
-import { Server } from './classes/Server';
-import { defaultConfig } from './config';
-import controllers from './controllers/_index';
-import hooks from './hooks/_index';
-import schemas from './models/schemas/_index';
-import './prototypes';
-import services from './services/_index';
+import { Server } from '@src/classes';
+import { defaultConfig } from '@src/config';
+import controllers from '@src/controllers';
+import hooks from '@src/hooks';
+import '@src/prototypes';
+import services from '@src/services';
+import '@src/types';
+import { schemas } from '@src/types';
 
 try {
     const server = new Server(defaultConfig);
-
     server.envCheck();
     server.init();
     server.initErrorCatcher();

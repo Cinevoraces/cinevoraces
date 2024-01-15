@@ -1,4 +1,4 @@
-import type { FastifyError, FastifyPluginCallback } from 'fastify';
+import { type FastifyError, type FastifyPluginCallback } from 'fastify';
 import plugin from 'fastify-plugin';
 import fs from 'fs';
 

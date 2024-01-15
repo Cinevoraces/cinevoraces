@@ -1,6 +1,5 @@
-import type { FastifyInstance, FastifyRequest as Request, FastifyReply as Reply } from 'fastify';
-
-import { ESchemasIds, EErrorMessages, EResponseMessages } from '../models/enums/_index';
+import { EErrorMessages, EResponseMessages, ESchemasIds } from '@src/types';
+import { type FastifyInstance, type FastifyReply as Reply, type FastifyRequest as Request } from 'fastify';
 
 const aTokenOptions = { expiresIn: 600 };
 const rTokenOptions = { expiresIn: '1d' };
@@ -86,7 +85,7 @@ export default async (fastify: FastifyInstance) => {
                     httpOnly: false,
                     secure: true,
                     sameSite: 'strict',
-                    expires: new Date(new Date().setDate(new Date().getDate() + 1)),
+                    expires: Date.tomorrow(),
                 })
                 .send({
                     user: privateUser,
@@ -131,7 +130,7 @@ export default async (fastify: FastifyInstance) => {
                     httpOnly: false,
                     secure: true,
                     sameSite: 'strict',
-                    expires: new Date(new Date().setDate(new Date().getDate() + 1)),
+                    expires: Date.tomorrow(),
                 })
                 .send({
                     user: privateUser,

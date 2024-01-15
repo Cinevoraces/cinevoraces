@@ -1,6 +1,5 @@
-import type { FastifyInstance, FastifyRequest as Request, FastifyReply as Reply } from 'fastify';
-import { ESchemasIds, EErrorMessages, EResponseMessages } from '../models/enums/_index';
-import type { PPostMovie, PPutMovie } from '../models/types/_index';
+import { EErrorMessages, EResponseMessages, ESchemasIds, type PostMovie, type PutMovie } from '@src/types';
+import { type FastifyInstance, type FastifyReply as Reply, type FastifyRequest as Request } from 'fastify';
 
 /**
  * @description Movies API.
@@ -71,7 +70,7 @@ export default async (fastify: FastifyInstance) => {
         preValidation: [fastify.throwIfMovieFound],
         handler: async function (request: Request, reply: Reply) {
             const { _movieService, _fileService } = this;
-            const movie = request.body as PPostMovie;
+            const movie = request.body as PostMovie;
             // Get poster url and delete it from payload as it's not a movie property
             const poster_url = movie.poster_url;
             delete movie.poster_url;
@@ -101,7 +100,7 @@ export default async (fastify: FastifyInstance) => {
         preValidation: [fastify.throwIfMovieIsPublished],
         handler: async function (request: Request, reply: Reply) {
             const { _movieService } = this;
-            await _movieService.updateUnpublishedMovie(request.body as PPutMovie);
+            await _movieService.updateUnpublishedMovie(request.body as PutMovie);
             reply.code(201).send({ message: EResponseMessages.PROPOSITION_UPDATE_SUCCESS });
         },
     });

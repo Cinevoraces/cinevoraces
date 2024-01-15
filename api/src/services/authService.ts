@@ -1,8 +1,8 @@
+import type { ERoles } from '@src/types';
 import bcrypt from 'bcryptjs';
 import type { FastifyPluginCallback } from 'fastify';
 import plugin from 'fastify-plugin';
 import type { PoolClient } from 'pg';
-import type { ERoles } from '../models/enums/ERoles';
 import DatabaseService from './databaseService';
 
 /**

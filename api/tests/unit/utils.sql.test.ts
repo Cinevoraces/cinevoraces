@@ -1,6 +1,6 @@
-import { reduceSqlQuery } from '../../src/prototypes/TemplateString/sql';
+import { reduceSqlQuery, sql } from '../../src/utils/sql';
 
-describe('DBClient/sql/utils.ts', () => {
+describe('Database/sql/utils.ts', () => {
     it('reduceSqlQuery()', () => {
         // Prepare test conditions
         // (has to be a function because of the way reduceSqlQuery() works)
