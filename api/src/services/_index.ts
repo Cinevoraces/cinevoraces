@@ -1,10 +1,10 @@
 import type { FastifyPluginCallback } from 'fastify';
-import UserService from './UserService';
 import authService from './authService';
 import errorService from './errorService';
 import fileService from './fileService';
 import movieService from './movieService';
 import reviewService from './reviewService';
+import userService from './userService';
 
 /**
  * **Services Registration _index**
@@ -16,5 +16,5 @@ export default [
     authService,
     movieService,
     reviewService,
-    UserService,
+    userService,
 ] as Array<FastifyPluginCallback>;

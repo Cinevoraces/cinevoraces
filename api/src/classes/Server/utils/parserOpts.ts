@@ -4,7 +4,7 @@ import type { defaultDecoder } from 'qs';
  * @description Parse options from querystring.
  * TODO: 'unescape' is deprecated, update is needed.
  */
-const parseOptions = {
+export const parserOpts = {
     ignoreQueryPrefix: true,
     decoder(str: string, decoder: defaultDecoder, charset: unknown) {
         const strWithoutPlus = str.replace(/\+/g, ' ');
@@ -31,5 +31,3 @@ const parseOptions = {
         }
     },
 };
-
-export default parseOptions;

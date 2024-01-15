@@ -1,4 +1,4 @@
-import { reduceSqlQuery, sql } from '../../src/classes/Database/utils/sql';
+import { reduceSqlQuery, sql } from '../../src/utils/sql';
 
 describe('Database/sql/utils.ts', () => {
     it('reduceSqlQuery()', () => {
