@@ -1,4 +1,5 @@
 import { EErrorMessages, EResponseMessages, ESchemasIds } from '@src/types';
+import { hashString } from '@src/utils';
 import { type FastifyInstance, type FastifyReply as Reply, type FastifyRequest as Request } from 'fastify';
 
 const aTokenOptions = { expiresIn: 600 };
@@ -36,7 +37,7 @@ export default async (fastify: FastifyInstance) => {
             if (!body.password.match(/^(?=.*[A-Z])(?=.*[!#$%*+=?|-])(?=.*\d)[!#$%*+=?|\-A-Za-z\d]{12,}$/))
                 _errorService.send(EErrorMessages.INVALID_PASSWORD_FORMAT, 422);
 
-            body.password = await _authService.hashString(body.password);
+            body.password = await hashString(body.password);
 
             // Create user
             await _authService.createUser(body);

@@ -1,5 +1,5 @@
 import type { ERoles } from '@src/types';
-import bcrypt from 'bcryptjs';
+import { compareStrings } from '@src/utils';
 import type { FastifyPluginCallback } from 'fastify';
 import plugin from 'fastify-plugin';
 import type { PoolClient } from 'pg';
@@ -12,26 +12,6 @@ import DatabaseService from './databaseService';
 class AuthService extends DatabaseService {
     constructor(client: PoolClient) {
         super(client);
-    }
-
-    /**
-     * @description Hash string with a salt set to 10.
-     * @param {string} string string to hash.
-     * @returns Hashed string.
-     */
-    public async hashString(string: string): Promise<string> {
-        const salt = await bcrypt.genSalt(10);
-        return await bcrypt.hash(string, salt);
-    }
-
-    /**
-     * @description Compare string with hashed one.
-     * @param {string} s1 string to compare.
-     * @param {string} s2 string to compare.
-     * @returns Boolean.
-     */
-    public async compareStrings(s1: string, s2: string): Promise<boolean> {
-        return await bcrypt.compare(s1, s2);
     }
 
     /**
@@ -98,7 +78,7 @@ class AuthService extends DatabaseService {
               WHERE id = $1;`,
             values: [userId],
         });
-        return await this.compareStrings(password, rows[0].password);
+        return await compareStrings(password, rows[0].password);
     }
 }
 
