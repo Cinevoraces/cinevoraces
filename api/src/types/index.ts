@@ -2,7 +2,6 @@
  * Models
  */
 export type { PostMovie, PutMovie } from './MoviePayloads';
-export type { QueryString } from './Querystring';
 export type { Episode } from './models/Episode';
 export type { Movie } from './models/Movie';
 export type { ReducedMovie } from './models/ReducedMovie';
@@ -10,6 +9,8 @@ export type { Review } from './models/Review';
 export type { Season } from './models/Season';
 export type { User } from './models/User';
 export type { UserMetrics } from './models/UserMetrics';
+export type { GetUsers } from './queryStrings/GetUsers';
+export type { QueryString } from './queryStrings/Querystring';
 
 /**
  * Enums

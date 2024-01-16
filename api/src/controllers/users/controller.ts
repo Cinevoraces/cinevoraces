@@ -1,62 +1,47 @@
 import { EErrorMessages, EMimeType, EResponseMessages, ESchemasIds } from '@src/types';
 import { hashString } from '@src/utils';
 import { type FastifyInstance, type FastifyReply as Reply, type FastifyRequest as Request } from 'fastify';
+import type { DELETEUsersRequest, PUTUsersRequest } from './types';
 
-/**
- * @description Users API.
- * @prefix /
- */
 export default async (fastify: FastifyInstance) => {
-    /**
-     * @description Get users according to query. Public datas only.
-     * @route GET /users
-     */
     fastify.route({
         method: 'GET',
         url: '/users',
         schema: fastify.getSchema(ESchemasIds.GETPublicUsers),
-        handler: async function (request: Request, reply: Reply) {
-            const { _errorService, _userService } = this;
-            const { rowCount, rows } = await _userService.getUsersByQuery(request.query, false);
+        handler: async (request: Request, reply: Reply) => {
+            const { _errorService } = fastify;
+            const { userService } = fastify.services;
+            const { rowCount, rows } = await userService.getUsers(request.query);
+
             if (!rowCount) _errorService.send(EErrorMessages.NOT_FOUND, 404);
             reply.code(200).send(rows);
         },
     });
 
-    /**
-     * @description Get users according to query. Private datas included.
-     * @route GET /users/me
-     */
     fastify.route({
         method: 'GET',
         url: '/users/me',
         schema: fastify.getSchema(ESchemasIds.GETPrivateUsers),
         onRequest: [fastify.verifyAccessToken],
-        handler: async function (request: Request, reply: Reply) {
-            const { _errorService, _userService } = this;
-            const { rowCount, rows } = await _userService.getUsersByQuery(request.query, true, request.user.id);
+        handler: async (request: Request, reply: Reply) => {
+            const { _errorService } = fastify;
+            const { userService } = fastify.services;
+            const { rowCount, rows } = await userService.getUsers(request.query, request.user.id);
+
             if (!rowCount) _errorService.send(EErrorMessages.NOT_FOUND, 404);
             reply.code(200).send(rows);
         },
     });
 
-    /**
-     * @description Put user by token.
-     * @route PUT /users
-     */
     fastify.route({
         method: 'PUT',
         url: '/users',
         schema: fastify.getSchema(ESchemasIds.PUTUsers),
         onRequest: [fastify.verifyAccessToken],
         preValidation: [fastify.verifyPassword],
-        handler: async function (
-            request: Request<{
-                Body: { password: string; update_user?: { pseudo?: string; mail?: string; password?: string } };
-            }>,
-            reply: Reply,
-        ) {
-            const { _errorService, _userService, _authService } = this;
+        handler: async (request: Request<PUTUsersRequest>, reply: Reply) => {
+            const { userService } = fastify.services;
+            const { _errorService, _authService } = fastify;
             const { update_user } = request.body;
 
             if (update_user.password) {
@@ -67,23 +52,19 @@ export default async (fastify: FastifyInstance) => {
                 update_user.password = await hashString(update_user.password);
             }
             // Update user
-            await _userService.updateUser(request.user.id, update_user);
+            await userService.updateUser(request.user.id, update_user);
 
             reply.code(201).send({ message: EResponseMessages.UPDATE_USER_SUCCESS });
         },
     });
 
-    /**
-     * @description Update user avatar.
-     * @route PUT /users
-     */
     fastify.route({
         method: 'PUT',
         url: '/users/avatar',
         schema: fastify.getSchema(ESchemasIds.PUTUsersAvatar),
         onRequest: [fastify.verifyAccessToken],
-        handler: async function (request: Request, reply: Reply) {
-            const { _errorService, _fileService } = this;
+        handler: async (request: Request, reply: Reply) => {
+            const { _errorService, _fileService } = fastify;
             const { id } = request.user;
             const avatar = await request.file();
 
@@ -105,24 +86,18 @@ export default async (fastify: FastifyInstance) => {
         },
     });
 
-    /**
-     * @description Delete user by id.
-     * @route DELETE /users
-     */
     fastify.route({
         method: 'DELETE',
         url: '/admin/users/:id',
         schema: fastify.getSchema(ESchemasIds.DELETEUsersAsAdmin),
         onRequest: [fastify.isAdmin],
         preValidation: [fastify.verifyPassword],
-        handler: async function (request: Request<{ Params: { id: number } }>, reply: Reply) {
-            const { _errorService, _userService } = this;
+        handler: async function (request: Request<DELETEUsersRequest>, reply: Reply) {
+            const { userService } = this.services;
             const { id } = request.params;
-            // Check if user exists
-            const { rowCount } = await _userService.getUsersByQuery({ where: { id } }, true);
-            if (!rowCount) _errorService.send(EErrorMessages.NOT_FOUND, 404);
+
             // Delete user
-            await _userService.deleteUser(id);
+            await userService.deleteUser(id);
             reply.code(200).send({ message: EResponseMessages.DELETE_USER_SUCCESS });
         },
     });

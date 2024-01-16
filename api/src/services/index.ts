@@ -4,7 +4,6 @@ import errorService, { type TErrorService } from './errorService';
 import fileService, { type TFileService } from './fileService';
 import movieService, { type TMovieService } from './movieService';
 import reviewService, { type TReviewService } from './reviewService';
-import userService, { type TUserService } from './userService';
 
 declare module 'fastify' {
     interface FastifyInstance {
@@ -13,7 +12,6 @@ declare module 'fastify' {
         _authService: TAuthService;
         _movieService: TMovieService;
         _reviewService: TReviewService;
-        _userService: TUserService;
         verifyAccessToken: (request: Request, reply: Reply) => void;
         verifyAccessTokenOptionnal: (request: Request, reply: Reply) => void;
         verifyRefreshToken: (request: Request, reply: Reply) => void;
@@ -32,11 +30,12 @@ declare module 'fastify' {
  * **Services Registration _index**
  * Add any new service to this array (order matters!).
  */
-export default [
-    fileService,
-    errorService,
-    authService,
-    movieService,
-    reviewService,
-    userService,
-] as Array<FastifyPluginCallback>;
+export default [fileService, errorService, authService, movieService, reviewService] as Array<FastifyPluginCallback>;
+
+export {
+    default as userService,
+    type DeleteUserFn,
+    type GetUsersFn,
+    type UpdateUserFn,
+    type UpdateUserPayload,
+} from './userService';

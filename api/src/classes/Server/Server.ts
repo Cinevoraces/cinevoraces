@@ -5,9 +5,9 @@ import fastifyMultipart, { type FastifyMultipartOptions } from '@fastify/multipa
 import fastifyStatic, { type FastifyStaticOptions } from '@fastify/static';
 import FastifySwagger, { type SwaggerOptions } from '@fastify/swagger';
 import FastifySwaggerUi, { type FastifySwaggerUiOptions } from '@fastify/swagger-ui';
-import type { FastifyInstance, FastifyServerOptions } from 'fastify';
-import fastify from 'fastify';
-import type { PoolConfig } from 'pg';
+import { userService } from '@src/services';
+import fastify, { type FastifyInstance, type FastifyServerOptions } from 'fastify';
+import { type PoolConfig } from 'pg';
 import qs from 'qs';
 import dbConnector from './utils/dbConnector';
 
@@ -59,6 +59,8 @@ export default class Server {
         this.fastify.register(fastifyStatic, this.dependenciesOpts['@fastify/static']);
         this.fastify.register(FastifySwagger, this.dependenciesOpts['@fastify/swagger']);
         this.fastify.register(FastifySwaggerUi, this.dependenciesOpts['@fastify/swagger-ui']);
+        // Register services
+        this.fastify.register(userService);
     }
 
     /**
