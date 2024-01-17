@@ -1,6 +1,7 @@
 import { Server } from '../../src/classes/Server';
 import controllers from '../../src/controllers';
 import hooks from '../../src/hooks';
+import '../../src/prototypes';
 import services from '../../src/services';
 import { schemas } from '../../src/types';
 

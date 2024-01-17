@@ -1,14 +1,6 @@
 import type { FastifyInstance } from 'fastify';
 
 export const logUser = async (instance: FastifyInstance, pseudo: string, password: string) => {
-    const resp = await instance.inject({
-        method: 'POST',
-        url: '/login',
-        payload: { pseudo, password },
-    });
-
-    console.log(resp);
-
     const { statusCode, json, cookies } = await instance.inject({
         method: 'POST',
         url: '/login',

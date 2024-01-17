@@ -31,19 +31,22 @@ export default plugin(async fastify => {
 
         const query = sql`
             SELECT id, pseudo, role, created_at, updated_at
-                ${isPrivate ? 'mail, ' : ''}
-                ${select.metrics ? ',metrics' : ''}
-                ${select.propositions ? ',propositions' : ''}
-                ${select.reviews ? ',reviews' : ''}
-                ${select.movies ? ',movies' : ''}
-            FROM userview ${where ? 'WHERE' : ''}
-                ${userId ? `id=${userId}` : ''}
-                ${where.pseudo ? `pseudo=${where.pseudo}` : ''}
-                ${where.mail ? `mail=${where.mail}` : ''}
-                ${where.role ? `role=${where.role}` : ''}
-            ${sort ? `ORDER BY id ${sort}` : ''}
-            ${limit ? `LIMIT ${limit}` : ''};
+                ${isPrivate && ',mail'}
+                ${select?.metrics && ',metrics'}
+                ${select?.propositions && ',propositions'}
+                ${select?.reviews && ',reviews'}
+                ${select?.movies && ',movies'}
+            FROM userview ${(where ?? userId) && 'WHERE'}
+                ${userId && `id = ${userId}`}
+                ${where?.pseudo && `pseudo=${where.pseudo}`}
+                ${where?.mail && `mail=${where.mail}`}
+                ${where?.role && `role=${where.role}`}
+            ${sort && 'ORDER BY'} ${sort && `id ${sort}`}
+            ${limit && 'LIMIT'} ${limit && ` ${limit}`}
+            ;
         `;
+
+        console.log(query);
 
         const { rowCount, rows } = await postgres.query(query);
         return { rowCount, rows };

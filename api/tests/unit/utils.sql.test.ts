@@ -1,19 +1,6 @@
-import { reduceSqlQuery, sql } from '../../src/utils/sql';
+import { sql } from '../../src/utils/sql';
 
 describe('Database/sql/utils.ts', () => {
-    it('reduceSqlQuery()', () => {
-        // Prepare test conditions
-        // (has to be a function because of the way reduceSqlQuery() works)
-        const testFunc = (query: TemplateStringsArray, ..._: unknown[]) => {
-            const reducedSqlQuery = reduceSqlQuery(query);
-            expect(reducedSqlQuery).toEqual('SELECT * FROM users WHERE id = $1;');
-            return reducedSqlQuery;
-        };
-
-        // Run test
-        testFunc`SELECT * FROM users WHERE id = ${10};`;
-    });
-
     it('sql()', () => {
         const id = 158;
         const query = sql`SELECT * FROM users WHERE id = ${id};`;
