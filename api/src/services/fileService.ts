@@ -1,13 +1,10 @@
-import { type MultipartFile } from '@fastify/multipart';
-import { EDocType, EErrorMessages } from '@src/types';
-import { v2, type UploadApiOptions, type UploadApiResponse } from 'cloudinary';
+import { EDocType } from '@src/types';
+import { getFolderPath } from '@src/utils';
 import { type FastifyPluginCallback } from 'fastify';
 import plugin from 'fastify-plugin';
-import fs from 'fs';
 import { type PoolClient } from 'pg';
-import { Readable } from 'stream';
-import { fetch } from 'undici';
 import DatabaseService from './databaseService';
+
 /**
  * @description File service takes care of downloading/saving/naming files to disk.
  * Any file system related operations should be done through this service.
@@ -15,89 +12,6 @@ import DatabaseService from './databaseService';
 class FileService extends DatabaseService {
     constructor(client: PoolClient) {
         super(client);
-    }
-
-    public files = [] as Array<{
-        filename?: string;
-        path?: string;
-        contentType?: string;
-        ext?: string;
-        stream?: Readable;
-    }>;
-    public paths = {
-        root: '/',
-        temp: '/api/temp',
-        log: '/api/logs',
-        public: '/api/public',
-    };
-    public cloudinaryConfig = { cloudinary_url: process.env.CLOUDINARY_URL };
-
-    /**
-     * @description Generate a GUID string
-     * @returns GUID
-     */
-    public generateGuid(): string {
-        const s4 = () =>
-            Math.floor((1 + Math.random()) * 0x10000)
-                .toString(16)
-                .substring(1);
-        return `${s4() + s4()}-${s4()}-${s4()}-${s4()}-${s4() + s4() + s4()}`;
-    }
-
-    /**
-     * @description Download a file from a URL
-     * @param {string} url URL to download from
-     * @param {string} path Define if the file should be saved to disk, if so, define the path without extension
-     * @returns Promise: object containing A Blob, the content type and the file path
-     */
-    public async downloadFile(
-        url: string,
-        path: string = null,
-        retryCount = 0,
-    ): Promise<{ blob: Blob; contentType: string; path?: string }> {
-        try {
-            const res = await fetch(url);
-            const blob = await res.blob();
-            const contentType = res.headers.get('content-type');
-            if (path !== null) {
-                path = `${path}.${contentType.split('/')[1]}`;
-                await this.saveFile(path, blob);
-            }
-            return { blob, contentType, path };
-        } catch (err) {
-            if (retryCount < 3) return this.downloadFile(url, path, retryCount + 1);
-            else return;
-        }
-    }
-
-    /**
-     * @description Save a file to disk
-     * @param {string} path Path to save file to
-     * @param {Readable | Buffer} source Readable stream or Blob to save the file from
-     */
-    public async saveFile(path: string, source: Readable | Blob): Promise<void> {
-        if (source instanceof Readable)
-            return new Promise<void>((resolve, reject) => {
-                const ws = fs.createWriteStream(path);
-                source.pipe(ws);
-                ws.on('error', reject);
-                ws.on('finish', resolve);
-                ws.on('close', resolve);
-            });
-        else if (source instanceof Blob) {
-            const bytea = await source.arrayBuffer();
-            return new Promise((resolve, reject) => {
-                fs.writeFile(path, Buffer.from(bytea), error => (error ? reject(error) : resolve()));
-            });
-        }
-    }
-
-    /**
-     * @description Delete a file from disk
-     * @param {string} path Path to delete file from
-     */
-    public async deleteFile(path: string): Promise<void> {
-        await fs.promises.unlink(path);
     }
 
     /**
@@ -124,94 +38,7 @@ class FileService extends DatabaseService {
         // Return file path if found, else return null
         return rows.length === 0
             ? null
-            : `${this.paths.public}/${type}${entityId}.${rows[0].content_type.split('/')[1]}`;
-    }
-
-    /**
-     * @description Upload a movie poster using an external url.
-     * @param {object} movieId - movie's id.
-     * @param {object} url - The file to upload.
-     */
-    public async UploadMoviePoster(movieId: number, url: string): Promise<void> {
-        // NOTE: It is currently possible for a movie to have multiple posters.
-        // This is not a used feature for now, but might be useful in the future.
-        const fileName = `${EDocType.POSTER}${movieId}`;
-        const { contentType } = await this.downloadFile(url, `${this.paths.public}/${fileName}`);
-
-        await this.requestDatabase({
-            text: ` INSERT INTO "document" ("document_group_id", "filename", "content_type", "type")
-              VALUES (
-                (SELECT document_group_id FROM movie WHERE movie.id = $1), 
-                $2, $3, $4);`,
-            values: [movieId, fileName, contentType, EDocType.POSTER],
-        });
-    }
-
-    /**
-     * @description Compress and save new user avatar using Cloudinary.
-     * @param {object} userId - User's id.
-     * @param {object} avatar - The file to upload.
-     */
-    public async UploadAvatar(userId: number, avatar: MultipartFile): Promise<void> {
-        const public_id = this.generateGuid();
-        const tempFilePath = `${this.paths.temp}/${public_id}.${avatar.mimetype.split('/')[1]}`;
-        await this.saveFile(tempFilePath, avatar.file);
-
-        // Upload avatar to Cloudinary for compression
-        const cloudinaryRes = await this.cloudinaryUpload(tempFilePath, {
-            folder: 'cinevoraces',
-            tags: 'avatar',
-            width: 200,
-            height: 200,
-            crop: 'fill',
-            gravity: 'faces',
-            format: 'jpeg', //!\ Beware of hard coded mime type below /!\\
-            public_id,
-        });
-
-        if (!cloudinaryRes) throw new Error(EErrorMessages.CLOUDINARY_FAILURE);
-
-        // Download compressed file from Cloudinary and save it to database
-        const fileName = `${EDocType.AVATAR}${userId}`;
-        const { contentType } = await this.downloadFile(cloudinaryRes.url, `${this.paths.public}/${fileName}`);
-        await this.requestDatabase({
-            text: ' SELECT add_or_update_avatar($1, $2, $3);',
-            values: [userId, fileName, contentType],
-        });
-
-        // Delete temp files
-        await this.deleteFile(tempFilePath);
-        await this.cloudinaryDelete(public_id);
-    }
-
-    /**
-     * @description Upload image to Cloudinary account.
-     * @param {string} filePath - The name of the file to upload.
-     * @param {object} UploadApiOptions - The options to pass to the upload API.
-     */
-    private async cloudinaryUpload(filePath: string, UploadApiOptions: UploadApiOptions): Promise<UploadApiResponse> {
-        v2.config(this.cloudinaryConfig);
-        try {
-            const res = await v2.uploader.upload(filePath, UploadApiOptions);
-            return res;
-        } catch (err) {
-            console.error(err);
-        }
-    }
-
-    /**
-     * @description Delete image from Cloudinary account.
-     * @param {string} publicId - The public id of the image to delete.
-     * @returns {boolean} - True if image is deleted, false otherwise.
-     */
-    private async cloudinaryDelete(publicId: string): Promise<boolean> {
-        v2.config(this.cloudinaryConfig);
-        try {
-            const cloudinaryRes = await v2.uploader.destroy(publicId);
-            return cloudinaryRes.result === 'ok';
-        } catch (err) {
-            console.error(err);
-        }
+            : `${getFolderPath('public')}/${type}${entityId}.${rows[0].content_type.split('/')[1]}`;
     }
 }
 

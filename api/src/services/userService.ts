@@ -1,4 +1,7 @@
-import type { GetUsers, QueryString, User } from '@src/types';
+import type { MultipartFile } from '@fastify/multipart';
+import { HTTPClient } from '@src/classes';
+import { EDocType, type GetUsers, type QueryString, type User } from '@src/types';
+import { cloudinaryDelete, cloudinaryUpload, deleteFile, getFolderPath, saveFile } from '@src/utils';
 import plugin from 'fastify-plugin';
 import DatabaseService from './databaseService';
 
@@ -10,6 +13,8 @@ export type GetUsersFn = (
 export type UpdateUserFn = (id: number, payload: UpdateUserPayload) => Promise<void>;
 
 export type DeleteUserFn = (id: number) => Promise<void>;
+
+export type UploadAvatarFn = (userId: number, avatar: MultipartFile) => Promise<void>;
 
 export interface UpdateUserPayload {
     pseudo?: string;
@@ -30,7 +35,7 @@ export default plugin(async fastify => {
         const isPrivate = id !== undefined;
 
         const enums = {
-            where: isPrivate ? [] : ['id', 'pseudo', 'mail', 'role'], // No WHERE clause for users/me
+            where: isPrivate ? [] : ['id', 'pseudo', 'mail', 'role'],
             select: ['propositions', 'reviews', 'metrics', 'movies'],
         };
         let values = [] as Array<unknown>,
@@ -94,12 +99,36 @@ export default plugin(async fastify => {
         });
     };
 
+    /**
+     * Use cloudinary to resize avatar then stores it on disk.
+     */
+    const uploadAvatar: UploadAvatarFn = async (userId, avatar) => {
+        const public_id = crypto.randomUUID();
+        const tempFilePath = `${getFolderPath('temp')}/${public_id}.${avatar.mimetype.split('/')[1]}`;
+        await saveFile(tempFilePath, avatar.file);
+
+        const { url: cloudinaryUrl } = await cloudinaryUpload(tempFilePath, public_id);
+
+        const filename = `${EDocType.AVATAR}${userId}`;
+        const httpClient = new HTTPClient();
+        const { contentType } = await httpClient.downloadFile(cloudinaryUrl, { filename, destination: 'public' });
+
+        await dbService.requestDatabase({
+            text: ' SELECT add_or_update_avatar($1, $2, $3);',
+            values: [userId, filename, contentType],
+        });
+
+        await deleteFile(tempFilePath);
+        await cloudinaryDelete(public_id);
+    };
+
     fastify.decorate('services', {
         ...fastify.services,
         userService: {
             getUsers,
             updateUser,
             deleteUser,
+            uploadAvatar,
         },
     });
 });
@@ -111,6 +140,7 @@ declare module 'fastify' {
                 getUsers: GetUsersFn;
                 updateUser: UpdateUserFn;
                 deleteUser: DeleteUserFn;
+                uploadAvatar: UploadAvatarFn;
             };
         };
     }

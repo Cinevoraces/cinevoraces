@@ -1,15 +1,16 @@
 import type { FastifyInstance } from 'fastify';
 
-export const logUser = async (instance: FastifyInstance, pseudo: string, password: string) => {
+export const logUser = async (instance: FastifyInstance) => {
     const { statusCode, json, cookies } = await instance.inject({
         method: 'POST',
         url: '/login',
-        payload: { pseudo, password },
+        payload: {
+            pseudo: process.env.TEST_USER,
+            password: process.env.TEST_PASS,
+        },
     });
 
     const res = await json();
-
-    console.log(statusCode);
 
     if (statusCode === 200) {
         const refreshToken =

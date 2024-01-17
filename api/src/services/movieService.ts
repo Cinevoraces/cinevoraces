@@ -1,4 +1,13 @@
-import type { Episode, Movie, PostMovie, PutMovie, QueryString, Season } from '@src/types';
+import { HTTPClient } from '@src/classes';
+import {
+    EDocType,
+    type Episode,
+    type Movie,
+    type PostMovie,
+    type PutMovie,
+    type QueryString,
+    type Season,
+} from '@src/types';
 import type { FastifyPluginCallback } from 'fastify';
 import plugin from 'fastify-plugin';
 import type { PoolClient } from 'pg';
@@ -275,6 +284,26 @@ class MovieService extends DatabaseService {
             values: [id],
         });
         return rowCount ? true : false;
+    }
+
+    /**
+     * @description Upload a movie poster using an external url.
+     * @param {object} movieId - movie's id.
+     * @param {object} url - The file to upload.
+     */
+    public async uploadMoviePoster(movieId: number, url: string): Promise<void> {
+        const filename = `${EDocType.POSTER}${movieId}`;
+
+        const httpClient = new HTTPClient();
+        const { contentType } = await httpClient.downloadFile(url, { filename, destination: 'public' });
+
+        await this.requestDatabase({
+            text: ` INSERT INTO "document" ("document_group_id", "filename", "content_type", "type")
+              VALUES (
+                (SELECT document_group_id FROM movie WHERE movie.id = $1), 
+                $2, $3, $4);`,
+            values: [movieId, filename, contentType, EDocType.POSTER],
+        });
     }
 }
 

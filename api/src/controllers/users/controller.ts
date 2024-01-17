@@ -64,7 +64,8 @@ export default async (fastify: FastifyInstance) => {
         schema: fastify.getSchema(ESchemasIds.PUTUsersAvatar),
         onRequest: [fastify.verifyAccessToken],
         handler: async (request: Request, reply: Reply) => {
-            const { _errorService, _fileService } = fastify;
+            const { userService } = fastify.services;
+            const { _errorService } = fastify;
             const { id } = request.user;
             const avatar = await request.file();
 
@@ -77,12 +78,8 @@ export default async (fastify: FastifyInstance) => {
                 _errorService.send(EErrorMessages.INVALID_FILE_SIZE, 413);
             });
 
-            try {
-                await _fileService.UploadAvatar(id, avatar);
-                reply.code(201).send({ message: EResponseMessages.UPDATE_USER_PIC_SUCCESS });
-            } catch (err) {
-                _errorService.send(err.message, 500);
-            }
+            await userService.uploadAvatar(id, avatar);
+            reply.code(201).send({ message: EResponseMessages.UPDATE_USER_PIC_SUCCESS });
         },
     });
 
@@ -92,8 +89,8 @@ export default async (fastify: FastifyInstance) => {
         schema: fastify.getSchema(ESchemasIds.DELETEUsersAsAdmin),
         onRequest: [fastify.isAdmin],
         preValidation: [fastify.verifyPassword],
-        handler: async function (request: Request<DELETEUsersRequest>, reply: Reply) {
-            const { userService } = this.services;
+        handler: async (request: Request<DELETEUsersRequest>, reply: Reply) => {
+            const { userService } = fastify.services;
             const { id } = request.params;
 
             // Delete user

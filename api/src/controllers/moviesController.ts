@@ -69,7 +69,7 @@ export default async (fastify: FastifyInstance) => {
         onRequest: [fastify.verifyAccessToken],
         preValidation: [fastify.throwIfMovieFound],
         handler: async function (request: Request, reply: Reply) {
-            const { _movieService, _fileService } = this;
+            const { _movieService } = this;
             const movie = request.body as PostMovie;
             // Get poster url and delete it from payload as it's not a movie property
             const poster_url = movie.poster_url;
@@ -82,7 +82,7 @@ export default async (fastify: FastifyInstance) => {
             };
             const movieId = await _movieService.insertNewMovie(payload);
             // Save poster to DB
-            await _fileService.UploadMoviePoster(movieId, poster_url);
+            await _movieService.uploadMoviePoster(movieId, poster_url);
 
             reply.code(200).send({ message: EResponseMessages.PROPOSITION_SUCCESS });
         },
