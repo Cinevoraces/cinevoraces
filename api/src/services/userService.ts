@@ -1,6 +1,6 @@
 import type { GetUsers, QueryString, User } from '@src/types';
-import { sql } from '@src/utils';
 import plugin from 'fastify-plugin';
+import DatabaseService from './databaseService';
 
 export type GetUsersFn = (
     queryString: QueryString<GetUsers.Select, GetUsers.Where>,
@@ -19,6 +19,7 @@ export interface UpdateUserPayload {
 
 export default plugin(async fastify => {
     const { postgres } = fastify;
+    const dbService = new DatabaseService(postgres);
 
     /**
      * Get users using query parameters.
@@ -27,28 +28,45 @@ export default plugin(async fastify => {
     const getUsers: GetUsersFn = async (queryString, id) => {
         const { select, where, limit, sort } = queryString;
         const isPrivate = id !== undefined;
-        const userId = id ?? where?.id;
 
-        const query = sql`
-            SELECT id, pseudo, role, created_at, updated_at
-                ${isPrivate && ',mail'}
-                ${select?.metrics && ',metrics'}
-                ${select?.propositions && ',propositions'}
-                ${select?.reviews && ',reviews'}
-                ${select?.movies && ',movies'}
-            FROM userview ${(where ?? userId) && 'WHERE'}
-                ${userId && `id = ${userId}`}
-                ${where?.pseudo && `pseudo=${where.pseudo}`}
-                ${where?.mail && `mail=${where.mail}`}
-                ${where?.role && `role=${where.role}`}
-            ${sort && 'ORDER BY'} ${sort && `id ${sort}`}
-            ${limit && 'LIMIT'} ${limit && ` ${limit}`}
-            ;
-        `;
+        const enums = {
+            where: isPrivate ? [] : ['id', 'pseudo', 'mail', 'role'], // No WHERE clause for users/me
+            select: ['propositions', 'reviews', 'metrics', 'movies'],
+        };
+        let values = [] as Array<unknown>,
+            SELECT: string = undefined,
+            WHERE = { query: '', count: 0, values: [] as Array<unknown> },
+            ORDERBY = '',
+            LIMIT = '';
 
-        console.log(query);
+        if (select) {
+            SELECT = dbService.reduceSelect(select as Record<string, unknown>, enums.select);
+        }
+        if (where) {
+            WHERE = dbService.reduceWhere(where as Record<string, unknown>, 'AND', enums.where);
+            values = WHERE.values as Array<unknown>;
+        }
+        if (isPrivate) {
+            WHERE = { query: 'id=$1', count: 1, values: [id] as Array<unknown> };
+            values = WHERE.values;
+        }
+        if (sort === 'asc' || sort === 'desc') {
+            ORDERBY = `ORDER BY id ${sort}`;
+        }
+        if (typeof limit === 'number' && limit > 0) {
+            LIMIT = `LIMIT ${limit}`;
+        }
 
-        const { rowCount, rows } = await postgres.query(query);
+        const { rowCount, rows } = await dbService.requestDatabase({
+            text: ` SELECT id, pseudo, ${isPrivate ? 'mail, ' : ''}role, created_at, updated_at
+              ${SELECT ? `,${SELECT}` : ''}
+              FROM userview
+              ${WHERE?.count ? `WHERE ${WHERE.query}` : ''}
+              ${ORDERBY}
+              ${LIMIT};`,
+            values,
+        });
+
         return { rowCount, rows };
     };
 
@@ -56,26 +74,24 @@ export default plugin(async fastify => {
      * Update one user.
      */
     const updateUser: UpdateUserFn = async (id, set) => {
-        const query = sql`
-            UPDATE "user" SET 
-                ${set.pseudo ? `pseudo=${set.pseudo}` : ''}
-                ${set.mail ? `mail=${set.mail}` : ''}
-                ${set.password ? `password=${set.password}` : ''}
-            WHERE id=${id};
-        `;
-
-        await postgres.query(query);
+        const enumerator = ['pseudo', 'mail', 'password'];
+        const SET = dbService.reduceWhere(set as Record<string, unknown>, ',', enumerator, 1);
+        await dbService.requestDatabase({
+            text: ` UPDATE "user"
+              SET ${SET.query}
+              WHERE id=$1;`,
+            values: [id, ...SET.values],
+        });
     };
 
     /**
      * Delete one user.
      */
     const deleteUser: DeleteUserFn = async id => {
-        const query = sql`
-            DELETE FROM "user" WHERE id=${id};
-        `;
-
-        await postgres.query(query);
+        await dbService.requestDatabase({
+            text: ' DELETE FROM "user" WHERE id=$1;',
+            values: [id],
+        });
     };
 
     fastify.decorate('services', {
