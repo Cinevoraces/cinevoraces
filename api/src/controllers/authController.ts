@@ -25,23 +25,20 @@ export default async (fastify: FastifyInstance) => {
             const { _errorService, _authService } = this;
             const { body } = request;
 
-            // 'moi' endpoint is used for private user pages
-            // forbiddenPseudos could be filled later whith bad words
-            const forbiddenPseudos = ['moi'];
-            if (forbiddenPseudos.includes(body.pseudo)) _errorService.send(EErrorMessages.FORBIDDEN_PSEUDO, 409);
-            // Duplicate check
+            if (!body.password.is('valid-password')) {
+                _errorService.send(EErrorMessages.INVALID_PASSWORD_FORMAT, 422);
+            }
+            if (!body.pseudo.is('valid-pseudo')) {
+                _errorService.send(EErrorMessages.FORBIDDEN_PSEUDO, 409);
+            }
+
+            // issues/168: Duplicate check - Should be done in the database
             const user = await _authService.getUserByPseudoOrMail(body.pseudo, body.mail);
             if (user && body.mail === user.mail) _errorService.send(EErrorMessages.DUPLICATE_MAIL, 409);
             if (user && body.pseudo === user.pseudo) _errorService.send(EErrorMessages.DUPLICATE_PSEUDO, 409);
-            // Test and Hash password
-            if (!body.password.match(/^(?=.*[A-Z])(?=.*[!#$%*+=?|-])(?=.*\d)[!#$%*+=?|\-A-Za-z\d]{12,}$/))
-                _errorService.send(EErrorMessages.INVALID_PASSWORD_FORMAT, 422);
 
             body.password = await hashString(body.password);
-
-            // Create user
             await _authService.createUser(body);
-
             reply.code(200).send({ message: EResponseMessages.CREATE_USER_SUCCESS });
         },
     });
