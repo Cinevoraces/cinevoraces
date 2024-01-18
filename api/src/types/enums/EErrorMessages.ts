@@ -17,7 +17,6 @@ export enum EErrorMessages {
     COMPROMISED_SESSION = 'Session compromise. Veuillez vous reconnecter.',
     INVALID_USER = 'Utilisateur introuvable.',
     MISSING_PASSWORD = 'Mot de passe requis.',
-    NO_EPISODE_AVAILABLE = 'Aucun créneau disponible.',
     NOT_FOUND = 'Aucun résultat.',
     NOT_FOUND_MOVIE = 'Aucun film trouvé',
     ALREADY_POSTED_MOVIE = 'Le film sélectionné a déjà été proposé.',

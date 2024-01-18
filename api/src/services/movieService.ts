@@ -1,4 +1,4 @@
-import type { Episode, Movie, PostMovie, PutMovie, QueryString, Season } from '@src/types';
+import type { Movie, PostMovie, PutMovie, QueryString, Season } from '@src/types';
 import type { FastifyPluginCallback } from 'fastify';
 import plugin from 'fastify-plugin';
 import type { PoolClient } from 'pg';
@@ -176,28 +176,6 @@ class MovieService extends DatabaseService {
             text: 'SELECT new_season($1, $2, $3);',
             values: [seasonNumber, year, firstMondayOfTheYear],
         });
-    }
-
-    /**
-     * @description Get the next 5 available episodes within 1 month. Consider current episode if available too.
-     * @returns Array of episodes.
-     */
-    public async getAvailableEpisodes(): Promise<{
-        rowCount: number;
-        rows: Episode[];
-    }> {
-        const { rowCount, rows } = await this.requestDatabase({
-            text: ` SELECT ep.id, ep.season_number, ep.episode_number, ep.publishing_date
-                FROM "episode" ep
-                  LEFT JOIN (SELECT "movie".id, "movie".episode_id FROM movie) mv 
-                    ON mv.episode_id = ep.id
-                  WHERE mv.id IS NULL
-                AND ep.publishing_date >= (NOW() - interval '6 days')
-                AND ep.publishing_date < (NOW() + interval '1 month')
-              ORDER BY ep.publishing_date ASC
-              LIMIT 5;`,
-        });
-        return { rowCount, rows };
     }
 
     /**

@@ -40,3 +40,5 @@ export default [
     reviewService,
     userService,
 ] as Array<FastifyPluginCallback>;
+
+export { default as episodeService, type GetAvailableEpisodesFn } from './episodeService';

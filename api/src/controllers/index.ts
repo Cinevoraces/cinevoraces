@@ -1,9 +1,9 @@
 import type { FastifyPluginCallback } from 'fastify';
-import publicController from './publicController';
 import authController from './authController';
-import episodesController from './episodesController';
+import episodesController from './episodes/controller';
 import metricsController from './metricsController';
 import moviesController from './moviesController';
+import publicController from './publicController';
 import reviewsController from './reviewsController';
 import seasonsController from './seasonsController';
 import usersController from './usersController';
