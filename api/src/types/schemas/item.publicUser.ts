@@ -33,7 +33,7 @@ export const IPublicUser = {
                 },
             },
         },
-        metrics: { $ref: `${ESchemasIds.IUserMetrics}#` },
+        metrics: { $ref: `Metrics#` },
     },
     required: ['id', 'pseudo', 'role', 'created_at', 'updated_at'],
 };

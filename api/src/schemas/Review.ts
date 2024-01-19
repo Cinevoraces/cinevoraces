@@ -1,7 +1,5 @@
-import { ESchemasIds } from '../enums/ESchemasIds';
-
-export const IReview = {
-    $id: ESchemasIds.IReview,
+export const Review = {
+    $id: 'Review',
     type: 'object',
     properties: {
         movie_id: { type: 'number' },

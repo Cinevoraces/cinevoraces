@@ -1,12 +1,4 @@
-import {
-    EAddReview,
-    EErrorMessages,
-    EResponseMessages,
-    EReview,
-    ESchemasIds,
-    EUpdateReview,
-    type Review,
-} from '@src/types';
+import { EAddReview, EReview, ESchemasIds, EUpdateReview, type Review } from '@src/types';
 import { type FastifyInstance, type FastifyReply as Reply, type FastifyRequest as Request } from 'fastify';
 
 /**
@@ -60,41 +52,6 @@ export default async (fastify: FastifyInstance) => {
             };
 
             reply.code(201).send(response);
-        },
-    });
-
-    /**
-     * @description Get all reviews as admin.
-     * @route GET /admin/reviews
-     */
-    fastify.route({
-        method: 'GET',
-        url: '/admin/reviews',
-        schema: fastify.getSchema(ESchemasIds.GETReviewsAsAdmin),
-        onRequest: [fastify.isAdmin],
-        handler: async function (request: Request, reply: Reply) {
-            const { _errorService, _reviewService } = this;
-            const { rows: reviews, rowCount } = await _reviewService.getReviewsAsAdmind(request.query);
-            if (!rowCount) _errorService.send(EErrorMessages.NOT_FOUND, 404);
-            reply.code(200).send(reviews);
-        },
-    });
-
-    /**
-     * @description Delete a comment on a review as admin.
-     * @route DELETE /admin/reviews/:movieId/:userId
-     */
-    fastify.route({
-        method: 'DELETE',
-        url: '/admin/reviews/:movieId/:userId',
-        schema: fastify.getSchema(ESchemasIds.DELETEMoviesAsAdmin),
-        onRequest: [fastify.isAdmin],
-        preValidation: [fastify.verifyPassword],
-        handler: async function (request: Request<{ Params: { movieId: number; userId: number } }>, reply: Reply) {
-            const { _reviewService } = this;
-            const { movieId, userId } = request.params;
-            await _reviewService.deleteCommentAsAdmin(movieId, userId);
-            reply.code(201).send({ message: EResponseMessages.DELETE_COMMENT_SUCCESS });
         },
     });
 };

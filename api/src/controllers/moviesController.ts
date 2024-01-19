@@ -104,38 +104,4 @@ export default async (fastify: FastifyInstance) => {
             reply.code(201).send({ message: EResponseMessages.PROPOSITION_UPDATE_SUCCESS });
         },
     });
-
-    /**
-     * @description Publish a pending proposition.
-     * @route PUT /admin/movies/publish/:id
-     */
-    fastify.route({
-        method: 'PUT',
-        url: '/admin/movies/publish/:id',
-        schema: fastify.getSchema(ESchemasIds.PUTMoviesAsAdmin),
-        onRequest: [fastify.isAdmin],
-        preValidation: [fastify.verifyPassword, fastify.adminThrowIfMovieIsPublished],
-        handler: async function (request: Request<{ Params: { id: number } }>, reply: Reply) {
-            const { _movieService } = this;
-            await _movieService.publishMovie(request.params.id);
-            reply.code(201).send({ message: EResponseMessages.PROPOSITION_PUBLICATION_SUCCESS });
-        },
-    });
-
-    /**
-     * @description Delete one movie.
-     * @route DELETE /admin/movies
-     */
-    fastify.route({
-        method: 'DELETE',
-        url: '/admin/movies/:id',
-        schema: fastify.getSchema(ESchemasIds.DELETEMoviesAsAdmin),
-        onRequest: [fastify.isAdmin],
-        preValidation: [fastify.verifyPassword, fastify.throwIfMovieNotFound],
-        handler: async function (request: Request<{ Params: { id: number } }>, reply: Reply) {
-            await this._movieService.deleteMovie(request.params.id);
-
-            reply.code(201).send({ message: EResponseMessages.DELETE_MOVIE_SUCCESS });
-        },
-    });
 };

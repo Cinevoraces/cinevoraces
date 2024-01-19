@@ -98,17 +98,6 @@ class UserService extends DatabaseService {
             values: [id, ...SET.values],
         });
     }
-
-    /**
-     * @description Delete one user.
-     * @param {number} id User's id.
-     */
-    public async deleteUser(id: number): Promise<void> {
-        await this.requestDatabase({
-            text: ' DELETE FROM "user" WHERE id=$1;',
-            values: [id],
-        });
-    }
 }
 
 // Decorate FastifyInstance with UserService

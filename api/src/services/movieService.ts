@@ -1,4 +1,4 @@
-import type { Movie, PostMovie, PutMovie, QueryString, Season } from '@src/types';
+import type { Movie, PostMovie, PutMovie, QueryString } from '@src/types';
 import type { FastifyPluginCallback } from 'fastify';
 import plugin from 'fastify-plugin';
 import type { PoolClient } from 'pg';
@@ -112,70 +112,6 @@ class MovieService extends DatabaseService {
             values: [payload.presentation, payload.movie_id],
         });
         return rows[0];
-    }
-
-    /**
-     * @description Update is_publish movie state.
-     * @param {number} id movie's id
-     */
-    public async publishMovie(id: number): Promise<void> {
-        await this.requestDatabase({
-            text: 'UPDATE movie SET is_published = true WHERE id = $1;',
-            values: [id],
-        });
-    }
-
-    /**
-     * @description Delete one movie.
-     * @param {number} id movie's id
-     */
-    public async deleteMovie(id: number): Promise<void> {
-        await this.requestDatabase({
-            text: 'DELETE FROM movie WHERE id = $1;',
-            values: [id],
-        });
-    }
-
-    /**
-     * @description Get all seasons objects.
-     * @returns Array of seasons.
-     */
-    public async getSeasons(): Promise<{
-        rowCount: number;
-        rows: Array<unknown>;
-    }> {
-        const { rowCount, rows } = await this.requestDatabase({
-            text: 'SELECT * FROM seasonView;',
-            values: [],
-        });
-        return { rowCount, rows };
-    }
-
-    /**
-     * @description Get one season object by season number.
-     * @param {number} seasonNumber season's number
-     * @returns Season object.
-     */
-    public async getSeasonByNumber(seasonNumber: number): Promise<Season> {
-        const { rowCount, rows } = await this.requestDatabase({
-            text: 'SELECT * FROM season WHERE number = $1;',
-            values: [seasonNumber],
-        });
-
-        return rowCount ? rows[0] : null;
-    }
-
-    /**
-     * @description Create a new season and it's episodes.
-     * @param {number} year season's year
-     * @param {number} seasonNumber season's number
-     * @param {Date} firstMondayOfTheYear season's first monday
-     */
-    public async insertNewSeason(year: number, seasonNumber: number, firstMondayOfTheYear: Date): Promise<void> {
-        await this.requestDatabase({
-            text: 'SELECT new_season($1, $2, $3);',
-            values: [seasonNumber, year, firstMondayOfTheYear],
-        });
     }
 
     /**

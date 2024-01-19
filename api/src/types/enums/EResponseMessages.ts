@@ -9,7 +9,6 @@ export enum EResponseMessages {
     PROPOSITION_SUCCESS = 'Votre proposition a bien été enregistrée.',
     PROPOSITION_UPDATE_SUCCESS = 'Votre proposition a bien été mise à jour.',
     REFRESH_SUCCESS = 'Tokens régénérés avec succés.',
-    SEASON_CREATED_SUCCESS = 'Nouvelle saison créée.',
     UPDATE_MOVIES_POSTERS_SUCCESS = 'Les posters ont bien été mis à jour.',
     UPDATE_USER_PIC_SUCCESS = 'Votre avatar a bien été mis à jour.',
     UPDATE_USER_SUCCESS = 'Votre profil a bien été mis à jour.',

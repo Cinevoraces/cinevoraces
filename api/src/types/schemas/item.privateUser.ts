@@ -34,7 +34,7 @@ export const IPrivateUser = {
                 },
             },
         },
-        metrics: { $ref: `${ESchemasIds.IUserMetrics}#` },
+        metrics: { $ref: `Metrics#` },
     },
     required: ['id', 'pseudo', 'mail', 'role', 'created_at', 'updated_at'],
 };

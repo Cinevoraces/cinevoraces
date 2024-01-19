@@ -1,7 +1,5 @@
-import { ESchemasIds } from '../enums/ESchemasIds';
-
-export const ISeason = {
-    $id: ESchemasIds.ISeason,
+export const Season = {
+    $id: 'Season',
     type: 'object',
     required: ['season_number', 'year', 'movie_count'],
     properties: {

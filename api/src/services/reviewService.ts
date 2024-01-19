@@ -1,4 +1,4 @@
-import type { QueryString, Review } from '@src/types';
+import type { Review } from '@src/types';
 import type { FastifyPluginCallback } from 'fastify';
 import plugin from 'fastify-plugin';
 import type { PoolClient } from 'pg';
@@ -89,54 +89,6 @@ class ReviewService extends DatabaseService {
             text: ` UPDATE "review" SET ${column} = $3, "updated_at" = NOW()
               WHERE user_id=$1 AND movie_id=$2;`,
             values: [userId, movieId, value],
-        });
-    }
-
-    /**
-     * @description Get reviews according to query.
-     * @param {object} query object containing queries parameters
-     * @returns Array of review object.
-     */
-    public async getReviewsAsAdmind(query: QueryString): Promise<{ rowCount: number; rows: Array<unknown> }> {
-        const enumerator = ['author_id', 'movie_id'];
-        const { where, limit, sort } = query;
-        let values = [] as Array<unknown>,
-            WHERE = { query: '', count: 0, values: [] as Array<unknown> },
-            ORDERBY = '',
-            LIMIT = '';
-        // Build WHERE query
-        if (where) {
-            WHERE = this.reduceWhere(where, 'AND', enumerator);
-            values = WHERE.values as Array<unknown>;
-        }
-        // Build ORDERBY query
-        if (sort === 'asc' || sort === 'desc') {
-            ORDERBY = `ORDER BY id ${sort}`;
-        }
-        // Build LIMIT query
-        if (typeof limit === 'number' && limit > 0) {
-            LIMIT = `LIMIT ${limit}`;
-        }
-        const { rowCount, rows } = await this.requestDatabase({
-            text: ` SELECT * FROM reviewview
-            ${WHERE?.count ? `WHERE ${WHERE.query}` : ''}
-            ${ORDERBY}
-            ${LIMIT};`,
-            values,
-        });
-        return { rowCount, rows };
-    }
-
-    /**
-     * @description Delete one movie.
-     * @param {number} userId user's id
-     * @param {number} movieId user's id
-     */
-    public async deleteCommentAsAdmin(userId: number, movieId: number): Promise<void> {
-        await this.requestDatabase({
-            text: ` UPDATE review SET comment = null 
-              WHERE user_id=$1 AND movie_id=$2;`,
-            values: [userId, movieId],
         });
     }
 }

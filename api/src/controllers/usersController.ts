@@ -104,26 +104,4 @@ export default async (fastify: FastifyInstance) => {
             }
         },
     });
-
-    /**
-     * @description Delete user by id.
-     * @route DELETE /users
-     */
-    fastify.route({
-        method: 'DELETE',
-        url: '/admin/users/:id',
-        schema: fastify.getSchema(ESchemasIds.DELETEUsersAsAdmin),
-        onRequest: [fastify.isAdmin],
-        preValidation: [fastify.verifyPassword],
-        handler: async function (request: Request<{ Params: { id: number } }>, reply: Reply) {
-            const { _errorService, _userService } = this;
-            const { id } = request.params;
-            // Check if user exists
-            const { rowCount } = await _userService.getUsersByQuery({ where: { id } }, true);
-            if (!rowCount) _errorService.send(EErrorMessages.NOT_FOUND, 404);
-            // Delete user
-            await _userService.deleteUser(id);
-            reply.code(200).send({ message: EResponseMessages.DELETE_USER_SUCCESS });
-        },
-    });
 };

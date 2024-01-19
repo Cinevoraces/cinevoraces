@@ -1,7 +1,5 @@
-import { ESchemasIds } from '../enums/ESchemasIds';
-
-export const IGlobalMetrics = {
-    $id: ESchemasIds.IGlobalMetrics,
+export const GlobalMetrics = {
+    $id: 'GlobalMetrics',
     type: 'object',
     required: ['seasons_count', 'movies_count', 'countries_count'],
     properties: {
@@ -11,8 +9,8 @@ export const IGlobalMetrics = {
     },
 };
 
-export const IUserMetrics = {
-    $id: ESchemasIds.IUserMetrics,
+export const Metrics = {
+    $id: 'Metrics',
     type: 'object',
     required: ['propositions_count', 'comments_count', 'likes_count', 'watchlist_count', 'ratings_count'],
     properties: {

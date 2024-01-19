@@ -5,11 +5,21 @@ import fastifyMultipart, { type FastifyMultipartOptions } from '@fastify/multipa
 import fastifyStatic, { type FastifyStaticOptions } from '@fastify/static';
 import FastifySwagger, { type SwaggerOptions } from '@fastify/swagger';
 import FastifySwaggerUi, { type FastifySwaggerUiOptions } from '@fastify/swagger-ui';
-import { episodeService } from '@src/services';
+import controllers, {
+    adminController,
+    episodesController,
+    metricsController,
+    seasonsController,
+} from '@src/controllers';
+import hooks from '@src/hooks';
+import { Episode, GlobalMetrics, Metrics, Review, Season } from '@src/schemas';
+import services from '@src/services';
+import { schemas } from '@src/types';
 import type { FastifyInstance, FastifyServerOptions } from 'fastify';
 import fastify from 'fastify';
 import type { PoolConfig } from 'pg';
 import qs from 'qs';
+import addSchemas from './utils/addSchemas';
 import dbConnector from './utils/dbConnector';
 
 interface DependenciesOpts {
@@ -52,6 +62,8 @@ export default class Server {
         this.fastify = fastify({ ...this.serverOpts, querystringParser: this.querystringParser });
 
         // Register dependencies
+        [...schemas, Episode, Metrics, GlobalMetrics, Review, Season].forEach(s => this.fastify.addSchema(s));
+        this.fastify.register(addSchemas);
         this.fastify.register(dbConnector, this.dependenciesOpts['pg']);
         this.fastify.register(fastifyCookie, this.dependenciesOpts['@fastify/cookie']);
         this.fastify.register(fastifyCors, this.dependenciesOpts['@fastify/cors']);
@@ -60,8 +72,15 @@ export default class Server {
         this.fastify.register(fastifyStatic, this.dependenciesOpts['@fastify/static']);
         this.fastify.register(FastifySwagger, this.dependenciesOpts['@fastify/swagger']);
         this.fastify.register(FastifySwaggerUi, this.dependenciesOpts['@fastify/swagger-ui']);
-        // Register services
-        this.fastify.register(episodeService);
+        // Legacy register
+        services.forEach(s => this.fastify.register(s));
+        hooks.forEach(h => this.fastify.register(h));
+        controllers.forEach(({ c, opts }) => this.fastify.register(c, opts));
+        // Register controllers
+        this.fastify.register(adminController);
+        this.fastify.register(episodesController);
+        this.fastify.register(metricsController);
+        this.fastify.register(seasonsController);
     }
 
     /**
