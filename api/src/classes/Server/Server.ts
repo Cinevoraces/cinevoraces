@@ -12,9 +12,19 @@ import controllers, {
     seasonsController,
 } from '@src/controllers';
 import hooks from '@src/hooks';
-import { Episode, GlobalMetrics, Metrics, Review, Season } from '@src/schemas';
+import {
+    Episode as EpisodeSchema,
+    Error as ErrorSchema,
+    GlobalMetrics as GlobalMetricsSchema,
+    Metrics as MetricsSchema,
+    Movie as MovieSchema,
+    PrivateUser as PrivateUserSchema,
+    PublicUser as PublicUserSchema,
+    ReducedMovie as ReducedMovieSchema,
+    Review as ReviewSchema,
+    Season as SeasonSchema,
+} from '@src/schemas';
 import services from '@src/services';
-import { schemas } from '@src/types';
 import type { FastifyInstance, FastifyServerOptions } from 'fastify';
 import fastify from 'fastify';
 import type { PoolConfig } from 'pg';
@@ -60,10 +70,21 @@ export default class Server {
      */
     public init() {
         this.fastify = fastify({ ...this.serverOpts, querystringParser: this.querystringParser });
-
-        // Register dependencies
-        [...schemas, Episode, Metrics, GlobalMetrics, Review, Season].forEach(s => this.fastify.addSchema(s));
+        // Register schemas
+        [
+            ErrorSchema,
+            EpisodeSchema,
+            MetricsSchema,
+            GlobalMetricsSchema,
+            ReviewSchema,
+            PublicUserSchema,
+            PrivateUserSchema,
+            MovieSchema,
+            ReducedMovieSchema,
+            SeasonSchema,
+        ].forEach(s => this.fastify.addSchema(s));
         this.fastify.register(addSchemas);
+        // Register dependencies
         this.fastify.register(dbConnector, this.dependenciesOpts['pg']);
         this.fastify.register(fastifyCookie, this.dependenciesOpts['@fastify/cookie']);
         this.fastify.register(fastifyCors, this.dependenciesOpts['@fastify/cors']);

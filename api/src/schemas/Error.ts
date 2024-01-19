@@ -1,7 +1,5 @@
-import { ESchemasIds } from '../enums/ESchemasIds';
-
 export const Error = {
-    $id: ESchemasIds.Error,
+    $id: 'Error',
     type: 'object',
     required: ['message'],
     properties: {

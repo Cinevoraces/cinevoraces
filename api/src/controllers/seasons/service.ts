@@ -5,12 +5,10 @@ export default async (postgres: PoolClient) => {
     /**
      * Get all seasons.
      */
-    const getSeasons: GetSeasonsFn = async () => {
-        const { rowCount, rows } = await postgres.query({
+    const getSeasons: GetSeasonsFn = async () =>
+        await postgres.query({
             text: 'SELECT * FROM seasonView;',
         });
-        return { rowCount, rows };
-    };
 
     /**
      * Get one season by season number.
@@ -20,8 +18,8 @@ export default async (postgres: PoolClient) => {
             text: 'SELECT * FROM season WHERE number = $1;',
             values: [seasonNumber],
         });
-
-        return rowCount ? rows[0] : null;
+        if (!rowCount) throw new ServerError(404);
+        return rows[0];
     };
 
     return {

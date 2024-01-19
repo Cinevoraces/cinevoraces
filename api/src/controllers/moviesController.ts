@@ -1,4 +1,4 @@
-import { EErrorMessages, EResponseMessages, ESchemasIds, type PostMovie, type PutMovie } from '@src/types';
+import { ESchemasIds, type PostMovie, type PutMovie } from '@src/types';
 import { type FastifyInstance, type FastifyReply as Reply, type FastifyRequest as Request } from 'fastify';
 
 /**
@@ -17,10 +17,14 @@ export default async (fastify: FastifyInstance) => {
         onRequest: [fastify.verifyAccessTokenOptionnal],
         handler: async function (request: Request, reply: Reply) {
             const { query, user } = request;
-            const { _movieService, _reviewService, _errorService } = this;
+            const { _movieService, _reviewService } = this;
 
             const { rows: movies, rowCount } = await _movieService.getMoviesByQuery(query);
-            if (!rowCount) _errorService.send(EErrorMessages.NOT_FOUND_MOVIE, 404);
+            if (!rowCount) {
+                // issues/168 - FIXME: This isn't an error
+                throw new ServerError(404, 'NOT_FOUND', 'Aucun film trouvé');
+            }
+
             // TODO: This solution must be treated using SQL.
             // Populate movies with user existing reviews if logged
             if (user) {
@@ -48,11 +52,9 @@ export default async (fastify: FastifyInstance) => {
         url: '/movies/random-posters/:count',
         schema: fastify.getSchema(ESchemasIds.GETRandomMoviePosters),
         handler: async function (request: Request<{ Params: { count: number } }>, reply: Reply) {
-            const { _movieService, _errorService } = this;
-
+            const { _movieService } = this;
             const posters = await _movieService.getRandomMoviePosters(request.params.count);
-            if (posters.length < request.params.count || !posters.length)
-                _errorService.send(EErrorMessages.NOT_FOUND_MOVIE, 404);
+            if (request.params.count) throw new ServerError(400);
 
             reply.code(200).send(posters);
         },
@@ -69,7 +71,7 @@ export default async (fastify: FastifyInstance) => {
         onRequest: [fastify.verifyAccessToken],
         preValidation: [fastify.throwIfMovieFound],
         handler: async function (request: Request, reply: Reply) {
-            const { _movieService, _fileService } = this;
+            const { _movieService } = this;
             const movie = request.body as PostMovie;
             // Get poster url and delete it from payload as it's not a movie property
             const poster_url = movie.poster_url;
@@ -82,9 +84,10 @@ export default async (fastify: FastifyInstance) => {
             };
             const movieId = await _movieService.insertNewMovie(payload);
             // Save poster to DB
-            await _fileService.UploadMoviePoster(movieId, poster_url);
+            await _movieService.uploadMoviePoster(movieId, poster_url);
 
-            reply.code(200).send({ message: EResponseMessages.PROPOSITION_SUCCESS });
+            // issues/168 - FIXME: This should not return the final message
+            reply.code(200).send({ message: 'Votre proposition a bien été enregistrée.' });
         },
     });
 
@@ -101,7 +104,9 @@ export default async (fastify: FastifyInstance) => {
         handler: async function (request: Request, reply: Reply) {
             const { _movieService } = this;
             await _movieService.updateUnpublishedMovie(request.body as PutMovie);
-            reply.code(201).send({ message: EResponseMessages.PROPOSITION_UPDATE_SUCCESS });
+
+            // issues/168 - FIXME: This should not return the final message
+            reply.code(201).send({ message: 'Votre proposition a bien été mise à jour.' });
         },
     });
 };

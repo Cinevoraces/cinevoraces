@@ -69,7 +69,7 @@ export const GETMovies = {
     response: {
         200: {
             type: 'array',
-            items: { $ref: `${ESchemasIds.IMovie}#` },
+            items: { $ref: 'Movie#' },
         },
     },
 };

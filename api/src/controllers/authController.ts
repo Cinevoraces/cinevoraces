@@ -1,4 +1,4 @@
-import { EErrorMessages, EResponseMessages, ESchemasIds } from '@src/types';
+import { ESchemasIds } from '@src/types';
 import { hashString } from '@src/utils';
 import { type FastifyInstance, type FastifyReply as Reply, type FastifyRequest as Request } from 'fastify';
 
@@ -22,27 +22,33 @@ export default async (fastify: FastifyInstance) => {
             request: Request<{ Body: { pseudo: string; mail: string; password: string } }>,
             reply: Reply,
         ) {
-            const { _errorService, _authService } = this;
+            const { _authService } = this;
             const { body } = request;
 
             // 'moi' endpoint is used for private user pages
-            // forbiddenPseudos could be filled later whith bad words
             const forbiddenPseudos = ['moi'];
-            if (forbiddenPseudos.includes(body.pseudo)) _errorService.send(EErrorMessages.FORBIDDEN_PSEUDO, 409);
-            // Duplicate check
+            if (forbiddenPseudos.includes(body.pseudo)) {
+                // issues/168 - FIXME: This should not return the final error message
+                throw new ServerError(409, 'DUPLICATE_PSEUDO', 'Ce pseudo est réservé ou interdit');
+            }
             const user = await _authService.getUserByPseudoOrMail(body.pseudo, body.mail);
-            if (user && body.mail === user.mail) _errorService.send(EErrorMessages.DUPLICATE_MAIL, 409);
-            if (user && body.pseudo === user.pseudo) _errorService.send(EErrorMessages.DUPLICATE_PSEUDO, 409);
+            if (user && body.mail === user.mail) {
+                // issues/168 - FIXME: This should not return the final error message
+                throw new ServerError(409, 'DUPLICATE_MAIL', 'Cette adresse mail est déjà associée à un compte');
+            }
+            if (user && body.pseudo === user.pseudo) {
+                // issues/168 - FIXME: This should not return the final error message
+                throw new ServerError(409, 'DUPLICATE_PSEUDO', 'Ce pseudo est réservé ou interdit');
+            }
             // Test and Hash password
-            if (!body.password.match(/^(?=.*[A-Z])(?=.*[!#$%*+=?|-])(?=.*\d)[!#$%*+=?|\-A-Za-z\d]{12,}$/))
-                _errorService.send(EErrorMessages.INVALID_PASSWORD_FORMAT, 422);
+            if (!body.password.match(/^(?=.*[A-Z])(?=.*[!#$%*+=?|-])(?=.*\d)[!#$%*+=?|\-A-Za-z\d]{12,}$/)) {
+                throw new ServerError(400, 'INVALID_PASSWORD_FORMAT', 'Le format du mot de passe est invalide.');
+            }
 
             body.password = await hashString(body.password);
-
-            // Create user
             await _authService.createUser(body);
-
-            reply.code(200).send({ message: EResponseMessages.CREATE_USER_SUCCESS });
+            // issues/168 - FIXME: This should not return the final message
+            reply.code(200).send({ message: 'Compte utilisateur créé avec succès.' });
         },
     });
 
@@ -58,16 +64,19 @@ export default async (fastify: FastifyInstance) => {
             request: Request<{ Body: { pseudo?: string; mail?: string; password: string } }>,
             reply: Reply,
         ) {
-            const { _errorService, _authService } = this;
+            const { _authService } = this;
             const { mail, pseudo, password } = request.body;
 
             const privateUser = await _authService.getPrivateUser(pseudo ? { pseudo } : { mail });
-            if (!privateUser)
-                // Check if user exists
-                _errorService.send(EErrorMessages.INVALID_USER, 404);
-            // Check if password match
+            if (!privateUser) {
+                // issues/168 - FIXME: This should not return the final error message
+                throw new ServerError(401, 'INVALID_CREDENTIALS', 'Identifiants incorrects.');
+            }
             const isPasswordCorrect = await _authService.verifyPassword(privateUser.id, password);
-            if (!isPasswordCorrect) _errorService.send(EErrorMessages.INVALID_PASSWORD, 401);
+            if (!isPasswordCorrect) {
+                // issues/168 - FIXME: This should not return the final error message
+                throw new ServerError(401, 'INVALID_CREDENTIALS', 'Identifiants incorrects.');
+            }
 
             const tokensContent = {
                 id: privateUser.id,
@@ -75,7 +84,6 @@ export default async (fastify: FastifyInstance) => {
                 role: privateUser.role,
             };
 
-            // Generate tokens
             const accessToken = await reply.jwtSign(tokensContent, aTokenOptions);
             const refreshToken = await reply.jwtSign(tokensContent, rTokenOptions);
 
@@ -91,7 +99,8 @@ export default async (fastify: FastifyInstance) => {
                 .send({
                     user: privateUser,
                     token: accessToken,
-                    message: `${EResponseMessages.LOGIN_SUCCESS} ${privateUser.pseudo} !`,
+                    // issues/168 - FIXME: This should not return the final message
+                    message: `Bienvenue ${privateUser.pseudo} !`,
                 });
         },
     });
@@ -106,21 +115,18 @@ export default async (fastify: FastifyInstance) => {
         schema: fastify.getSchema(ESchemasIds.GETRefresh),
         onRequest: [fastify.verifyRefreshToken],
         handler: async function (request: Request, reply: Reply) {
-            const { _errorService, _authService } = this;
+            const { _authService } = this;
             const { user } = request;
 
             const privateUser = await _authService.getPrivateUser({ id: user.id });
 
-            if (!privateUser) _errorService.send(EErrorMessages.COMPROMISED_SESSION, 401);
+            if (!privateUser) throw new ServerError(401, 'INVALID_TOKEN');
 
-            // Generate new tokens
             const tokensContent = {
                 id: privateUser.id,
                 pseudo: privateUser.pseudo,
                 role: privateUser.role,
             };
-
-            // Generate tokens
             const accessToken = await reply.jwtSign(tokensContent, aTokenOptions);
             const refreshToken = await reply.jwtSign(tokensContent, rTokenOptions);
 
@@ -136,7 +142,6 @@ export default async (fastify: FastifyInstance) => {
                 .send({
                     user: privateUser,
                     token: accessToken,
-                    message: EResponseMessages.REFRESH_SUCCESS,
                 });
         },
     });

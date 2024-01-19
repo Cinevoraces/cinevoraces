@@ -10,10 +10,11 @@ export default plugin(async fastify => {
         url: '/metrics',
         schema: fastify.getSchema('API:GET/metrics'),
         handler: async (request: Request, reply: Reply) => {
-            const { rows } = await fastify.postgres.query({
+            const { rows, rowCount } = await fastify.postgres.query({
                 text: 'SELECT * FROM metricsView;',
             });
 
+            if (!rowCount) throw new ServerError(500, 'METRICS_COULD_NOT_GET');
             reply.code(200).send(rows[0]);
         },
     });

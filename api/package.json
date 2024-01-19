@@ -5,6 +5,7 @@
         "start": "node ./dist/src/index.js",
         "test": "jest --watchAll",
         "test:unit": "jest --watchAll ./tests/unit/*",
+        "test:int": "jest --watchAll ./tests/integration/*",
         "lint": "eslint --fix **/*.ts",
         "format": "prettier --write \"src/**/*.ts\""
     },

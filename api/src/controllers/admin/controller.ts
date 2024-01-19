@@ -1,4 +1,3 @@
-import { EResponseMessages } from '@src/types';
 import { type FastifyReply as Reply, type FastifyRequest as Request } from 'fastify';
 import plugin from 'fastify-plugin';
 import schemas from './schemas';
@@ -23,6 +22,7 @@ export default plugin(async fastify => {
         preValidation: [fastify.verifyPassword, fastify.adminThrowIfMovieIsPublished],
         handler: async (request: Request<PUTMovieAsAdminRequest>, reply: Reply) => {
             await publishMovie(request.params.id);
+            // issues/168 - FIXME: This should not return the final message
             reply.code(201).send({ message: 'La proposition a bien été publiée.' });
         },
     });
@@ -35,7 +35,8 @@ export default plugin(async fastify => {
         preValidation: [fastify.verifyPassword, fastify.throwIfMovieNotFound],
         handler: async (request: Request<DELETEMovieAsAdminRequest>, reply: Reply) => {
             await deleteMovie(request.params.id);
-            reply.code(201).send({ message: EResponseMessages.DELETE_MOVIE_SUCCESS });
+            // issues/168 - FIXME: This should not return the final message
+            reply.code(201).send({ message: 'Le film a bien été supprimée.' });
         },
     });
 
@@ -62,7 +63,8 @@ export default plugin(async fastify => {
         handler: async (request: Request<{ Params: { movieId: number; userId: number } }>, reply: Reply) => {
             const { movieId, userId } = request.params;
             await deleteComment(movieId, userId);
-            reply.code(201).send({ message: EResponseMessages.DELETE_COMMENT_SUCCESS });
+            // issues/168 - FIXME: This should not return the final message
+            reply.code(201).send({ message: 'Commentaire supprimé avec succès.' });
         },
     });
 
@@ -93,7 +95,8 @@ export default plugin(async fastify => {
         handler: async (request: Request<{ Params: { id: number } }>, reply: Reply) => {
             const { id } = request.params;
             await deleteUser(id);
-            reply.code(200).send({ message: EResponseMessages.DELETE_USER_SUCCESS });
+            // issues/168 - FIXME: This should not return the final message
+            reply.code(200).send({ message: 'Utilisateur supprimé avec succès.' });
         },
     });
 });

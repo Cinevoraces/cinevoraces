@@ -1,7 +1,5 @@
-import { ESchemasIds } from '../enums/ESchemasIds';
-
-export const IMovie = {
-    $id: ESchemasIds.IMovie,
+export const Movie = {
+    $id: 'Movie',
     type: 'object',
     properties: {
         id: { type: 'number' },
@@ -84,8 +82,8 @@ export const IMovie = {
     required: ['id', 'author_id', 'season_number', 'is_published', 'french_title', 'original_title', 'publishing_date'],
 };
 
-export const IReducedMovie = {
-    $id: ESchemasIds.IReducedMovie,
+export const ReducedMovie = {
+    $id: 'ReducedMovie',
     type: 'object',
     properties: {
         movie_id: { type: 'number' },
