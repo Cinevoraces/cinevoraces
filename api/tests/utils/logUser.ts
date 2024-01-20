@@ -3,7 +3,7 @@ import type { FastifyInstance } from 'fastify';
 export const logUser = async (instance: FastifyInstance) => {
     const { statusCode, json, cookies } = await instance.inject({
         method: 'POST',
-        url: '/login',
+        url: '/auth/login',
         payload: {
             pseudo: process.env.TEST_USER,
             password: process.env.TEST_PASS,

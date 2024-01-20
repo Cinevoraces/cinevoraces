@@ -1,1 +1,3 @@
-export type GetDocumentByIdFn = (type: string, id: number) => Promise<string>;
+export interface GETPublicRessourceRequest {
+    Params: { docType: string; entityId: number };
+}

@@ -1,14 +1,21 @@
+import { AuthService, MovieService, ReviewService, SeasonService, UserService } from '@src/services';
 import { type FastifyReply as Reply, type FastifyRequest as Request } from 'fastify';
 import plugin from 'fastify-plugin';
 import schemas from './schemas';
-import createService from './service';
-import type { DELETEMovieAsAdminRequest, PUTMovieAsAdminRequest } from './types';
+import type {
+    DELETECommentAsAdminRequest,
+    DELETEMovieAsAdminRequest,
+    DELETEUserAsAdminRequest,
+    PUTMovieAsAdminRequest,
+} from './types';
 import { type POSTSeasonRequest } from './types';
 
 export default plugin(async fastify => {
-    const { createSeason, deleteComment, deleteMovie, deleteUser, getReviews, publishMovie } = await createService(
-        fastify.postgres,
-    );
+    const authService = new AuthService(fastify.postgres);
+    const movieService = new MovieService(fastify.postgres);
+    const reviewService = new ReviewService(fastify.postgres);
+    const seasonService = new SeasonService(fastify.postgres);
+    const userService = new UserService(fastify.postgres);
     fastify.addSchemas(schemas);
 
     // ------------//
@@ -18,12 +25,11 @@ export default plugin(async fastify => {
         method: 'PUT',
         url: '/admin/movies/publish/:id',
         schema: fastify.getSchema('API:PUT/admin/movies/publish/:id'),
-        onRequest: [fastify.isAdmin],
-        preValidation: [fastify.verifyPassword, fastify.adminThrowIfMovieIsPublished],
         handler: async (request: Request<PUTMovieAsAdminRequest>, reply: Reply) => {
-            await publishMovie(request.params.id);
-            // issues/168 - FIXME: This should not return the final message
-            reply.code(201).send({ message: 'La proposition a bien été publiée.' });
+            await authService.verifyPasswordOrThrow(request.user.id, request.body.password);
+            await authService.isAdmin(request);
+            await movieService.publishMovie(request.params.id);
+            reply.code(201).send({ message: 'La proposition a bien été publiée.' }); // issues/168
         },
     });
 
@@ -31,12 +37,11 @@ export default plugin(async fastify => {
         method: 'DELETE',
         url: '/admin/movies/:id',
         schema: fastify.getSchema('API:DELETE/admin/movies/:id'),
-        onRequest: [fastify.isAdmin],
-        preValidation: [fastify.verifyPassword, fastify.throwIfMovieNotFound],
         handler: async (request: Request<DELETEMovieAsAdminRequest>, reply: Reply) => {
-            await deleteMovie(request.params.id);
-            // issues/168 - FIXME: This should not return the final message
-            reply.code(201).send({ message: 'Le film a bien été supprimée.' });
+            await authService.verifyPasswordOrThrow(request.user.id, request.body.password);
+            await authService.isAdmin(request);
+            await movieService.deleteMovie(request.params.id);
+            reply.code(201).send({ message: 'Le film a bien été supprimée.' }); // issues/168
         },
     });
 
@@ -47,9 +52,9 @@ export default plugin(async fastify => {
         method: 'GET',
         url: '/admin/reviews',
         schema: fastify.getSchema('API:GET/admin/reviews'),
-        onRequest: [fastify.isAdmin],
         handler: async (request: Request, reply: Reply) => {
-            const { rows: reviews } = await getReviews(request.query);
+            await authService.isAdmin(request);
+            const { rows: reviews } = await reviewService.getReviews(request.query);
             reply.code(200).send(reviews);
         },
     });
@@ -58,13 +63,12 @@ export default plugin(async fastify => {
         method: 'DELETE',
         url: '/admin/reviews/:movieId/:userId',
         schema: fastify.getSchema('API:DELETE/admin/reviews/:movieId/:userId'),
-        onRequest: [fastify.isAdmin],
-        preValidation: [fastify.verifyPassword],
-        handler: async (request: Request<{ Params: { movieId: number; userId: number } }>, reply: Reply) => {
+        handler: async (request: Request<DELETECommentAsAdminRequest>, reply: Reply) => {
             const { movieId, userId } = request.params;
-            await deleteComment(movieId, userId);
-            // issues/168 - FIXME: This should not return the final message
-            reply.code(201).send({ message: 'Commentaire supprimé avec succès.' });
+            await authService.verifyPasswordOrThrow(request.user.id, request.body.password);
+            await authService.isAdmin(request);
+            await reviewService.deleteComment(movieId, userId);
+            reply.code(201).send({ message: 'Commentaire supprimé avec succès.' }); // issues/168
         },
     });
 
@@ -75,10 +79,10 @@ export default plugin(async fastify => {
         method: 'POST',
         url: '/admin/seasons',
         schema: fastify.getSchema('API:POST/seasons'),
-        onRequest: [fastify.isAdmin],
         handler: async (request: Request<POSTSeasonRequest>, reply: Reply) => {
             const { year, season_number } = request.body;
-            await createSeason(year, season_number);
+            await authService.isAdmin(request);
+            await seasonService.createSeason(year, season_number);
             reply.code(201);
         },
     });
@@ -90,13 +94,12 @@ export default plugin(async fastify => {
         method: 'DELETE',
         url: '/admin/users/:id',
         schema: fastify.getSchema('API:DELETE/admin/users/:id'),
-        onRequest: [fastify.isAdmin],
-        preValidation: [fastify.verifyPassword],
-        handler: async (request: Request<{ Params: { id: number } }>, reply: Reply) => {
+        handler: async (request: Request<DELETEUserAsAdminRequest>, reply: Reply) => {
             const { id } = request.params;
-            await deleteUser(id);
-            // issues/168 - FIXME: This should not return the final message
-            reply.code(200).send({ message: 'Utilisateur supprimé avec succès.' });
+            await authService.verifyPasswordOrThrow(request.user.id, request.body.password);
+            await authService.isAdmin(request);
+            await userService.deleteUser(id);
+            reply.code(200).send({ message: 'Utilisateur supprimé avec succès.' }); // issues/168
         },
     });
 });

@@ -1,19 +1,30 @@
 import type { MultipartFile } from '@fastify/multipart';
 import { HTTPClient } from '@src/classes';
-import { EDocType, EMimeType } from '@src/types';
+import type { UpdateUserPayload } from '@src/controllers/users/types';
+import { EDocType, EMimeType, type ERoles, type GetUsers, type QueryString, type User } from '@src/types';
 import { cloudinaryDelete, cloudinaryUpload, deleteFile, getFolderPath, saveFile } from '@src/utils';
-import type { PoolClient } from 'pg';
-import DatabaseService from '../../services/databaseService';
-import type { DeleteUserFn, GetUsersFn, UpdateUserFn, UploadAvatarFn, ValidateAvatarFn } from './types';
+import type { QueryResult } from 'pg';
+import Service from './Service';
 
-export default async (postgres: PoolClient) => {
-    const dbService = new DatabaseService(postgres);
+type CreateUserFn = (values: Record<'pseudo' | 'mail' | 'password', string>) => Promise<void>;
+type DeleteUserFn = (id: number) => Promise<QueryResult>;
+type GetPrivateUserFn = (
+    value: { id: number } | { pseudo: string } | { mail: string },
+) => Promise<{ id: number; pseudo: string; mail: string; role: ERoles }>;
+type GetUsersFn = (
+    queryString: QueryString<GetUsers.Select, GetUsers.Where>,
+    id?: number,
+) => Promise<{ rowCount: number; rows: Array<User> }>;
+type UpdateUserFn = (id: number, payload: UpdateUserPayload) => Promise<void>;
+type UploadAvatarFn = (userId: number, avatar: MultipartFile) => Promise<void>;
+type ValidateAvatarFn = (avatar: MultipartFile) => void;
 
+export default class UserService extends Service {
     /**
      * Get users using query parameters.
      * - Set *id* to get "me" as user.
      */
-    const getUsers: GetUsersFn = async (queryString, id) => {
+    getUsers: GetUsersFn = async (queryString, id) => {
         const { select, where, limit, sort } = queryString;
         const isPrivate = id !== undefined;
 
@@ -28,10 +39,10 @@ export default async (postgres: PoolClient) => {
             LIMIT = '';
 
         if (select) {
-            SELECT = dbService.reduceSelect(select as Record<string, unknown>, enums.select);
+            SELECT = this.reduceSelect(select as Record<string, unknown>, enums.select);
         }
         if (where) {
-            WHERE = dbService.reduceWhere(where as Record<string, unknown>, 'AND', enums.where);
+            WHERE = this.reduceWhere(where as Record<string, unknown>, 'AND', enums.where);
             values = WHERE.values as Array<unknown>;
         }
         if (isPrivate) {
@@ -45,7 +56,7 @@ export default async (postgres: PoolClient) => {
             LIMIT = `LIMIT ${limit}`;
         }
 
-        return await dbService.requestDatabase({
+        return await this.postgres.query({
             text: ` SELECT id, pseudo, ${isPrivate ? 'mail, ' : ''}role, created_at, updated_at
               ${SELECT ? `,${SELECT}` : ''}
               FROM userview
@@ -57,12 +68,38 @@ export default async (postgres: PoolClient) => {
     };
 
     /**
+     * Get token construction data of one user using id or pseudo.
+     */
+    getPrivateUser: GetPrivateUserFn = async value => {
+        const column: string = Object.keys(value)[0];
+        const { rows } = await this.postgres.query({
+            text: ` 
+                    SELECT id, pseudo, mail, password, role, document_group_id
+                    FROM "user"
+                    WHERE ${Object.keys(value)[0]} = $1;`,
+            values: [value[column as keyof typeof value]],
+        });
+        return rows[0];
+    };
+
+    /**
+     * Create a new user.
+     */
+    createUser: CreateUserFn = async values => {
+        const { pseudo, mail, password } = values;
+        await this.postgres.query({
+            text: 'INSERT INTO "user" (pseudo, mail, password) VALUES ($1, $2, $3);',
+            values: [pseudo, mail, password],
+        });
+    };
+
+    /**
      * Update one user.
      */
-    const updateUser: UpdateUserFn = async (id, set) => {
+    updateUser: UpdateUserFn = async (id, set) => {
         const enumerator = ['pseudo', 'mail', 'password'];
-        const SET = dbService.reduceWhere(set as Record<string, unknown>, ',', enumerator, 1);
-        await dbService.requestDatabase({
+        const SET = this.reduceWhere(set as Record<string, unknown>, ',', enumerator, 1);
+        await this.postgres.query({
             text: ` UPDATE "user"
               SET ${SET.query}
               WHERE id=$1;`,
@@ -73,37 +110,33 @@ export default async (postgres: PoolClient) => {
     /**
      * Delete one user.
      */
-    const deleteUser: DeleteUserFn = async id => {
-        await dbService.requestDatabase({
+    deleteUser: DeleteUserFn = async id =>
+        await this.postgres.query({
             text: ' DELETE FROM "user" WHERE id=$1;',
             values: [id],
         });
-    };
 
     /**
      * Validate avatar file on upload.
      */
-    const validateAvatar: ValidateAvatarFn = (avatar: MultipartFile) => {
+    validateAvatar: ValidateAvatarFn = (avatar: MultipartFile) => {
         const allowedMimeTypes = [EMimeType.PNG, EMimeType.GIF, EMimeType.JPEG, EMimeType.JPG, EMimeType.WEBP];
 
         if (!avatar) {
-            // issues/168 - FIXME: This should not return the final error message
-            throw new ServerError(400, 'INVALID_FILE', 'Le fichier est invalide.');
+            throw new ServerError(400, 'INVALID_FILE', 'Le fichier est invalide.'); // issues/168
         }
         if (!allowedMimeTypes.includes(avatar.mimetype as EMimeType)) {
-            // issues/168 - FIXME: This should not return the final error message
-            throw new ServerError(415, 'INVALID_FILE_MIMETYPE', "Le format de ce fichier n'est pas pris en charge.");
+            throw new ServerError(415, 'INVALID_FILE_MIMETYPE', "Le format de ce fichier n'est pas pris en charge."); // issues/168
         }
         avatar.file.on('limit', () => {
-            // issues/168 - FIXME: This should not return the final error message
-            throw new ServerError(413, 'INVALID_FILE_SIZE', 'Le fichier est trop volumineux.');
+            throw new ServerError(413, 'INVALID_FILE_SIZE', 'Le fichier est trop volumineux.'); // issues/168
         });
     };
 
     /**
      * Use cloudinary to resize avatar then stores it on disk.
      */
-    const uploadAvatar: UploadAvatarFn = async (userId, avatar) => {
+    uploadAvatar: UploadAvatarFn = async (userId, avatar) => {
         const public_id = crypto.randomUUID();
         const tempFilePath = `${getFolderPath('temp')}/${public_id}.${avatar.mimetype.split('/')[1]}`;
         await saveFile(tempFilePath, avatar.file);
@@ -114,7 +147,7 @@ export default async (postgres: PoolClient) => {
         const httpClient = new HTTPClient();
         const { contentType } = await httpClient.downloadFile(cloudinaryUrl, { filename, destination: 'public' });
 
-        await dbService.requestDatabase({
+        await this.postgres.query({
             text: ' SELECT add_or_update_avatar($1, $2, $3);',
             values: [userId, filename, contentType],
         });
@@ -122,12 +155,4 @@ export default async (postgres: PoolClient) => {
         await deleteFile(tempFilePath);
         await cloudinaryDelete(public_id);
     };
-
-    return {
-        getUsers,
-        updateUser,
-        deleteUser,
-        validateAvatar,
-        uploadAvatar,
-    };
-};
+}

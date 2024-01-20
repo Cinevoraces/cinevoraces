@@ -1,12 +1,13 @@
+import { AuthService, UserService } from '@src/services';
 import { hashString } from '@src/utils';
 import { type FastifyReply as Reply, type FastifyRequest as Request } from 'fastify';
 import plugin from 'fastify-plugin';
 import schemas from './schemas';
-import createService from './service';
 import type { PUTUsersRequest } from './types';
 
 export default plugin(async fastify => {
-    const { getUsers, updateUser, uploadAvatar, validateAvatar } = await createService(fastify.postgres);
+    const authService = new AuthService(fastify.postgres);
+    const userService = new UserService(fastify.postgres);
     fastify.addSchemas(schemas);
 
     fastify.route({
@@ -14,10 +15,10 @@ export default plugin(async fastify => {
         url: '/users',
         schema: fastify.getSchema('API:GET/users'),
         handler: async (request: Request, reply: Reply) => {
-            const { rowCount, rows } = await getUsers(request.query);
-            if (!rowCount)
-                // issues/168 - FIXME: This should not return the final error message
-                throw new ServerError(404, 'NOT_FOUND', 'Aucun résultat.');
+            const { rowCount, rows } = await userService.getUsers(request.query);
+            if (!rowCount) {
+                throw new ServerError(404, 'NOT_FOUND', 'Aucun résultat.'); // issues/168
+            }
             reply.code(200).send(rows);
         },
     });
@@ -26,9 +27,9 @@ export default plugin(async fastify => {
         method: 'GET',
         url: '/users/me',
         schema: fastify.getSchema('API:GET/users/me'),
-        onRequest: [fastify.verifyAccessToken],
         handler: async (request: Request, reply: Reply) => {
-            const { rowCount, rows } = await getUsers(request.query, request.user.id);
+            await authService.verifyAccessToken(request);
+            const { rowCount, rows } = await userService.getUsers(request.query, request.user.id);
             if (!rowCount) throw new ServerError(404, 'TOKEN_USER_NOT_FOUND', 'Token user not found');
             reply.code(200).send(rows);
         },
@@ -38,24 +39,21 @@ export default plugin(async fastify => {
         method: 'PUT',
         url: '/users',
         schema: fastify.getSchema('API:PUT/users'),
-        onRequest: [fastify.verifyAccessToken],
-        preValidation: [fastify.verifyPassword],
         handler: async (request: Request<PUTUsersRequest>, reply: Reply) => {
+            await authService.verifyAccessToken(request);
+            await authService.verifyPasswordOrThrow(request.user.id, request.body.password);
             const { update_user } = request.body;
 
             if (update_user.password) {
-                // Test and Hash new password
                 if (!update_user.password.match(/^(?=.*[A-Z])(?=.*[!#$%*+=?|-])(?=.*\d)[!#$%*+=?|\-A-Za-z\d]{12,}$/))
-                    // issues/168 - FIXME: This should not return the final error message
-                    throw new ServerError(400, 'INVALID_PASSWORD_FORMAT', 'Le format du mot de passe est invalide.');
+                    throw new ServerError(400, 'INVALID_PASSWORD_FORMAT', 'Le format du mot de passe est invalide.'); // issues/168
 
                 update_user.password = await hashString(update_user.password);
             }
 
-            await updateUser(request.user.id, update_user);
+            await userService.updateUser(request.user.id, update_user);
 
-            // issues/168 - FIXME: This should not return the final message
-            reply.code(201).send({ message: 'Votre profil a bien été mis à jour.' });
+            reply.code(201).send({ message: 'Votre profil a bien été mis à jour.' }); // issues/168
         },
     });
 
@@ -63,14 +61,12 @@ export default plugin(async fastify => {
         method: 'PUT',
         url: '/users/avatar',
         schema: fastify.getSchema('API:PUT/users/avatar'),
-        onRequest: [fastify.verifyAccessToken],
         handler: async (request: Request, reply: Reply) => {
-            const { id } = request.user;
+            const { id } = await authService.verifyAccessToken(request);
             const avatar = await request.file();
-            validateAvatar(avatar);
-            await uploadAvatar(id, avatar);
-            // issues/168 - FIXME: This should not return the final message
-            reply.code(201).send({ message: 'Votre avatar a bien été mis à jour.' });
+            userService.validateAvatar(avatar);
+            await userService.uploadAvatar(id, avatar);
+            reply.code(201).send({ message: 'Votre avatar a bien été mis à jour.' }); // issues/168
         },
     });
 });

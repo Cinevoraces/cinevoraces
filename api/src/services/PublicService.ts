@@ -1,12 +1,13 @@
 import { getFolderPath } from '@src/utils';
-import { type PoolClient } from 'pg';
-import { type GetDocumentByIdFn } from './types';
+import Service from './Service';
 
-export default async (postgres: PoolClient) => {
+export type GetDocumentByIdFn = (type: string, id: number) => Promise<string>;
+
+export default class PublicService extends Service {
     /**
      * Get document by entity type and id
      */
-    const getDocumentById: GetDocumentByIdFn = async (type, entityId) => {
+    getDocumentById: GetDocumentByIdFn = async (type, entityId) => {
         // FIXME: API parameter should directly ask for EDocType
         if (!['avatar', 'poster'].includes(type))
             throw new ServerError(400, 'INVALID_DOC_TYPE', 'Invalid document type, should be "avatar" or "poster"');
@@ -14,7 +15,7 @@ export default async (postgres: PoolClient) => {
         const tableName = type === 'avatar' ? '"user"' : '"movie"';
 
         // Get the file path
-        const { rows, rowCount } = await postgres.query<{ filename: string; content_type: string }>({
+        const { rows, rowCount } = await this.postgres.query<{ filename: string; content_type: string }>({
             text: ` 
                     SELECT filename, content_type FROM document 
                     WHERE type = $1 
@@ -23,12 +24,7 @@ export default async (postgres: PoolClient) => {
             values: [type, entityId],
         });
 
-        // issues/168 - FIXME: This should not return the final error message
-        if (!rowCount) throw new ServerError(404, 'NOT_FOUND', 'Requested document does not exist');
+        if (!rowCount) throw new ServerError(404, 'NOT_FOUND', 'Requested document does not exist'); // issues/168
         return `${getFolderPath('public')}/${type}${entityId}.${rows[0].content_type.split('/')[1]}`;
     };
-
-    return {
-        getDocumentById,
-    };
-};
+}

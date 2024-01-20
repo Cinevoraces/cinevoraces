@@ -1,7 +1,7 @@
-import writeOptionsCSR from './writeOptionsCSR';
+import type { BodyData } from 'models/custom_types';
 import { EErrorMessages } from 'models/enums';
 import { toast } from 'react-hot-toast';
-import type { BodyData } from 'models/custom_types';
+import writeOptionsCSR from './writeOptionsCSR';
 
 import logoutUser from '@utils/logoutUser';
 
@@ -20,17 +20,17 @@ const handleResponse = async (res: Response, endpoint: string, method?: 'POST' |
   let response = res;
   let counter = 0;
   // No body comes with 204 status
-  if (res.status === 204 ) return;
+  if (res.status === 204) return;
   // For others status code, extract response body
   let responseBody = await response.json();
   // If accessToken expired
-  if (res.status === 401 && responseBody.message === EErrorMessages.EXPIRED_ACCESS_TOKEN && counter === 0 ) {
+  if (res.status === 401 && responseBody.message === EErrorMessages.EXPIRED_ACCESS_TOKEN && counter === 0) {
     // One attempt to refresh it
     counter++;
-    const refreshTokenAttempt = await fetch(baseUrlCSR + '/refresh', writeOptionsCSR(undefined, undefined, true));
+    const refreshTokenAttempt = await fetch(baseUrlCSR + '/auth/refresh', writeOptionsCSR(undefined, undefined, true));
     const rTAResponseBody = await refreshTokenAttempt.json();
     // If it failed, send a permission error
-    if (refreshTokenAttempt.status !== 200){
+    if (refreshTokenAttempt.status !== 200) {
       const { message } = rTAResponseBody;
       // Inform the user
       toast.error(message, { id: 'expired-session' });

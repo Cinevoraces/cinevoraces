@@ -12,10 +12,14 @@ export default [
             },
         },
     },
+    {
+        $id: 'API:GET/ping',
+        description: '**Ping the API**',
+    },
 ];
 
 declare module 'fastify' {
     interface FastifyInstance {
-        getSchema(id: 'API:GET/:docType/:entityId'): FastifySchema;
+        getSchema(id: 'API:GET/:docType/:entityId' | 'API:GET/ping'): FastifySchema;
     }
 }

@@ -3,6 +3,7 @@ type ServerErrorStatus = 'NOT_FOUND' | 'INTERNAL_SERVER_ERROR' | 'BAD_REQUEST' |
 type ErrorCodes =
     | 'DUPLICATE_PSEUDO'
     | 'DUPLICATE_MAIL'
+    | 'DUPLICATE_MOVIE'
     | 'INVALID_DOC_TYPE'
     | 'INVALID_FILE'
     | 'INVALID_FILE_MIMETYPE'

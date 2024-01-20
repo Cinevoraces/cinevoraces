@@ -1,15 +1,15 @@
-import { useRef, useState } from 'react';
-import Image from 'next/image';
-import { useRouter } from 'next/router';
-import { useAppSelector, useAppDispatch } from '@store/store';
 import { RefTextInput, Toggle } from '@components/Input';
-import { toggleArePWVisible, global } from '@store/slices/global';
 import Button from '@components/Input/Button';
 import SendLogo from '@public/icons/send-icon.svg';
-import { mutationRequestCSR } from 'binders';
-import { toast } from 'react-hot-toast';
+import { global, toggleArePWVisible } from '@store/slices/global';
+import { useAppDispatch, useAppSelector } from '@store/store';
 import tryCatchWrapper from '@utils/tryCatchWrapper';
+import { mutationRequestCSR } from 'binders';
 import type { BodyData } from 'models/custom_types';
+import Image from 'next/image';
+import { useRouter } from 'next/router';
+import { useRef, useState } from 'react';
+import { toast } from 'react-hot-toast';
 
 export default function InscriptionForm() {
   const isPWVisible = useAppSelector(global).arePWVisible;
@@ -57,7 +57,7 @@ export default function InscriptionForm() {
         mail: emailRef.current!.value,
         pseudo: usernameRef.current!.value,
       };
-      tryCatchWrapper(submitSuccess)('POST', '/register', data);
+      tryCatchWrapper(submitSuccess)('POST', '/auth/register', data);
     }
   };
 
@@ -110,7 +110,8 @@ export default function InscriptionForm() {
           onChange={() => dispatch(toggleArePWVisible())}
         />
         <p className={helpingTextStyle}>
-          Longueur minimale : 12 caractères.<br/>
+          Longueur minimale : 12 caractères.
+          <br />
           Doit comprendre au moins une majuscule, une minuscule, un chiffre et un symbole parmi ! # $ % * + = ? | -
         </p>
       </div>

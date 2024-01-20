@@ -1,8 +1,11 @@
-import type GlobalServerError from './ServerError';
+import GlobalServerError from './ServerError';
 
 declare global {
     /* eslint-disable-next-line no-var */
     var ServerError: typeof GlobalServerError;
 }
 
-export const registerServerError = () => (global.ServerError = ServerError);
+/**
+ * Register the ServerError class globally.
+ */
+export const registerServerError = () => (global.ServerError = GlobalServerError);

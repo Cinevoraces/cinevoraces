@@ -1,12 +1,14 @@
-import type { PoolClient } from 'pg';
-import type { GetAvailableEpisodesFn } from './types';
+import type { Episode } from '@src/types';
+import Service from './Service';
 
-export default async (postgres: PoolClient) => {
+type GetAvailableEpisodesFn = () => Promise<{ rowCount: number; rows: Array<Episode> }>;
+
+export default class EpisodeService extends Service {
     /**
      * Get available episodes.
      */
-    const getAvailableEpisodes: GetAvailableEpisodesFn = async () =>
-        await postgres.query({
+    getAvailableEpisodes: GetAvailableEpisodesFn = async () =>
+        await this.postgres.query({
             text: ` 
                 SELECT ep.id, ep.season_number, ep.episode_number, ep.publishing_date
                 FROM "episode" ep
@@ -16,10 +18,6 @@ export default async (postgres: PoolClient) => {
                     AND ep.publishing_date < (NOW() + interval '1 month')
                 ORDER BY ep.publishing_date ASC
                 LIMIT 5;
-            `,
+          `,
         });
-
-    return {
-        getAvailableEpisodes,
-    };
-};
+}
