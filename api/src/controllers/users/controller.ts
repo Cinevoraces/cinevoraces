@@ -45,8 +45,9 @@ export default plugin(async fastify => {
             const { update_user } = request.body;
 
             if (update_user.password) {
-                if (!update_user.password.match(/^(?=.*[A-Z])(?=.*[!#$%*+=?|-])(?=.*\d)[!#$%*+=?|\-A-Za-z\d]{12,}$/))
+                if (!update_user.password.is('valid-password')) {
                     throw new ServerError(400, 'INVALID_PASSWORD_FORMAT', 'Le format du mot de passe est invalide.'); // issues/168
+                }
 
                 update_user.password = await hashString(update_user.password);
             }

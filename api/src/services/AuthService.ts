@@ -77,13 +77,12 @@ export default class AuthService extends Service {
      * Check registration payload and throw if invalid.
      */
     public checkRegistrationPayload: CheckRegistrationPayloadFn = async ({ mail, pseudo, password }) => {
-        const forbiddenPseudos = ['moi'];
         const { rowCount, rows } = await this.postgres.query<User>({
             text: 'SELECT pseudo, mail FROM "user" WHERE pseudo = $1 OR mail = $2;',
             values: [pseudo, mail],
         });
 
-        if (forbiddenPseudos.includes(pseudo)) {
+        if (pseudo.is('valid-pseudo')) {
             throw new ServerError(409, 'DUPLICATE_PSEUDO', 'Ce pseudo est réservé ou interdit'); // issues/168
         }
         if (rowCount && mail === rows[0].mail) {
@@ -92,7 +91,7 @@ export default class AuthService extends Service {
         if (rowCount && pseudo === rows[0].pseudo) {
             throw new ServerError(409, 'DUPLICATE_PSEUDO', 'Ce pseudo est réservé ou interdit'); // issues/168
         }
-        if (!password.match(/^(?=.*[A-Z])(?=.*[!#$%*+=?|-])(?=.*\d)[!#$%*+=?|\-A-Za-z\d]{12,}$/)) {
+        if (!password.is('valid-password')) {
             throw new ServerError(400, 'INVALID_PASSWORD_FORMAT', 'Le format du mot de passe est invalide.');
         }
     };
