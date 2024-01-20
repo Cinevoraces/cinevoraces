@@ -1,7 +1,7 @@
 {
     "scripts": {
-        "dev": "nodemon --watch 'src/**/*.ts' --exec node --inspect=0.0.0.0:9229 -r ts-node/register src/index.ts",
-        "build": "tsc",
+        "dev": "node ./scripts/dev.mjs",
+        "build": "tsc && tsc-alias",
         "start": "node ./dist/src/index.js",
         "test": "jest --watchAll",
         "test:unit": "jest --watchAll ./tests/unit/*",
@@ -40,6 +40,7 @@
         "prettier": "^3.1.1",
         "ts-jest": "^29.1.1",
         "ts-node": "^10.9.2",
+        "tsc-alias": "^1.8.8",
         "tsc-watch": "^6.0.4",
         "tsconfig-paths": "^4.2.0",
         "typescript": "^5.3.3"

@@ -1,10 +1,12 @@
 import { Server, registerServerError } from '@src/classes';
 import { defaultConfig } from '@src/config';
-import '@src/prototypes';
+import { registerDatePrototypes, registerStringPrototypes } from '@src/prototypes';
 import '@src/types';
 
 try {
     registerServerError();
+    registerDatePrototypes();
+    registerStringPrototypes();
     const server = new Server(defaultConfig);
     server.envCheck();
     server.init();

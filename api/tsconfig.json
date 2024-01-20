@@ -1,14 +1,15 @@
 {
     "include": [
-        "src/**/*",
-        "src/*",
-        "tests/**/*.ts",
-        "tests/*.ts",
+        "./src/**/*",
+        "./src/*",
+        "./tests/**/*.ts",
+        "./tests/*.ts",
         "./jest.config.ts",
     ],
     "exclude": [
         "dist",
-        "node_modules"
+        "node_modules",
+        "scripts"
     ],
     "compilerOptions": {
         "types": [
@@ -34,7 +35,7 @@
         "outDir": "dist",
         "paths": {
             "@src/*": [
-                "src/*"
+                "./src/*"
             ],
         }
     },
