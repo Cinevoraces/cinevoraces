@@ -60,15 +60,13 @@ export default async (fastify: FastifyInstance) => {
             const { update_user } = request.body;
 
             if (update_user.password) {
-                // Test and Hash new password
-                if (!update_user.password.match(/^(?=.*[A-Z])(?=.*[!#$%*+=?|-])(?=.*\d)[!#$%*+=?|\-A-Za-z\d]{12,}$/))
+                !update_user.password.is('valid-password') &&
                     _errorService.send(EErrorMessages.INVALID_PASSWORD_FORMAT, 422);
 
                 update_user.password = await hashString(update_user.password);
             }
-            // Update user
-            await _userService.updateUser(request.user.id, update_user);
 
+            await _userService.updateUser(request.user.id, update_user);
             reply.code(201).send({ message: EResponseMessages.UPDATE_USER_SUCCESS });
         },
     });
