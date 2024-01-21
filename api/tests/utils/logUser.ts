@@ -1,7 +1,11 @@
 import type { FastifyInstance } from 'fastify';
 
 export const logUser = async (instance: FastifyInstance) => {
-    const { statusCode, json, cookies } = await instance.inject({
+    const {
+        statusCode,
+        json,
+        cookies: resCookies,
+    } = await instance.inject({
         method: 'POST',
         url: '/auth/login',
         payload: {
@@ -13,11 +17,14 @@ export const logUser = async (instance: FastifyInstance) => {
     const res = await json();
 
     if (statusCode === 200) {
-        const refreshToken =
-            (cookies[0] as Record<string, string>).name + '=' + (cookies[0] as Record<string, string>).value;
+        const cookies = {
+            refreshToken:
+                (resCookies[0] as Record<string, string>).name + '=' + (resCookies[0] as Record<string, string>).value,
+        };
         const accessToken = await res.token;
+        const headers = { Authorization: `Bearer ${accessToken}` };
 
-        return { refreshToken, accessToken };
+        return { headers, cookies };
     } else {
         return;
     }

@@ -3,17 +3,19 @@ import { logUser } from '../../utils/logUser';
 
 describe('API - User controller', () => {
     const server = buildTestServer();
+    let userHeaders = {};
 
-    beforeAll(() => server.fastify.ready());
+    beforeAll(async () => {
+        server.fastify.ready();
+        userHeaders = await logUser(server.fastify);
+    });
     afterAll(() => server.fastify.close());
 
     it('GET /users/me - should return "me" object', async () => {
-        const { refreshToken, accessToken } = await logUser(server.fastify);
         const { statusCode, json } = await server.fastify.inject({
             method: 'GET',
             url: '/users/me',
-            headers: { Authorization: `Bearer ${accessToken}` },
-            cookies: { refreshToken },
+            ...userHeaders,
         });
 
         const res: Array<Record<string, unknown>> = await json();
@@ -42,12 +44,10 @@ describe('API - User controller', () => {
     });
 
     it('PUT /users - should update user', async () => {
-        const { refreshToken, accessToken } = await logUser(server.fastify);
         const { statusCode } = await server.fastify.inject({
             method: 'PUT',
             url: '/users',
-            headers: { Authorization: `Bearer ${accessToken}` },
-            cookies: { refreshToken },
+            ...userHeaders,
             payload: {
                 password: process.env.TEST_PASS,
                 update_user: {
