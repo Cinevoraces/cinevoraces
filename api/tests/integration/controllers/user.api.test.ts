@@ -11,7 +11,7 @@ describe('API - User controller', () => {
     });
     afterAll(() => server.fastify.close());
 
-    it('GET /users/me - should return "me" object', async () => {
+    it('API:GET/users/me - should return "me" object', async () => {
         const { statusCode, json } = await server.fastify.inject({
             method: 'GET',
             url: '/users/me',
@@ -27,7 +27,7 @@ describe('API - User controller', () => {
         expect(user).toHaveProperty('mail');
     });
 
-    it('GET /users - should return "users" array', async () => {
+    it('API:GET/users - should return "users" array', async () => {
         const { statusCode, json } = await server.fastify.inject({
             method: 'GET',
             url: '/users',
@@ -43,7 +43,7 @@ describe('API - User controller', () => {
         }
     });
 
-    it('PUT /users - should update user', async () => {
+    it("API:PUT/users - should update 'me' user", async () => {
         const { statusCode } = await server.fastify.inject({
             method: 'PUT',
             url: '/users',

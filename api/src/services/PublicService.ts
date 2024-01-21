@@ -1,7 +1,8 @@
+import { EDocType } from '@src/types';
 import { getFolderPath } from '@src/utils';
 import Service from './Service';
 
-export type GetDocumentByIdFn = (type: string, id: number) => Promise<string>;
+export type GetDocumentByIdFn = (type: EDocType, id: number) => Promise<string>;
 
 export default class PublicService extends Service {
     /**
@@ -9,10 +10,13 @@ export default class PublicService extends Service {
      */
     getDocumentById: GetDocumentByIdFn = async (type, entityId) => {
         // FIXME: API parameter should directly ask for EDocType
-        if (!['avatar', 'poster'].includes(type))
-            throw new ServerError(400, 'INVALID_DOC_TYPE', 'Invalid document type, should be "avatar" or "poster"');
+        const tableName = [
+            { type: EDocType.AVATAR, table: 'user' },
+            { type: EDocType.POSTER, table: 'movie' },
+        ].find(({ type: t }) => t === type)?.table;
 
-        const tableName = type === 'avatar' ? '"user"' : '"movie"';
+        if (!tableName)
+            throw new ServerError(400, 'INVALID_DOC_TYPE', 'Invalid document type, should be "avatar" or "poster"');
 
         // Get the file path
         const { rows, rowCount } = await this.postgres.query<{ filename: string; content_type: string }>({

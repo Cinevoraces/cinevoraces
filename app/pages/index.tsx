@@ -1,20 +1,20 @@
-import type { NextPage } from 'next';
 import CustomHead from '@components/Head';
+import { Button } from '@components/Input';
+import type { MetricsProps } from '@components/Metrics';
+import Metrics from '@components/Metrics';
+import PosterComponent from '@components/MultiplePosters';
+import commentsSample from '@public/comments_sample.jpg';
+import discordInvite from '@public/discord_invite.png';
+import discordLogo from '@public/icons/discord.svg';
+import { user } from '@store/slices/user';
+import { useAppSelector } from '@store/store';
+import { getRequestSSR } from 'binders';
+import type { MinimalMovie } from 'models/custom_types/movies';
+import type { NextPage } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Button } from '@components/Input';
-import PosterComponent from '@components/MultiplePosters';
-import discordLogo from '@public/icons/discord.svg';
-import discordInvite from '@public/discord_invite.png';
-import commentsSample from '@public/comments_sample.jpg';
-import Metrics from '@components/Metrics';
-import type { MetricsProps } from '@components/Metrics';
-import type { MinimalMovie } from 'models/custom_types/movies';
-import { getRequestSSR } from 'binders';
-import { useAppSelector } from '@store/store';
-import { user } from '@store/slices/user';
 
-import { useTrail, animated } from '@react-spring/web';
+import { animated, useTrail } from '@react-spring/web';
 
 import Poster from '@components/Poster';
 
@@ -38,13 +38,11 @@ const Home: NextPage<HomeProps> = (props) => {
   const emStyle = 'emphasis ';
 
   // Animation section
-  const trail = useTrail(
-    lastSixMoviesInfos.length, {
-      config: { mass: 1, tension: 300, friction: 36 },
-      from: { opacity:0, x:25 },
-      to: { opacity:100, x:0 }
-    }
-  );
+  const trail = useTrail(lastSixMoviesInfos.length, {
+    config: { mass: 1, tension: 300, friction: 36 },
+    from: { opacity: 0, x: 25 },
+    to: { opacity: 100, x: 0 },
+  });
 
   return (
     <>
@@ -70,7 +68,7 @@ const Home: NextPage<HomeProps> = (props) => {
                     <Button
                       to={'/inscription'}
                       customStyle={'empty'}>
-                      {'S\'inscrire'}
+                      {"S'inscrire"}
                     </Button>
                   )}
                 </div>
@@ -79,23 +77,22 @@ const Home: NextPage<HomeProps> = (props) => {
                 <PosterComponent number={8} />
               </div>
             </div>
-            <div className='w-full'>
+            <div className="w-full">
               <h2 className={h2Style}>Les derniers ajouts de la communauté :</h2>
               <ul className="mt-8 grid grid-cols-3 gap-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 animated-caroussel">
-                {
-                  trail.map((props, index) => (
-                    <animated.li style={props} key={index}>
-                      <Link
-                        href={`/films/${lastSixMovies[index].id}`}>
-                        <Poster
-                          src={`${process.env.NEXT_PUBLIC_API_BASE_URL_SSR}/public/poster/${lastSixMovies[index].id}`}
-                          title={lastSixMovies[index].french_title}
-                          type='caroussel'
-                        />
-                      </Link>
-                    </animated.li>
-                  ))
-                }
+                {trail.map((props, index) => (
+                  <animated.li
+                    style={props}
+                    key={index}>
+                    <Link href={`/films/${lastSixMovies[index].id}`}>
+                      <Poster
+                        src={`${process.env.NEXT_PUBLIC_API_BASE_URL_SSR}/public/1/${lastSixMovies[index].id}`}
+                        title={lastSixMovies[index].french_title}
+                        type="caroussel"
+                      />
+                    </Link>
+                  </animated.li>
+                ))}
               </ul>
             </div>
           </div>
@@ -114,13 +111,13 @@ const Home: NextPage<HomeProps> = (props) => {
                 <span className={emStyle}>Cinévoraces </span>
                 <span>
                   {
-                    'rassemble depuis 2020 des passionnés de tous les cinémas. Comédies, blockbusters d\'action, drames, horreur, thrillers, films d’auteurs... tous les genres sont représentés !'
+                    "rassemble depuis 2020 des passionnés de tous les cinémas. Comédies, blockbusters d'action, drames, horreur, thrillers, films d’auteurs... tous les genres sont représentés !"
                   }
                 </span>
                 <br />
                 <span>
                   {
-                    'Sur le même principe qu’un club de lecture, chaque semaine, un membre de la communauté propose un film à visionner. Il est ensuite commenté et noté directement sur la page du film et fait l\'objet de discussions sur '
+                    "Sur le même principe qu’un club de lecture, chaque semaine, un membre de la communauté propose un film à visionner. Il est ensuite commenté et noté directement sur la page du film et fait l'objet de discussions sur "
                   }
                 </span>
                 <Link
@@ -130,7 +127,7 @@ const Home: NextPage<HomeProps> = (props) => {
                 </Link>
                 <br />
                 <br />
-                {'Envie de rejoindre l\'aventure ?'}
+                {"Envie de rejoindre l'aventure ?"}
                 <br />
                 {!id ? (
                   <Link
@@ -148,7 +145,7 @@ const Home: NextPage<HomeProps> = (props) => {
                   <Button
                     to={'/inscription'}
                     customStyle="rounded">
-                    {'S\'inscrire'}
+                    {"S'inscrire"}
                   </Button>
                 </div>
               )}
@@ -198,7 +195,7 @@ const Home: NextPage<HomeProps> = (props) => {
               <p>
                 Vous souhaitez rejoindre la communauté active de Cinévoraces ? <br />
                 Participer à des <span className={emStyle}>événements</span> et parler de cinéma et de beaucoup
-                {' d\''}
+                {" d'"}
                 <span className={emStyle}>autres sujets</span> ?
                 <br />
                 <br />

@@ -16,8 +16,8 @@ export default plugin(async fastify => {
 
     fastify.route({
         method: 'GET',
-        url: '/:docType/:entityId',
-        schema: fastify.getSchema('API:GET/:docType/:entityId'),
+        url: '/public/:docType/:entityId',
+        schema: fastify.getSchema('API:GET/public/:docType/:entityId'),
         handler: async (request: Request<GETPublicRessourceRequest>, reply: Reply) => {
             const { docType, entityId } = request.params;
             const path = await publicService.getDocumentById(docType, entityId);

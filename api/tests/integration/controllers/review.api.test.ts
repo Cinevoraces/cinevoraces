@@ -13,7 +13,7 @@ describe('API - Review controller', () => {
     });
     afterAll(() => server.fastify.close());
 
-    it('PUT /reviews/:movieId - should create/update a review', async () => {
+    it('API:PUT/reviews/:movieId - should create/update a review', async () => {
         const randomReview = {
             rating: randomNumber(1, 5),
             bookmarked: randomBoolean(),
