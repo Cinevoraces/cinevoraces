@@ -72,17 +72,18 @@ export default class ReviewService extends Service {
     updateReview: UpdateReviewFn = async (userId, movieId, payload) => {
         const column = Object.keys(payload)[0];
         const value = payload[column as keyof typeof payload];
-        const { rows } = await this.postgres.query({
-            text: ` 
-                UPDATE "review" SET ${column} = $3, "updated_at" = NOW()
-                WHERE user_id=$1 AND movie_id=$2;
-                
-                SELECT bookmarked, viewed, liked, rating, comment
-                FROM "review"
+        await this.postgres.query({
+            text: `
+                UPDATE "review" SET ${column} = $3, updated_at = NOW()
                 WHERE user_id=$1 AND movie_id=$2;`,
             values: [userId, movieId, value],
         });
-
+        const { rows } = await this.postgres.query({
+            text: ` 
+                SELECT bookmarked, viewed, liked, rating, comment
+                FROM "review" WHERE user_id=$1 AND movie_id=$2;`,
+            values: [userId, movieId],
+        });
         return rows[0];
     };
 
