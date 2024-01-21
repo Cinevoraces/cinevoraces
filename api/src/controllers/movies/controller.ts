@@ -51,8 +51,8 @@ export default plugin(async fastify => {
         url: '/movies/random-posters/:count',
         schema: fastify.getSchema('API:GET/movies/random-posters/:count'),
         handler: async (request: Request<GETMoviePosterRequest>, reply: Reply) => {
+            if (isNaN(request.params.count)) throw new ServerError(400);
             const posters = await movieService.getRandomMoviePosters(request.params.count);
-            if (request.params.count) throw new ServerError(400);
             reply.code(200).send(posters);
         },
     });

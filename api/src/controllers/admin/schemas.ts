@@ -164,42 +164,18 @@ export default [
             },
         },
     },
-    {
-        $id: 'API:PUT/admin/movies/update-posters',
-        summary: '(TOKEN REQUIRED)',
-        description:
-            '**Update movies posters that point to a TMDB url. Downloads the poster and update the url in database.**.',
-        tags: ['Admin'],
-        response: {
-            201: {
-                type: 'object',
-                properties: {
-                    message: { type: 'string' },
-                },
-                required: ['message'],
-            },
-        },
-        200: {
-            type: 'object',
-            properties: {
-                message: { type: 'string' },
-            },
-            required: ['message'],
-        },
-    },
 ];
 
 declare module 'fastify' {
     interface FastifyInstance {
         getSchema(
             id:
-                | 'API:PUT/admin/movies/publish/:id'
                 | 'API:DELETE/admin/movies/:id'
-                | 'API:GET/admin/reviews'
                 | 'API:DELETE/admin/reviews/:movieId/:userId'
-                | 'API:POST/seasons'
                 | 'API:DELETE/admin/users/:id'
-                | 'API:PUT/admin/movies/update-posters',
+                | 'API:GET/admin/reviews'
+                | 'API:POST/seasons'
+                | 'API:PUT/admin/movies/publish/:id',
         ): FastifySchema;
     }
 }
