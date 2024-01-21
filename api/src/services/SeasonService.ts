@@ -22,7 +22,7 @@ export default class SeasonService extends Service {
      */
     getSeasonByNumber: GetSeasonByNumberFn = async seasonNumber => {
         const { rowCount, rows } = await this.postgres.query({
-            text: 'SELECT * FROM season WHERE number = $1;',
+            text: 'SELECT * FROM seasonView WHERE season_number = $1;',
             values: [seasonNumber],
         });
         if (!rowCount) throw new ServerError(404);
