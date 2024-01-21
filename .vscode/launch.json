@@ -11,8 +11,6 @@
       "port": 9229,
       "address": "localhost",
       "localRoot": "${workspaceFolder}/api",
-      "remoteRoot": "/api",
-      "restart": true,
       "resolveSourceMapLocations": [
         "${workspaceFolder}/**",
         "!**/node_modules/**"
@@ -20,23 +18,6 @@
       "skipFiles": [
         "<node_internals>/**/*.js"
       ]
-    },
-    {
-      "name": "Debug App (Chrome)",
-      "type": "chrome",
-      "request": "launch",
-      //"runtimeArgs": ["--disable-web-security"],
-      "runtimeArgs": ["--remote-debugging-port=9222"],
-      "url": "http://localhost:3000",
-      "webRoot": "${workspaceRoot}/app",
-      "sourceMapPathOverrides": {
-      "/app/*": "${webRoot}/*"
-      },
-      "resolveSourceMapLocations": [
-        "${webRoot}/*"
-      ],
-      "skipFiles": ["!${webRoot}/node_modules/**"],
-      "port": 9222,
     }
   ]
 }
