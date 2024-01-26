@@ -82,7 +82,7 @@ export default class AuthService extends Service {
             values: [pseudo, mail],
         });
 
-        if (pseudo.is('valid-pseudo')) {
+        if (!pseudo.is('valid-pseudo')) {
             throw new ServerError(409, 'DUPLICATE_PSEUDO', 'Ce pseudo est réservé ou interdit'); // issues/168
         }
         if (rowCount && mail === rows[0].mail) {

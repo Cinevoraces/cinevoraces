@@ -20,7 +20,7 @@ export default [
                 viewed: { type: 'boolean' },
                 liked: { type: 'boolean' },
                 rating: { type: 'number' },
-                comment: { type: 'string' },
+                comment: { type: 'string', maxLength: 1500 },
             },
         },
         response: {

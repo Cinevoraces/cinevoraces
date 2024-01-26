@@ -85,7 +85,7 @@ export default [
                 release_date: { type: 'string' },
                 runtime: { type: 'number' },
                 casting: { type: 'array', items: { type: 'string' } },
-                presentation: { type: 'string' },
+                presentation: { type: 'string', maxLength: 2500, minLength: 250 },
                 movie_genres: { type: 'array', items: { type: 'string' } },
                 movie_languages: { type: 'array', items: { type: 'string' } },
                 movie_countries: { type: 'array', items: { type: 'string' } },
