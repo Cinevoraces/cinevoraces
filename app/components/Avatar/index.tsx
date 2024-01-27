@@ -1,6 +1,6 @@
+import defaultUserPic from '@public/icons/user_default.svg';
 import Image from 'next/image';
 import Link from 'next/link';
-import defaultUserPic from '@public/icons/user_default.svg';
 import { useState } from 'react';
 
 interface AvatarProps {
@@ -16,7 +16,7 @@ hover:outline-none hover:ring-4 hover:ring-offset-0 hover:ring-white/5 hover:sca
 transition duration-150 hover:ease-out`;
 
 /**
- * 
+ *
  * @param id
  * @param pseudo
  * @param interactive facultative to use it as link
@@ -25,33 +25,33 @@ transition duration-150 hover:ease-out`;
  */
 const Avatar = ({ id, pseudo, interactive, avatarUrl }: AvatarProps) => {
   // Trick the browser to consider the latest version of the avatar
-  const url = avatarUrl ? avatarUrl :`${process.env.NEXT_PUBLIC_API_BASE_URL_SSR}/public/avatar/${id}`;
+  const url = avatarUrl ? avatarUrl : `${process.env.NEXT_PUBLIC_API_BASE_URL_SSR}/public/0/${id}`;
   const [source, setSource] = useState(url);
   return (
     <>
-      { 
-        interactive
-          ? (<Link href={`/membres/${pseudo}`}>
-            <Image
-              src={source}
-              alt={pseudo === 'moi' ? 'mon avatar' : `avatar de ${pseudo}`}
-              height={50}
-              width={50}
-              className={baseStyle + animationStyle}
-              priority
-              onError={() => setSource(defaultUserPic)}
-            />
-          </Link>)
-          : (<Image
-            src={source} // Specific treatment to handle avatar modification
+      {interactive ? (
+        <Link href={`/membres/${pseudo}`}>
+          <Image
+            src={source}
             alt={pseudo === 'moi' ? 'mon avatar' : `avatar de ${pseudo}`}
             height={50}
             width={50}
-            className={baseStyle}
+            className={baseStyle + animationStyle}
             priority
             onError={() => setSource(defaultUserPic)}
-          />)
-      }
+          />
+        </Link>
+      ) : (
+        <Image
+          src={source} // Specific treatment to handle avatar modification
+          alt={pseudo === 'moi' ? 'mon avatar' : `avatar de ${pseudo}`}
+          height={50}
+          width={50}
+          className={baseStyle}
+          priority
+          onError={() => setSource(defaultUserPic)}
+        />
+      )}
     </>
   );
 };

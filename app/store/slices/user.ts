@@ -1,9 +1,9 @@
-import { bindActionCreators, createSlice } from '@reduxjs/toolkit';
-import type { RootState } from '../store';
+import { createSlice } from '@reduxjs/toolkit';
 import type { Roles } from 'models/enums';
+import type { RootState } from '../store';
 
 // For no reason, directly import the env variable when calling the state doesn't work properly.
-const imagesSource = (process.env.NEXT_PUBLIC_API_BASE_URL_SSR);
+const imagesSource = process.env.NEXT_PUBLIC_API_BASE_URL_SSR;
 
 export interface UserProps {
   id?: number;
@@ -20,13 +20,13 @@ const userSlice = createSlice({
   reducers: {
     login(_, action) {
       const user = action.payload;
-      return { 
+      return {
         isConnected: true,
         ...user,
-        avatarUrl: `${imagesSource}/public/avatar/${user.id}`,
+        avatarUrl: `${imagesSource}/public/0/${user.id}`,
       };
     },
-    logout(){
+    logout() {
       return initialState;
     },
     setUserModification(state, action) {
@@ -40,9 +40,5 @@ const userSlice = createSlice({
 });
 
 export const user = (state: RootState) => state.user;
-export const {
-  login,
-  logout,
-  setUserModification,
-} = userSlice.actions;
+export const { login, logout, setUserModification } = userSlice.actions;
 export default userSlice.reducer;

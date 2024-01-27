@@ -147,6 +147,9 @@ export default class UserService extends Service {
         const httpClient = new HTTPClient();
         const { contentType } = await httpClient.downloadFile(cloudinaryUrl, { filename, destination: 'public' });
 
+        console.log('contentType', contentType);
+        console.log('filename', filename);
+
         await this.postgres.query({
             text: ' SELECT add_or_update_avatar($1, $2, $3);',
             values: [userId, filename, contentType],
