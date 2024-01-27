@@ -1,22 +1,22 @@
 import CustomHead from '@components/Head';
-import { useState, useRef } from 'react';
-import useSWR from 'swr';
-import { toast } from 'react-hot-toast';
 import { useAppSelector } from '@store/store';
+import { PickEpisode, PickMovie, SearchMovie, WritePresentationAndSend } from 'pages_chunks/proposition/UI';
+import { useRef, useState } from 'react';
+import { toast } from 'react-hot-toast';
 import { user } from 'store/slices/user';
-import { PickEpisode, SearchMovie, PickMovie, WritePresentationAndSend } from 'pages_chunks/proposition/UI';
+import useSWR from 'swr';
 
+import type { EpisodeOption, TMDBMovie } from 'models/custom_types/index';
 import type { NextPage } from 'next';
 import type { FormEvent, RefObject } from 'react';
-import type { TMDBMovie, EpisodeOption } from 'models/custom_types/index';
 
-import useRefreshPendingProposition from 'pages_chunks/proposition/business_logic/useRefreshPendingProposition';
-import useFormatEpisodeOptions from 'pages_chunks/proposition/business_logic/useFormatEpisodeOptions';
-import { movieSearch } from 'pages_chunks/proposition/business_logic/movieSearch';
-import propositionSubmit from 'pages_chunks/proposition/business_logic/propositionSubmit';
-import { useRouter } from 'next/router';
 import Loader from '@components/Loader';
 import tryCatchWrapper from '@utils/tryCatchWrapper';
+import { useRouter } from 'next/router';
+import { movieSearch } from 'pages_chunks/proposition/business_logic/movieSearch';
+import propositionSubmit from 'pages_chunks/proposition/business_logic/propositionSubmit';
+import useFormatEpisodeOptions from 'pages_chunks/proposition/business_logic/useFormatEpisodeOptions';
+import useRefreshPendingProposition from 'pages_chunks/proposition/business_logic/useRefreshPendingProposition';
 
 // Rendering bug forces to keep these declarations here for no reason and pass it as prop.
 const pickMovieStyles = {
@@ -47,12 +47,7 @@ const Proposition: NextPage = () => {
     error: userError,
     mutate: userMutate,
   } = useSWR(() => (userId ? `/users?select[propositions]=true&where[id]=${userId}` : null));
-  useRefreshPendingProposition(
-    userId,
-    userData,
-    setUserHasPendingPropositions,
-    userMutate,
-  );
+  useRefreshPendingProposition(userId, userData, setUserHasPendingPropositions, userMutate);
 
   // Episode logic
   const [areOptionsDisplayed, setAreOptionsDisplayed] = useState(false);
@@ -60,7 +55,7 @@ const Proposition: NextPage = () => {
     name: 'Date - Épisode...',
     value: '0',
   });
-  const { data: episodes, error: episodesError } = useSWR(() => (userId ? '/episodes' : ''));
+  const { data: episodes } = useSWR(() => (userId ? '/episodes' : ''));
   const episodesArray = useRef<EpisodeOption[]>([]);
   useFormatEpisodeOptions(episodes, episodesArray);
   const handleOptionsDisplay = () => setAreOptionsDisplayed(!areOptionsDisplayed);
@@ -113,40 +108,41 @@ const Proposition: NextPage = () => {
           <Loader />
         ) : userHasPendingPropositions ? (
           <p className="custom-container">
-          Vous avez déjà une proposition en attente. Vous pourrez réserver un nouveau créneau une fois votre proposition
-          publiée.
+            Vous avez déjà une proposition en attente. Vous pourrez réserver un nouveau créneau une fois votre
+            proposition publiée.
           </p>
-        ) : episodesError ? (
-          <p className="custom-container">Tous les épisodes des semaines à venir sont réservés. Réessayez dans quelques semaines !</p>
-        ) 
-          : (
-            <>
-              <PickEpisode
-                episodesArray={episodesArray.current}
-                areOptionsDisplayed={areOptionsDisplayed}
-                handleOptionsDisplay={handleOptionsDisplay}
-                episode={episode}
-                setEpisode={setEpisode}
-              />
-              <SearchMovie
-                handleMovieSearch={handleMovieSearch}
-                ref={searchRef}
-              />
-              <PickMovie
-                movies={searchResults}
-                handleSelectMovie={handleSelectMovie}
-                ref={searchRef}
-                styles={pickMovieStyles}
-              />
-              <WritePresentationAndSend
-                searchResults={searchResults}
-                selectedMovieId={selectedMovieId}
-                handlePropositionSubmit={handlePropositionSubmit}
-                episode={episode}
-                ref={presentation}
-              />
-            </>
-          )}
+        ) : !episodes?.length ? (
+          <p className="custom-container">
+            Tous les épisodes des semaines à venir sont réservés. Réessayez dans quelques semaines !
+          </p>
+        ) : (
+          <>
+            <PickEpisode
+              episodesArray={episodesArray.current}
+              areOptionsDisplayed={areOptionsDisplayed}
+              handleOptionsDisplay={handleOptionsDisplay}
+              episode={episode}
+              setEpisode={setEpisode}
+            />
+            <SearchMovie
+              handleMovieSearch={handleMovieSearch}
+              ref={searchRef}
+            />
+            <PickMovie
+              movies={searchResults}
+              handleSelectMovie={handleSelectMovie}
+              ref={searchRef}
+              styles={pickMovieStyles}
+            />
+            <WritePresentationAndSend
+              searchResults={searchResults}
+              selectedMovieId={selectedMovieId}
+              handlePropositionSubmit={handlePropositionSubmit}
+              episode={episode}
+              ref={presentation}
+            />
+          </>
+        )}
       </main>
     </>
   );

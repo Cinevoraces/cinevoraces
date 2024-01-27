@@ -1,6 +1,8 @@
-import '../../src/prototypes/String';
+import registerStringPrototype from '../../src/prototypes/String';
 
 describe('prototypes/String.ts', () => {
+    registerStringPrototype();
+
     it('validates password', () => {
         expect('Password123!'.is('valid-password')).toBe(true);
         expect('password123!'.is('valid-password')).toBe(false);

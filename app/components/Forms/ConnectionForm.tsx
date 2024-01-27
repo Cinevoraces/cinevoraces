@@ -1,14 +1,13 @@
-import { useRef } from 'react';
-import { useAppSelector, useAppDispatch } from '@store/store';
-import Button from '@components/Input/Button';
 import { RefTextInput, Toggle } from '@components/Input';
-import { toggleConnectionModal } from '@store/slices/global';
-import { toggleArePWVisible, global } from '@store/slices/global';
-import { mutationRequestCSR } from 'binders';
+import Button from '@components/Input/Button';
+import { global, toggleArePWVisible, toggleConnectionModal } from '@store/slices/global';
 import { login } from '@store/slices/user';
-import { toast } from 'react-hot-toast';
+import { useAppDispatch, useAppSelector } from '@store/store';
 import tryCatchWrapper from '@utils/tryCatchWrapper';
+import { mutationRequestCSR } from 'binders';
 import type { BodyData } from 'models/custom_types';
+import { useRef } from 'react';
+import { toast } from 'react-hot-toast';
 
 const ConnectionForm = () => {
   const isPWVisible = useAppSelector(global).arePWVisible;
@@ -20,9 +19,10 @@ const ConnectionForm = () => {
 
   const submitSuccess = async (method: 'POST' | 'PUT' | 'DELETE', endpoint: string, data?: BodyData) => {
     const responseData = await mutationRequestCSR(method, endpoint, data);
-    if (responseData.statusCode){ // To be enhanced later with a proper error validation base on statusCodes
+    if (responseData.statusCode) {
+      // To be enhanced later with a proper error validation base on statusCodes
       throw new Error(responseData.message);
-    };
+    }
     toast.success(responseData.message);
     // State Mutation
     dispatch(login(responseData.user));
@@ -32,7 +32,10 @@ const ConnectionForm = () => {
     dispatch(toggleConnectionModal());
   };
 
-  const handleSubmit = async(e: React.FormEvent<HTMLFormElement>, allInputsRef: React.RefObject<HTMLInputElement>[]) => {
+  const handleSubmit = async (
+    e: React.FormEvent<HTMLFormElement>,
+    allInputsRef: React.RefObject<HTMLInputElement>[]
+  ) => {
     e.preventDefault();
     // Passing all inputs as required
     allInputsRef.forEach((inputRef) => {
@@ -42,21 +45,23 @@ const ConnectionForm = () => {
     const inputValidationStatus = allInputsRef.map((inputRef) => inputRef.current?.reportValidity());
     if (!inputValidationStatus.includes(false)) {
       // Check the identifier nature
-      const identifierType = (new RegExp(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/).test(identifierRef.current!.value)) 
-        ? 'mail' 
+      const identifierType = new RegExp(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/).test(
+        identifierRef.current!.value
+      )
+        ? 'mail'
         : 'pseudo';
       const data = {
         password: passwordRef.current!.value,
         [identifierType]: identifierRef.current!.value,
       };
-      tryCatchWrapper(submitSuccess)('POST', '/login', data);
+      tryCatchWrapper(submitSuccess)('POST', '/auth/login', data);
     }
   };
 
   return (
     <form
       action="submit"
-      onSubmit={ async (e) => handleSubmit(e, allInputsRef)}
+      onSubmit={async (e) => handleSubmit(e, allInputsRef)}
       className="flex flex-col w-full gap-3">
       <RefTextInput
         id="identifier"
@@ -87,7 +92,7 @@ const ConnectionForm = () => {
           customStyle="empty"
           onClick={() => dispatch(toggleConnectionModal())}
           to={'/inscription'}>
-          {'S\'inscrire'}
+          {"S'inscrire"}
         </Button>
       </div>
     </form>

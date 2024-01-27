@@ -1,37 +1,37 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import { useEffect, useRef, useState } from 'react';
-import type { FormEvent } from 'react';
 import CustomHead from '@components/Head';
-import useSWR from 'swr';
+import { BaseInteraction, Button, RatingInteraction } from '@components/Input';
+import Loader from '@components/Loader';
+import PostCard from '@components/PostCard';
+import RichText from '@components/RichText';
+import { user } from '@store/slices/user';
+import { useAppSelector } from '@store/store';
+import cutText from '@utils/cutText';
+import { getRequestSSR, mutationRequestCSR } from 'binders';
+import reviewMutation from 'cache/filmPage.cache';
+import { useRouter } from 'next/router';
 import {
-  Poster,
-  Title,
-  OriginalTitle,
-  Rating,
+  Casting,
+  CommentsSection,
+  Countries,
   Directors,
   Genres,
-  Countries,
   Languages,
+  OriginalTitle,
+  Poster,
+  Rating,
   Runtime,
-  Casting,
+  Title,
 } from 'pages_chunks/film/UI';
-import { Button, BaseInteraction, RatingInteraction } from '@components/Input';
-import PostCard from '@components/PostCard';
-import { CommentsSection } from 'pages_chunks/film/UI';
-import { getRequestSSR, mutationRequestCSR } from 'binders';
-import { useAppSelector } from '@store/store';
-import { user } from '@store/slices/user';
+import type { FormEvent } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { toast } from 'react-hot-toast';
-import cutText from '@utils/cutText';
-import { useRouter } from 'next/router';
-import Loader from '@components/Loader';
-import reviewMutation from 'cache/filmPage.cache';
-import RichText from '@components/RichText';
+import useSWR from 'swr';
 
-import type { NextPage, GetStaticProps } from 'next';
-import type { ParsedUrlQuery } from 'querystring';
-import type { MinimalMovie, CompleteMovie, Interactions } from 'models/custom_types/index';
 import type { BodyData } from 'models/custom_types';
+import type { CompleteMovie, Interactions, MinimalMovie } from 'models/custom_types/index';
+import type { GetStaticProps, NextPage } from 'next';
+import type { ParsedUrlQuery } from 'querystring';
 interface FilmProps {
   movies: CompleteMovie[];
 }
@@ -66,7 +66,7 @@ const Film: NextPage<FilmProps> = ({ movies }) => {
   // Defining cache management and inititializing it with initial props :
   const { data, mutate } = useSWR(`/movies?where[id]=${movieId}` + selectQueryString, { fallbackData: movies });
   // Safeguard mostly for TS type assertion
-  if (!data || data?.length === 0) throw new Error('Le film demandé n\'a pas été retrouvé.');
+  if (!data || data?.length === 0) throw new Error("Le film demandé n'a pas été retrouvé.");
   // Basic data extraction
   const movie = data[0];
   const {
@@ -84,7 +84,7 @@ const Film: NextPage<FilmProps> = ({ movies }) => {
 
   const handleInteraction = async (type: 'bookmarked' | 'viewed' | 'liked' | 'rating' | 'comment') => {
     if (!userId) {
-      return toast.error('Connectez-vous d\'abord.');
+      return toast.error("Connectez-vous d'abord.");
     }
     const body: BodyData = {};
     // 1 - Mutate the cache first, without revalidation
@@ -139,7 +139,7 @@ const Film: NextPage<FilmProps> = ({ movies }) => {
         title={`Cinévoraces - ${french_title}`}
         description={`Découvrez ${french_title}, recommandé par ${movie.presentation.author_pseudo}`}
         slug={router.asPath}
-        imageUrl={`https://cinevoraces.fr/api/public/poster/${movie.id}`}
+        imageUrl={`https://cinevoraces.fr/api/public/1/${movie.id}`}
       />
       <main className="custom-container ">
         {Object.keys(movie).length === 0 && <p>Loading</p>}
@@ -151,20 +151,25 @@ const Film: NextPage<FilmProps> = ({ movies }) => {
               <div
                 id="poster-interactions"
                 className="flex gap-6 mx-auto sm:flex-col sm:flex-0 self-top xl:col-span-2 xl:w-full">
-                <Poster movieId={movie.id || 0} french_title={movie.french_title} />
+                <Poster
+                  movieId={movie.id || 0}
+                  french_title={movie.french_title}
+                />
                 <div
                   id="interactions"
                   className="flex flex-col h-full justify-around self-center sm:justify-between sm:flex-row sm:gap-5 lg:w-full xl:gap-0">
-                  {baseInteractionsArray.slice(0, 3).map((i) => (
-                    (i.type !== 'rating') &&
-                    <BaseInteraction
-                      type={i.type}
-                      counter={i.counter}
-                      isClicked={!user_review || !user_review[i.type] ? false : true}
-                      onClick={() => handleInteraction(i.type)}
-                      key={i.type}
-                    />
-                  ))}
+                  {baseInteractionsArray.slice(0, 3).map(
+                    (i) =>
+                      i.type !== 'rating' && (
+                        <BaseInteraction
+                          type={i.type}
+                          counter={i.counter}
+                          isClicked={!user_review || !user_review[i.type] ? false : true}
+                          onClick={() => handleInteraction(i.type)}
+                          key={i.type}
+                        />
+                      )
+                  )}
                   <RatingInteraction
                     counter={ratings_count}
                     isClicked={!user_review || !user_review.rating ? false : true}
@@ -203,11 +208,9 @@ const Film: NextPage<FilmProps> = ({ movies }) => {
                   {...movie.presentation}
                   created_at={movie.publishing_date}>
                   <RichText>
-                    {
-                      !isPresentationCut || isPresentationExpanded
-                        ? movie.presentation.presentation as string
-                        : cutPresentationText as string
-                    }
+                    {!isPresentationCut || isPresentationExpanded
+                      ? (movie.presentation.presentation as string)
+                      : (cutPresentationText as string)}
                   </RichText>
                   {isPresentationCut && (
                     <div className="flex justify-end">
@@ -239,7 +242,7 @@ interface Params extends ParsedUrlQuery {
   article: string;
 }
 
-export const getStaticPaths: ()=>Promise<{ paths: { params: {} }[]; fallback: boolean | string } | []> = async () => {
+export const getStaticPaths: () => Promise<{ paths: { params: {} }[]; fallback: boolean | string } | []> = async () => {
   try {
     const movies = await getRequestSSR('/movies?where[is_published]=true');
     const paths = movies.map((movie: MinimalMovie) => ({ params: { film: '' + movie.id } }));

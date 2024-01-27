@@ -1,24 +1,9 @@
-import type { FastifyPluginCallback } from 'fastify';
-import publicController from './publicController';
-import authController from './authController';
-import episodesController from './episodesController';
-import metricsController from './metricsController';
-import moviesController from './moviesController';
-import reviewsController from './reviewsController';
-import seasonsController from './seasonsController';
-import usersController from './usersController';
-
-/**
- * **Controllers Registration _index**
- * Add any new controller to this array.
- */
-export default [
-    { c: publicController, opts: { prefix: '/public' } },
-    { c: authController },
-    { c: episodesController },
-    { c: metricsController },
-    { c: moviesController },
-    { c: reviewsController },
-    { c: seasonsController },
-    { c: usersController },
-] as Array<{ c: FastifyPluginCallback; opts: Record<never, never> }>;
+export { default as adminController } from './admin/controller';
+export { default as authController } from './auth/controller';
+export { default as episodesController } from './episodes/controller';
+export { default as metricsController } from './metrics/controller';
+export { default as moviesController } from './movies/controller';
+export { default as publicController } from './public/controller';
+export { default as reviewsController } from './reviews/controller';
+export { default as seasonsController } from './seasons/controller';
+export { default as usersController } from './users/controller';

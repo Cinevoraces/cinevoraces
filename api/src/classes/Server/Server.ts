@@ -5,11 +5,36 @@ import fastifyMultipart, { type FastifyMultipartOptions } from '@fastify/multipa
 import fastifyStatic, { type FastifyStaticOptions } from '@fastify/static';
 import FastifySwagger, { type SwaggerOptions } from '@fastify/swagger';
 import FastifySwaggerUi, { type FastifySwaggerUiOptions } from '@fastify/swagger-ui';
-import type { FastifyInstance, FastifyServerOptions } from 'fastify';
-import fastify from 'fastify';
+import {
+    adminController,
+    authController,
+    episodesController,
+    metricsController,
+    moviesController,
+    publicController,
+    reviewsController,
+    seasonsController,
+    usersController,
+} from '@src/controllers';
+import {
+    Episode as EpisodeSchema,
+    Error as ErrorSchema,
+    GlobalMetrics as GlobalMetricsSchema,
+    Metrics as MetricsSchema,
+    Movie as MovieSchema,
+    PrivateUser as PrivateUserSchema,
+    PublicUser as PublicUserSchema,
+    ReducedMovie as ReducedMovieSchema,
+    Review as ReviewSchema,
+    Season as SeasonSchema,
+} from '@src/schemas';
+import type { ERoles } from '@src/types';
+import fastify, { type FastifyInstance, type FastifyServerOptions } from 'fastify';
 import type { PoolConfig } from 'pg';
 import qs from 'qs';
+import addSchemas from './utils/addSchemas';
 import dbConnector from './utils/dbConnector';
+import payloadSanitizer from './utils/payloadSanitizer';
 
 interface DependenciesOpts {
     '@fastify/cookie'?: FastifyCookieOptions;
@@ -49,9 +74,23 @@ export default class Server {
      */
     public init() {
         this.fastify = fastify({ ...this.serverOpts, querystringParser: this.querystringParser });
-
-        // Register dependencies
+        // Register schemas
+        [
+            ErrorSchema,
+            EpisodeSchema,
+            MetricsSchema,
+            GlobalMetricsSchema,
+            ReviewSchema,
+            PublicUserSchema,
+            PrivateUserSchema,
+            MovieSchema,
+            ReducedMovieSchema,
+            SeasonSchema,
+        ].forEach(s => this.fastify.addSchema(s));
+        this.fastify.register(addSchemas);
+        // Dependencies injection
         this.fastify.register(dbConnector, this.dependenciesOpts['pg']);
+        this.fastify.register(payloadSanitizer);
         this.fastify.register(fastifyCookie, this.dependenciesOpts['@fastify/cookie']);
         this.fastify.register(fastifyCors, this.dependenciesOpts['@fastify/cors']);
         this.fastify.register(fastifyJWT, this.dependenciesOpts['@fastify/jwt']);
@@ -59,6 +98,16 @@ export default class Server {
         this.fastify.register(fastifyStatic, this.dependenciesOpts['@fastify/static']);
         this.fastify.register(FastifySwagger, this.dependenciesOpts['@fastify/swagger']);
         this.fastify.register(FastifySwaggerUi, this.dependenciesOpts['@fastify/swagger-ui']);
+        // Register controllers
+        this.fastify.register(adminController);
+        this.fastify.register(authController);
+        this.fastify.register(episodesController);
+        this.fastify.register(metricsController);
+        this.fastify.register(moviesController);
+        this.fastify.register(publicController);
+        this.fastify.register(seasonsController);
+        this.fastify.register(reviewsController);
+        this.fastify.register(usersController);
     }
 
     /**
@@ -113,5 +162,27 @@ export default class Server {
 
     private querystringParser(str: string) {
         return qs.parse(str, this.parserOpts);
+    }
+}
+
+declare module '@fastify/jwt' {
+    interface VerifyOptions {
+        onlyCookie: boolean;
+    }
+    interface FastifyJWT {
+        user: {
+            id?: number;
+            pseudo?: string;
+            mail?: string;
+            role?: ERoles;
+            document_group_id?: number;
+            previous_review?: {
+                comment?: string;
+                rating?: number;
+                bookmarked?: boolean;
+                viewed?: boolean;
+                liked?: boolean;
+            };
+        };
     }
 }

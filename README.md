@@ -5,14 +5,18 @@
 </picture>
 
 [![license](https://img.shields.io/badge/Cinévoraces-2.0.0-orange.svg)](https://github.com/cinevoraces)
+
 <!-- [![license](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE) -->
 
 ### :file_folder: Requirements
+
 - Docker
 - NodeJS >= 18.x.x
 
 ### :clapper: Env
-*Create a `.env` file a the root of the project.*
+
+_Create a `.env` file a the root of the project._
+
 ```
 # DATABASE
 POSTGRES_PASSWORD=
@@ -24,6 +28,10 @@ POSTGRES_PORT=5432
 # API
 CLOUDINARY_URL=
 PASS_REGEXP='^(?=.*[A-Z])(?=.*[!#$%*+=?|\-])(?=.*\d)[!#$%*+=?|\-A-Za-z\d]{12,}$'
+
+# API INTEGRATION TESTS
+TEST_USER=
+TEST_PASS=
 
 # APP
 TMDB_KEY=

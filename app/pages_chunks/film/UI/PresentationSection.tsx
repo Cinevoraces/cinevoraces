@@ -1,5 +1,5 @@
-import Rate from '@components/Rate';
 import PosterImage from '@components/Poster';
+import Rate from '@components/Rate';
 
 const dataTitleStyle = 'text-lg uppercase text-light-gray pr-4 ';
 const dataStyle = 'text-lg font-light text-white ';
@@ -18,9 +18,9 @@ const Poster = ({ movieId, french_title }: PosterProps) => {
       className="relative w-full h-full
         before:content-[' '] before:absolute before:-inset-0.5 before:bg-gradient-to-tr before:from-dark-gray before:to-orange-primary before:rounded-xl">
       <PosterImage
-        src={`${process.env.NEXT_PUBLIC_API_BASE_URL_SSR}/public/poster/${movieId}`}
+        src={`${process.env.NEXT_PUBLIC_API_BASE_URL_SSR}/public/1/${movieId}`}
         title={french_title}
-        type='film'
+        type="film"
       />
     </div>
   );
@@ -60,11 +60,7 @@ const Rating = (props: RatingProps) => {
     <div
       id="global-rating"
       className={'flex items-center justify-between gap-0 '}>
-      <p className={hListTypeStyle + 'sm:-mr-[30px]'}>
-        {
-          (props.type === 'global') ? 'Note globale :' : 'Ma note :'
-        }
-      </p>
+      <p className={hListTypeStyle + 'sm:-mr-[30px]'}>{props.type === 'global' ? 'Note globale :' : 'Ma note :'}</p>
       <Rate {...props} />
     </div>
   );
@@ -168,15 +164,4 @@ const Casting = ({ casting }: CastingProps) => {
   );
 };
 
-export {
-  Poster,
-  Title,
-  OriginalTitle,
-  Rating,
-  Directors,
-  Genres,
-  Countries,
-  Languages,
-  Runtime,
-  Casting,
-};
+export { Casting, Countries, Directors, Genres, Languages, OriginalTitle, Poster, Rating, Runtime, Title };

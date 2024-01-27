@@ -8,6 +8,11 @@
             "./tsconfig.json"
         ]
     },
+    "ignorePatterns": [
+        "node_modules",
+        "dist",
+        "scripts"
+    ],
     "rules": {
         "@typescript-eslint/no-explicit-any": "error",
         "@typescript-eslint/prefer-for-of": "error",

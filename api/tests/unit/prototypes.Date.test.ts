@@ -1,6 +1,8 @@
-import '../../src/prototypes/Date';
+import registerDatePrototype from '../../src/prototypes/Date';
 
 describe('prototypes/Date.ts', () => {
+    registerDatePrototype();
+
     it('firstDayOfYear()', () => {
         expect(Date.firstDayOfYear(0, 2025).toUTCString().startsWith('Sun')).toBe(true);
         expect(Date.firstDayOfYear(1, 2025).toUTCString().startsWith('Mon')).toBe(true);
