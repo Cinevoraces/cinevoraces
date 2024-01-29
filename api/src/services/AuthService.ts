@@ -15,7 +15,7 @@ export default class AuthService extends Service {
             await request.jwtVerify();
             return request.user;
         } catch {
-            throw new ServerError(401);
+            throw new ServerError(401, 'TOKEN_EXPIRED');
         }
     };
 

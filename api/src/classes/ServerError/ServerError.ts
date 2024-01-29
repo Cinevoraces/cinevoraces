@@ -13,6 +13,7 @@ type ErrorCodes =
     | 'INVALID_TOKEN'
     | 'METRICS_COULD_NOT_GET'
     | 'TOKEN_USER_NOT_FOUND'
+    | 'TOKEN_EXPIRED'
     | 'NOT_FOUND'
     | 'INTERNAL_SERVER_ERROR'
     | 'BAD_REQUEST'
