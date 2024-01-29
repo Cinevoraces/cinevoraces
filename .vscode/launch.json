@@ -9,8 +9,9 @@
       "type": "node",
       "request": "attach",
       "port": 9229,
-      "address": "localhost",
       "localRoot": "${workspaceFolder}/api",
+      "remoteRoot": "/api",
+      "restart": true,
       "resolveSourceMapLocations": [
         "${workspaceFolder}/**",
         "!**/node_modules/**"
