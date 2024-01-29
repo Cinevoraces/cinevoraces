@@ -86,7 +86,7 @@ const Home: NextPage<HomeProps> = (props) => {
                     key={index}>
                     <Link href={`/films/${lastSixMovies[index].id}`}>
                       <Poster
-                        src={`${process.env.NEXT_PUBLIC_API_BASE_URL_SSR}/public/1/${lastSixMovies[index].id}`}
+                        src={`${process.env.NEXT_PUBLIC_API_BASE_URL_SSR}/public/poster/${lastSixMovies[index].id}`}
                         title={lastSixMovies[index].french_title}
                         type="caroussel"
                       />

@@ -25,7 +25,7 @@ transition duration-150 hover:ease-out`;
  */
 const Avatar = ({ id, pseudo, interactive, avatarUrl }: AvatarProps) => {
   // Trick the browser to consider the latest version of the avatar
-  const url = avatarUrl ? avatarUrl : `${process.env.NEXT_PUBLIC_API_BASE_URL_SSR}/public/0/${id}`;
+  const url = avatarUrl ? avatarUrl : `${process.env.NEXT_PUBLIC_API_BASE_URL_SSR}/public/avatar/${id}`;
   const [source, setSource] = useState(url);
   return (
     <>

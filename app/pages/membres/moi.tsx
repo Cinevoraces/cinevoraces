@@ -27,7 +27,7 @@ const Moi: NextPage = () => {
         title="Cinévoraces - Modifier votre profil"
         description="Page d'administration de votre profil"
         slug={router.asPath}
-        imageUrl={userId ? `${process.env.NEXT_PUBLIC_API_BASE_URL_SSR}/public/0/${userId}` : undefined}
+        imageUrl={userId ? `${process.env.NEXT_PUBLIC_API_BASE_URL_SSR}/public/avatar/${userId}` : undefined}
       />
       <main className="grow flex flex-col justify-start">
         <h1 className="custom-container grow-0 pb-4 hero-text text-center">{'Mon profil privé'}</h1>

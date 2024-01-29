@@ -4,7 +4,6 @@ type ErrorCodes =
     | 'DUPLICATE_PSEUDO'
     | 'DUPLICATE_MAIL'
     | 'DUPLICATE_MOVIE'
-    | 'INVALID_DOC_TYPE'
     | 'INVALID_FILE'
     | 'INVALID_FILE_MIMETYPE'
     | 'INVALID_FILE_SIZE'
