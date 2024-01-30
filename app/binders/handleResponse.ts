@@ -1,5 +1,5 @@
 import type { BodyData } from 'models/custom_types';
-import { EErrorMessages } from 'models/enums';
+import { EApiMessage } from 'models/enums';
 import { toast } from 'react-hot-toast';
 import writeOptionsCSR from './writeOptionsCSR';
 
@@ -24,7 +24,7 @@ const handleResponse = async (res: Response, endpoint: string, method?: 'POST' |
   // For others status code, extract response body
   let responseBody = await response.json();
   // If accessToken expired
-  if (res.status === 401 && responseBody.message === EErrorMessages.EXPIRED_ACCESS_TOKEN && counter === 0) {
+  if (res.status === 401 && responseBody.message === EApiMessage.TOKEN_EXPIRED && counter === 0) {
     // One attempt to refresh it
     counter++;
     const refreshTokenAttempt = await fetch(baseUrlCSR + '/auth/refresh', writeOptionsCSR(undefined, undefined, true));
