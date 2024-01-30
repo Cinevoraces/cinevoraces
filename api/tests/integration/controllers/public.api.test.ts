@@ -6,10 +6,20 @@ describe('API - Public controller', () => {
     beforeAll(async () => server.fastify.ready());
     afterAll(() => server.fastify.close());
 
-    it('API:GET/public/:docType/:entityId - should return an image', async () => {
+    it('API:GET/public/:docType/:entityId - should return a poster', async () => {
         const response = await server.fastify.inject({
             method: 'GET',
-            url: '/public/1/116',
+            url: '/public/poster/116',
+        });
+
+        expect(response.statusCode).toEqual(200);
+        expect(response.headers['content-type']).toEqual('image/jpeg');
+    });
+
+    it('API:GET/public/:docType/:entityId - should return an avatar', async () => {
+        const response = await server.fastify.inject({
+            method: 'GET',
+            url: '/public/avatar/2',
         });
 
         expect(response.statusCode).toEqual(200);

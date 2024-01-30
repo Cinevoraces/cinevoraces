@@ -7,7 +7,7 @@ export default [
         params: {
             type: 'object',
             properties: {
-                docType: { type: 'number' },
+                docType: { type: 'string' },
                 entityId: { type: 'number' },
             },
         },

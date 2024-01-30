@@ -26,6 +26,6 @@ export const logUser = async (instance: FastifyInstance) => {
 
         return { headers, cookies };
     } else {
-        return;
+        throw new Error(res.message);
     }
 };

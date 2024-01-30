@@ -23,7 +23,7 @@ const userSlice = createSlice({
       return {
         isConnected: true,
         ...user,
-        avatarUrl: `${imagesSource}/public/0/${user.id}`,
+        avatarUrl: `${imagesSource}/public/avatar/${user.id}`,
       };
     },
     logout() {

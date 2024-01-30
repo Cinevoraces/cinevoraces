@@ -43,7 +43,7 @@ const PropositionMovieCard = ({ movie, propositionCardStyle, posterStyle }: Prop
         id="proposition_result_card"
         className={propositionCardStyle}>
         <Poster
-          src={id ? `${process.env.NEXT_PUBLIC_API_BASE_URL_SSR}/public/1/${id}` : '/poster_placeholder.jpg'}
+          src={id ? `${process.env.NEXT_PUBLIC_API_BASE_URL_SSR}/public/poster/${id}` : '/poster_placeholder.jpg'}
           title={french_title || 'placeholder'}
           type="card"
         />
