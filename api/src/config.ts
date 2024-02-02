@@ -34,6 +34,12 @@ export const defaultConfig: ServerOpts = {
                 signed: true,
             },
         },
+        '@fastify/rate-limit': {
+            global: true,
+            hook: 'preHandler',
+            max: 1000,
+            timeWindow: 1000 * 60,
+        },
         '@fastify/static': {
             root: '/',
         },
@@ -75,4 +81,15 @@ export const defaultConfig: ServerOpts = {
 export const testConfig: ServerOpts = {
     ...defaultConfig,
     logger: false,
+};
+
+export const rateLimit = {
+    loginAttempts: {
+        max: 5,
+        timeWindow: 60000 * 15,
+    },
+    publicFiles: {
+        max: 500,
+        timeWindow: 6000,
+    },
 };
