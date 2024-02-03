@@ -5,10 +5,11 @@ describe('templates/utils.ts', () => {
         const str = html`
             <html>
                 <body>
-                    <h1>Bienvenue sur Cinévoraces !</h1>
+                    <h1>Bienvenue sur ${`Cinévoraces`} !</h1>
                 </body>
             </html>
         `;
+
         expect(str).toBe('<html><body><h1>Bienvenue sur Cinévoraces !</h1></body></html>');
     });
 });

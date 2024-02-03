@@ -1,11 +1,15 @@
+import { style } from '../style';
 import { html } from '../utils';
 
 const subject = 'Bienvenue sur Cinévoraces !';
 
 const content = html`
     <html>
+        ${style}
         <body>
-            <h1>Bienvenue sur Cinévoraces !</h1>
+            <main>
+                <div class="container"></div>
+            </main>
         </body>
     </html>
 `;
