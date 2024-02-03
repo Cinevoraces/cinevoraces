@@ -9,7 +9,10 @@ import { TscWatchClient } from 'tsc-watch/client.js';
  * - nodemon is used to restart the server when a file changes (with debug on port :9229).
  */
 
-const nodemonCfg = '--inspect=0.0.0.0:9229 dist/src/index.js';
+const nodemonCfg = {
+    script: 'dist/src/index.js',
+    exec: 'node --inspect=0.0.0.0:9229',
+};
 
 const watch = new TscWatchClient();
 
