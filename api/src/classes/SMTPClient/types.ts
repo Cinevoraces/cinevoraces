@@ -4,6 +4,10 @@ export interface ISMTPClient {
     sendMail: SendMail;
 }
 
-export type SendMail = (to: { pseudo: string; mail: string }, template: EmailTemplate) => Promise<void>;
+export type SendMail = (
+    to: { pseudo: string; mail: string },
+    template: EmailTemplate,
+    params?: Record<string, string>,
+) => Promise<void>;
 
 export type EmailTemplate = keyof typeof templates;
