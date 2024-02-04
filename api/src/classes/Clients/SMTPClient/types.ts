@@ -2,12 +2,14 @@ import type { templates } from '@src/templates';
 
 export interface ISMTPClient {
     sendMail: SendMail;
+    setSandbox: (isSandbox: boolean) => void;
+    isSandbox: () => boolean;
 }
 
 export type SendMail = (
     to: { pseudo: string; mail: string },
-    template: EmailTemplate,
+    type: EmailType,
     params?: Record<string, string>,
-) => Promise<void>;
+) => Promise<{ status: number }>;
 
-export type EmailTemplate = keyof typeof templates;
+export type EmailType = keyof typeof templates;

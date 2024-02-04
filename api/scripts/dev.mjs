@@ -1,6 +1,7 @@
 import nodemon from 'nodemon';
 import { replaceTscAliasPaths } from 'tsc-alias';
 import { TscWatchClient } from 'tsc-watch/client.js';
+import { fileURLToPath } from 'url';
 
 /**
  * This script is used to run the server in development mode.
@@ -9,8 +10,11 @@ import { TscWatchClient } from 'tsc-watch/client.js';
  * - nodemon is used to restart the server when a file changes (with debug on port :9229).
  */
 
+const rootpath = fileURLToPath(import.meta.url).split('/scripts')[0];
+process.chdir(rootpath);
+
 const nodemonCfg = {
-    script: 'dist/src/index.js',
+    script: rootpath + '/dist/src/index.js',
     exec: 'node --inspect=0.0.0.0:9229',
 };
 

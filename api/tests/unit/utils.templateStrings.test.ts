@@ -20,6 +20,6 @@ describe('utils/templateStrings.ts', () => {
             }
         `;
 
-        expect(str).toBe('<style>.main{background-color:red;}</style>');
+        expect(str).toBe('<style>.main {background-color: red;}</style>');
     });
 });

@@ -1,4 +1,3 @@
-import { SMTPClient } from '@src/classes';
 import { PublicService } from '@src/services';
 import { type FastifyReply as Reply, type FastifyRequest as Request } from 'fastify';
 import plugin from 'fastify-plugin';
@@ -12,13 +11,7 @@ export default plugin(async fastify => {
     fastify.route({
         method: 'GET',
         url: '/ping',
-        handler: async (_, reply: Reply) => {
-            const client = new SMTPClient();
-            client.sendMail({ mail: 'gregory.michalak.192@gmail.com', pseudo: 'Greg' }, 'confirmMail', {
-                url: 'https://cinevoraces.fr',
-            });
-            reply.send('pong');
-        },
+        handler: async (_, reply: Reply) => reply.send('pong'),
     });
 
     fastify.route({
