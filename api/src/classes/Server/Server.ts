@@ -153,6 +153,7 @@ export default class Server {
             'PASS_REGEXP',
             'JWT_SECRET',
             'COOKIE_SECRET',
+            'BREVO_API_KEY',
             'POSTGRES_USER',
             'POSTGRES_DB',
             'POSTGRES_PASSWORD',

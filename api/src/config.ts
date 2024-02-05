@@ -93,3 +93,8 @@ export const rateLimit = {
         timeWindow: 6000,
     },
 };
+
+export const brevoConfig = {
+    apiKey: process.env.BREVO_API_KEY,
+    sender: { name: 'Cinévoraces', email: 'cinevoraces@gmail.com' },
+};
