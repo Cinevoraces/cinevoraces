@@ -1,3 +1,4 @@
+import { rateLimit } from '@src/config';
 import { AuthService, UserService } from '@src/services';
 import { hashString } from '@src/utils';
 import { type FastifyInstance, type FastifyReply as Reply, type FastifyRequest as Request } from 'fastify';
@@ -29,6 +30,7 @@ export default plugin(async (fastify: FastifyInstance) => {
     fastify.route({
         method: 'POST',
         url: '/auth/login',
+        preHandler: fastify.rateLimit(rateLimit.loginAttempts),
         schema: fastify.getSchema('API:POST/auth/login'),
         handler: async (request: Request<POSTLoginBody>, reply: Reply) => {
             const { mail, pseudo, password } = request.body;
