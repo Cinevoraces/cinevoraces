@@ -1,7 +1,7 @@
 import fs from 'fs';
 import { Readable } from 'stream';
 
-export type Folder = 'root' | 'temp' | 'logs' | 'public';
+export type Folder = 'root' | 'temp' | 'public';
 
 /**
  * Get the full path of the folder
@@ -11,7 +11,6 @@ export const getFolderPath = (folder: Folder) => {
     const paths = {
         root: root,
         temp: `${root}/temp`,
-        logs: `${root}/logs`,
         public: `${root}/public`,
     };
     return paths[folder];

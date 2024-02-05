@@ -2,6 +2,7 @@ import fastifyCookie, { type FastifyCookieOptions } from '@fastify/cookie';
 import fastifyCors, { type FastifyCorsOptions } from '@fastify/cors';
 import fastifyJWT, { type FastifyJWTOptions } from '@fastify/jwt';
 import fastifyMultipart, { type FastifyMultipartOptions } from '@fastify/multipart';
+import fastifyRateLimit, { type FastifyRateLimitOptions } from '@fastify/rate-limit';
 import fastifyStatic, { type FastifyStaticOptions } from '@fastify/static';
 import FastifySwagger, { type SwaggerOptions } from '@fastify/swagger';
 import FastifySwaggerUi, { type FastifySwaggerUiOptions } from '@fastify/swagger-ui';
@@ -38,6 +39,7 @@ import payloadSanitizer from './utils/payloadSanitizer';
 
 interface DependenciesOpts {
     '@fastify/cookie'?: FastifyCookieOptions;
+    '@fastify/rate-limit'?: FastifyRateLimitOptions;
     '@fastify/cors'?: FastifyCorsOptions;
     '@fastify/jwt'?: FastifyJWTOptions;
     '@fastify/multipart'?: FastifyMultipartOptions;
@@ -72,10 +74,10 @@ export default class Server {
     /**
      * Initialize the server with all dependencies.
      */
-    public init() {
+    public async init() {
         this.fastify = fastify({ ...this.serverOpts, querystringParser: this.querystringParser });
         // Register schemas
-        [
+        for (const s of [
             ErrorSchema,
             EpisodeSchema,
             MetricsSchema,
@@ -86,28 +88,34 @@ export default class Server {
             MovieSchema,
             ReducedMovieSchema,
             SeasonSchema,
-        ].forEach(s => this.fastify.addSchema(s));
-        this.fastify.register(addSchemas);
+        ])
+            this.fastify.addSchema(s);
+
+        // Register utils
+        await this.fastify.register(addSchemas);
+
         // Dependencies injection
-        this.fastify.register(dbConnector, this.dependenciesOpts['pg']);
-        this.fastify.register(payloadSanitizer);
-        this.fastify.register(fastifyCookie, this.dependenciesOpts['@fastify/cookie']);
-        this.fastify.register(fastifyCors, this.dependenciesOpts['@fastify/cors']);
-        this.fastify.register(fastifyJWT, this.dependenciesOpts['@fastify/jwt']);
-        this.fastify.register(fastifyMultipart, this.dependenciesOpts['@fastify/multipart']);
-        this.fastify.register(fastifyStatic, this.dependenciesOpts['@fastify/static']);
-        this.fastify.register(FastifySwagger, this.dependenciesOpts['@fastify/swagger']);
-        this.fastify.register(FastifySwaggerUi, this.dependenciesOpts['@fastify/swagger-ui']);
+        await this.fastify.register(dbConnector, this.dependenciesOpts['pg']);
+        await this.fastify.register(payloadSanitizer);
+        await this.fastify.register(fastifyRateLimit, this.dependenciesOpts['@fastify/rate-limit']);
+        await this.fastify.register(fastifyCookie, this.dependenciesOpts['@fastify/cookie']);
+        await this.fastify.register(fastifyCors, this.dependenciesOpts['@fastify/cors']);
+        await this.fastify.register(fastifyJWT, this.dependenciesOpts['@fastify/jwt']);
+        await this.fastify.register(fastifyMultipart, this.dependenciesOpts['@fastify/multipart']);
+        await this.fastify.register(fastifyStatic, this.dependenciesOpts['@fastify/static']);
+        await this.fastify.register(FastifySwagger, this.dependenciesOpts['@fastify/swagger']);
+        await this.fastify.register(FastifySwaggerUi, this.dependenciesOpts['@fastify/swagger-ui']);
+
         // Register controllers
-        this.fastify.register(adminController);
-        this.fastify.register(authController);
-        this.fastify.register(episodesController);
-        this.fastify.register(metricsController);
-        this.fastify.register(moviesController);
-        this.fastify.register(publicController);
-        this.fastify.register(seasonsController);
-        this.fastify.register(reviewsController);
-        this.fastify.register(usersController);
+        await this.fastify.register(adminController);
+        await this.fastify.register(authController);
+        await this.fastify.register(episodesController);
+        await this.fastify.register(metricsController);
+        await this.fastify.register(moviesController);
+        await this.fastify.register(publicController);
+        await this.fastify.register(seasonsController);
+        await this.fastify.register(reviewsController);
+        await this.fastify.register(usersController);
     }
 
     /**
@@ -145,6 +153,7 @@ export default class Server {
             'PASS_REGEXP',
             'JWT_SECRET',
             'COOKIE_SECRET',
+            'BREVO_API_KEY',
             'POSTGRES_USER',
             'POSTGRES_DB',
             'POSTGRES_PASSWORD',

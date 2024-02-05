@@ -5,12 +5,27 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Debug API",
+      "name": "Debug API: Remote",
       "type": "node",
       "request": "attach",
       "port": 9229,
       "localRoot": "${workspaceFolder}/api",
-      "remoteRoot": "/api",
+      "address": "localhost",
+      "restart": true,
+      "resolveSourceMapLocations": [
+        "${workspaceFolder}/**",
+        "!**/node_modules/**"
+      ],
+      "skipFiles": [
+        "<node_internals>/**/*.js"
+      ]
+    },
+    {
+      "name": "Debug API: Attach",
+      "type": "node",
+      "request": "attach",
+      "port": 9229,
+      "localRoot": "${workspaceFolder}/api",
       "restart": true,
       "resolveSourceMapLocations": [
         "${workspaceFolder}/**",

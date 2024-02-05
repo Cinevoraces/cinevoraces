@@ -26,7 +26,7 @@ export default plugin(async fastify => {
         url: '/admin/movies/publish/:id',
         schema: fastify.getSchema('API:PUT/admin/movies/publish/:id'),
         handler: async (request: Request<PUTMovieAsAdminRequest>, reply: Reply) => {
-            await authService.isAdmin(request);
+            await authService.isAdminOrThrow(request);
             await authService.verifyPasswordOrThrow(request.user.id, request.body.password);
             await movieService.publishMovie(request.params.id);
             reply.code(201).send({ message: 'La proposition a bien été publiée.' }); // issues/168
@@ -38,7 +38,7 @@ export default plugin(async fastify => {
         url: '/admin/movies/:id',
         schema: fastify.getSchema('API:DELETE/admin/movies/:id'),
         handler: async (request: Request<DELETEMovieAsAdminRequest>, reply: Reply) => {
-            await authService.isAdmin(request);
+            await authService.isAdminOrThrow(request);
             await authService.verifyPasswordOrThrow(request.user.id, request.body.password);
             await movieService.deleteMovie(request.params.id);
             reply.code(201).send({ message: 'Le film a bien été supprimée.' }); // issues/168
@@ -53,7 +53,7 @@ export default plugin(async fastify => {
         url: '/admin/reviews',
         schema: fastify.getSchema('API:GET/admin/reviews'),
         handler: async (request: Request, reply: Reply) => {
-            await authService.isAdmin(request);
+            await authService.isAdminOrThrow(request);
             const { rows: reviews } = await reviewService.getReviews(request.query);
             reply.code(200).send(reviews);
         },
@@ -65,7 +65,7 @@ export default plugin(async fastify => {
         schema: fastify.getSchema('API:DELETE/admin/reviews/:movieId/:userId'),
         handler: async (request: Request<DELETECommentAsAdminRequest>, reply: Reply) => {
             const { movieId, userId } = request.params;
-            await authService.isAdmin(request);
+            await authService.isAdminOrThrow(request);
             await authService.verifyPasswordOrThrow(request.user.id, request.body.password);
             await reviewService.deleteComment(movieId, userId);
             reply.code(201).send({ message: 'Commentaire supprimé avec succès.' }); // issues/168
@@ -81,7 +81,7 @@ export default plugin(async fastify => {
         schema: fastify.getSchema('API:POST/seasons'),
         handler: async (request: Request<POSTSeasonRequest>, reply: Reply) => {
             const { year, season_number } = request.body;
-            await authService.isAdmin(request);
+            await authService.isAdminOrThrow(request);
             await seasonService.createSeason(year, season_number);
             reply.code(201);
         },
@@ -96,7 +96,7 @@ export default plugin(async fastify => {
         schema: fastify.getSchema('API:DELETE/admin/users/:id'),
         handler: async (request: Request<DELETEUserAsAdminRequest>, reply: Reply) => {
             const { id } = request.params;
-            await authService.isAdmin(request);
+            await authService.isAdminOrThrow(request);
             await authService.verifyPasswordOrThrow(request.user.id, request.body.password);
             await userService.deleteUser(id);
             reply.code(200).send({ message: 'Utilisateur supprimé avec succès.' }); // issues/168

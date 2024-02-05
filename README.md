@@ -27,7 +27,9 @@ POSTGRES_PORT=5432
 
 # API
 CLOUDINARY_URL=
+BREVO_API_KEY=
 PASS_REGEXP='^(?=.*[A-Z])(?=.*[!#$%*+=?|\-])(?=.*\d)[!#$%*+=?|\-A-Za-z\d]{12,}$'
+NODE_ENV=development
 
 # API INTEGRATION TESTS
 TEST_USER=
