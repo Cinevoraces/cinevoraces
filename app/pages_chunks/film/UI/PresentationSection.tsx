@@ -18,7 +18,7 @@ const Poster = ({ movieId, french_title }: PosterProps) => {
       className="relative w-full h-full
         before:content-[' '] before:absolute before:-inset-0.5 before:bg-gradient-to-tr before:from-dark-gray before:to-orange-primary before:rounded-xl">
       <PosterImage
-        src={`${process.env.NEXT_PUBLIC_API_BASE_URL_SSR}/public/1/${movieId}`}
+        src={`${process.env.NEXT_PUBLIC_API_BASE_URL_SSR}/public/poster/${movieId}`}
         title={french_title}
         type="film"
       />

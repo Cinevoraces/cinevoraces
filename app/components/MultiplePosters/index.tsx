@@ -43,7 +43,7 @@ const MultiplePosters = ({ number }: PostersComponentProps) => {
               href={`/films/${posters[index].id}`}
               className={posterStyles + ' ' + indivStyles[index]}>
               <Poster
-                src={`${process.env.NEXT_PUBLIC_API_BASE_URL_SSR}/public/1/${posters[index].id}`}
+                src={`${process.env.NEXT_PUBLIC_API_BASE_URL_SSR}/public/poster/${posters[index].id}`}
                 title={posters[index].french_title}
               />
             </Link>
