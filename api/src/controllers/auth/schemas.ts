@@ -1,6 +1,5 @@
-export default [
-    {
-        $id: 'API:POST/auth/register',
+export default {
+    'API:POST/auth/register': {
         description: 'Register a new user',
         tags: ['Authentication'],
         body: {
@@ -31,8 +30,7 @@ export default [
             },
         },
     },
-    {
-        $id: 'API:POST/auth/login',
+    'API:POST/auth/login': {
         description:
             '**Login endpoint:**. Will respond with an access token in the *body* and a refresh token in a *cookie*. Body must contain either a *pseudo* or a *mail* and a *password*.',
         tags: ['Authentication'],
@@ -76,8 +74,7 @@ export default [
             },
         },
     },
-    {
-        $id: 'API:GET/auth/refresh',
+    'API:GET/auth/refresh': {
         summary: '(TOKEN REQUIRED)',
         description:
             '**Token requesting endpoint:** The refresh token must be sent in the *authorization headers*. A new pair of tokens will be sent in the *body* and in a *cookie*.',
@@ -110,10 +107,4 @@ export default [
             },
         },
     },
-];
-
-declare module 'fastify' {
-    interface FastifyInstance {
-        getSchema(id: 'API:POST/auth/register' | 'API:POST/auth/login' | 'API:GET/auth/refresh'): FastifySchema;
-    }
-}
+};

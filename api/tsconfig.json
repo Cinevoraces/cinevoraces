@@ -1,28 +1,12 @@
 {
-    "include": [
-        "./src/**/*",
-        "./src/*",
-        "./tests/**/*.ts",
-        "./tests/*.ts",
-        "./jest.config.ts",
-    ],
-    "exclude": [
-        "dist",
-        "node_modules",
-        "scripts"
-    ],
+    "include": ["./src/**/*", "./src/*", "./tests/**/*.ts", "./tests/*.ts", "./jest.config.ts"],
+    "exclude": ["dist", "node_modules", "scripts"],
     "compilerOptions": {
-        "types": [
-            "@types/jest",
-            "node"
-        ],
+        "types": ["@types/jest", "node"],
         "moduleResolution": "node",
         "target": "ES6",
         "module": "commonjs",
-        "lib": [
-            "ES6",
-            "esnext.asynciterable"
-        ],
+        "lib": ["ES6", "esnext.asynciterable"],
         "emitDecoratorMetadata": true,
         "experimentalDecorators": true,
         "allowSyntheticDefaultImports": true,
@@ -34,14 +18,10 @@
         "baseUrl": ".",
         "outDir": "dist",
         "paths": {
-            "@src/*": [
-                "./src/*"
-            ],
-        }
+            "@src/*": ["./src/*"],
+        },
     },
     "ts-node": {
-        "require": [
-            "tsconfig-paths/register"
-        ]
-    }
+        "require": ["tsconfig-paths/register"],
+    },
 }

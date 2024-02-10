@@ -1,4 +1,4 @@
-import { parserOpts, type ServerOpts } from '@src/classes/Server';
+import { type ServerOpts } from '@src/classes/Server';
 
 /**
  * For more information on the dependencies, see:
@@ -10,7 +10,6 @@ import { parserOpts, type ServerOpts } from '@src/classes/Server';
  */
 export const defaultConfig: ServerOpts = {
     logger: true,
-    parserOpts,
     dependenciesOpts: {
         pg: {
             user: process.env.POSTGRES_USER,

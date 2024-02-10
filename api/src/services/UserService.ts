@@ -1,70 +1,55 @@
 import type { MultipartFile } from '@fastify/multipart';
-import { HTTPClient } from '@src/classes';
-import type { UpdateUserPayload } from '@src/controllers/users/types';
-import { EDocType, EMimeType, type ERoles, type GetUsers, type QueryString, type User } from '@src/types';
-import { cloudinaryDelete, cloudinaryUpload, deleteFile, getFolderPath, saveFile } from '@src/utils';
-import type { QueryResult } from 'pg';
+import { HTTPClient, Query, UserRepository } from '@src/classes';
+import type { CreateUserPayload, UpdateUserPayload } from '@src/controllers/users/types';
+import type { BaseQuery } from '@src/types';
+import { EDocType, EMimeType, type ERoles, type User } from '@src/types';
+import { cloudinaryDelete, cloudinaryUpload, deleteFile, getFolderPath, hashString, saveFile } from '@src/utils';
+import type { PoolClient } from 'pg';
 import Service from './Service';
 
-type CreateUserFn = (values: Record<'pseudo' | 'mail' | 'password', string>) => Promise<void>;
-type DeleteUserFn = (id: number) => Promise<QueryResult>;
+type CreateUserFn = (payload: CreateUserPayload) => Promise<void>;
+type DeleteUserFn = (id: number) => Promise<void>;
 type GetPrivateUserFn = (
     value: { id: number } | { pseudo: string } | { mail: string },
 ) => Promise<{ id: number; pseudo: string; mail: string; role: ERoles }>;
-type GetUsersFn = (
-    queryString: QueryString<GetUsers.Select, GetUsers.Where>,
-    id?: number,
-) => Promise<{ rowCount: number; rows: Array<User> }>;
+type GetUsersFn = (qs: BaseQuery, id?: number) => Promise<Array<User>>;
 type UpdateUserFn = (id: number, payload: UpdateUserPayload) => Promise<void>;
 type UploadAvatarFn = (userId: number, avatar: MultipartFile) => Promise<void>;
 type ValidateAvatarFn = (avatar: MultipartFile) => void;
 
 export default class UserService extends Service {
+    userRepo: UserRepository;
+
+    constructor(postgres: PoolClient) {
+        super(postgres);
+        this.userRepo = new UserRepository(postgres);
+    }
+
     /**
      * Get users using query parameters.
      * - Set *id* to get "me" as user.
      */
     getUsers: GetUsersFn = async (queryString, id) => {
-        const { select, where, limit, sort } = queryString;
         const isPrivate = id !== undefined;
 
-        const enums = {
-            where: isPrivate ? [] : ['id', 'pseudo', 'mail', 'role'],
-            select: ['propositions', 'reviews', 'metrics', 'movies'],
-        };
-        let values = [] as Array<unknown>,
-            SELECT: string = undefined,
-            WHERE = { query: '', count: 0, values: [] as Array<unknown> },
-            ORDERBY = '',
-            LIMIT = '';
-
-        if (select) {
-            SELECT = this.reduceSelect(select as Record<string, unknown>, enums.select);
-        }
-        if (where) {
-            WHERE = this.reduceWhere(where as Record<string, unknown>, 'AND', enums.where);
-            values = WHERE.values as Array<unknown>;
-        }
-        if (isPrivate) {
-            WHERE = { query: 'id=$1', count: 1, values: [id] as Array<unknown> };
-            values = WHERE.values;
-        }
-        if (sort === 'asc' || sort === 'desc') {
-            ORDERBY = `ORDER BY id ${sort}`;
-        }
-        if (typeof limit === 'number' && limit > 0) {
-            LIMIT = `LIMIT ${limit}`;
-        }
-
-        return await this.postgres.query({
-            text: ` SELECT id, pseudo, ${isPrivate ? 'mail, ' : ''}role, created_at, updated_at
-              ${SELECT ? `,${SELECT}` : ''}
-              FROM userview
-              ${WHERE?.count ? `WHERE ${WHERE.query}` : ''}
-              ${ORDERBY}
-              ${LIMIT};`,
-            values,
+        const query = new Query({
+            ...queryString,
+            select: {
+                ...queryString.select,
+                id: true,
+                pseudo: true,
+                role: true,
+                created_at: true,
+                updated_at: true,
+                mail: isPrivate,
+            },
+            where: {
+                ...queryString.where,
+                ...(isPrivate ? { id } : {}),
+            },
         });
+
+        return await this.userRepo.getMany(query);
     };
 
     /**
@@ -86,35 +71,36 @@ export default class UserService extends Service {
      * Create a new user.
      */
     createUser: CreateUserFn = async values => {
-        const { pseudo, mail, password } = values;
-        await this.postgres.query({
-            text: 'INSERT INTO "user" (pseudo, mail, password) VALUES ($1, $2, $3);',
-            values: [pseudo, mail, password],
-        });
+        let { pseudo, mail, password } = values;
+        password = await hashString(password);
+        await this.userRepo.create({ pseudo, mail, password });
     };
 
     /**
      * Update one user.
      */
-    updateUser: UpdateUserFn = async (id, set) => {
-        const enumerator = ['pseudo', 'mail', 'password'];
-        const SET = this.reduceWhere(set as Record<string, unknown>, ',', enumerator, 1);
-        await this.postgres.query({
-            text: ` UPDATE "user"
-              SET ${SET.query}
-              WHERE id=$1;`,
-            values: [id, ...SET.values],
+    updateUser: UpdateUserFn = async (id, { password, ...payload }) => {
+        if (password) {
+            if (!password.is('valid-password'))
+                throw new ServerError(400, 'INVALID_PASSWORD_FORMAT', 'Le format du mot de passe est invalide.'); // issues/168
+
+            password = await hashString(password);
+        }
+
+        const query = new Query({
+            where: { id },
+            set: {
+                ...payload,
+                ...(password ? { password } : {}),
+            },
         });
+        await this.userRepo.update(query);
     };
 
     /**
      * Delete one user.
      */
-    deleteUser: DeleteUserFn = async id =>
-        await this.postgres.query({
-            text: ' DELETE FROM "user" WHERE id=$1;',
-            values: [id],
-        });
+    deleteUser: DeleteUserFn = async id => await this.userRepo.delete(id);
 
     /**
      * Validate avatar file on upload.
