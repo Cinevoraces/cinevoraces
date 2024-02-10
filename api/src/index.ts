@@ -11,6 +11,7 @@ import '@src/types';
         const server = new Server(defaultConfig);
         server.envCheck();
         await server.init();
+        await server.applyMigrations();
         server.initErrorCatcher();
         server.start();
     } catch (err) {
