@@ -131,6 +131,7 @@ export default class Server {
             return;
         }
 
+        migrations.reverse();
         for (const migration of migrations) {
             if (migration.error) {
                 errorMsgs.push(migration.error);

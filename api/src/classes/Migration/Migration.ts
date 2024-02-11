@@ -31,7 +31,7 @@ export default class Migration {
         return migrations;
     };
 
-    public static minifySql = (sql: string) => sql.replace(/\s+/g, ' ').trim();
+    public static removeComments = (sql: string) => sql.replace(/(\/\*[^*]*\*\/)|(\/\/[^*]*)|(--[^.].*)/gm, '');
 
     /**
      * Apply the migration to the database.
@@ -46,7 +46,6 @@ export default class Migration {
                 this.skiped = true;
                 return;
             }
-            // TODO => Block here
             await this.pgClient.query(this.up);
             await this.insertMigration();
         } catch (e) {
@@ -63,11 +62,15 @@ export default class Migration {
     };
 
     private parseUp = (query: string) => {
-        this.up = query.split('-- MIGRATION DOWN')[0];
+        query = query.split('-- MIGRATION DOWN')[0];
+        query = Migration.removeComments(query);
+        this.up = query;
     };
 
     private parseDown = (query: string) => {
-        this.down = query.split('-- MIGRATION DOWN')[1];
+        query = query.split('-- MIGRATION DOWN')[1];
+        query = Migration.removeComments(query);
+        this.down = query;
     };
 
     private isMigrationExists = async (retry?: boolean) => {

@@ -1,8 +1,6 @@
 BEGIN;
 
--- Updated on V18 -> Document implementation
-CREATE
-OR REPLACE FUNCTION new_movie (
+CREATE OR REPLACE FUNCTION new_movie(
 	title TEXT,
 	original_title TEXT,
 	poster_url TEXT,
@@ -11,32 +9,31 @@ OR REPLACE FUNCTION new_movie (
 	runtime INT,
 	casting TEXT[],
 	presentation TEXT,
-	movie_genres TEXT[],
+  movie_genres TEXT[],
 	movie_languages TEXT[],
 	movie_countries TEXT[],
 	episode_id INT,
 	user_id INT
 ) RETURNS void AS $$
-
-DECLARE movie_id INT;
-DECLARE g TEXT;
-DECLARE genre_id INT;
-DECLARE l TEXT;
-DECLARE language_id INT;
-DECLARE c TEXT;
-DECLARE country_id INT;
+DECLARE
+	movie_id INT;
+	g TEXT;
+	genre_id INT;
+	l TEXT;
+	language_id INT;
+	c TEXT;
+	country_id INT;
 
 BEGIN
 	IF NOT EXISTS (SELECT * FROM movie WHERE title=movie.french_title) THEN
 		INSERT INTO movie("french_title", "original_title", "poster_url", "directors", "release_date", "runtime", "casting", "presentation", "episode_id", "user_id")
 		VALUES (title, original_title, poster_url, directors, release_date, runtime, casting, presentation, episode_id, user_id)
 		RETURNING id INTO movie_id;
-		
 		-- Create genre if not exists
 		FOREACH g IN ARRAY movie_genres
 			LOOP
 				IF NOT EXISTS (SELECT * FROM genre WHERE name=g) THEN
-					INSERT INTO genre("name") SELECT g;
+					INSERT INTO genre("name") SELECT g
 					RETURNING id INTO genre_id;
 				ELSE
 					RAISE NOTICE 'Genre (%) déjà là', g;
@@ -45,7 +42,6 @@ BEGIN
 				INSERT INTO movie_has_genre(movie_id, genre_id)
 				SELECT movie_id, genre_id;
 			END LOOP;
-		
 		-- Create language if not exists
 		FOREACH l IN ARRAY movie_languages
 			LOOP
@@ -59,7 +55,6 @@ BEGIN
 				INSERT INTO movie_has_language(movie_id, language_id)
 				SELECT movie_id, language_id;
 			END LOOP;
-
 		-- Create country if not exists
 		FOREACH c IN ARRAY movie_countries
 			LOOP
@@ -76,7 +71,7 @@ BEGIN
 	ELSE
 		RAISE NOTICE 'Movie (%) déjà là', title;
 	END IF;
-END;
+END
 $$ LANGUAGE plpgsql;
 
 COMMIT;
