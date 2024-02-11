@@ -19,8 +19,7 @@ export default class Migration {
     }
 
     public static getMigrations = (pgClient: PoolClient) => {
-        const isDev = process.env.NODE_ENV === 'development';
-        const folder = `${isDev ? process.cwd() : '/api'}${sep}migrations`;
+        const folder = `${process.cwd()}${sep}migrations`;
         const migrations = readdirSync(folder)
             .filter(f => f.endsWith('.sql'))
             .sort()

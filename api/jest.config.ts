@@ -2,7 +2,7 @@
 export default {
     preset: 'ts-jest',
     testEnvironment: 'node',
-    moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
+    moduleFileExtensions: ['js'],
     modulePathIgnorePatterns: ['<rootDir>/dist/'],
     roots: ['<rootDir>'],
     moduleNameMapper: {

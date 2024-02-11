@@ -1,4 +1,4 @@
-import { spawn } from 'child_process';
+import jest from 'jest';
 import { sep } from 'path';
 import { chdir } from 'process';
 import { TscWatchClient } from 'tsc-watch/client.js';
@@ -77,6 +77,6 @@ export default class Launcher {
      * Start unit tests
      */
     startUnitTests() {
-        spawn('npx', ['jest', './tests/unit/*', '--watchAll'], { stdio: 'inherit' });
+        jest.run(['./tests/unit/*', '--watchAll']);
     }
 }
