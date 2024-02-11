@@ -1,11 +1,11 @@
 import type { ERoles } from '@src/types';
 import fastify, { type FastifyInstance, type FastifyServerOptions } from 'fastify';
 import qs from 'qs';
+import { Migration } from '../Migration';
 import type { DependenciesOpts } from './types';
 import addSchemas from './utils/addSchemas';
 import dbConnector from './utils/dbConnector';
 import { envCheck } from './utils/envCheck';
-import { getMigrations } from './utils/getMigrations';
 import payloadSanitizer from './utils/payloadSanitizer';
 
 interface ErrorCatcherOpts {
@@ -112,12 +112,34 @@ export default class Server {
      */
     public envCheck = () => envCheck();
 
+    /**
+     * Apply all pending migrations.
+     * @throws {Error} If one or more migrations failed to apply.
+     */
     public applyMigrations = async () => {
-        const migrations = getMigrations();
+        const migrations = Migration.getMigrations(this.fastify.postgres);
+        const errorMsgs: string[] = [];
+        console.log('Applying migrations...');
+
+        for (const migration of migrations) await migration.apply();
+
+        if (migrations.every(m => m.error === undefined)) {
+            const successCount = migrations.filter(m => !m.skiped).length;
+            successCount > 0
+                ? console.log(`${successCount} migrations applied successfully.`)
+                : console.log('No migrations to apply.');
+            return;
+        }
 
         for (const migration of migrations) {
-            // await this.fastify.postgres.query(migration.query);
+            if (migration.error) {
+                errorMsgs.push(migration.error);
+                continue;
+            }
+            await migration.rollback();
         }
+
+        throw new Error(errorMsgs.join('\n'));
     };
 
     private querystringParser = (str: string) => qs.parse(str, this.parserOpts);
