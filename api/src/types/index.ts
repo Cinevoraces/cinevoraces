@@ -8,5 +8,4 @@ export type { Review } from './models/Review';
 export type { Season } from './models/Season';
 export type { User } from './models/User';
 export type { UserMetrics } from './models/UserMetrics';
-export type { GetUsers } from './queryStrings/GetUsers';
-export type { QueryString } from './queryStrings/Querystring';
+export type { BaseQuery, QueryString } from './queryStrings/Querystring';

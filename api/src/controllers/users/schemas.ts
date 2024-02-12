@@ -1,6 +1,5 @@
-export default [
-    {
-        $id: 'API:GET/users',
+export default {
+    'API:GET/users': {
         description:
             '**Get public users**: Use query parameters to populate the results using the following format: "*/users?select[reviews]=true&where[id]=1*"',
         tags: ['Users'],
@@ -36,8 +35,7 @@ export default [
             },
         },
     },
-    {
-        $id: 'API:GET/users/me',
+    'API:GET/users/me': {
         summary: '(TOKEN REQUIRED)',
         description:
             '**Get users**. Use query parameters to populate the results using the following format: "*/users?select[reviews]=true&where[id]=1*".',
@@ -65,8 +63,7 @@ export default [
             },
         },
     },
-    {
-        $id: 'API:PUT/users',
+    'API:PUT/users': {
         summary: '(TOKEN REQUIRED)',
         description:
             '**Modify user by token**: Modify property in *update_user* object sent in the body. *update_user* **can** contain one or more of the following properties: *pseudo*, *mail* or *password*. Password must match the following requirments: *8 Characters, at least 1 Number, at least 1 letter. Max 64 characters* It can contain the following special characters: "!#$&%*+=?|" You must provide the current password as well.',
@@ -104,8 +101,7 @@ export default [
             },
         },
     },
-    {
-        $id: 'API:PUT/users/avatar',
+    'API:PUT/users/avatar': {
         summary: '(TOKEN REQUIRED)',
         description:
             '**Modify user avatar by token:** Send a multipart/form-data request with the following field *avatar: file*',
@@ -119,10 +115,4 @@ export default [
             },
         },
     },
-];
-
-declare module 'fastify' {
-    interface FastifyInstance {
-        getSchema(id: 'API:GET/users' | 'API:GET/users/me' | 'API:PUT/users' | 'API:PUT/users/avatar'): FastifySchema;
-    }
-}
+};
