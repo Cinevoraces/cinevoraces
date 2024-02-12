@@ -1,25 +1,14 @@
 {
-    "plugins": [
-        "@typescript-eslint"
-    ],
+    "plugins": ["@typescript-eslint"],
     "parserOptions": {
         "tsconfigRootDir": "./",
-        "project": [
-            "./tsconfig.json"
-        ]
+        "project": ["./tsconfig.json"]
     },
-    "ignorePatterns": [
-        "node_modules",
-        "dist",
-        "scripts"
-    ],
+    "ignorePatterns": ["node_modules", "dist", "scripts"],
     "rules": {
         "@typescript-eslint/no-explicit-any": "error",
         "@typescript-eslint/prefer-for-of": "error",
-        "@typescript-eslint/consistent-type-definitions": [
-            "error",
-            "interface"
-        ],
+        "@typescript-eslint/consistent-type-definitions": ["error", "interface"],
         "@typescript-eslint/consistent-type-exports": "error",
         "@typescript-eslint/consistent-type-imports": "error",
         "@typescript-eslint/no-namespace": "off",
@@ -42,9 +31,5 @@
         "import/no-anonymous-default-export": "off",
         "no-nested-ternary": "error"
     },
-    "extends": [
-        "eslint:recommended",
-        "plugin:@typescript-eslint/recommended",
-        "prettier"
-    ]
+    "extends": ["eslint:recommended", "plugin:@typescript-eslint/recommended", "prettier"]
 }

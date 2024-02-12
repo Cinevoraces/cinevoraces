@@ -1,7 +1,5 @@
 BEGIN;
 
--- Updated on V18 -> Document implementation
-
 CREATE OR REPLACE FUNCTION new_movie(
 	title TEXT,
 	original_title TEXT,
@@ -75,5 +73,12 @@ BEGIN
 	END IF;
 END
 $$ LANGUAGE plpgsql;
+
+COMMIT;
+
+-- MIGRATION DOWN
+BEGIN;
+
+DROP FUNCTION IF EXISTS new_movie;
 
 COMMIT;

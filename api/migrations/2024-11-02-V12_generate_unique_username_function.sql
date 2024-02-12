@@ -1,6 +1,7 @@
 BEGIN;
 
-CREATE OR REPLACE FUNCTION generate_unique_username() RETURNS text AS $$
+CREATE
+OR REPLACE FUNCTION generate_unique_username () RETURNS text AS $$
 DECLARE
     syllables text[] := ARRAY[
         'zizi', 'zo', 'zu', 'jaja', 'jeje', 'jiji', 'jojo', 'juju', 'baba', 'bebe', 'bibi', 'bobo', 'bubu', 'dada', 'dede', 'didi', 'dodo', 'dudu', 'fafa', 'fefe',
@@ -45,5 +46,12 @@ BEGIN
     RETURN username;
 END;
 $$ LANGUAGE plpgsql;
+
+COMMIT;
+
+-- MIGRATION DOWN
+BEGIN;
+
+DROP FUNCTION generate_unique_username ();
 
 COMMIT;

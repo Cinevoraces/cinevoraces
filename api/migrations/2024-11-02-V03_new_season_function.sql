@@ -1,9 +1,10 @@
 BEGIN;
 
-CREATE OR REPLACE FUNCTION new_season(
-	season_to_add INT,
-	year_to_add INT,
-	first_episode DATE
+CREATE
+OR REPLACE FUNCTION new_season (
+  season_to_add INT,
+  year_to_add INT,
+  first_episode DATE
 ) RETURNS void AS $$
 
 DECLARE
@@ -27,6 +28,13 @@ BEGIN
 		RAISE EXCEPTION 'Season (%) already exist', season_to_add;
 	END IF;
 END
-$$LANGUAGE plpgsql;
+$$ LANGUAGE plpgsql;
+
+COMMIT;
+
+-- MIGRATION DOWN
+BEGIN;
+
+DROP FUNCTION new_season;
 
 COMMIT;
