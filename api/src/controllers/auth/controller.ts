@@ -1,6 +1,5 @@
 import { rateLimit } from '@src/config';
 import { AuthService, UserService } from '@src/services';
-import { hashString } from '@src/utils';
 import { type FastifyInstance, type FastifyReply as Reply, type FastifyRequest as Request } from 'fastify';
 import plugin from 'fastify-plugin';
 import schemas from './schemas';
@@ -12,16 +11,14 @@ const rTokenOptions = { expiresIn: '1d' };
 export default plugin(async (fastify: FastifyInstance) => {
     const authService = new AuthService(fastify.postgres);
     const userService = new UserService(fastify.postgres);
-    fastify.addSchemas(schemas);
 
     fastify.route({
         method: 'POST',
         url: '/auth/register',
-        schema: fastify.getSchema('API:POST/auth/register'),
+        schema: schemas['API:POST/auth/register'],
         handler: async (request: Request<POSTRegisterBody>, reply: Reply) => {
             const { body } = request;
             await authService.checkRegistrationPayload(body);
-            body.password = await hashString(body.password);
             await userService.createUser(body);
             reply.code(200).send({ message: 'Compte utilisateur créé avec succès.' });
         },
@@ -31,7 +28,7 @@ export default plugin(async (fastify: FastifyInstance) => {
         method: 'POST',
         url: '/auth/login',
         preHandler: fastify.rateLimit(rateLimit.loginAttempts),
-        schema: fastify.getSchema('API:POST/auth/login'),
+        schema: schemas['API:POST/auth/login'],
         handler: async (request: Request<POSTLoginBody>, reply: Reply) => {
             const { mail, pseudo, password } = request.body;
 
@@ -71,7 +68,7 @@ export default plugin(async (fastify: FastifyInstance) => {
     fastify.route({
         method: 'GET',
         url: '/auth/refresh',
-        schema: fastify.getSchema('API:GET/auth/refresh'),
+        schema: schemas['API:GET/auth/refresh'],
         handler: async (request: Request, reply: Reply) => {
             const { id } = await authService.verifyRefreshToken(request, reply);
             const user = await userService.getPrivateUser({ id });

@@ -4,6 +4,12 @@ export interface UpdateUserPayload {
     password?: string;
 }
 
+export interface CreateUserPayload {
+    pseudo: string;
+    mail: string;
+    password: string;
+}
+
 export interface PUTUsersRequest {
     Body: {
         password: string;
