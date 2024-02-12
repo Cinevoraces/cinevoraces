@@ -10,30 +10,20 @@
       "request": "attach",
       "port": 9229,
       "localRoot": "${workspaceFolder}/api",
-      "address": "localhost",
+      "remoteRoot": "/api",
       "restart": true,
       "resolveSourceMapLocations": [
         "${workspaceFolder}/**",
         "!**/node_modules/**"
       ],
-      "skipFiles": [
-        "<node_internals>/**/*.js"
-      ]
+      "skipFiles": ["<node_internals>/**/*.js"]
     },
     {
-      "name": "Debug API: Attach",
+      "name": "Debug API: Local",
       "type": "node",
       "request": "attach",
-      "port": 9229,
-      "localRoot": "${workspaceFolder}/api",
-      "restart": true,
-      "resolveSourceMapLocations": [
-        "${workspaceFolder}/**",
-        "!**/node_modules/**"
-      ],
-      "skipFiles": [
-        "<node_internals>/**/*.js"
-      ]
+      "processId": "${command:PickProcess}",
+      "restart": true
     }
   ]
 }

@@ -1,10 +1,12 @@
 {
     "scripts": {
         "dev": "node ./scripts/dev.mjs",
+        "dev:local": "node ./scripts/dev.mjs --exportEnv=.env",
         "build": "tsc && tsc-alias",
         "start": "node ./dist/src/index.js",
         "test": "jest --watchAll",
-        "test:unit": "jest --watchAll ./tests/unit/*",
+        "test:unit": "node ./scripts/test.mjs",
+        "test:unit:local": "node ./scripts/test.mjs --exportEnv=.env",
         "test:int": "jest --watchAll ./tests/integration/*",
         "lint": "eslint --fix **/*.ts",
         "format": "prettier --write \"src/**/*.ts\""
