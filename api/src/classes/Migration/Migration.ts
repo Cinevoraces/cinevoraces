@@ -53,9 +53,10 @@ export default class Migration {
     };
 
     /**
-     * Rollback the migration from the database.
+     * Rollback the migration from the database if it was applied.
      */
     public rollback = async () => {
+        if (this.skiped || this.error) return;
         await this.pgClient.query(this.down);
         await this.removeMigration();
     };
@@ -74,10 +75,10 @@ export default class Migration {
 
     private isMigrationExists = async (retry?: boolean) => {
         try {
+            if (retry) this.createMigrationTable();
             const { rows } = await this.pgClient.query('SELECT * FROM migration WHERE name = $1', [this.name]);
             return rows.length > 0;
         } catch (e) {
-            this.createMigrationTable();
             if (retry) throw e;
             this.isMigrationExists(true);
         }
