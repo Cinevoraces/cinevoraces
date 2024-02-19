@@ -1,18 +1,4 @@
 {
     "name": "cinevoraces",
-    "version": "2.0.0",
-    "scripts": {
-        "i": "(cd api && npm install); (cd app && npm install)",
-        "i:win": "cd api && npm install && cd .. && cd app && npm install",
-        "compose:build": "docker compose build",
-        "compose:start": "docker compose up -d",
-        "db:dump": "./scripts/backup.sh",
-        "db:dump:win": ".\\scripts\\backup.bat",
-        "db:restore": "./scripts/restore.sh",
-        "db:restore:win": ".\\scripts\\restore.bat"
-    },
-    "dependencies": {
-        "app": "file:app",
-        "cinevoraces-api": "file:api"
-    }
+    "version": "2.0.0"
 }
