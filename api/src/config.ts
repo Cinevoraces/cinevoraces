@@ -1,4 +1,8 @@
 import { type ServerOpts } from '@src/classes/Server';
+import { config as loadEnv } from 'dotenv';
+
+// Load environment variables from .env file
+loadEnv({ path: '.env' });
 
 /**
  * For more information on the dependencies, see:

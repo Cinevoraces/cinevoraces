@@ -7,6 +7,5 @@
     "source.organizeImports": "explicit",
     "source.fixAll.eslint": "explicit"
   },
-  "eslint.workingDirectories": ["./app", "./api"],
   "css.lint.unknownAtRules": "ignore"
 }

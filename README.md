@@ -10,32 +10,35 @@
 
 ### :file_folder: Requirements
 
-- Docker
 - NodeJS >= 18.x.x
 
 ### :clapper: Env
 
-_Create a `.env` file a the root of the project._
+_Create `.env` files a the root of the projects._
 
 ```
-# DATABASE
+###############
+#     API     #
+###############
+
 POSTGRES_PASSWORD=
 POSTGRES_USER=
 POSTGRES_DB=
 POSTGRES_HOST=postgres
 POSTGRES_PORT=5432
 
-# API
 CLOUDINARY_URL=
 BREVO_API_KEY=
 PASS_REGEXP='^(?=.*[A-Z])(?=.*[!#$%*+=?|\-])(?=.*\d)[!#$%*+=?|\-A-Za-z\d]{12,}$'
 NODE_ENV=development
 
-# API INTEGRATION TESTS
 TEST_USER=
 TEST_PASS=
 
-# APP
+###############
+#     APP     #
+###############
+
 TMDB_KEY=
 DISCORD_INVITE_URL=
 ```

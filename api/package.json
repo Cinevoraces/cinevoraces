@@ -1,4 +1,6 @@
 {
+    "name": "cinevoraces-api",
+    "version": "2.0.0",
     "scripts": {
         "dev": "node ./scripts/dev.mjs",
         "dev:local": "node ./scripts/dev.mjs --exportEnv=.env",
@@ -23,6 +25,7 @@
         "@getbrevo/brevo": "^2.0.0-beta.4",
         "bcryptjs": "^2.4.3",
         "cloudinary": "^2.0.0",
+        "dotenv": "^16.4.4",
         "fastify": "^4.26.0",
         "fastify-plugin": "^4.5.1",
         "pg": "^8.11.3",

@@ -10,7 +10,7 @@ export const getFolderPath = (folder: Folder) => {
     const root = process.cwd();
     const paths = {
         root: root,
-        temp: `${root}/temp`,
+        temp: `${root}/public/temp`,
         public: `${root}/public`,
     };
     return paths[folder];
