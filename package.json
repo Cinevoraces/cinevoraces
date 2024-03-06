@@ -2,6 +2,8 @@
   "name": "cinevoraces",
   "version": "2.0.0",
   "scripts": {
+    "build": "docker compose build",
+    "start": "docker compose up -d",
     "data:restore": "./scripts/restore.sh"
   }
 }
